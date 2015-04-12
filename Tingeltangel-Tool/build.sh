@@ -25,6 +25,7 @@ cp sample.png Tingeltangel.sh Tingeltangel.bat $NAME/
 # cp -r win_sox $NAME/
 # cp -r win_mpg123 $NAME/
 cp -r html $NAME/
+cp -r books $NAME/
 
 zip -r $NAME.zip $NAME > /dev/null
 
