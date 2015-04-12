@@ -1,0 +1,8 @@
+Name: Bildwörterbuch Türkisch
+Publisher: Cornelsen
+Author: Cornelsen
+Book Version: 264
+URL: 
+ThumbMD5: 23e0d70dd000eb1a0a4f34e13c2f9620
+FileMD5: 0167270bd109c724a1935bb156651d7a
+Book Area Code: en

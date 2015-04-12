@@ -1,0 +1,8 @@
+Name: WAS IST WAS Junior Entdecke die Welt!
+Publisher: Tessloff
+Author: Claudia Kaiser & Martin Lickleder (Autoren), Stefan Seidel, Christian & Fabian Jeremies (Illustratoren)
+Book Version: 879
+URL: 
+ThumbMD5: f8b7ca26eab2bb9b4e979bcdf255947e
+FileMD5: 4b4a11017ee1efa36c5db224fdce7686
+Book Area Code: en

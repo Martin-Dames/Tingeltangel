@@ -1,0 +1,8 @@
+Name: Keloğlan Serisi 3-Bolluk Bağı
+Publisher: Kuşak Yayınları
+Author: Fatma Börekçi
+Book Version: 1266
+URL: 
+ThumbMD5: a3da388915137878652e7447eed31803
+FileMD5: 679025728c355572390050422e227692
+Book Area Code: en

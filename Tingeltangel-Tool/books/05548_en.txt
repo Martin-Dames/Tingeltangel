@@ -1,0 +1,8 @@
+Name: 中文2
+Publisher: ting.com.hk
+Author: xxx
+Book Version: 1483
+URL: 
+ThumbMD5: 0044bca49a62805cc4511558a563f265
+FileMD5: 1efe2a7cc7474560947e2cf1540555be
+Book Area Code: en

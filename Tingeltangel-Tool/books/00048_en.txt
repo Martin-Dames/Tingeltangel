@@ -1,0 +1,8 @@
+Name: Revell Stickertest
+Publisher: Himmer AG
+Author: Stefanie Sperber
+Book Version: 1029
+URL: www.revell.de
+ThumbMD5: 3bd6f5e5198aaf23e8e12d338e097c89
+FileMD5: 60988dd016b96b464096d1d43adad7ad
+Book Area Code: en

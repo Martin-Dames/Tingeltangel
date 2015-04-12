@@ -1,0 +1,8 @@
+Name: Komm mit in den Kindergarten
+Publisher: Thienemann
+Author: Bianka Minte-König / Hans-Günther Döring
+Book Version: 40
+URL: http://www.thienemann.de
+ThumbMD5: f752f00fcdc5c97b5dd9047a5ceb3011
+FileMD5: fdfa3d2e8dc9ef4fc3eb92f4eb2ddd8a
+Book Area Code: en

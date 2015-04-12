@@ -1,0 +1,8 @@
+Name: Englisch-Stars 4
+Publisher: Oldenbourg bsv
+Author: Oldenbourg bsv
+Book Version: 1205
+URL: 
+ThumbMD5: 9bf9da115d9667102211a5bb606d3673
+FileMD5: 156cff240d818c42c555ec4008a3da42
+Book Area Code: en

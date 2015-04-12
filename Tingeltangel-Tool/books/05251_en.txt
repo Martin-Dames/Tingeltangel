@@ -1,0 +1,8 @@
+Name: Grundschulwörterbuch Französisch neu
+Publisher: Langenscheidt
+Author: Langenscheidt
+Book Version: 1083
+URL: 
+ThumbMD5: 4bec942480803c4d2294ff19fd3fb6ee
+FileMD5: ac72518492382901e24cc629dd4ddfc3
+Book Area Code: en

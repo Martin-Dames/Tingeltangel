@@ -1,0 +1,8 @@
+Name: Die klingende Liederfibel
+Publisher: Sauerländer Kinderbücher
+Author: Grüger
+Book Version: 256
+URL: 
+ThumbMD5: bd5206a76a91126372b2567fa6d72737
+FileMD5: 03cb35872ad9ff230a60e87b1de8077e
+Book Area Code: en

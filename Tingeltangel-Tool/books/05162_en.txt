@@ -1,0 +1,8 @@
+Name: Deutsch-Stars 3 Lesetraining
+Publisher: Oldenbourg bsv
+Author: Oldenbourg bsv
+Book Version: 1204
+URL: 
+ThumbMD5: d3a5a68b158b9a05e6405b3c65d75410
+FileMD5: 7694b3a1a5cdacf3c0874651b7039a24
+Book Area Code: en

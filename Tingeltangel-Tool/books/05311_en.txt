@@ -1,0 +1,8 @@
+Name: Àplus! 3 Vokabeltaschenbuch
+Publisher: Cornelsen
+Author: Cornelsen
+Book Version: 1312
+URL: 
+ThumbMD5: c763f91ba4066f64d3a2fc4d9cc50ed9
+FileMD5: efb4d401de565ef068fc5e439b734293
+Book Area Code: en

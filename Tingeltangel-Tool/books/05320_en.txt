@@ -1,0 +1,8 @@
+Name: Masallarla Değerler Eğitimi 11-Ayının Saflığı
+Publisher: Muştu Yayınları
+Author: Osman Kaplan
+Book Version: 1273
+URL: 
+ThumbMD5: 65d5c6505b7c2a0bf308d2ed71197b94
+FileMD5: 95ff43bcf45b6caca83d73fc0600f1d9
+Book Area Code: en

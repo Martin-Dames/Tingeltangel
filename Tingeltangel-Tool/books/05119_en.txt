@@ -1,0 +1,8 @@
+Name: Lextra jun.: unterwegs Französisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra
+Book Version: 490
+URL: 
+ThumbMD5: fbca96d914a9dc07feb0b0f73e669eba
+FileMD5: f6621e839870c916e085beb27a105173
+Book Area Code: en

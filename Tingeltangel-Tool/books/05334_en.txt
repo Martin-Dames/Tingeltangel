@@ -1,0 +1,8 @@
+Name: Nasrettin Hoca Serisi 8-Ayı Kurtardım
+Publisher: Kuşak Yayınları
+Author: Cengiz Demir
+Book Version: 1246
+URL: 
+ThumbMD5: 2a0c9d324d9981081d788c555cf174dd
+FileMD5: 9f04fd5b210e4cc3d9cdd311df03f9f8
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Die Chronik der Deutschen
+Publisher: Bertelsmann! JUNIOR
+Author: Bertelsmann! JUNIOR
+Book Version: 593
+URL: 
+ThumbMD5: ad8bcc70660fc73e8f1d83a70bb82bfd
+FileMD5: b61efcf7ec74ff5e6efb5e21026ff144
+Book Area Code: en

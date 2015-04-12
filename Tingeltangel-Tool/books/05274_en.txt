@@ -1,0 +1,8 @@
+Name: WAS IST WAS Junior Achtung! Piraten an Bord!
+Publisher: Tessloff
+Author: Tatjana Marti, Claudia Kaiser & Martin Lickleder 
+Book Version: 1327
+URL: 
+ThumbMD5: 5943e7bdfc5cd003c91577e6c88b62e3
+FileMD5: e68f8482f8dddf97ad49a8677aad3968
+Book Area Code: en

@@ -1,0 +1,9 @@
+Name: Bibi und das Drachenbaby/Mein Ting-Lese-Lernb
+Publisher: Klett
+Author: Matthias von Bornstädt mit Bildern von Linda Kohlbaum
+Book Version: 746
+URL: 
+ThumbMD5: 075e1b00f03404dc7cea85cdaf3275cf
+FileMD5: 827b3a0ea22e150dd2207bec25c09d74
+ScriptMD5: aa79276b14f85a436a6b633eeb05f480
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Bilderwörterbuch Englisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra junior
+Book Version: 431
+URL: 
+ThumbMD5: a68c5e991b4613477639829266101ac7
+FileMD5: 0d59a9d7a3bd1e86be1af801358ad89a
+Book Area Code: en

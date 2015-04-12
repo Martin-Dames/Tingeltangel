@@ -1,0 +1,8 @@
+Name: Ting Brochure English
+Publisher: Himmer AG Druckerei
+Author: Himmer AG Druckerei
+Book Version: 118
+URL: 
+ThumbMD5: 79f14d15fd265d2439ef3c3e660265d6
+FileMD5: a9b2ade64046db887fb49f280ba5773c
+Book Area Code: en

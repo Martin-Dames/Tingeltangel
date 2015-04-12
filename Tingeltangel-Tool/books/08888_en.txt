@@ -1,0 +1,8 @@
+Name: Test
+Publisher: Test
+Author: Test
+Book Version: 31
+URL: 
+ThumbMD5: a2214e74bac50c458bbc2b39a7399620
+FileMD5: d41d8cd98f00b204e9800998ecf8427e
+Book Area Code: en

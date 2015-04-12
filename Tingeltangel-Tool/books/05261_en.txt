@@ -1,0 +1,8 @@
+Name: CANLI DENİZALTI BALİNA
+Publisher: Kuşak Yayınları
+Author: Prof. Dr. Arif Sarsılmaz
+Book Version: 921
+URL: 
+ThumbMD5: e20c1f975b9e583dea22da674376ba29
+FileMD5: cd425bd01f4c160feacd70432c83fc1d
+Book Area Code: en

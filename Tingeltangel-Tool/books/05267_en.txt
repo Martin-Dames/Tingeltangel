@@ -1,0 +1,8 @@
+Name: Cepli Boksör Kanguru
+Publisher: Kuşak Yayınları
+Author: Prof. Dr. Arif Sarsılmaz
+Book Version: 927
+URL: 
+ThumbMD5: 080e570c7c175b0ed72f8346a61ce4f1
+FileMD5: 39478efc9d5daa849003fc138b551361
+Book Area Code: en

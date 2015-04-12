@@ -1,0 +1,8 @@
+Name: ABDEST ve NAMAZ
+Publisher: Muştu Yayınları
+Author: Orhan Sezgin
+Book Version: 925
+URL: 
+ThumbMD5: e93cc42fe56116ef5970672b1a7101c5
+FileMD5: ddf089c1f46c95339ba7cae59a50f99f
+Book Area Code: en

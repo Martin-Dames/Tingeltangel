@@ -1,0 +1,8 @@
+Name: Lextra Junior Bildwörterbuch Chinesisch
+Publisher: Cornelsen
+Author: Cornelsen
+Book Version: 677
+URL: 
+ThumbMD5: 3fee886951c26778329d4600b89ea628
+FileMD5: a523b7b8fbcbec476fa665d0a40ba3f7
+Book Area Code: en

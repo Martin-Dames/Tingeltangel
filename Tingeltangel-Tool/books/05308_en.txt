@@ -1,0 +1,8 @@
+Name: Die größten Deutschen
+Publisher: MDM
+Author: MDM
+Book Version: 1207
+URL: 
+ThumbMD5: f208da4ed19ee75a97014d4c37da7f11
+FileMD5: d4676b577e8448a4f8156ae408233ae4
+Book Area Code: en

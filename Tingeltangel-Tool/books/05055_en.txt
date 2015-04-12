@@ -1,0 +1,8 @@
+Name: Der Kinder Brockhaus Die Jahreszeiten
+Publisher: Wissenmedia
+Author: Brockhaus
+Book Version: 210
+URL: 
+ThumbMD5: 3392412ada9a879c2c8f56334a942503
+FileMD5: da4525141cee67b5c3e2e0c0214660bc
+Book Area Code: en

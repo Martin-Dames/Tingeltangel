@@ -1,0 +1,8 @@
+Name: Küçük Hanımlar Mutfağa-Salatalar
+Publisher: Muştu Yayınları
+Author: Nur Dombaycı
+Book Version: 1114
+URL: 
+ThumbMD5: 3520570bf1f0b2d7b197e428ac72ddff
+FileMD5: 42dab6ec98edd49418e9dc0a2616307d
+Book Area Code: en

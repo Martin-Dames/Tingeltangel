@@ -1,0 +1,8 @@
+Name: Mein Berlin
+Publisher: HDM
+Author: Baedeker
+Book Version: 328
+URL: 
+ThumbMD5: b49b96ad16add3a13303266529991d7f
+FileMD5: d8e991fcaf4b5e402727480c365f7fe5
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: SJI teaching materials
+Publisher: St Joseph's Institution International Elementary School Limited
+Author: Ms. Puay Leng
+Book Version: 1357
+URL: 
+ThumbMD5: 99d5c26da73ca3534c377cb136eeaca7
+FileMD5: 8206329d2f61b27e10f446d7bfae14ff
+Book Area Code: en

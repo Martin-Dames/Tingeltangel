@@ -1,0 +1,9 @@
+Name: Minha Barriga Ronca
+Publisher: GIRASSOL
+Author: Brigid Avison
+Book Version: 811
+URL: 
+ThumbMD5: f2feb0eea7664d5a7036065314ccc7fd
+FileMD5: eeb2060d14de51a55a8a812cc729e313
+ScriptMD5: 64838a48ec899916a37b7c40cfe8e684
+Book Area Code: en

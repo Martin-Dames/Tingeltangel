@@ -1,0 +1,8 @@
+Name: 汉语2
+Publisher: HimmerWinco
+Author: HimmerWinco
+Book Version: 1497
+URL: 
+ThumbMD5: 1198d7452c41bd1eb60a6619af7b3fc6
+FileMD5: 6abbb47dd00ea8d91e435d82afa3f919
+Book Area Code: en

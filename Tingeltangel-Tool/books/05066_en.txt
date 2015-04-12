@@ -1,0 +1,9 @@
+Name: IWW Castles Had Moats 
+Publisher: Macmillan
+Author: Macmillan
+Book Version: 237
+URL: 
+ThumbMD5: 27c128a1f284cd8afdc958bece288322
+FileMD5: d1b2dc3da4af4ece5e764103aed996d2
+ScriptMD5: a522ee3f3a9b92baca275ae0267ca235
+Book Area Code: en

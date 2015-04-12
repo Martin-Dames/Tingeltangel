@@ -1,0 +1,8 @@
+Name: Diktat-Stars 1 / 2
+Publisher: Oldenbourg bsv
+Author: Oldenbourg bsv
+Book Version: 697
+URL: 
+ThumbMD5: ea46cb076d52624ae86d2e97402fc8e7
+FileMD5: 65f1b839157592acc7d58a381f8ecfb5
+Book Area Code: en

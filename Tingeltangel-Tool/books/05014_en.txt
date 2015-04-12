@@ -1,0 +1,8 @@
+Name: High School Love Songs
+Publisher: Planet Girl
+Author: Marianne Arpin
+Book Version: 24
+URL: http://www.thienemann.de
+ThumbMD5: 04510de7a9ce2e148b4a4bd38194060b
+FileMD5: 31ad4bde9cf83c00e787990c92f68085
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Keloğlan Serisi 6-Keloğlanın Sofrası
+Publisher: Kuşak Yayınları
+Author: Fatma Börekçi
+Book Version: 1269
+URL: 
+ThumbMD5: be2fb52830baa29845e2b0af3dd5a6f5
+FileMD5: 4c0d867eff4e91ccabd713c7bb701492
+Book Area Code: en

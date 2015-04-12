@@ -1,0 +1,8 @@
+Name: 宝贝在路上：畅游美国——儿童英语自学系列
+Publisher: 中国地图出版社
+Author: 塞姆编
+Book Version: 1444
+URL: 
+ThumbMD5: f92d3437d884e3e69bdf0fc2ca8f0f7b
+FileMD5: 31ca77dd33217f8741f57306aa3402bb
+Book Area Code: en

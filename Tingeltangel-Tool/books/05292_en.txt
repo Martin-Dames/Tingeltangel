@@ -1,0 +1,8 @@
+Name: Grundschulwörterbuch Englisch (Kooperation)
+Publisher: Langenscheidt Verlag, Westermann, Schroedel, Diesterweg
+Author: Gila Hoppenstedt, Karen Richardson
+Book Version: 1368
+URL: 
+ThumbMD5: 15a6168463df4a6d1d397ca3b172ffdf
+FileMD5: 6c7d49ccce3bf1f126478526be9c2de4
+Book Area Code: en

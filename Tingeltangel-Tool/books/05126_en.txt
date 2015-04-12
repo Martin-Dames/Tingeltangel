@@ -1,0 +1,8 @@
+Name: Quak & Co. - Das tierische Geräusche-Memo
+Publisher: ASS
+Author: ASS
+Book Version: 445
+URL: 
+ThumbMD5: 9b6c32730a8c93136867412def3ea147
+FileMD5: cdc7f0f5e487590b1af3c3133185d949
+Book Area Code: en

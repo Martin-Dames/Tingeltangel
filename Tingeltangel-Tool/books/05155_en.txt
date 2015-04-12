@@ -1,0 +1,8 @@
+Name: DUO Azzurro Französisch 40 cm
+Publisher: Columbus
+Author: Columbus
+Book Version: 624
+URL: 
+ThumbMD5: ac6ca7c79fb424ce2366b329964635ee
+FileMD5: 2ed3c28aa2ee583cc615b97e00207263
+Book Area Code: en

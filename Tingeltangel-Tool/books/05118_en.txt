@@ -1,0 +1,8 @@
+Name: Lextra jun.: unterwegs Italienisch 
+Publisher: Cornelsen
+Author: Cornelsen lex:tra
+Book Version: 491
+URL: 
+ThumbMD5: fbca96d914a9dc07feb0b0f73e669eba
+FileMD5: 819cc66b807e96bd85d7480d8ea29d30
+Book Area Code: en

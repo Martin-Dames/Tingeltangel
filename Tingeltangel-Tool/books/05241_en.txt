@@ -1,0 +1,8 @@
+Name: Wickie - Affentheater an Bord
+Publisher: Klett
+Author: Klett
+Book Version: 832
+URL: 
+ThumbMD5: ae6ab2c772a86c2a9f8dab3907235363
+FileMD5: f5e2724b7515c3a8d672d259a176f3a0
+Book Area Code: en

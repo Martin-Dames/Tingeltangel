@@ -1,0 +1,8 @@
+Name: 汉语5
+Publisher: HimmerWinco
+Author: HimmerWinco
+Book Version: 1482
+URL: 
+ThumbMD5: ef87ad3f8930339b4544b69800b1ae47
+FileMD5: 68c3fdac8a6d810c12844e5da3e0eda9
+Book Area Code: en

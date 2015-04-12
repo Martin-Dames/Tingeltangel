@@ -1,0 +1,8 @@
+Name: Mein TING-Vorschulbuch mit Bibi Blocksberg
+Publisher: Klett
+Author: Klett
+Book Version: 839
+URL: 
+ThumbMD5: f7788a0298199cc8a0d391f6217ed24c
+FileMD5: e982184b781312809bdf1cfb617bfe97
+Book Area Code: en

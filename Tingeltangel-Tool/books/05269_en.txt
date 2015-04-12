@@ -1,0 +1,8 @@
+Name: Alfabem Olmasaydı
+Publisher: Kuşak Yayınları
+Author: Ersin Osman Söğütlü
+Book Version: 929
+URL: 
+ThumbMD5: a525b555ce63fa4dcd99b13360cc7b69
+FileMD5: 1d06448a548d839864d0cb3ada1072c2
+Book Area Code: en

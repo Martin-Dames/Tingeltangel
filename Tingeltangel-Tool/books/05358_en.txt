@@ -1,0 +1,8 @@
+Name: Wie heißt das auf Engisch und Französisch?
+Publisher: Tessloff
+Author: Sonja Meierjürgen
+Book Version: 1500
+URL: 
+ThumbMD5: c6ba7da9e68469457ba08805923e078f
+FileMD5: 8ed3d43871eede4ebbb03c3280ac027f
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Masallarla Değerler Eğitimi 16-Kellik İlacı
+Publisher: Muştu Yayınları
+Author: Osman Kaplan
+Book Version: 1302
+URL: 
+ThumbMD5: ea9d980436fb25fe4ab8a5139ef1d292
+FileMD5: b1b4276d15fa216cca56c6440f4441bd
+Book Area Code: en

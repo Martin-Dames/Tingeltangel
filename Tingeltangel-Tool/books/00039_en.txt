@@ -1,0 +1,8 @@
+Name: Tessloff Test Globus
+Publisher: Tessloff
+Author: Tessloff
+Book Version: 413
+URL: 
+ThumbMD5: 4214c95dbb3d196bf3b62740882704ce
+FileMD5: 13b244c14fdbf937e9412c068f5d4701
+Book Area Code: en

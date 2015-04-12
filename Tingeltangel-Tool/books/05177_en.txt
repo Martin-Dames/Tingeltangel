@@ -1,0 +1,8 @@
+Name: Bildwörterbuch Schwedisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra junior
+Book Version: 584
+URL: 
+ThumbMD5: e46d7ca4cae4bcbd54f1c6646c481bad
+FileMD5: 70397fce64caf1cf072966e71c28c9bc
+Book Area Code: en

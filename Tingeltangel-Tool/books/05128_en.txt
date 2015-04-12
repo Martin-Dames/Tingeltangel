@@ -1,0 +1,8 @@
+Name: Brockhaus scolaris Bildwörterbuch Englisch
+Publisher: Brockhaus
+Author: Brockhaus
+Book Version: 560
+URL: 
+ThumbMD5: cbfa9711f97ff88e3b60c1327cb9c71e
+FileMD5: f49a58cec632c7cd82fbfcc5187d7a06
+Book Area Code: en

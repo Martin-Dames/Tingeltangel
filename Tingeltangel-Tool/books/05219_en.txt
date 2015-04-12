@@ -1,0 +1,8 @@
+Name: Mein tierisch tolles Bildwörterbuch Französis
+Publisher: Langenscheidt
+Author: Gila Hoppenstedt / Ina Worms
+Book Version: 888
+URL: 
+ThumbMD5: 0e9b945eac06413a6f89c1f67686e219
+FileMD5: 2a8d63b29653b461f2e6c6b157a200da
+Book Area Code: en

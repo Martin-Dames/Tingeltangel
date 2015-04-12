@@ -1,0 +1,9 @@
+Name: Englisch-Stars 3 Comics
+Publisher: Oldenbourg bsv
+Author: Oldenbourg bsv
+Book Version: 739
+URL: 
+ThumbMD5: 5b00c82a1dea227c4d74b3e5a5cd7241
+FileMD5: 8bee187f393e7fd218260a4cd9210e71
+ScriptMD5: 1851dcb85590d8dafced3c51c04cea84
+Book Area Code: en

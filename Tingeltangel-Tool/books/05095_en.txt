@@ -1,0 +1,8 @@
+Name: Spiele & Co. Sonderheft
+Publisher: Spiele & Co.
+Author: Spiele & Co.
+Book Version: 257
+URL: 
+ThumbMD5: 78d94473761744a7102f8639329e6e19
+FileMD5: 2cf0dc3d7a67a6b0ff5fd6821a69ee73
+Book Area Code: en

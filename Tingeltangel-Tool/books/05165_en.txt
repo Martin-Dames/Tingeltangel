@@ -1,0 +1,8 @@
+Name: Englisch-Stars 3
+Publisher: Oldenbourg bsv
+Author: Oldenbourg bsv
+Book Version: 726
+URL: 
+ThumbMD5: 4d02db773eb95065d4a16b522f708b8f
+FileMD5: b3feb43194b1574a8ba1c5a4cf270969
+Book Area Code: en

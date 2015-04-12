@@ -1,0 +1,8 @@
+Name: Keloğlan Serisi 4-Keloğlan ve Ahmet Dede
+Publisher: Kuşak Yayınları
+Author: Fatma Börekçi
+Book Version: 1292
+URL: 
+ThumbMD5: 3c0b5ee36eeed3d5de4bf19f90b50513
+FileMD5: 1046c6f596d68fd7691b8386a493bc19
+Book Area Code: en

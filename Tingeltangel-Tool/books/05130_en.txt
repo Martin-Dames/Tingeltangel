@@ -1,0 +1,8 @@
+Name: Welcher Gartenvogel ist das?
+Publisher: Kosmos
+Author: Ulrich Schmid
+Book Version: 409
+URL: 
+ThumbMD5: 69a1498e95a12db6aa63d6540b6ca000
+FileMD5: a282f007d4eb323ef6dbf0e80201739d
+Book Area Code: en

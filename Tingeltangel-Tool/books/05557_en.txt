@@ -1,0 +1,8 @@
+Name: 我的第一本英语图文词典——儿童英语自学系列
+Publisher: 中国地图出版社
+Author: 詹森
+Book Version: 1496
+URL: 
+ThumbMD5: 99635dbbca809056c986822d14de21c8
+FileMD5: b6e9dca91da496144b34e6f3cb08d0f4
+Book Area Code: en

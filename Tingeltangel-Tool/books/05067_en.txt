@@ -1,0 +1,9 @@
+Name: IWW Caterpillars Eat So Much
+Publisher: Macmillan
+Author: Macmillan
+Book Version: 271
+URL: 
+ThumbMD5: 8645331c24f97a9414c3ea40c9fa13cb
+FileMD5: 8dad4745b4c7c8ee99aa44f8de204305
+ScriptMD5: 3e024cc8fa8658454e21bdfa2032457d
+Book Area Code: en

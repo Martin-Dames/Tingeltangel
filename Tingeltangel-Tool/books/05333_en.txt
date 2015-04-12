@@ -1,0 +1,8 @@
+Name: Nasrettin Hoca Serisi 7-Ya Tutarsa
+Publisher: Kuşak Yayınları
+Author: Cengiz Demir
+Book Version: 1245
+URL: 
+ThumbMD5: 7ca2801f1ee1f1cda751a4f310e015da
+FileMD5: 9629609c442f8068b52563e48efdd9de
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: 不一样的动画书系列
+Publisher: HimmerWinco
+Author: HimmerWinco
+Book Version: 1369
+URL: 
+ThumbMD5: 7f538a310ead091271bbcf2bda38f942
+FileMD5: dd75544f911bebf28a8767f25419fc24
+Book Area Code: en

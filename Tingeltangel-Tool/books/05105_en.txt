@@ -1,0 +1,8 @@
+Name: Mein blaubeerblaues Monster
+Publisher: Bertelsmann JUNIOR
+Author: Fritz / Gehlen
+Book Version: 342
+URL: 
+ThumbMD5: 08ef7d62c64b83f6b8951d2c9b03c338
+FileMD5: ae720eb6b77600c947c61da27c396c21
+Book Area Code: en

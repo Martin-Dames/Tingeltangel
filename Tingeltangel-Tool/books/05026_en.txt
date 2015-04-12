@@ -1,0 +1,8 @@
+Name: Tiger & Co.
+Publisher: Velber
+Author: Velber Kinderbuch
+Book Version: 54
+URL: 
+ThumbMD5: 96d78dbb078b80e3893d9a85019ba621
+FileMD5: 4ceea3c6dfa8088daadfce2a4518fda8
+Book Area Code: en

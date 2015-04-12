@@ -1,0 +1,8 @@
+Name: Lextra jun.: unterwegs Spanisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra
+Book Version: 492
+URL: 
+ThumbMD5: fbca96d914a9dc07feb0b0f73e669eba
+FileMD5: c5af6ae0cfa23c6129304701f852edc0
+Book Area Code: en

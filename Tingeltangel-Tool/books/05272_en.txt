@@ -1,0 +1,8 @@
+Name: Mein erster Tier- und Pflanzenführer
+Publisher: Kosmos
+Author: Anita van Saan, Holger Haag, Ursula Stichmann-Marny
+Book Version: 1005
+URL: 
+ThumbMD5: b4179b7ab84291ac6b7c40ad9465e7a6
+FileMD5: befdcbe9d09caddd4eff0d039c4ea80c
+Book Area Code: en

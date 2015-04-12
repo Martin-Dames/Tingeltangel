@@ -1,0 +1,8 @@
+Name: Kinderlieder aus der guten alten Zeit
+Publisher: Edition XXL
+Author: Edition XXL
+Book Version: 1168
+URL: 
+ThumbMD5: df56fa0feaa7e2a1426139ee2bcab171
+FileMD5: d4f751ec6e5d6913f5e7cc537e760b2d
+Book Area Code: en

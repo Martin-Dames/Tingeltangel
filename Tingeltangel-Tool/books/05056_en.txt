@@ -1,0 +1,8 @@
+Name: Der Kinder Brockhaus - Im Kindergarten
+Publisher: Wissenmedia
+Author: Brockhaus
+Book Version: 211
+URL: 
+ThumbMD5: eceffdfdb496e0f61fc02459caf11d7b
+FileMD5: 4e4323e14900f26146bacf5998c244da
+Book Area Code: en

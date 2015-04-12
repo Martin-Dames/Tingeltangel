@@ -1,0 +1,8 @@
+Name: Masallarla Değerler Eğitimi 12-Güzellik Yarış
+Publisher: Muştu Yayınları
+Author: Osman Kaplan
+Book Version: 1274
+URL: 
+ThumbMD5: 5344773b65b494f1cffd606f8ca9acb2
+FileMD5: 33d1f198d828788c7b213bdc67681a5e
+Book Area Code: en

@@ -1,0 +1,9 @@
+Name: O Triceratope Tinha Chifres
+Publisher: GIRASSOL
+Author: Rod Theodorou
+Book Version: 617
+URL: 
+ThumbMD5: b431c6d79fb14eb2fe636a5f4f69651a
+FileMD5: c3732b602f1a8bad676b09a663aae952
+ScriptMD5: d05f4bb75096d0e727901d262f7369c1
+Book Area Code: en

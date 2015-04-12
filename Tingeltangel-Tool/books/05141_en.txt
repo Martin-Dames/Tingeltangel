@@ -1,0 +1,8 @@
+Name: Huckla verzaubert die Schule
+Publisher: Langenscheidt
+Author: Irmtraud Guha
+Book Version: 547
+URL: 
+ThumbMD5: f4cbbca53f519de68c7d4a9c8708c702
+FileMD5: b2f4acd3f08fe0f006b10aab39da8f17
+Book Area Code: en

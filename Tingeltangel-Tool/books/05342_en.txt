@@ -1,0 +1,8 @@
+Name: Masallarla Değerler Eğitimi 10-Süslen Kuaför
+Publisher: Muştu Yayınları
+Author: Osman Kaplan
+Book Version: 1300
+URL: 
+ThumbMD5: 75fa9850f6ff160cd4809d642dfaf466
+FileMD5: 34cce8c8594e9a31419e59166013b181
+Book Area Code: en

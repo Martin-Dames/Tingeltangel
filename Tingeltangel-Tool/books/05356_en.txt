@@ -1,0 +1,8 @@
+Name: Ein Glück, dass es dich gibt
+Publisher: 1Buch
+Author: Kirstin Eggers / Gerald Hagemann
+Book Version: 1472
+URL: 
+ThumbMD5: 19d96b2bd89bbb0e7d1a4c2a3d8bb0cf
+FileMD5: 4e2d5bede0af7b94751b5eb04814fd1d
+Book Area Code: en

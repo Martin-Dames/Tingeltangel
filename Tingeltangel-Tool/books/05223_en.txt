@@ -1,0 +1,8 @@
+Name: TING Hurra! Jetzt bin ich Schulkind
+Publisher: Bertelsmann! JUNIOR
+Author: K. Johanna Fritz / Christiane Güth
+Book Version: 752
+URL: 
+ThumbMD5: d8e4c2ed46f635d56f2b0c00d79b4bd8
+FileMD5: 45f083499835548998c40053ec1f9716
+Book Area Code: en

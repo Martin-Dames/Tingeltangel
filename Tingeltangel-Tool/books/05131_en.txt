@@ -1,0 +1,8 @@
+Name: Power-Wörterbuch Französisch Aufl. 2012
+Publisher: Langenscheidt
+Author: Langenscheidt
+Book Version: 415
+URL: 
+ThumbMD5: 838ff59d9bf882867426461f7db4cb06
+FileMD5: b5a559653b7fb08848c944183e4ca685
+Book Area Code: en

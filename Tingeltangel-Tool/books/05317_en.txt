@@ -1,0 +1,8 @@
+Name: Masallarla Değerler Eğitimi 1-Doktor Baykuş
+Publisher: Muştu Yayınları
+Author: Osman Kaplan
+Book Version: 1288
+URL: 
+ThumbMD5: caf16d84fb4f9424b702374c7d552a5d
+FileMD5: ee1d0830d1d2d527df1622ec0105ebaf
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Der Kosmos Tier- und Pflanzenführer
+Publisher: Kosmos
+Author: Kosmos
+Book Version: 592
+URL: 
+ThumbMD5: 40da3fe61851fa2e42d4cd495bb1723d
+FileMD5: adaec8dcf343a83597093412bf461ff8
+Book Area Code: en

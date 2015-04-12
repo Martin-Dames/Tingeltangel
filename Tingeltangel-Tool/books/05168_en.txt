@@ -1,0 +1,9 @@
+Name: Englisch-Stars 4 Comics
+Publisher: Oldenbourg bsv
+Author: Oldenbourg bsv
+Book Version: 1206
+URL: 
+ThumbMD5: d52c05beacb7d217c02b31d4590b47f4
+FileMD5: c74ac2f3557e381f8df5a5e4ece387de
+ScriptMD5: 0aacc194dc29589d7014e76c993b819a
+Book Area Code: en

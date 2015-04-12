@@ -1,0 +1,8 @@
+Name: Grundschulwörterbuch Englisch
+Publisher: Langenscheidt
+Author: Langenscheidt
+Book Version: 83
+URL: 
+ThumbMD5: 49a6004cbe1bedaf2c02d8fb6e912599
+FileMD5: 5acd04689be233b65ceaf3ea0499db47
+Book Area Code: en

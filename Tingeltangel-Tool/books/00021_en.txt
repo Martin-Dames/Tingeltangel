@@ -1,0 +1,8 @@
+Name: Probeseiten
+Publisher: Verlag Handerk & Technik
+Author: Verlag Handerk & Technik
+Book Version: 171
+URL: http://www.handwerk-technik.de
+ThumbMD5: 21eb6d2fcc6986e32d7ce27cf6a25f48
+FileMD5: 41a6e8c85e3d356c5dfd8bf1e2c4050d
+Book Area Code: en

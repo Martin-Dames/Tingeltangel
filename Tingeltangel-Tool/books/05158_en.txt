@@ -1,0 +1,8 @@
+Name: Weltkarte (Englisch)
+Publisher: Columbus
+Author: Columbus
+Book Version: 1326
+URL: 
+ThumbMD5: 001a27c678b0390b3360c92f19577b29
+FileMD5: bbff61daab6e8944b31fe90bc3c72dd5
+Book Area Code: en

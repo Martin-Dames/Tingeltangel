@@ -1,0 +1,8 @@
+Name: 汉语6
+Publisher: HimmerWinco
+Author: HimmerWinco
+Book Version: 1484
+URL: 
+ThumbMD5: 48de1e5926b3c21698b5149402af8ac7
+FileMD5: d589eae46e56d1a67b3574e50311e40f
+Book Area Code: en

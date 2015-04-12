@@ -1,0 +1,9 @@
+Name: Bauernhof Rätsel
+Publisher: arsEdition
+Author: Corina Beurenmeister
+Book Version: 255
+URL: 
+ThumbMD5: 963091a6d6854ddb7c89cd9b532ba22a
+FileMD5: 66287f1f855aa1dbd53a56f5155a91fe
+ScriptMD5: 9b28c79405e513dabad4094a1869aa21
+Book Area Code: en

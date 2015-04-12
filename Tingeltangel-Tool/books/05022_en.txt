@@ -1,0 +1,8 @@
+Name: Brockhaus Programmvorschau Frühjahr  2011 
+Publisher: Wissenmedia
+Author: Brockhaus
+Book Version: 39
+URL: 
+ThumbMD5: bea0d05ddbe7e4bc283ce9ae68472c38
+FileMD5: 52df96d0f714ec6f1629a708dfb95dd3
+Book Area Code: en

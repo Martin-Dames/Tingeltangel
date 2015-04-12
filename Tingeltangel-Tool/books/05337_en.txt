@@ -1,0 +1,8 @@
+Name: Masallarla Değerler Eğitimi 2-Meraklı Kurbağa
+Publisher: Muştu Yayınları
+Author: Osman Kaplan
+Book Version: 1249
+URL: 
+ThumbMD5: 3b793d9ab05d23d79c185e0208f9d820
+FileMD5: b747ba0f0b51ae31b7db4ad556ee0b63
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Power-Wörterbuch Englisch
+Publisher: Langenscheidt
+Author: Langenscheidt
+Book Version: 495
+URL: 
+ThumbMD5: 4e3d02acb84039a5d7984e53fd2e8263
+FileMD5: b4391b97633bd0553c3d1bd81ef0547b
+Book Area Code: en

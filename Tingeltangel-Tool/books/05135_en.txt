@@ -1,0 +1,8 @@
+Name: Der große Spiel Atlas
+Publisher: Velber
+Author: Velber
+Book Version: 559
+URL: 
+ThumbMD5: 6bb414d3881e9f1f4048255413132873
+FileMD5: bafa9a23068aae24a41136df8e34e525
+Book Area Code: en

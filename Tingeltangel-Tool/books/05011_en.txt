@@ -1,0 +1,8 @@
+Name: High School Kisses
+Publisher: Planet Girl
+Author: Marianne Arpin
+Book Version: 21
+URL: http://www.thienemann.de
+ThumbMD5: 5f6a90566e8215961825fdaf008d74ec
+FileMD5: edb5a87cc525ffeb008a91f0e15b5555
+Book Area Code: en

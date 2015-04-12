@@ -1,0 +1,8 @@
+Name: 中文6
+Publisher: ting.com.hk
+Author: xxx
+Book Version: 1490
+URL: 
+ThumbMD5: dc95100db9af78bf7a55b6fb1533b83e
+FileMD5: 88466c0d5187f41d3c6692d8d755f845
+Book Area Code: en

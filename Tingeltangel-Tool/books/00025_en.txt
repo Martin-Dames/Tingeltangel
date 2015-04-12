@@ -1,0 +1,8 @@
+Name: TING ShowCode
+Publisher: TING GmbH
+Author: Tim Mager
+Book Version: 1077
+URL: 
+ThumbMD5: e5d2a6e602bc39ba9df550becc573cdd
+FileMD5: cf3ea0e47106f2c12d2ce45abda6e264
+Book Area Code: en

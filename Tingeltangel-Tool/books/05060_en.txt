@@ -1,0 +1,8 @@
+Name: Abenteuer Namibia
+Publisher: Stürtz
+Author: Küchler / Pack
+Book Version: 241
+URL: 
+ThumbMD5: 8ce5a6740ee4a55cb9ad496a197f1f8c
+FileMD5: 6a05c5d18a086bddefa735a16efa2309
+Book Area Code: en

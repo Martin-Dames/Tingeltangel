@@ -1,0 +1,8 @@
+Name: Der Kinder Brockhaus - Meine ersten Wörter
+Publisher: Wissenmedia
+Author: Brockhaus
+Book Version: 212
+URL: 
+ThumbMD5: 60a40a955f17a828c290d914b810a374
+FileMD5: a8b56c0ef6ccd9e2af5b486fb75c94fb
+Book Area Code: en

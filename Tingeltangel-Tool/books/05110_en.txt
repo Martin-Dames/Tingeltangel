@@ -1,0 +1,8 @@
+Name: Dschungeltiere
+Publisher: Velber Kinderbuch
+Author: Janine Scott
+Book Version: 319
+URL: 
+ThumbMD5: b47df9295bf12710591c0c57e81a7d5c
+FileMD5: 730d6d71d15f3cc659fd566f0e1c7dd9
+Book Area Code: en

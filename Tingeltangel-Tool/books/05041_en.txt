@@ -1,0 +1,8 @@
+Name: Turbokurs - Fit in Griechisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra
+Book Version: 215
+URL: 
+ThumbMD5: 0d17e640253e503a3074ba0e53ba5997
+FileMD5: d1d9e3007dda1593ca7c69fa2e3f86f4
+Book Area Code: en

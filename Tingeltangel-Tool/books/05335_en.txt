@@ -1,0 +1,8 @@
+Name: Nasrettin Hoca Serisi 9- Tarifi Bende
+Publisher: Kuşak Yayınları
+Author: Cengiz Demir
+Book Version: 1286
+URL: 
+ThumbMD5: 081e79b392bda2626f051c5cc0c09288
+FileMD5: 7adc57fa5e8a36b88e738a388257a869
+Book Area Code: en

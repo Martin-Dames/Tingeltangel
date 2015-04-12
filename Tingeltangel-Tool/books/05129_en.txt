@@ -1,0 +1,9 @@
+Name: Mein Ting Vorschulbuch mit den kleinen Lerndr
+Publisher: Klett
+Author: Klett
+Book Version: 758
+URL: 
+ThumbMD5: 2f1e7e004855c4b012ba300688ac128e
+FileMD5: 15295bee70c4f8390646729e5a335b54
+ScriptMD5: 6d84ee16b58ff964ba8a2e19db0c8759
+Book Area Code: en

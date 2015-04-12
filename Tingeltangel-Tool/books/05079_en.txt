@@ -1,0 +1,9 @@
+Name: As Lagartas Comem Tanto
+Publisher: GIRASSOL
+Author: Belinda Weber
+Book Version: 612
+URL: 
+ThumbMD5: ebf2a194056fc5be2b516d183a1bc893
+FileMD5: 4cb7783cbc53262a8b01c46763edb68e
+ScriptMD5: b4f4d36fbb3f2023fca17e2ff6b7d122
+Book Area Code: en

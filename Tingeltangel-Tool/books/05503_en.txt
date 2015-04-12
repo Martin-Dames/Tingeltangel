@@ -1,0 +1,8 @@
+Name: Discovery Mind Kindergarten coursework
+Publisher: Discovery Mind Kindergarten
+Author: Principal Doris Ng
+Book Version: 1212
+URL: 
+ThumbMD5: 70f520cfc2b98b646264e01f85bfa80d
+FileMD5: 47749cf8f0359a9399f8226dfe4b007a
+Book Area Code: en

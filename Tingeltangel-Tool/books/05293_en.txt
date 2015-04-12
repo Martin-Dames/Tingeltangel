@@ -1,0 +1,8 @@
+Name: Access - Wordmaster 2
+Publisher: Cornelsen
+Author: Cornelsen
+Book Version: 1137
+URL: 
+ThumbMD5: 1df17e437130ba55282aa0ea95946782
+FileMD5: a958e2dd83abe61ce01c4e290c639a93
+Book Area Code: en

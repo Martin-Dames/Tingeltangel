@@ -1,0 +1,8 @@
+Name: Der Kinder Brockhaus Unterwegs
+Publisher: Der Kinderbrockhaus
+Author: Hören & entdecken
+Book Version: 114
+URL: 
+ThumbMD5: 982b5a86af0b84ae2996537c2cca9c1c
+FileMD5: f5f8da5d35399f3b32f4f527575d5581
+Book Area Code: en

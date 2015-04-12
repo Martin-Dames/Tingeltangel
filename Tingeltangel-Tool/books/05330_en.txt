@@ -1,0 +1,8 @@
+Name: Nasrettin Hoca Serisi 4-Keramet Kavuktaysa
+Publisher: Kuşak Yayınları
+Author: Cengiz Demir
+Book Version: 1283
+URL: 
+ThumbMD5: 61c710a42d5803d62b2a01c433e4cd97
+FileMD5: ae0564ffd24746aeb0233050605e5398
+Book Area Code: en

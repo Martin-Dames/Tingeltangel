@@ -1,0 +1,8 @@
+Name: Mein tierisch tolles Bildwörterbuch Türkisch
+Publisher: Langenscheidt
+Author: Gila Hoppenstedt / Ina Worms
+Book Version: 1025
+URL: 
+ThumbMD5: 15b3c76dc373cf190dd8c7266cf5c0a3
+FileMD5: aecc5304c7567df69acccb474e12065e
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Demo Boxersound
+Publisher: HEEL Verlag
+Author: HEEL Verlag
+Book Version: 261
+URL: 
+ThumbMD5: d1db0eb5029a42ffa6e1fd6f09506778
+FileMD5: 5610dc057523e98cb5c487aafc652e06
+Book Area Code: en

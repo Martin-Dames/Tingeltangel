@@ -1,0 +1,8 @@
+Name: Grundschulwörterbuch Englisch neu
+Publisher: Langenscheidt
+Author: Langenscheidt
+Book Version: 1346
+URL: 
+ThumbMD5: a51b1faa0f5df0a092e38662fe64878f
+FileMD5: fe202982af5e6879f90762a049888556
+Book Area Code: en

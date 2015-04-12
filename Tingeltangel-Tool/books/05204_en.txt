@@ -1,0 +1,8 @@
+Name: Das Rätsel des verlorenen Steins
+Publisher: Lingen Verlag
+Author: Birgit Ebbert
+Book Version: 786
+URL: 
+ThumbMD5: e9a48d8075df8be4b488cd0e4b4bde5d
+FileMD5: a179bfb6260b75a9e648ee6e7a469773
+Book Area Code: en

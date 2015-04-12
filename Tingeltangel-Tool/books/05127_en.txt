@@ -1,0 +1,8 @@
+Name: Brockhaus scolaris Bildwörterbuch Deutsch
+Publisher: Brockhaus
+Author: Brockhaus
+Book Version: 565
+URL: 
+ThumbMD5: 520b1a5082387a8e294fe6a2e45ceb6d
+FileMD5: f6d20e72a4d0ae4d705fb68c2e095e55
+Book Area Code: en

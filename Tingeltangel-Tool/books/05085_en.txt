@@ -1,0 +1,9 @@
+Name: As Estrelas Piscam
+Publisher: GIRASSOL
+Author: Carole Stott
+Book Version: 618
+URL: 
+ThumbMD5: 48508e9b6f5f0f988b81304a225d912a
+FileMD5: ffbe5df067daaeecdeb9c32fd247f914
+ScriptMD5: 4570e0180b5073d06b8759ba80e1d735
+Book Area Code: en

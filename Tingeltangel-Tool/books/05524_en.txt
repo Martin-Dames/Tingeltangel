@@ -1,0 +1,8 @@
+Name: 机械百分百系列
+Publisher: 科学普及出版社
+Author: （澳）戈登·沃尔克
+Book Version: 1214
+URL: 
+ThumbMD5: e470ab12315d680b97f772cf95628552
+FileMD5: 53330c0d368a7661993a8324a3952726
+Book Area Code: en

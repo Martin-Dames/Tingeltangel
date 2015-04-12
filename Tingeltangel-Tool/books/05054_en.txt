@@ -1,0 +1,8 @@
+Name: Der Kinder Brockhaus Auf dem Bauernhof
+Publisher: Wissenmedia
+Author: Brockhaus
+Book Version: 209
+URL: 
+ThumbMD5: b61696b29c1a2ddbf99c9e08ed887d94
+FileMD5: b8676a28783b4adeb0344509fefb0387
+Book Area Code: en

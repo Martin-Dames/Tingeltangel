@@ -1,0 +1,8 @@
+Name: Access - Vokabeltaschenbuch 2
+Publisher: Cornelsen
+Author: Cornelsen
+Book Version: 1146
+URL: 
+ThumbMD5: 3a9a84db248c5bee661157fcdcacd3c8
+FileMD5: 09971c75dc233a55a7a0ab6e80dffe03
+Book Area Code: en

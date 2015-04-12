@@ -1,0 +1,8 @@
+Name: Nasrettin Hoca Serisi 6-Çömlek Hesabı
+Publisher: Kuşak Yayınları
+Author: Cengiz Demir
+Book Version: 1285
+URL: 
+ThumbMD5: b9ac83ec4d9f73988ad264ce24f92e97
+FileMD5: 039eb1a3d5fb3a7fa457c4f6cf07b6e3
+Book Area Code: en

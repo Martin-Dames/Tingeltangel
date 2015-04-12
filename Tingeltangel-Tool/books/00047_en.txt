@@ -1,0 +1,8 @@
+Name: Kulturzug
+Publisher: Oberbayerische Kulturtage
+Author: Oberbayerische Kulturtage
+Book Version: 819
+URL: 
+ThumbMD5: 7858a021715efa30054a2d41e61af2ee
+FileMD5: 49c87115e57da7879b154dabd6c2f56c
+Book Area Code: en

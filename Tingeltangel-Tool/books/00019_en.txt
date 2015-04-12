@@ -1,0 +1,9 @@
+Name: Test Weblinks
+Publisher: Himmer AG Druckerei
+Author: Tim Mager
+Book Version: 1071
+URL: 
+ThumbMD5: 91dca260372e74be2f84dc615a419bc1
+FileMD5: ca5eb23352395a886371e28e06c6c881
+ScriptMD5: d8674046aaa6eee41540a09cd8ed4c29
+Book Area Code: en

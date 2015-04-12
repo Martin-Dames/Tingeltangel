@@ -1,0 +1,8 @@
+Name: Der Kosmos Tier- und Pflanzenführer
+Publisher: Kosmos
+Author: Stichmann-Marny
+Book Version: 174
+URL: 
+ThumbMD5: 20b947d04afdabca78832c551d221cd4
+FileMD5: 8d937ad9c53b2e104fe57ef39cc180ec
+Book Area Code: en

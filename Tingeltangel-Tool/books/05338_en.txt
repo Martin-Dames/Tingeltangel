@@ -1,0 +1,8 @@
+Name: Masallarla Değerler Eğitimi 3-Eski Dostlar
+Publisher: Muştu Yayınları
+Author: Osman Kaplan
+Book Version: 1270
+URL: 
+ThumbMD5: d3cca7e3ca1ca3746110b30143f74017
+FileMD5: 212ea6133136de5f0dbde25c1f0cf95e
+Book Area Code: en

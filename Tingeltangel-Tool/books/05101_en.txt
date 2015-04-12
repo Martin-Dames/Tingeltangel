@@ -1,0 +1,8 @@
+Name: Das Wimmel-Wörterbuch
+Publisher: Duden Kinderbücher
+Author: Stefanie Scharnberg
+Book Version: 278
+URL: 
+ThumbMD5: 765bc0b0bb9e30926c4339853802033a
+FileMD5: 2bd73ea232c9e099c0fc562273a7a954
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Kinder Weltatlas
+Publisher: Schwager & Steinlein Verlag GmbH
+Author: Sandra Noa
+Book Version: 768
+URL: 
+ThumbMD5: 886b5358fd3b701a16174cc465699910
+FileMD5: 608c3e3768b85f75a614e904b3be6da9
+Book Area Code: en

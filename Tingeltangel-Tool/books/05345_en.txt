@@ -1,0 +1,8 @@
+Name: Keloğlan Serisi 1-Okuma Sevdası
+Publisher: Kuşak Yayınları
+Author: Fatma Börekçi
+Book Version: 1305
+URL: 
+ThumbMD5: 1110848f3a7781679d13c32327006400
+FileMD5: ee4921c681b9a503a3eb67b65b09d748
+Book Area Code: en

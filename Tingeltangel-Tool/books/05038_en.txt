@@ -1,0 +1,8 @@
+Name: Bilderwörterbuch Italienisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra junior
+Book Version: 777
+URL: 
+ThumbMD5: 4d177f390b18fcc1f2bd06ec463ac2f3
+FileMD5: 42d18580aa3bd0af5661aaccd659d019
+Book Area Code: en

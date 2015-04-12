@@ -1,0 +1,8 @@
+Name: Globus_Duo_Azzurro_12cm
+Publisher: Columbus
+Author: Columbus
+Book Version: 1391
+URL: 
+ThumbMD5: 1624887df2fb53b5c278bd83320db388
+FileMD5: 047835264aa72243010db8c883e4cc08
+Book Area Code: en

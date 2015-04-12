@@ -1,0 +1,9 @@
+Name: Os Castelos Tinham Fossos
+Publisher: GIRASSOL
+Author: Philip Steele
+Book Version: 611
+URL: 
+ThumbMD5: 8abc5a20504278def40d4919763d6ae8
+FileMD5: 84bd36da63c369377e7f47c86d9f7b09
+ScriptMD5: a522ee3f3a9b92baca275ae0267ca235
+Book Area Code: en

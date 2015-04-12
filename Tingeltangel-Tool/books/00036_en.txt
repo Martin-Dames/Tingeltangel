@@ -1,0 +1,8 @@
+Name: Demo-Poster für Didacta
+Publisher: Finken
+Author: Petra Golisch
+Book Version: 1492
+URL: 
+ThumbMD5: 1795c5a9e6a53adb75bdb4978eb0b4e2
+FileMD5: d03c42ca9147f38ccd5fbbf694ab58f3
+Book Area Code: en

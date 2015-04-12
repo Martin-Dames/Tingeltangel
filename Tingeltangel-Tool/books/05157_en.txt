@@ -1,0 +1,8 @@
+Name: DUO Azzurro Französisch 12 cm
+Publisher: Columbus
+Author: Columbus
+Book Version: 625
+URL: 
+ThumbMD5: 1624887df2fb53b5c278bd83320db388
+FileMD5: a87e32e9aabf36370da6a693e4a22123
+Book Area Code: en

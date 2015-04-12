@@ -1,0 +1,8 @@
+Name: 汉语3
+Publisher: HimmerWinco
+Author: HimmerWinco
+Book Version: 1485
+URL: 
+ThumbMD5: 814172272757b53de8b4c5c19217ce7a
+FileMD5: 2b61f604ee049070621a45a44d35bdd9
+Book Area Code: en

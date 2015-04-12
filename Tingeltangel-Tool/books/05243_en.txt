@@ -1,0 +1,8 @@
+Name: O meu primeiro Livro interativo de Inglês
+Publisher: Estúdio Didáctico
+Author: Ute Müller-Wolfangel, Cornelia Pardall, Daniela Prusse
+Book Version: 784
+URL: 
+ThumbMD5: 780c3b196b4118b612d8baeceea20520
+FileMD5: bb54ec67f202f921e28e0a2334702517
+Book Area Code: en

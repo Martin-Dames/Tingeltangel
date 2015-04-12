@@ -1,0 +1,9 @@
+Name: O Vento Sopra
+Publisher: GIRASSOL
+Author: Anita Ganeri
+Book Version: 813
+URL: 
+ThumbMD5: dbbf98da8f00202c87b8b58e5bd17e69
+FileMD5: 4a671d52ef25ab3d44314f9f6c8e28ab
+ScriptMD5: 9e10475f932f5689bcbdce31106ed607
+Book Area Code: en

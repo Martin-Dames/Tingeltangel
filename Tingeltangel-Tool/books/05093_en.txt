@@ -1,0 +1,8 @@
+Name: Weltkarte
+Publisher: Columbus
+Author: Columbus
+Book Version: 1396
+URL: 
+ThumbMD5: 001a27c678b0390b3360c92f19577b29
+FileMD5: 66e60c735468bcd54bfb317d684c43de
+Book Area Code: en

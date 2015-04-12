@@ -1,0 +1,8 @@
+Name: Turbokurs - Fit in Italienisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra
+Book Version: 141
+URL: 
+ThumbMD5: 9471d454be721e182f70789aad2e0caf
+FileMD5: 8493a19d3781d66e719ab28f050b337e
+Book Area Code: en

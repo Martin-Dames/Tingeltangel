@@ -1,0 +1,8 @@
+Name: Konuşan Sözlük
+Publisher: Kuşak Yayınları
+Author: ---
+Book Version: 1370
+URL: 
+ThumbMD5: 257f4426a1cf776dbacfb7e34780eee1
+FileMD5: b7f80b510da85cee017adc1ea4e2551f
+Book Area Code: en

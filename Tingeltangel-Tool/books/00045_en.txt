@@ -1,0 +1,8 @@
+Name: Kaka and the Mouse (Test)
+Publisher: Karadi Tales
+Author: Srinivasan
+Book Version: 646
+URL: 
+ThumbMD5: 23fa5b47355dec3e2fb5b185a16b8677
+FileMD5: 6fd1e5ae1f53b84be54d5a376c7ab7b6
+Book Area Code: en

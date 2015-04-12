@@ -1,0 +1,8 @@
+Name: NIS Test
+Publisher: Norwegian International School
+Author: Ms. Lina Chung
+Book Version: 1109
+URL: 
+ThumbMD5: 523146075ccda64e3dd26e54de510095
+FileMD5: 749ea028f8a44abd1eb0ec729b69d670
+Book Area Code: en

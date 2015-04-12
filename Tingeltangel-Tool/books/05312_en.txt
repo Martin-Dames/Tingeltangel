@@ -1,0 +1,8 @@
+Name: Çim Adam Serisi 1 - İstop Oynayan Çocuklar
+Publisher: Kuşak Yayınları
+Author: Filiz Güner
+Book Version: 1223
+URL: 
+ThumbMD5: 56df7087af0f0deb238a961116ff64c9
+FileMD5: d4ed81a598a3d7549f93a297dc5944d6
+Book Area Code: en

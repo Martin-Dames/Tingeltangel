@@ -1,0 +1,8 @@
+Name: Lernwörterbuch Chinesisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra
+Book Version: 103
+URL: 
+ThumbMD5: 7bde3a78ece7abdf1baf0c64dcdd8de8
+FileMD5: 540cb7c771b02b895324129c5e592ba8
+Book Area Code: en

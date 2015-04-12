@@ -1,0 +1,8 @@
+Name: Mein tierisch tolles Bildwörterbuch Spanisch
+Publisher: Langenscheidt
+Author: Gila Hoppenstedt / Ina Worms
+Book Version: 896
+URL: 
+ThumbMD5: b0260efc2653a8e69a42e3c2008b56be
+FileMD5: 63f1553787a989e7aa4fae43a03852f9
+Book Area Code: en

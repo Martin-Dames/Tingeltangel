@@ -1,0 +1,8 @@
+Name: Allererste Weihnachtslieder
+Publisher: Thienemann
+Author:  Rike Janßen
+Book Version: 488
+URL: 
+ThumbMD5: 00a4492d042e32cc9ae1bff36635a40d
+FileMD5: f1939baf5922bb4d36c33a7201fcc2fc
+Book Area Code: en

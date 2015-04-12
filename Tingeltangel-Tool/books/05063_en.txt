@@ -1,0 +1,8 @@
+Name: Bildwörterbuch Polnisch
+Publisher: Cornelsen
+Author: Cornelsen
+Book Version: 265
+URL: 
+ThumbMD5: db4819684438f2fcb090e37d29fa8887
+FileMD5: 58482176177c600e7e1942314e5815f9
+Book Area Code: en

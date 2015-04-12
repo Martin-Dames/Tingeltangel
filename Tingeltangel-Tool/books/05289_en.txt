@@ -1,0 +1,8 @@
+Name: Mein Uhrenbuch (TING-Ausgabe)
+Publisher: Tessloff
+Author: Tessloff
+Book Version: 1338
+URL: 
+ThumbMD5: 48b7f46c8545d8e299b1a08d6379e080
+FileMD5: c25d276b97ded1b7de2f6bebcfeefc72
+Book Area Code: en

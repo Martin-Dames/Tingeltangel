@@ -1,0 +1,8 @@
+Name: ABC, ABC, Arche Noah sticht in See
+Publisher: Gabriel
+Author: James Krüss / Günther Jakobs
+Book Version: 36
+URL: http://www.thienemann.de
+ThumbMD5: 1dc8e936e0d1ff1d9a4d8ab91c3b0b0c
+FileMD5: e844f1976092a88492af7dc4cb6d59bc
+Book Area Code: en

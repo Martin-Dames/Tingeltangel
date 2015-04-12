@@ -1,0 +1,8 @@
+Name: Deutsches Fastnachtsmuseum
+Publisher: Deutsches Fastnachtsmuseum
+Author: Dr. Birgit Friedel
+Book Version: 1406
+URL: 
+ThumbMD5: fe2fc67042adf1bf68ad43d111db0160
+FileMD5: e3c880b247af5b9590607234be62e678
+Book Area Code: en

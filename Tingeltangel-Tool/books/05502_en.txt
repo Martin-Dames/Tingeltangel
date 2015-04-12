@@ -1,0 +1,8 @@
+Name: Greenfield International Kindergarten Test
+Publisher: Greenfield International Kindergarten
+Author: Greenfield International Kindergarten
+Book Version: 1491
+URL: 
+ThumbMD5: 64e30e140348c61ac2bfbe0cd0b9b8c8
+FileMD5: a0aa6c73854f87f41ef9d0e8ad3606c5
+Book Area Code: en

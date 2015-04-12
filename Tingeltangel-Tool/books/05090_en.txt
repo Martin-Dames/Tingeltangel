@@ -1,0 +1,8 @@
+Name: Electronic Start
+Publisher: Kosmos
+Author: Kosmos
+Book Version: 302
+URL: 
+ThumbMD5: 56f7a03c1b227fa7b7ceeb30b0b7755f
+FileMD5: d7ae4fe190ebd7a66d95700219d779c7
+Book Area Code: en

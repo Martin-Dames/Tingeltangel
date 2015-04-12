@@ -1,0 +1,8 @@
+Name: Dickhäuter
+Publisher: Velber
+Author: Velber Kinderbuch
+Book Version: 68
+URL: 
+ThumbMD5: 5353225c21378e3fe438b3aaefc468af
+FileMD5: 741ce29f8eac87c73c372eb543aaaad4
+Book Area Code: en

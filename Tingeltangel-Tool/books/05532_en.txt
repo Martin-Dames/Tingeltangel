@@ -1,0 +1,8 @@
+Name: 超简单，零起点法语一学就上手
+Publisher: 北京创智明辉文化发展有限公司
+Author: 王云鹤  贝特朗
+Book Version: 1262
+URL: 
+ThumbMD5: 8e6f5e984e668808d5c8977f3a512589
+FileMD5: e38ba370829c7b34623a50c6559f8fb1
+Book Area Code: en

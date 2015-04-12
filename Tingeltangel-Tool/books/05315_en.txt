@@ -1,0 +1,8 @@
+Name: Çim Adam Serisi 3-Elveda Kirpi Ailesi
+Publisher: Kuşak Yayınları
+Author: Filiz Güner
+Book Version: 1279
+URL: 
+ThumbMD5: 9bc6841ef4f58e1ca4982a72976c92b6
+FileMD5: e540a28f8ed71dcf43c868b0decbe018
+Book Area Code: en

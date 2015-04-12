@@ -1,0 +1,8 @@
+Name: 3KM-Projekt
+Publisher: Fraunhofer Institut
+Author: Fraunhofer Institut
+Book Version: 1412
+URL: 
+ThumbMD5: 0c0228f1347c62930f56701201e07189
+FileMD5: e719f0f4cbb70431ace36adc2a214d6d
+Book Area Code: en

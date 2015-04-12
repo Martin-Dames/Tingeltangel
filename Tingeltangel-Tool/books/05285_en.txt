@@ -1,0 +1,8 @@
+Name: Namaz Hocalı Elifbâ
+Publisher: Muştu Yayınları
+Author: Erol Ergün - Aslı Kaplan
+Book Version: 1112
+URL: 
+ThumbMD5: c03ab46f22d4fa3e55ae37e2b1eee2da
+FileMD5: 6651bc51c5d612add7ad090e3fafce02
+Book Area Code: en

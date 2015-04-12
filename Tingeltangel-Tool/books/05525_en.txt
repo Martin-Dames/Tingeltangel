@@ -1,0 +1,8 @@
+Name: X光探视系列
+Publisher: 科学普及出版社
+Author: （澳）戈登·沃尔克
+Book Version: 1215
+URL: 
+ThumbMD5: 4d5f3033ef0551fa70719af7923527a6
+FileMD5: 19348daec43170563261c98493efbbce
+Book Area Code: en

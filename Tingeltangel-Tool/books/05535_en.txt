@@ -1,0 +1,8 @@
+Name: 汉语1
+Publisher: HimmerWinco
+Author: HimmerWinco
+Book Version: 1489
+URL: 
+ThumbMD5: 8722a79656dfd3e95b1409a08b8e3763
+FileMD5: 57ff01d8e50309d737278fc297925213
+Book Area Code: en

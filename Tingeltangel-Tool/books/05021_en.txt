@@ -1,0 +1,8 @@
+Name: Bilderwörterbuch Englisch
+Publisher: Langenscheidt
+Author: Langenscheidt
+Book Version: 94
+URL: 
+ThumbMD5: 51476df98dbb4b19f9012d772c996261
+FileMD5: a64f2ea143b36cfa51b90db595fb7ba3
+Book Area Code: en

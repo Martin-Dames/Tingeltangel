@@ -1,0 +1,8 @@
+Name: WAS IST WAS Junior Komm mit in den Zoo
+Publisher: Tessloff
+Author: WAS IST WAS Junior 
+Book Version: 1035
+URL: 
+ThumbMD5: 30695d39b42abb48f231388e38265a24
+FileMD5: b04ecd98791376cd1949b5416d127a27
+Book Area Code: en

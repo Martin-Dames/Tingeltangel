@@ -1,0 +1,8 @@
+Name: TESTPEN
+Publisher: Himmer AG Druckerei
+Author: Hannes Eisele
+Book Version: 168
+URL: 
+ThumbMD5: 7ce755daa2c7ff6c7e7b3c47167191da
+FileMD5: 191c025c0961fde5fdeeeca70479c245
+Book Area Code: en

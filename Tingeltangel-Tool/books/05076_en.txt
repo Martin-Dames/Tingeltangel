@@ -1,0 +1,9 @@
+Name: IWW Volcanoes Blow Their Tops
+Publisher: Macmillan
+Author: Macmillan
+Book Version: 220
+URL: 
+ThumbMD5: 68cf707291cf1abaa3d1d4671002104f
+FileMD5: 7a43bc75a4d998575dce9ea647e0e53d
+ScriptMD5: 01441d4c17cd47ed88a674070de57783
+Book Area Code: en

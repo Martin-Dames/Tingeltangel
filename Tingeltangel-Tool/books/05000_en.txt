@@ -1,0 +1,8 @@
+Name: Herzlich Willkommen
+Publisher: Cornelsen
+Author: Dieter Zahner
+Book Version: 145
+URL: http://www.cornelsen.de
+ThumbMD5: 85937a64b326c7115ca2bba82f5fa5e7
+FileMD5: e4d56abbcdd54f596d469842e26f27b8
+Book Area Code: en

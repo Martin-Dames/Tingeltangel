@@ -1,0 +1,8 @@
+Name: Dinosaurier
+Publisher: Velber
+Author: Velber Kinderbuch
+Book Version: 56
+URL: 
+ThumbMD5: 33502d87a083350b75ef83d70458d937
+FileMD5: 4b5ecccd911b2353912c7ea86dac1e57
+Book Area Code: en

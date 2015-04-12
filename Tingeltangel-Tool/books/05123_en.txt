@@ -1,0 +1,8 @@
+Name: Schulwörterbuch Französisch
+Publisher: Langenscheidt
+Author: Langenscheidt
+Book Version: 334
+URL: 
+ThumbMD5: 209f55fe6dd832d618e11ef2b86db0e1
+FileMD5: 1d9f89217b55f060e2a972b55f05975a
+Book Area Code: en

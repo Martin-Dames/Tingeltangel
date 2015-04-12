@@ -1,0 +1,8 @@
+Name: Der Kinder Brockhaus Tiere
+Publisher: Der Kinderbrockhaus
+Author: Hören & entdecken
+Book Version: 113
+URL: 
+ThumbMD5: 6df42972278f1b74f7533278dd7f83f9
+FileMD5: 0f7cf8612eac60540ec691165b13b918
+Book Area Code: en

@@ -1,0 +1,8 @@
+Name: Rund um die Welt ist Weihnachten
+Publisher: Thienemann Verlag
+Author: Catharina Westphal
+Book Version: 203
+URL: www.thienemann.de
+ThumbMD5: e4b4c91117e37cf979326bc78eb7d0d4
+FileMD5: 960770b2bfa844a49f86a046d1b71b73
+Book Area Code: en

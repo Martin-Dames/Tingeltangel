@@ -1,0 +1,8 @@
+Name: Turbokurs - Fit in Schwedisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra
+Book Version: 335
+URL: 
+ThumbMD5: 27b7f35ec9ac911305b69640df35b402
+FileMD5: 662ffe8151a4294e9998c651e4ec8c2f
+Book Area Code: en

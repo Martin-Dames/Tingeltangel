@@ -1,0 +1,8 @@
+Name: Wissen zum Mitmachen: Polartiere
+Publisher: velber kinderbuch
+Author: div.
+Book Version: 182
+URL: 
+ThumbMD5: ec6422ab702ad8f930307f206eab7755
+FileMD5: a59b702f0c105cae1ec79ac9f6b995c4
+Book Area Code: en

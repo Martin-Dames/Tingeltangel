@@ -1,0 +1,8 @@
+Name: Duden - Mein sprechendes Bildwörterbuch Engli
+Publisher: Duden Kinderbücher
+Author: Müller-Wolfangel / Pardall / Prusse
+Book Version: 274
+URL: 
+ThumbMD5: 17dfc2a2311ae22eafac359d8710dcdc
+FileMD5: c0a6e0742973b4342cb4409b1e44f947
+Book Area Code: en

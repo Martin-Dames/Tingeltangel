@@ -1,0 +1,8 @@
+Name: Nasrettin Hoca Serisi 2-Hepsinin Tadı Aynı
+Publisher: Kuşak Yayınları
+Author: Cengiz Demir
+Book Version: 1304
+URL: 
+ThumbMD5: d290d6557c6908e9dca973cb47d239ab
+FileMD5: 918fba1cb3798a90fedb9fb5b3fc4c9a
+Book Area Code: en

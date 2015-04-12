@@ -1,0 +1,9 @@
+Name: IWW My Tummy Rumbles
+Publisher: Macmillan
+Author: Macmillan
+Book Version: 240
+URL: 
+ThumbMD5: a3e8c9147f754bab347da3b6b6c083b8
+FileMD5: 48f8a880810bc6454163cf1ec3a5a954
+ScriptMD5: 64838a48ec899916a37b7c40cfe8e684
+Book Area Code: en

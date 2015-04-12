@@ -1,0 +1,8 @@
+Name: Nasrettin Hoca Serisi 5-Ye Kürküm Ye
+Publisher: Kuşak Yayınları
+Author: Cengiz Demir
+Book Version: 1284
+URL: 
+ThumbMD5: 22808c28ff299575dabc637b42d83fb2
+FileMD5: b2915e57744ba9e7d810172cbdb511db
+Book Area Code: en

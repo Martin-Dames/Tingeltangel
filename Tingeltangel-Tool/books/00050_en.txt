@@ -1,0 +1,8 @@
+Name: Bremen Map
+Publisher: tingplus
+Author: Dörte Brockmann
+Book Version: 1030
+URL: 
+ThumbMD5: e524cd675a415ed2f320f8d3fb4c1be7
+FileMD5: 3adc287f42e7494523d884c316a15311
+Book Area Code: en

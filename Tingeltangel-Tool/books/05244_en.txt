@@ -1,0 +1,8 @@
+Name: Die Wilde Welt Der Tiere
+Publisher: Der Kinderbrockhaus
+Author: Der Kinderbrockhaus
+Book Version: 873
+URL: 
+ThumbMD5: eddbe42bda6ae5522fcfdc940501fc9c
+FileMD5: 2e90a0abb38cc352e7b2f030bc4144b8
+Book Area Code: en

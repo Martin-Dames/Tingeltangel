@@ -1,0 +1,8 @@
+Name: HARİKA HAYVANLAR
+Publisher: Muştu Yayınları
+Author: Yasemin Demirci
+Book Version: 923
+URL: 
+ThumbMD5: e5bc48e085cf17954306c579d10f3f13
+FileMD5: e316426c02d37a38dd1ec2e201b3e5b0
+Book Area Code: en

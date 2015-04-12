@@ -1,0 +1,8 @@
+Name: Komm mit, wir entdecken den Wald
+Publisher: Thienemann
+Author: Gwyneth Minte / Hans-Günter Döring
+Book Version: 176
+URL: www.thienemann.de
+ThumbMD5: 9995306751326aa8e7adae9b860b85e9
+FileMD5: 1928cd51eb1ab5c792429024138e3715
+Book Area Code: en

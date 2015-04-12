@@ -1,0 +1,8 @@
+Name: Reise durch England und Wales
+Publisher: Verlagshaus Würzburg
+Author: Verlagshaus Würzburg
+Book Version: 70
+URL: 
+ThumbMD5: 3a9480e2c4f3ae8bc1f02d2092f30ee3
+FileMD5: a8bf9552cedd72082c585a3a59b37a1a
+Book Area Code: en

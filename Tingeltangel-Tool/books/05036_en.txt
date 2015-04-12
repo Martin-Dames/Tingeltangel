@@ -1,0 +1,8 @@
+Name: Bilderwörterbuch Französisch
+Publisher: Cornelsen
+Author: Cornelsen lex:tra junior
+Book Version: 564
+URL: 
+ThumbMD5: 7d1e7a65caec18bebbfb1a81349fac3f
+FileMD5: 1ca0d877049f5ee47e5147ef847af3ad
+Book Area Code: en

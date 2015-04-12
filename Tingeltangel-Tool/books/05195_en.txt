@@ -1,0 +1,8 @@
+Name: Traktor Klassiker
+Publisher: HEEL Verlag
+Author: Udo Paulitz
+Book Version: 581
+URL: 
+ThumbMD5: 0898cf3b0ef7798c48f30db47ca54fb3
+FileMD5: e45b9766e8825d6006cffc9f7c34224f
+Book Area Code: en

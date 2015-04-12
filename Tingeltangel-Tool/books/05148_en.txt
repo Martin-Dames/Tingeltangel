@@ -1,0 +1,8 @@
+Name: Auf dem Bauernhof
+Publisher: ars edition
+Author: ars edition
+Book Version: 551
+URL: 
+ThumbMD5: c460c050031d95c1a5304dfb6dca0784
+FileMD5: d3ea4e304ee8c9c8d01ab51637158298
+Book Area Code: en

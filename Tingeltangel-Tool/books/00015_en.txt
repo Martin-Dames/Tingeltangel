@@ -1,0 +1,9 @@
+Name: Codelet Test
+Publisher: Himmer AG Druckerei
+Author: Himmer AG Druckerei
+Book Version: 267
+URL: 
+ThumbMD5: a2440a2a17465873c8b9b6e87b40b7c7
+FileMD5: f50c59f448e51bfcc630c6ed58ecf0ba
+ScriptMD5: 5095330c221890055c3855e8270407e8
+Book Area Code: en
