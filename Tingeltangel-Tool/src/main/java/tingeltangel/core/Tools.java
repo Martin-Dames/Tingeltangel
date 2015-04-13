@@ -17,7 +17,7 @@ public class Tools {
     static final int[] E = {578, 562, 546, 530, 514, 498, 482, 466, 322, 306, 290, 274, 258, 242, 226, 210, -446, -462, -478, -494, -510, -526, -542, -558, -702, -718, -734, -750, -766, -782, -798, -814};
 
     static void copy(File source, File destination) throws IOException {
-        System.out.println(source.getAbsolutePath() + " -> " + destination.getAbsolutePath());
+        //System.out.println(source.getAbsolutePath() + " -> " + destination.getAbsolutePath());
         FileChannel sourceChannel = null;
         FileChannel destChannel;
         try {
@@ -41,7 +41,7 @@ public class Tools {
      * @param n Position in der Indextablelle (startet bei 0)
      * @return Position in der Datei
      */
-    static int getPositionInFileFromCode(int code, int n) {
+    public static int getPositionInFileFromCode(int code, int n) {
         if (((code & 255) != 0) | (n < 0)) {
             return -1;
         }

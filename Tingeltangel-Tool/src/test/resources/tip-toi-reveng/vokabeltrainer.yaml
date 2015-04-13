@@ -1,0 +1,28 @@
+product-id: 900
+welcome: hallo
+init: $modus := 1 $gesucht := 1
+scripts:
+    teddy:
+    - $modus == 1? P(der_teddy)
+    - $modus == 2? P(le_nounours)
+    - $modus == 3? $gesucht == 1? P(c_est_exact) $modus := 1
+    - $modus == 3? $gesucht != 1? P(essaye_a_nouveau)
+    ball:
+    - $modus == 1? P(der_ball)
+    - $modus == 2? P(le_ballon)
+    - $modus == 3? $gesucht == 2? P(c_est_exact) $modus := 1
+    - $modus == 3? $gesucht != 2? P(essaye_a_nouveau)
+    wichtel:
+    - $modus == 1? P(ein_wichtel)
+    - $modus == 2? P(un_lutin)
+    - $modus == 3? $gesucht == 3? P(c_est_exact) $modus := 1
+    - $modus == 3? $gesucht != 3? P(essaye_a_nouveau)
+    deutsch:
+    - $modus := 1
+    franzoesisch:
+    - $modus := 2
+    fragezeichen:
+    - $gesucht == 1? $gesucht := 2 P(ou_est) P(le_nounours) $modus := 3
+    - $gesucht == 2? $gesucht := 3 P(ou_est) P(le_ballon) $modus := 3
+    - $gesucht == 3? $gesucht := 1 P(ou_est) P(un_lutin) $modus := 3
+

@@ -28,7 +28,7 @@ public class Translator {
         int lastHigherTingId = -1;
         int lastCurrentCodeId = -1;
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(MasterFrameMenu.class.getResourceAsStream(ID_TRANS_FILE)));
+            BufferedReader in = new BufferedReader(new InputStreamReader(Translator.class.getResourceAsStream(ID_TRANS_FILE)));
             String row;
             while((row = in.readLine()) != null) {
                 r++;

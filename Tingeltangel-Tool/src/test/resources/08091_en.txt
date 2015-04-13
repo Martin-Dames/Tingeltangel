@@ -1,0 +1,9 @@
+Name: My Book
+Publisher: Me
+Author: Me
+Book Version: 1
+URL: 
+ThumbMD5: 6d6f7596e7a51a69982fcd26159de2b8
+FileMD5: 627ceb2e9c39829be73e8fa5fe478187
+ScriptMD5: 222a7f890268b864e8ec5a2a15aa9344
+Book Area Code: en

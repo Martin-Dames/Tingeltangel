@@ -1,4 +1,3 @@
-
 package tingeltangel.core;
 
 import java.io.BufferedReader;
@@ -12,6 +11,7 @@ import tingeltangel.core.scripting.Command;
 import tingeltangel.core.scripting.Commands;
 import tingeltangel.core.scripting.Instance;
 import tingeltangel.core.scripting.SyntaxError;
+import tingeltangel.core.scripting.Disassembler;
 
 public class Script {
 
@@ -21,6 +21,11 @@ public class Script {
     public Script(String code, Entry entry) {
         this.entry = entry;
         this.code = code;
+    }
+
+    public Script(byte[] binary, Entry entry) {
+        this.entry = entry;
+        this.code = new Disassembler().disassemble(binary);
     }
     
     void changeMade() {

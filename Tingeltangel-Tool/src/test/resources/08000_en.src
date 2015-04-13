@@ -1,0 +1,78 @@
+Precode=15001
+TYPE=1
+[Note]
+Track 1
+[Content]
+Track_1.mp3
+
+Precode=15002
+TYPE=1
+[Note]
+Track 2
+[Content]
+Track_2.mp3
+
+Precode=15004
+TYPE=1
+[Note]
+Track 3
+[Content]
+Track_3.mp3
+
+Precode=15005
+TYPE=0
+[Note]
+[Content]
+set v3, 1
+playoid 15001
+end
+
+Precode=15006
+TYPE=0
+[Note]
+[Content]
+set v3, 2
+playoid 15002
+end
+
+Precode=15007
+TYPE=0
+[Note]
+[Content]
+set v3, 3
+playoid 15004
+end
+
+
+Precode=15009
+TYPE=0
+[Note]
+Play
+[Content]
+cmp v3,0
+je track1
+cmp v3,1
+je track2
+cmp v3,2
+je track3
+end
+
+:track1
+playoid 15001
+end
+
+:track2
+playoid 15002
+end
+
+:track3
+playoid 15004
+end
+
+Precode=15010
+TYPE=0
+[Note]
+Init
+[Content]
+clearvar
+

@@ -1,15 +1,18 @@
 
 package tingeltangel.core;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.security.DigestInputStream;
@@ -17,6 +20,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Iterator;
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
@@ -265,7 +269,11 @@ public class Book {
     }
     
     public static void load(File file, Book book) throws FileNotFoundException, IOException, NoBookException {
-        DataInputStream in = new DataInputStream(new FileInputStream(file));
+        load(new FileInputStream(file), book);
+    }
+
+    public static void load(InputStream inputStream, Book book) throws IOException, NoBookException {
+        DataInputStream in = new DataInputStream(inputStream);
         
         book.clear();
         
@@ -555,9 +563,13 @@ public class Book {
         emulator.addRegisterListener(listener);
     }
 
-    private void generateScriptFile(PrintWriter out) {
+    public void generateScriptFile( File srcFile )  throws IOException {
+        this.generateScriptFile(new PrintWriter(new FileWriter(srcFile)) );
+    }
+
+    void generateScriptFile(PrintWriter out) throws IOException {
         Iterator<Integer> ids = indexIDs.iterator();
-        int pathLength = new File(".").getAbsolutePath().length();
+        int pathLength = this.dir.getCanonicalPath().length() +1 ;
         while(ids.hasNext()) {
             Entry entry = indexEntries.get(ids.next());
             if(entry.isMP3()) {
@@ -566,7 +578,7 @@ public class Book {
                 out.print("[Note]\r\n");
                 out.print(entry.getHint() + "\r\n");
                 out.print("[Content]\r\n");
-                out.print(entry.getMP3().getAbsolutePath().substring(pathLength - 1) + "\r\n");
+                out.print(entry.getMP3().getAbsolutePath().substring(pathLength) + "\r\n");
                 out.print("\r\n");
             } else if(entry.isCode() || entry.isSub()) {
                 out.print("Precode=" + entry.getTingID() + "\r\n");
@@ -577,6 +589,64 @@ public class Book {
                 out.print(entry.getScript().toString().replaceAll("\n", "\r\n"));
                 out.print("\r\n");
             }
+        }
+
+        out.close();
+    }
+    
+    /**
+     * Return a set of all OIDs used in the book.
+     *
+     * @return
+     */
+    public Set<Integer> getIds() {
+        return this.indexEntries.keySet();
+    }
+    
+    public void importFromScriptFile(InputStream scriptFile) throws IOException, NoBookException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(scriptFile));
+
+        Entry entry = null;
+        int type = -1;
+        boolean inNote = false;
+        boolean inContent = false;
+        String line = in.readLine();
+        while (line != null) {
+            if (line.startsWith("Precode=")) {
+                inContent = false;
+                inNote = false;
+                int tingID = Integer.parseInt( line.substring(line.indexOf('=')+1)   );
+                this.addEntry(tingID);
+                entry = this.getEntryFromTingID(tingID);
+            } else if( entry != null && line.startsWith("TYPE="))  {
+                type = Integer.parseInt(line.substring(line.indexOf('=')+1));
+                if( type == 0 ) {
+                    entry.setScript(new Script("",entry));
+                } else if( type == 1) {
+                    entry.setMP3();
+                } else {
+                    throw new RuntimeException("Unknown type "+type);
+                }
+            } else if( line.startsWith("[Note]")) {
+                inNote = true;
+                inContent = false;
+            } else if( line.startsWith("[Content]")) {
+                inNote = false;
+                inContent = true;
+            } else if( type == 1 && inContent) {
+                if( !line.trim().isEmpty()) {
+                    entry.setMP3(new File(this.dir, line));
+                } else {
+                    inContent = false;
+                }
+            } else if( type == 0 && inContent) {
+                Script script = entry.getScript();
+                script.setCode(script.toString() + line + "\n" );
+            } else if( inNote) {
+                entry.setHint(entry.getHint() + line +"\n" );
+            }
+
+            line = in.readLine();
         }
     }
    

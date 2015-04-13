@@ -84,7 +84,7 @@ public class Entry {
             } else {
                 entry.size = (int)entry.mp3.length();
             }
-            entry.calculateFileLength();
+            entry.mp3length = Mp3Utils.getDuration(entry.mp3) / 1000.f;
         }
         
         String sScript = in.readUTF();
@@ -160,7 +160,7 @@ public class Entry {
         return(script);
     }
     
-    public void setMP3(File mp3) throws FileNotFoundException, IOException, NoBookException {
+    public void setMP3(File mp3) throws IOException, NoBookException {
         changeMade();
         String name = mp3.getAbsolutePath();
         if(!mp3.isFile()) {
@@ -177,14 +177,12 @@ public class Entry {
         // copy to book dir
         File target = new File(book.getMP3Path(), mp3.getName());
         
-        if(!mp3.getAbsolutePath().equals(target.getAbsolutePath())) {
-            Tools.copy(mp3, target);
-        }
-        
+        Tools.copy(mp3, target);
+
         
         this.mp3 = target;
         try {
-            calculateFileLength();
+            mp3length = Mp3Utils.getDuration(this.mp3) / 1000.f;
         } catch(IOException e) {
             this.mp3 = null;
             throw e;
@@ -192,39 +190,4 @@ public class Entry {
         size = (int)mp3.length();
         script = null;
     }
-    
-    private void calculateFileLength() throws IOException {
-        
-        String soxLength = "Length (seconds):";
-        String soxBinary = "sox";
-        
-        if(System.getProperty("os.name").startsWith("Windows")) {
-            soxBinary = "win_sox\\sox.exe";
-        }
-        
-        // call sox
-                
-        ProcessBuilder pBuilder = new ProcessBuilder(soxBinary, mp3.getAbsolutePath(), "-n", "stat").redirectErrorStream(true);
-        Process exec = pBuilder.start();
-        
-        BufferedReader in = new BufferedReader(new InputStreamReader(exec.getInputStream()));
-        
-        
-        String row;
-        while((row = in.readLine()) != null) {
-            System.out.println(row);
-            if(row.startsWith(soxLength)) {
-                row = row.substring(soxLength.length()).trim();
-                mp3length = Float.parseFloat(row);
-                in.close();
-                exec.destroy();
-                return;
-            }
-        }
-        in.close();
-        exec.destroy();
-        throw new IOException();
-    }
-
-    
 }
