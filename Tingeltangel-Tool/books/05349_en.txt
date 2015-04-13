@@ -1,8 +1,0 @@
-Name: Keloğlan Serisi 5 Rüya Bahçesi
-Publisher: Kuşak Yayınları
-Author: Fatma Börekçi
-Book Version: 1293
-URL: 
-ThumbMD5: f98ecf5287fc71a20df1dd181db26a7c
-FileMD5: 25bee66aefbacb2bc60d7c61047c1aa0
-Book Area Code: en

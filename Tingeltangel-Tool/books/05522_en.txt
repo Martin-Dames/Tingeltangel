@@ -1,8 +1,0 @@
-Name: The Mysterious Island / I AM HERE
-Publisher: China Science and Technology Press
-Author: China Science and Technology Press
-Book Version: 1100
-URL: 
-ThumbMD5: 0578934ac56e84d7dadf382980663e96
-FileMD5: 7026c992039fec25505a122256a8ae15
-Book Area Code: en

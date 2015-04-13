@@ -1,8 +1,0 @@
-Name: Deutsch-Stars 2 Lesetraining
-Publisher: Oldenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 669
-URL: 
-ThumbMD5: b708aea6ab104f70d7e948a27cbf0305
-FileMD5: ac8d61d16eefd3ac993e5ee0d50efc20
-Book Area Code: en

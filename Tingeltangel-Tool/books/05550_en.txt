@@ -1,8 +1,0 @@
-Name: 中文4
-Publisher: ting.com.hk
-Author: xxxx
-Book Version: 1480
-URL: 
-ThumbMD5: 241e06ea39c77a6b2d78a54470b8eec0
-FileMD5: 61f734b314680df4893bbd0483c4d205
-Book Area Code: en

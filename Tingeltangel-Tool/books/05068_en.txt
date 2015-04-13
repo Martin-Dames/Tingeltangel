@@ -1,9 +1,0 @@
-Name: IWW Columbus Crossed the Ocean
-Publisher: Macmillan
-Author: Macmillan
-Book Version: 243
-URL: 
-ThumbMD5: c1d0628020b6b9b8c5f256f40980a82e
-FileMD5: b3de31862db6863f7228bc9c1da93138
-ScriptMD5: 4e9368b85036cf7e30253b712c6b391c
-Book Area Code: en

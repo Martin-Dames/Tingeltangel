@@ -1,9 +1,0 @@
-Name: Ratz Fatz Zahlen
-Publisher: HABA
-Author: Hajo Bücken
-Book Version: 575
-URL: 
-ThumbMD5: c58cd9b240d019b83a2de845b1c0ad6a
-FileMD5: ae86605b6724d7b47c9732c56a585e1c
-ScriptMD5: 899448e6b66d78582de361d64becc78b
-Book Area Code: en

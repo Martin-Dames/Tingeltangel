@@ -1,8 +1,0 @@
-Name: Canım Peygamberim 1 - En Adaletli
-Publisher: Muştu Yayınları
-Author: M. Şükran ŞAFAK
-Book Version: 1473
-URL: 
-ThumbMD5: e87f6475e3a4b50da99823234bc3a95d
-FileMD5: 3440f8d697a760e21da53d268c95c3dc
-Book Area Code: en

@@ -1,9 +1,0 @@
-Name: IWW Triceratops Had Horns
-Publisher: Macmillan
-Author: Macmillan
-Book Version: 227
-URL: 
-ThumbMD5: 06d52a078083961ef6725b3b8acbfc0f
-FileMD5: 4c36d32ea4490fff733e6dd9ecc97c49
-ScriptMD5: d05f4bb75096d0e727901d262f7369c1
-Book Area Code: en

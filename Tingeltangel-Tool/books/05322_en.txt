@@ -1,8 +1,0 @@
-Name: Masallarla Değerler Eğitimi 14-Başkan Karga
-Publisher: Muştu Yayınları
-Author: Osman Kaplan
-Book Version: 1275
-URL: 
-ThumbMD5: 0e330ee193f7bdb334daf2122ae89ad9
-FileMD5: d39425b835b78d568ef8e7a69608d9db
-Book Area Code: en

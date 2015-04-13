@@ -1,8 +1,0 @@
-Name: TWGHs Teaching Material
-Publisher: TWGHs
-Author: Mr. Arthur Lai
-Book Version: 1355
-URL: 
-ThumbMD5: a231911bc42179d6037010aa05459eb9
-FileMD5: fa14e04d423d54d92f2fd20e32aea3e4
-Book Area Code: en

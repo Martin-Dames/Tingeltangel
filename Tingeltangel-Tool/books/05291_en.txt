@@ -1,8 +1,0 @@
-Name: Küçük Hanımlar Mutfağa - Tatlılar
-Publisher: Muştu Yayınları
-Author: Nur Dombaycı
-Book Version: 1123
-URL: 
-ThumbMD5: 636c0a0c4e98c29cfc679d52b9c1a353
-FileMD5: 89c26c7e9ade492d8301dd058d0bb2ee
-Book Area Code: en

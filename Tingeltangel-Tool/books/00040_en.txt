@@ -1,8 +1,0 @@
-Name: Polizeiauto
-Publisher: TING GmbH
-Author: Tim Mager
-Book Version: 1389
-URL: 
-ThumbMD5: 04f5d948764b270c0e0475aab57bb453
-FileMD5: ada703ed75616f8b2a4b3e7f0589d382
-Book Area Code: en

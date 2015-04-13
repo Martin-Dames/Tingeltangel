@@ -1,8 +1,0 @@
-Name: Tek Kart
-Publisher: Define Yayınları
-Author: Kur’an-ı Kerim
-Book Version: 1189
-URL: 
-ThumbMD5: 6ab9cde5ca5c9c175890e92e716b29d9
-FileMD5: 9f691ab5f51b868068732f27920c1b4e
-Book Area Code: en

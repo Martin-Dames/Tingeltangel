@@ -1,8 +1,0 @@
-Name: Englisch - keine Hexerei
-Publisher: Langenscheidt
-Author: Langenscheidt
-Book Version: 84
-URL: 
-ThumbMD5: 85d9a8b2db9d3cd0f9e16e935b96df7b
-FileMD5: 5e31519959d238aad4b5a35dcab862b7
-Book Area Code: en

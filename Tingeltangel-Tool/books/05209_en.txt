@@ -1,8 +1,0 @@
-Name: Highlights High Five (English Ting Edition) V
-Publisher: Highlights for Children, Inc.
-Author: Christine French Cully
-Book Version: 650
-URL: 
-ThumbMD5: b5532f8b10f7dc11c758f081a05532b1
-FileMD5: 276595f4e7c530f1bd4996841c547d04
-Book Area Code: en

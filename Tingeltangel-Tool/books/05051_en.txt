@@ -1,8 +1,0 @@
-Name: That's IT - Going global by communicating in 
-Publisher: Verlag Handwerk und Technik GmbH
-Author: Karen Wonigeit
-Book Version: 179
-URL: www.handwerk-technik.de
-ThumbMD5: 0b2abed41f336a35413f6c5717a0b86a
-FileMD5: 1b4184886114ae2efaee469800e0ea92
-Book Area Code: en

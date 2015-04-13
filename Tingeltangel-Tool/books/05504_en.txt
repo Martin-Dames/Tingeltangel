@@ -1,8 +1,0 @@
-Name: Sound Sample
-Publisher: Winco Paper Products Co., Ltd.
-Author: Carol Tam
-Book Version: 1363
-URL: 
-ThumbMD5: 8ef9f3539fedc1906ba5026f8fa1df74
-FileMD5: e379960ba080fe47d837754886da8c9b
-Book Area Code: en

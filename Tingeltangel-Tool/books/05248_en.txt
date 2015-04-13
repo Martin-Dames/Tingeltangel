@@ -1,8 +1,0 @@
-Name: Lextra jun.: Unterwegs in den USA
-Publisher: Cornelsen
-Author: Cornelsen lex:tra junior
-Book Version: 915
-URL: 
-ThumbMD5: 1e4836774adaec4e9862e074d61477c4
-FileMD5: 4d0bb0f7e0316584cf82947b7b62a7bb
-Book Area Code: en

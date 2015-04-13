@@ -1,8 +1,0 @@
-Name: 宝贝在路上：畅游英国——儿童英语自学系列
-Publisher: 中国地图出版社
-Author: 塞姆编
-Book Version: 1495
-URL: 
-ThumbMD5: fa9a2325889ff3c252380904fd392050
-FileMD5: d0b48f19f1916172a0705f8b7ccf9d14
-Book Area Code: en

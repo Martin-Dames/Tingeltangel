@@ -1,8 +1,0 @@
-Name: Masallarla Değerler Eğitimi 7-Leyleğin Ömrü
-Publisher: Muştu Yayınları
-Author: Osman Kaplan
-Book Version: 1253
-URL: 
-ThumbMD5: 77e7d824ccbe8fd4c70bbbd31345bc1c
-FileMD5: 832922e43dd06796b1a586e8de337b25
-Book Area Code: en

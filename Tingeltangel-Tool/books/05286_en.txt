@@ -1,8 +1,0 @@
-Name: Küçük Hanımlar Mutfakta-Aparatifler
-Publisher: Muştu Yayınları
-Author: Nur Dombaycı
-Book Version: 1125
-URL: 
-ThumbMD5: c14a74bba9c62acde38a1e1bd58dcda4
-FileMD5: 267a45019c7d6a290211ac19c986d900
-Book Area Code: en

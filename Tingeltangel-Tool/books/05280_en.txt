@@ -1,8 +1,0 @@
-Name: TING Englisch Block - At School
-Publisher: Tessloff
-Author: Tessloff
-Book Version: 1339
-URL: 
-ThumbMD5: 2cff623491c35095c2682d75f1f18d27
-FileMD5: 5e20f71a1d592e770044c0273e2a591b
-Book Area Code: en

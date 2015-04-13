@@ -1,8 +1,0 @@
-Name: 零起点韩语多媒体课堂系列
-Publisher: 北京创智明辉文化发展有限公司
-Author: 崔桂莲 著 , 王云鹤 贝特朗
-Book Version: 1382
-URL: 
-ThumbMD5: f607a63f6ba77be341c1a717e9f13c90
-FileMD5: b8621b7c922c4205b78ec441bdb6c37a
-Book Area Code: en

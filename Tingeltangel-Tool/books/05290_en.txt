@@ -1,8 +1,0 @@
-Name: Küçük Hanımlar Mutfağa - Yemekler
-Publisher: Muştu Yayınları
-Author: Nur Dombaycı
-Book Version: 1124
-URL: 
-ThumbMD5: 4108af5db600d841059fa6905cf97a4a
-FileMD5: c9ce0f724e56613d50b2e68151063fc0
-Book Area Code: en

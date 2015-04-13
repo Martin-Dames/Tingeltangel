@@ -1,8 +1,0 @@
-Name: mealli yasîn-i şerîf sûreler ve namaz duaları
-Publisher: Define Yayınları
-Author: Haydar Yıldırım
-Book Version: 1085
-URL: 
-ThumbMD5: 55e949bfb4944cd72643f7ffde05c0b5
-FileMD5: ad2f40e48c9d958e62b8dbbf55de44f2
-Book Area Code: en

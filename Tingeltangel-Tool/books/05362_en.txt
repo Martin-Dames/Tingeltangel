@@ -1,8 +1,0 @@
-Name: Canım Peygamberim 2 - En Merhametli
-Publisher: Muştu Yayınları
-Author: M. Şükran ŞAFAK
-Book Version: 1450
-URL: 
-ThumbMD5: 31a7b26e68e46ca81e11e1f32f274165
-FileMD5: 94a16a6217292cf1220b3aec7e792473
-Book Area Code: en

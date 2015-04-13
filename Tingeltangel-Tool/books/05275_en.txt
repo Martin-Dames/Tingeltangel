@@ -1,8 +1,0 @@
-Name: WAS IST WAS Junior Erlebe die Welt der Dinosa
-Publisher: Tessloff
-Author: Sabine Stauber, Claudia Kaiser & Martin Lickleder
-Book Version: 1329
-URL: 
-ThumbMD5: e091fe17a2aeef19edcb16c021bcf996
-FileMD5: 510ebf6bb5bb8fdd1fe7429852f84657
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Neşeli Bilim Kitaplarım 2 - Tavuklar
-Publisher: Muştu Yayınları
-Author: Nurşen ŞİRİN
-Book Version: 1457
-URL: 
-ThumbMD5: 91bc534d2b9f0a3fc7965e481ce1a4be
-FileMD5: 3b1e11ce2fc951b27bd29cabfbe39472
-Book Area Code: en

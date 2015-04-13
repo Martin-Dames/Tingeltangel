@@ -1,8 +1,0 @@
-Name: Mathe-Stars 1 Grundwissen
-Publisher: Odenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 718
-URL: 
-ThumbMD5: 8f8b17a523ba5964124db9c3e8c48e82
-FileMD5: 71d2a1c1eeee2e5a9fedf411fe6aa422
-Book Area Code: en

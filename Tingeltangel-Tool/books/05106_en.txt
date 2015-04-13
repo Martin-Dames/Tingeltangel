@@ -1,8 +1,0 @@
-Name: Grundschulwörterbuch Englisch
-Publisher: Brockhaus
-Author: Brockhaus
-Book Version: 317
-URL: 
-ThumbMD5: 53b80190aad06be1c4ac96e1e34869e6
-FileMD5: 9cbed51a897d4fbe58b4834c9b1575fd
-Book Area Code: en

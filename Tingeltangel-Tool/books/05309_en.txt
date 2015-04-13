@@ -1,8 +1,0 @@
-Name: WAS IST WAS Abenteuer Freizeit - Mach mit!
-Publisher: Tessloff
-Author: Tessloff
-Book Version: 1296
-URL: 
-ThumbMD5: fbcd001c9b5055906e0b4bb9c081caf3
-FileMD5: 51949d6f548523f92e6bc18d3d224d2f
-Book Area Code: en

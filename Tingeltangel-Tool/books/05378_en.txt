@@ -1,8 +1,0 @@
-Name: Peygamberimizin Çocukluk Yılları 4 - Minik Ku
-Publisher: Muştu Yayınları
-Author: Nurefşan ÇAĞLAROĞLU
-Book Version: 1466
-URL: 
-ThumbMD5: 944e25621e8c22055505850e66552dac
-FileMD5: 7f5bb42a2673c2edb2aa8b5c0a29401e
-Book Area Code: en

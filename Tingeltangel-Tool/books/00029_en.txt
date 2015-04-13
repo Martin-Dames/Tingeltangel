@@ -1,8 +1,0 @@
-Name: Test Anleitungsheft
-Publisher: Kosmos
-Author: Kosmos
-Book Version: 263
-URL: 
-ThumbMD5: a452943cb3ab64b3fa472ac796d99efb
-FileMD5: 55dac07a87a358b5102faadcfe6d7518
-Book Area Code: en

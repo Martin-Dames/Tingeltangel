@@ -1,8 +1,0 @@
-Name: Demo Dampflokomotiven
-Publisher: HEEL Verlag
-Author: HEEL Verlag
-Book Version: 260
-URL: 
-ThumbMD5: 9eb55d5c06b77e137c85dbd580f0eeed
-FileMD5: 0e6c4ece23bd0d338e30a50864feacfb
-Book Area Code: en

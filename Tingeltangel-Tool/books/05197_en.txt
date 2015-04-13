@@ -1,8 +1,0 @@
-Name: Highlights (English Ting Edition) Volume 1, I
-Publisher: Highlights for Children, Inc.
-Author: Christine French Cully
-Book Version: 656
-URL: 
-ThumbMD5: ee54d7c4568930380c225d94d55f4313
-FileMD5: a283ec9d7c57b5c598165aaf7a80c434
-Book Area Code: en

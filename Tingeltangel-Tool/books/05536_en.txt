@@ -1,8 +1,0 @@
-Name: 中文1
-Publisher: HimmerWinvo
-Author: HimmerWinco
-Book Version: 1488
-URL: 
-ThumbMD5: 0b171011fcc12b9e6fa68b1319b529dd
-FileMD5: 09f042eb0324f8f18f82f060d2115026
-Book Area Code: en

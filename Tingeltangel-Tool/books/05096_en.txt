@@ -1,8 +1,0 @@
-Name: Mein erstes "Was fliegt denn da?"
-Publisher: Kosmos
-Author: Holger Haag 
-Book Version: 259
-URL: 
-ThumbMD5: 40cc7d3978c286565865a61dd3f3c699
-FileMD5: c06154f23e3303e13ddaabcb70d7d6cb
-Book Area Code: en

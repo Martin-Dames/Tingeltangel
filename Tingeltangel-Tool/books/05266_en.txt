@@ -1,8 +1,0 @@
-Name: Bilgisayarım Olmasaydı
-Publisher: Kuşak Yayınları
-Author: Ersin Osman Söğütlü
-Book Version: 926
-URL: 
-ThumbMD5: a66b14b9d99ab6d022a2c8a76e06e620
-FileMD5: 1ea04a02a64e1a5bd3b1375e2f3ff39d
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name:  Let's Talk and Let's Learn Pinyin
-Publisher: Big Apple Chinese
-Author: Ms. Huali Xiong 
-Book Version: 842
-URL: 
-ThumbMD5: 8b0f1ef4ae830800c31e022557ccee7b
-FileMD5: 08d8894910ea8b9bb33995fe12fee684
-Book Area Code: en

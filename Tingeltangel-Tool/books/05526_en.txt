@@ -1,8 +1,0 @@
-Name: Silver Planet Group
-Publisher: Silver Planet Group
-Author: Mr. Albert Au
-Book Version: 1002
-URL: 
-ThumbMD5: c82cc973e2c154780743faae76c2b21f
-FileMD5: 3d6dca2729b429a331351cf25fd0f54d
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: DUO Azzurro Englisch 12 cm
-Publisher: Columbus
-Author: Columbus
-Book Version: 626
-URL: 
-ThumbMD5: 1624887df2fb53b5c278bd83320db388
-FileMD5: 9c0d4944064700584f69e98b5515961b
-Book Area Code: en

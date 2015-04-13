@@ -1,8 +1,0 @@
-Name: Das Early English Kinderliederbuch 4 Jahre
-Publisher: Gabriel
-Author: Thienemann
-Book Version: 290
-URL: 
-ThumbMD5: 6f521ef4a4ffb47948003cb99e359897
-FileMD5: 16ed490ff8e84e25a00017ee68e08198
-Book Area Code: en

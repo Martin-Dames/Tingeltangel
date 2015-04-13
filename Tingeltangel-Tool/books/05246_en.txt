@@ -1,8 +1,0 @@
-Name: TING Rätselspaß für Vorschulkinder
-Publisher: tingplus
-Author: Carola Hoffmann / Christa Lippich
-Book Version: 1494
-URL: 
-ThumbMD5: f1db499a4af6d499d8bcebffd2d1f738
-FileMD5: 2f9a1031e41f667ef587a1bf7d922f6b
-Book Area Code: en

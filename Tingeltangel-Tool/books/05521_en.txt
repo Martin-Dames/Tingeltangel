@@ -1,8 +1,0 @@
-Name: Little Cricket Gery
-Publisher: Popular Science Press
-Author: 上海阿凡提卡通艺术有限公司
-Book Version: 1011
-URL: 
-ThumbMD5: 15210b6393792dbc2195e81c155ea5d7
-FileMD5: d584883029a62ca6a023a0e010fbfc61
-Book Area Code: en

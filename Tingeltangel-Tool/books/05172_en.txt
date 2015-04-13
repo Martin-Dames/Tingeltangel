@@ -1,8 +1,0 @@
-Name: Mathe-Stars 4 Grundwissen
-Publisher: Oldenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 736
-URL: 
-ThumbMD5: 1dbc30e6b55f82742e48f46eee8a761e
-FileMD5: c43990d18af1a6f446ff5ce01e0ae23b
-Book Area Code: en

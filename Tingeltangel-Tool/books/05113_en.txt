@@ -1,8 +1,0 @@
-Name: Àplus! 1 Vokabeltaschenbuch 
-Publisher: Cornelsen
-Author: Cornelsen
-Book Version: 301
-URL: 
-ThumbMD5: f2ace1b99cc60a67e95658b375faa534
-FileMD5: 75605c9ce37070ee27940b3998eacfb9
-Book Area Code: en

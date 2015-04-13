@@ -1,8 +1,0 @@
-Name: 彩泥捏捏系列
-Publisher: HimmerWinco
-Author: HimmerWinco
-Book Version: 1428
-URL: 
-ThumbMD5: fa0c31fd2152b8d2108b151058b306f3
-FileMD5: c37bcd9382c6be88b8549232e7141581
-Book Area Code: en

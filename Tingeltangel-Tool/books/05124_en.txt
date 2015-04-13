@@ -1,8 +1,0 @@
-Name: Die Farben - Mein kleiner Brockhaus
-Publisher: Ass Altenburger
-Author: Ass Altenburger
-Book Version: 390
-URL: 
-ThumbMD5: 952edd7212ab724c22bbe0ba5e7b218f
-FileMD5: f777b2b191d3a65589769e42c29032b0
-Book Area Code: en

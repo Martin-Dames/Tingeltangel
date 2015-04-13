@@ -1,8 +1,0 @@
-Name: 汉语4
-Publisher: HimmerWinco
-Author: HimmerWinco
-Book Version: 1486
-URL: 
-ThumbMD5: 4aca62ef9728bc871981815e29b11bfb
-FileMD5: b32a2eba2e493c92729e2e0c8c74ea0d
-Book Area Code: en

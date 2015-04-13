@@ -1,8 +1,0 @@
-Name: 眼睛、耳朵、鼻子和尾巴系列
-Publisher: China Science and Technology Press
-Author: China Science and Technology Press
-Book Version: 1335
-URL: 
-ThumbMD5: 92c7a6e6090215b2daa1ebe43757ea9c
-FileMD5: d684788eb2ddaf36a53fece035c39abc
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: My pop—up The backhoe Bob
-Publisher: Popular Science Press
-Author: Gordon Volke
-Book Version: 863
-URL: 
-ThumbMD5: 19f89907ea190c06e876b629405dab50
-FileMD5: 8eecb69a202f409106f7fd3691f563a5
-Book Area Code: en

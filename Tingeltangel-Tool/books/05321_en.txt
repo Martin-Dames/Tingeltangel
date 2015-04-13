@@ -1,8 +1,0 @@
-Name: Masallarla Değerler Eğitimi 13-Eğri Oturuş
-Publisher: Muştu Yayınları
-Author: Osman Kaplan
-Book Version: 1303
-URL: 
-ThumbMD5: 39362b28fd9761ea3eae4f782b7067ec
-FileMD5: 4536b33e3c6e6c5b09b1865d36f157ad
-Book Area Code: en

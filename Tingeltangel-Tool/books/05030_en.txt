@@ -1,8 +1,0 @@
-Name: Weltall
-Publisher: Velber
-Author: Velber Kinderbuch
-Book Version: 67
-URL: 
-ThumbMD5: 750d4f30685975229c481a392d5030ec
-FileMD5: f53a4454cb7926db2326929b1cc6be41
-Book Area Code: en

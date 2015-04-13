@@ -1,8 +1,0 @@
-Name: Masallarla Değerler Eğitimi 5-Nöbetçi Tilki
-Publisher: Muştu Yayınları
-Author: Osman Kaplan
-Book Version: 1251
-URL: 
-ThumbMD5: 4536c7210e4ef554a813ac0cbcefac27
-FileMD5: 5ddd49a29d5dd948e215f7f474a946c1
-Book Area Code: en

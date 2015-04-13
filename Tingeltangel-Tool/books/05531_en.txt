@@ -1,8 +1,0 @@
-Name: 男生女生系列
-Publisher: 科学普及出版社
-Author: (澳）戴纳摩
-Book Version: 1213
-URL: 
-ThumbMD5: b610a59353c34ed307d68ddc6af8557e
-FileMD5: 246170437d8a37a609e83b54b5cd80fc
-Book Area Code: en

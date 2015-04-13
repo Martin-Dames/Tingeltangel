@@ -1,8 +1,0 @@
-Name: Felix Weltkarte
-Publisher: Coppenrath
-Author: Coppenrath
-Book Version: 1197
-URL: 
-ThumbMD5: b501671e2304dcf12a4380770e6e9acf
-FileMD5: 045c6c7ef753079bdf0eb3df83aa6053
-Book Area Code: en

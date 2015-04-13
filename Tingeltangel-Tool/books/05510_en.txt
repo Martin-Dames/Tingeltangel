@@ -1,8 +1,0 @@
-Name: My pop-up The Excavator Eric and The Backhoe 
-Publisher: Popular Science Press
-Author: Gordon Volke
-Book Version: 1336
-URL: 
-ThumbMD5: 301b33d154fb261d5d412187e94fba0c
-FileMD5: b9b51daa168b547a0fc3573b78f82a68
-Book Area Code: en

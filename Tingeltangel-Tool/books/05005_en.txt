@@ -1,8 +1,0 @@
-Name: Mein erster Hör-Brockhaus
-Publisher: Brockhaus
-Author: Brockhaus
-Book Version: 651
-URL: 
-ThumbMD5: 0230d333adb689916909b5f1c34c8bd8
-FileMD5: 06be2af300e65b3a709ad66c20bbaa95
-Book Area Code: en

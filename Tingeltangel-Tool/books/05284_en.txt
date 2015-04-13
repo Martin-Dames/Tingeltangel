@@ -1,8 +1,0 @@
-Name: Muhtasar Tecvid
-Publisher: Define Yayınları
-Author: Mustafa Arslan
-Book Version: 1093
-URL: 
-ThumbMD5: 6b5c1a8c82f2b2c798110b8e2838893b
-FileMD5: 8c43657512e73809493b15b33a3f7b95
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Lextra jun.: unterwegs Englisch
-Publisher: Cornelsen
-Author: Cornelsen lex:tra
-Book Version: 489
-URL: 
-ThumbMD5: fbca96d914a9dc07feb0b0f73e669eba
-FileMD5: f46c4db2bd27f8c1617efb87844b35d7
-Book Area Code: en

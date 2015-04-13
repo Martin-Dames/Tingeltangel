@@ -1,8 +1,0 @@
-Name: Komm mit, wir reisen zu Mozart
-Publisher: arsEdition
-Author: Herbert Rosendorfer
-Book Version: 45
-URL: 
-ThumbMD5: de5817f0901f922beb387724a2c436ba
-FileMD5: 59e7bb67018eb2e4b82f8b8da533467d
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Bildwörterbuch Chinesisch
-Publisher: Langenscheidt
-Author: Langenscheidt
-Book Version: 107
-URL: 
-ThumbMD5: 7935af21557303c6a879efc7e698f926
-FileMD5: b14b7d9a11871b95c7fcfb2b44acf4eb
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Schuss und Tor: Ich bin der Star im Stadion
-Publisher: Bertelsmann JUNIOR
-Author: Fritz / Thielk
-Book Version: 339
-URL: 
-ThumbMD5: 33619df0f22c0aba4326e69b94f14f66
-FileMD5: 17ff78b4b76f851296c104771c8e0acb
-Book Area Code: en

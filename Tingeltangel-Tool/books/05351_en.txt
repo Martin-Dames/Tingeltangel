@@ -1,8 +1,0 @@
-Name: Masallarla Değerler Eğitimi 4-Çok Gezen
-Publisher: Muştu Yayınları
-Author: Osman Kaplan
-Book Version: 1277
-URL: 
-ThumbMD5: 5c96ac84826abb6d68caaa65c260ca85
-FileMD5: 24cbe23f234e1d5e14067f13cab5a499
-Book Area Code: en

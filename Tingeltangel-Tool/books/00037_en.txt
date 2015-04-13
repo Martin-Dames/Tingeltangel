@@ -1,8 +1,0 @@
-Name: Test Hörzentrum Böhler GmbH
-Publisher: Hörzentrum Böhler GmbH
-Author: Hörzentrum Böhler GmbH
-Book Version: 393
-URL: 
-ThumbMD5: 2f56b481ec12493feed4c30903413d9a
-FileMD5: e6161d305966bd7e41852e90f6aeee8c
-Book Area Code: en

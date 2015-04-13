@@ -1,8 +1,0 @@
-Name: Nasrettin Hoca Serisi 3-Keçini İçeri Al
-Publisher: Kuşak Yayınları
-Author: Cengiz Demir
-Book Version: 1241
-URL: 
-ThumbMD5: 3f0748328153f85b20d134587e8b83ad
-FileMD5: 8a3d45901c7e2678b76d5be35173cdc3
-Book Area Code: en

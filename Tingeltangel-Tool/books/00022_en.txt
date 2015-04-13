@@ -1,8 +1,0 @@
-Name: Ting Testspiel
-Publisher: Ting Co. Ltd.
-Author: Hannes Eisele
-Book Version: 166
-URL: 
-ThumbMD5: 708914c113b7e464b5ef7c96a3495f8b
-FileMD5: 0c8011a3f806a18dd9f4429e0c100f20
-Book Area Code: en

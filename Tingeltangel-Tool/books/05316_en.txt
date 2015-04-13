@@ -1,8 +1,0 @@
-Name: Çim Adam Serisi 5-Eve Dönüş
-Publisher: Kuşak Yayınları
-Author: Filiz Güner
-Book Version: 1297
-URL: 
-ThumbMD5: 06c3260e0c9cf2794d4eb20c4606c00d
-FileMD5: 08b6f9289af9ec6a9248eaa2140a36e9
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Der große FELIX Weltatlas
-Publisher: Coppenrath Verlag
-Author: Annette Langen / Constanza Droop
-Book Version: 1191
-URL: 
-ThumbMD5: 4f41d785f8caf711667407d4ecde2932
-FileMD5: 5f6654693ce67d76032efb29fdda053d
-Book Area Code: en

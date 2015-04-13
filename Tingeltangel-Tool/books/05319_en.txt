@@ -1,8 +1,0 @@
-Name: Masallarla Değerler Eğitimi 9-Dağcı Ayı
-Publisher: Muştu Yayınları
-Author: Osman Kaplan
-Book Version: 1299
-URL: 
-ThumbMD5: 3f8e9000e80d32d946497d26ad5e618c
-FileMD5: e59c1488d6428c0d12c304389479800e
-Book Area Code: en

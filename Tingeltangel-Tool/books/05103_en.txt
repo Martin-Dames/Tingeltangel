@@ -1,8 +1,0 @@
-Name: Donnerstags rette ich Drachen
-Publisher: Bertelsmann JUNIOR
-Author: Fritz / Gehlen
-Book Version: 340
-URL: 
-ThumbMD5: 86caab7fdd7ea59d4823ac3ad152ee52
-FileMD5: 5c8ffe201f4125ec31a29b00ec1e94f3
-Book Area Code: en

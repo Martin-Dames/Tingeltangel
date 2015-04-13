@@ -1,8 +1,0 @@
-Name: WAS IST WAS Junior Auf gehts zum Fussball
-Publisher: Tessloff
-Author: WAS IST WAS Junior
-Book Version: 1342
-URL: 
-ThumbMD5: 9b920eb8bc33b97a372aacf9a8e303ef
-FileMD5: 095972b32adae12e0a2f5698487c6f97
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: TYTATSW Kindergarten Demo
-Publisher: HimmerWinco
-Author: Patrick Ho
-Book Version: 1447
-URL: 
-ThumbMD5: 324a707fad338e8d0ad3d2470f2679ca
-FileMD5: 3acf07c67b8c3d29ba5c6fca0ba0090b
-Book Area Code: en

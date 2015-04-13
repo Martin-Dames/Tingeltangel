@@ -1,9 +1,0 @@
-Name: O Sabao Faz Bolhas
-Publisher: GIRASSOL
-Author: Barbara Taylor
-Book Version: 616
-URL: 
-ThumbMD5: 4268d50a53653271f5941a39dab6b9a1
-FileMD5: ec35c4e56a4f5bde3beddebccaa348c3
-ScriptMD5: 8ffab87b997bbb40d6a9ba9e1d467f03
-Book Area Code: en

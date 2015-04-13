@@ -1,8 +1,0 @@
-Name: Weltkarte (Französisch)
-Publisher: Columbus
-Author: Columbus
-Book Version: 1328
-URL: 
-ThumbMD5: 001a27c678b0390b3360c92f19577b29
-FileMD5: b4e708070da1563d2119ae94c0caa69d
-Book Area Code: en

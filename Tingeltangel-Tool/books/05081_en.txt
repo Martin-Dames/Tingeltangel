@@ -1,9 +1,0 @@
-Name: Os Cangurus Têm Bolsas
-Publisher: GIRASSOL
-Author: Jenny Wood
-Book Version: 614
-URL: 
-ThumbMD5: 64879cef283288a296931cfa4f12620c
-FileMD5: 7b1dbd277e603bdde54c05af40a7967a
-ScriptMD5: 8d274e3dc2eef9ad0904c731c1e877af
-Book Area Code: en

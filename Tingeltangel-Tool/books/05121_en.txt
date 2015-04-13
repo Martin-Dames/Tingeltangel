@@ -1,8 +1,0 @@
-Name: Komm mit in die Schule
-Publisher: Thienemann
-Author: Bianka Minte-König / Hans-Günther Döring
-Book Version: 323
-URL: 
-ThumbMD5: 85d2429f3adaadd59227b89e707bfbd0
-FileMD5: 2398f4b7e99a1b76e46d53fddc22c120
-Book Area Code: en

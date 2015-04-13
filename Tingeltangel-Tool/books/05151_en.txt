@@ -1,8 +1,0 @@
-Name: Mein Ting-Buch 1. Klasse Deutsch und Rechnen 
-Publisher: Klett
-Author: Klett
-Book Version: 603
-URL: 
-ThumbMD5: 181ec0b9ac8d6849f855122e37f42301
-FileMD5: 21a2c868c021ff30c5199dfa28197ae1
-Book Area Code: en

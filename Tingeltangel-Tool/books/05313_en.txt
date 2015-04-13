@@ -1,8 +1,0 @@
-Name: Çim Adam Serisi 4-Saçlarımı Yeme Kuzcuk
-Publisher: Kuşak Yayınları
-Author: Filiz Güner
-Book Version: 1280
-URL: 
-ThumbMD5: e2fd3fdc4cef65363d9eb4f69fbe1c85
-FileMD5: b1bc56f631aede4af35188ec3de5c115
-Book Area Code: en

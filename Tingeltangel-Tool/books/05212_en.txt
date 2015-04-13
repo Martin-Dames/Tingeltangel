@@ -1,8 +1,0 @@
-Name: Grundschulwörterbuch Englisch - Broschur
-Publisher: Langenscheidt
-Author: Langenscheidt
-Book Version: 609
-URL: 
-ThumbMD5: da2a387b50b38ef21e4e0f1f86825ac2
-FileMD5: cc14988027f65636838453976cf15921
-Book Area Code: en

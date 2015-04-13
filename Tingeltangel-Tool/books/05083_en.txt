@@ -1,9 +1,0 @@
-Name: As Pirâmides Foram Construídas
-Publisher: GIRASSOL
-Author: Philip Steele
-Book Version: 615
-URL: 
-ThumbMD5: 7fe0e4e393e7bf5004b9a72f92e08de7
-FileMD5: 5dca3e69ac7a9c6a82aa0df6223f0bca
-ScriptMD5: 6310d2ca4240ae110a0df71b0a6995e9
-Book Area Code: en

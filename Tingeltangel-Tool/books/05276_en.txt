@@ -1,8 +1,0 @@
-Name: O MEU LIVRO INTERATIVO DE INGLÊS COM EX
-Publisher: Estúdio didáctico
-Author: Estúdio didáctico
-Book Version: 1115
-URL: 
-ThumbMD5: a8b19c68f052bf4404e18ca2412ecd40
-FileMD5: 9ea151f3c7a2ce28f678a91f93ae3d31
-Book Area Code: en

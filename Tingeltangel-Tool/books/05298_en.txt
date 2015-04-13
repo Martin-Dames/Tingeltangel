@@ -1,8 +1,0 @@
-Name: Hymer
-Publisher: Columbus
-Author: Columbus
-Book Version: 1216
-URL: 
-ThumbMD5: d18af3e988691ac825127ad955b94739
-FileMD5: 9f75dc4c84f170c0fe99c7ab5765e015
-Book Area Code: en

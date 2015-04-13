@@ -1,8 +1,0 @@
-Name: DUO Azzurro Englisch 40 cm
-Publisher: Columbus
-Author: Columbus
-Book Version: 627
-URL: 
-ThumbMD5: ac6ca7c79fb424ce2366b329964635ee
-FileMD5: 8aeffd62a2b08061bffb61ae6a1e7cc0
-Book Area Code: en

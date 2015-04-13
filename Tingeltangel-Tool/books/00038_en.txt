@@ -1,8 +1,0 @@
-Name: Dump Test
-Publisher: Himmer AG
-Author: Tim Mager
-Book Version: 401
-URL: 
-ThumbMD5: 4a4292cb908b6fbe1045ffc19722d941
-FileMD5: 8495915d2c9fb2186c117a9494ea5ba6
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Commercials
-Publisher: Himmer AG Druckerei
-Author: Himmer AG Druckerei
-Book Version: 631
-URL: 
-ThumbMD5: ce9a8241d5c252e84a28bf0f992884d2
-FileMD5: d998fc9da6040bfe40cc0696c04c49e1
-Book Area Code: en

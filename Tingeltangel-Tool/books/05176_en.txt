@@ -1,8 +1,0 @@
-Name: Bildwörterbuch Russisch
-Publisher: Cornelsen
-Author: lextra junior
-Book Version: 580
-URL: 
-ThumbMD5: e72fb982ec7b4a872040314c80fea00b
-FileMD5: 26c7f099183159c398c59f6986d851f0
-Book Area Code: en

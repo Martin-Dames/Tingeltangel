@@ -1,8 +1,0 @@
-Name: Keloğlan Serisi 2-Susuzluk
-Publisher: Kuşak Yayınları
-Author: Fatma Börekçi
-Book Version: 1291
-URL: 
-ThumbMD5: f0f61a3f9922a41481e91f1fdf0bee2d
-FileMD5: 8d8fd697960951c3a2ffdeb32d58110f
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Wissen zum Mitmachen: Pferde
-Publisher: velber kinderbuch
-Author: div.
-Book Version: 181
-URL: 
-ThumbMD5: 437e0509fb94d06b58532fac0ee2f033
-FileMD5: 2e1053de5cb8329196e1d9be3c549705
-Book Area Code: en

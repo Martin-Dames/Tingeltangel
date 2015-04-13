@@ -1,8 +1,0 @@
-Name: Faszinierendes Leipzig
-Publisher: Verlagshaus Würzburg
-Author: Flechsig
-Book Version: 157
-URL: 
-ThumbMD5: cf4872261ab6fc2447a6e309678ef4c9
-FileMD5: d4eb212ff94fc1add08879734055752d
-Book Area Code: en

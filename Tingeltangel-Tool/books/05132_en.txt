@@ -1,8 +1,0 @@
-Name: Mit Ottern stottern
-Publisher: Thienemann 
-Author: Schreiber-Wicke
-Book Version: 397
-URL: 
-ThumbMD5: 72b1091c23dfaca3caa42b492430725e
-FileMD5: 8203ba2128e123993dbc2a60dbe27d32
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Columbus Impfglobus
-Publisher: Columbus-Verlag
-Author: Columbus-Verlag Paul Oestergaard GmbH
-Book Version: 938
-URL: 
-ThumbMD5: 91d0f56b8a093208fc84bfb86cc06207
-FileMD5: 10109354870d2dfceb50b20f4d94c1f5
-Book Area Code: en

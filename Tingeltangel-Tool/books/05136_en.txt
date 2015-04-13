@@ -1,9 +1,0 @@
-Name: Der Kinder Brockhaus Das sprechende Kinderqui
-Publisher: Der Kinderbrockhaus
-Author: Der Kinder Brockhaus
-Book Version: 476
-URL: 
-ThumbMD5: d0af808458c2200eaa572bd1d5f4c145
-FileMD5: bf6a295cce11582644d78a36f145c9b2
-ScriptMD5: 2e379d8e23185c3de9b8833808085f45
-Book Area Code: en

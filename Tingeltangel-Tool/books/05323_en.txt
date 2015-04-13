@@ -1,8 +1,0 @@
-Name: Masallarla Değerler Eğitimi 15-Arının Öğüdü
-Publisher: Muştu Yayınları
-Author: Osman Kaplan
-Book Version: 1276
-URL: 
-ThumbMD5: b42299c8cd5febbd288a231d56b02d29
-FileMD5: 8ac7a2cef111ccd3e69cc846c053188e
-Book Area Code: en

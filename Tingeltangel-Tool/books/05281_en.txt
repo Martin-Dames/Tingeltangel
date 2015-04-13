@@ -1,8 +1,0 @@
-Name: muhtasar TECVİD
-Publisher: Define Yayınları
-Author: Mustafa Arslan
-Book Version: 1090
-URL: 
-ThumbMD5: 6b5c1a8c82f2b2c798110b8e2838893b
-FileMD5: 7516197bcc050639df75be392a87d85b
-Book Area Code: en

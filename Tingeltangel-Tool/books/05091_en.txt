@@ -1,8 +1,0 @@
-Name: Globus_Duo_Azzurro_40cm
-Publisher: Columbus
-Author: Columbus
-Book Version: 1390
-URL: 
-ThumbMD5: ac6ca7c79fb424ce2366b329964635ee
-FileMD5: e5a00a0ab87b00c87aa1187308941b1d
-Book Area Code: en
