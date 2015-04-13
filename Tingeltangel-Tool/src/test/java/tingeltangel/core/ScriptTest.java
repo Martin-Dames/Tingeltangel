@@ -56,5 +56,14 @@ public class ScriptTest {
         }
     }
 
+    @Test
+    public void testGetSize() throws SyntaxError {
+        Script script = new Script("set v3, 1\n" +
+                "playoid 15001\n" +
+                "end", entry);
+
+
+        assertEquals(13, script.getSize());
+    }
 
 }
