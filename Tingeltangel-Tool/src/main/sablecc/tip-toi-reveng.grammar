@@ -1,0 +1,132 @@
+Package tiptoi_reveng;
+
+Helpers
+
+  letter = ['A'..'Z'] | ['a'..'z'] | [0x7F .. 0xFF];
+  digit = ['0'..'9'];
+  nondigit = '_' | letter;
+
+  sign = '+' | '-';
+
+  digit_seq = digit+;
+  letter_seq = letter+;
+  nondigit_seq = nondigit+;
+
+  identifier = nondigit (digit | nondigit)*;
+
+  all = [0 .. 0xFFFF];
+  cr = 13;
+  lf = 10;
+  tab = 9;
+  eol = cr | lf | cr lf;
+
+  blank = ( eol | tab | ' ');
+  tabspace = [tab + ' '];
+  space = [cr + [lf + [tab + ' ']]];
+
+  not_cr_lf = [all - [cr + lf]];
+
+Tokens
+   plus_eq = '+=';
+   minus_eq = '-=';
+   star_eq = '*=';
+   slash_eq = '/=';
+   dot_eq = '.=';
+   colon_eq = ':=';
+   perc_eq = '%=';
+   caret_eq = '^=';
+   amp_eq = '&=';
+   bar_eq = '|=';
+   sh_l_eq = '<<=';
+   sh_r_eq = '>>=';
+
+   cop_eq = '==';
+   cop_lteq = '<=';
+   cop_gteq = '>=';
+   cop_lt = '<';
+   cop_gt = '>';
+   cop_neq = '!=';
+   
+   plus = '+';
+   minus = '-';
+   l_par = '(';
+   r_par = ')';
+   l_brace = '{';
+   r_brace = '}';
+   l_bracket = '[';
+   r_bracket = ']';
+   semicolon = ';';
+   colon = ':';
+   coloncolon = '::';
+   dot = '.';
+   comma = ',';
+   dollar = '$';
+   quest = '?';
+   play_specifier = 'P';
+   jump_specifier = 'J';
+   cancel_specifier = 'C';
+   game_specifier = 'G';
+   percent_s = '%s';
+   slash = '/';
+
+   variable = '$' (digit | nondigit)+;
+   identifier = identifier;
+   integer = digit_seq;
+   blank = blank+;
+
+Ignored Tokens
+
+  blank;
+  
+Productions
+    
+  statement = 
+      {conditional}   conditional 
+    | {action} action+
+  ;
+  
+  
+  action = 
+      {set}    assignment
+    | {jump}   jump_command
+    | {play}   play_command
+    | {game}   game_command
+    | {cancel} cancel_specifier
+  ;
+  
+  play_command = 
+      play_specifier l_par file_list r_par
+  ;
+
+  file_name =
+      {text} identifier
+    | {number} integer
+  ;
+
+  file_list =  file_name file_list_tail*;
+
+  file_list_tail = comma file_name;
+
+  jump_command = jump_specifier l_par identifier r_par;
+
+  game_command = game_specifier  l_par integer r_par;
+
+  assignment = 
+      {set}  variable colon_eq term
+    | {plus} variable plus_eq term
+    | {minus} variable minus_eq term
+  ;
+
+  conditional =
+  	  {eq} variable cop_eq term quest statement?
+  	| {neq} variable cop_neq term quest statement?
+  	| {lt} variable cop_lt term quest statement?
+  	| {gt} variable cop_gt term quest statement?
+  	| {lteq} variable cop_lteq term quest statement?
+  	| {gteq} variable cop_gteq term quest statement?
+  ;
+
+  term =
+      {value}     integer
+    | {variable}  variable
+  ;
