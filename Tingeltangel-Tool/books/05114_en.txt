@@ -1,8 +1,0 @@
-Name: Turbokurs - Fit in Russisch
-Publisher: Cornelsen
-Author: Cornelsen lex:tra
-Book Version: 408
-URL: 
-ThumbMD5: 33ad9b7ba199e32c149049057a8fa3de
-FileMD5: fac5b0859f317d2f797839f6e38bdee5
-Book Area Code: en

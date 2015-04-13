@@ -1,8 +1,0 @@
-Name: WAS IST WAS Junior Unterwegs mit großen Fahrz
-Publisher: Tessloff
-Author: Claudia Kaiser & Martin Lickleder (Autoren), Christian & Fabian Jeremies, Dirk Hennig, Max Walther, Daniela Pohl (Illustratoren)
-Book Version: 844
-URL: 
-ThumbMD5: 6d7bfa90bc50c91736f61b6f89085886
-FileMD5: a2bb867c63559839208b4a30a0f049a2
-Book Area Code: en

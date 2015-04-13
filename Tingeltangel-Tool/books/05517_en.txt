@@ -1,8 +1,0 @@
-Name: Easy Chines Reading Series
-Publisher: Easy Chinese Reading
-Author: Ms. Canvia tai
-Book Version: 1010
-URL: 
-ThumbMD5: 1c06a883eddf66e5838d596f61e02bec
-FileMD5: 31650342c4dc9f162b2cdecb126324fa
-Book Area Code: en

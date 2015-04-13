@@ -1,8 +1,0 @@
-Name: Schulwörterbuch Englisch
-Publisher: Langenscheidt
-Author: Langenscheidt
-Book Version: 497
-URL: 
-ThumbMD5: 3dabaa26820710d1839d995bad3d5ee5
-FileMD5: 2e621a46482e9056fc9e25edae42c7e1
-Book Area Code: en

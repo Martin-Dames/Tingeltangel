@@ -1,8 +1,0 @@
-Name: Canım Peygamberim 5 - En Yardımsever
-Publisher: Muştu Yayınları
-Author: M. Şükran ŞAFAK
-Book Version: 1453
-URL: 
-ThumbMD5: 1a5472865246e647b552fe0ead123c6d
-FileMD5: 72d99d1b5d7d7ad2b0fc9bddeb44fb9d
-Book Area Code: en

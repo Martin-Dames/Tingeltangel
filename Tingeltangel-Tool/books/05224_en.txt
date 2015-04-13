@@ -1,8 +1,0 @@
-Name: TING Hurra! Ich habe Geburtstag
-Publisher: Bertelsmann! JUNIOR
-Author: K. Johanna Fritz / Christiane Güth
-Book Version: 753
-URL: 
-ThumbMD5: 9dd7ab4452c5cd8d6f8d31fa109dcda3
-FileMD5: 89513db9f79e14c4368fa8987a57da2a
-Book Area Code: en

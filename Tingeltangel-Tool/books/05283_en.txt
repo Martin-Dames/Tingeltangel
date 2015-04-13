@@ -1,8 +1,0 @@
-Name: Kur'ân-ı Kerim Elif Ba'sı ve Tecvid
-Publisher: Define Yayınları
-Author: Mustafa ARSLAN
-Book Version: 1089
-URL: 
-ThumbMD5: ea34d5d1e1f06c2f9e54adf3da97c131
-FileMD5: ded0af8f4d9e46c2267c64051fe556d1
-Book Area Code: en

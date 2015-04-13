@@ -1,8 +1,0 @@
-Name: Mein TING-Lese-Lernbuch - Ein Elch zum Knudde
-Publisher: Klett
-Author: Klett
-Book Version: 843
-URL: 
-ThumbMD5: f48e16c92f4cbd8f3ad76cbe56a96df1
-FileMD5: 04629e7557aabb2c81fd3955904572df
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Mein tierisch tolles Bildwörterbuch Englisch
-Publisher: Langenscheidt
-Author: Gila Hoppenstedt / Ina Worms
-Book Version: 880
-URL: 
-ThumbMD5: 6a104f1eea043eed636f7b1a15f3c6d3
-FileMD5: 9bb27b4261c6d49334de9090c63e4671
-Book Area Code: en

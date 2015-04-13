@@ -1,8 +1,0 @@
-Name: Meine erste Hör-Bibel
-Publisher: Velber
-Author: Rachel Elliot
-Book Version: 287
-URL: 
-ThumbMD5: 4a44ca5c7f9e931fc3f44d726a385b51
-FileMD5: 8d9b319b36b80e3211d9b9ec5ba0f96c
-Book Area Code: en

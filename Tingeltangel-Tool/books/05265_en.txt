@@ -1,8 +1,0 @@
-Name: Abdest Almayı Öğreniyorum
-Publisher: Muştu Yayınları
-Author: Ümit Yıldırım
-Book Version: 924
-URL: 
-ThumbMD5: 143f0e31c3f358f1684a11384f771845
-FileMD5: bf08fe8e2937876b02c7c40718ff19f1
-Book Area Code: en

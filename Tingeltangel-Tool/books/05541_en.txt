@@ -1,8 +1,0 @@
-Name: Phonics Works 1
-Publisher: Joyous Publishing House
-Author: Patrick Ho
-Book Version: 1263
-URL: 
-ThumbMD5: ef3527e6b906723e4b47e319129c84f9
-FileMD5: 7431b2a177f3a682f0d2cc47a2f2cde2
-Book Area Code: en

@@ -1,9 +1,0 @@
-Name: Baustellen-Rätsel
-Publisher: arsEdition
-Author: Corina Beurenmeister
-Book Version: 206
-URL: 
-ThumbMD5: c61c4b43c49fb63d92c29d09fce289ba
-FileMD5: 60b90a1c9bf3d111197d3b9c45f40fb8
-ScriptMD5: 1d77609463cd1182e313ea1435ba8c7c
-Book Area Code: en

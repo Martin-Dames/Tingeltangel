@@ -1,8 +1,0 @@
-Name: Ich rette Dich, kleine Blumenprinzessin
-Publisher: Bertelsmann JUNIOR
-Author: Fritz / Güth
-Book Version: 341
-URL: 
-ThumbMD5: 2fbd71a3145099d1d706f93c403dc521
-FileMD5: 148daaa6e87ae69f4d17b8682880d294
-Book Area Code: en

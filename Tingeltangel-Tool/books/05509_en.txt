@@ -1,8 +1,0 @@
-Name: 用户手册
-Publisher: HimmerWinco
-Author: HimmerWinco
-Book Version: 1441
-URL: 
-ThumbMD5: f58daebec6693acf26cb8a4b144ff3e2
-FileMD5: bef9d35f72722fbee2d63b92095110fc
-Book Area Code: en

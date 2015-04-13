@@ -1,8 +1,0 @@
-Name: Access Band 1: 5. Schuljahr Vokabeltaschenbuc
-Publisher: Cornelsen
-Author: Cornelsen
-Book Version: 1101
-URL: 
-ThumbMD5: 86e78a6faa731bf85cdc1310847a5ed0
-FileMD5: 43fe70e2b5f64fe18297068b863659b7
-Book Area Code: en

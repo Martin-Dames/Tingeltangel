@@ -1,8 +1,0 @@
-Name: Stickertest casa tema
-Publisher: casa tema
-Author: Herr Rachlok
-Book Version: 1049
-URL: 
-ThumbMD5: a78b1dedf15be8816709a7e16e1bb65a
-FileMD5: fa515cf3a0b53c1363c9fc263b3627e0
-Book Area Code: en

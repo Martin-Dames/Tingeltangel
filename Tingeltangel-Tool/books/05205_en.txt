@@ -1,8 +1,0 @@
-Name: Lextra jun.: Unterwegs Schwedisch
-Publisher: Cornelsen
-Author: Cornelsen lex:tra junior
-Book Version: 676
-URL: 
-ThumbMD5: a365c236efe3086b7b3560ec3b1582c7
-FileMD5: 4d2f6f688869da5f11de2ee21325c9a5
-Book Area Code: en

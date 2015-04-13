@@ -1,8 +1,0 @@
-Name: Bastelgeschichten - Komm mit auf den Bauernho
-Publisher: frechverlag
-Author: frechverlag
-Book Version: 92
-URL: 
-ThumbMD5: 7337fc08c21dbc2242cd75b0b22ed011
-FileMD5: 55798bd45f755c453bc164960cf3c08c
-Book Area Code: en

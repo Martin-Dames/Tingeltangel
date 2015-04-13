@@ -1,8 +1,0 @@
-Name: Singapore International School
-Publisher: Singapore International School
-Author: Singapore International School
-Book Version: 775
-URL: 
-ThumbMD5: 6895fb07ff4527f3b4257b56c2c7a9c8
-FileMD5: 0aee31077deebfdf68f6428046c22196
-Book Area Code: en

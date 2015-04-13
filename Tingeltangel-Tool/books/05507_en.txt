@@ -1,8 +1,0 @@
-Name: Course Work
-Publisher: Greenville Kids World Kindergarten
-Author: Greenville Kids World Kindergarten
-Book Version: 978
-URL: 
-ThumbMD5: 75658d3d7198251bedb32505486bc77e
-FileMD5: df1a33f3a16878f6662877fe6095379a
-Book Area Code: en

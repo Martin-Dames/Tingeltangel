@@ -1,8 +1,0 @@
-Name: GÖRGÜ VE NEZAKET KURALLARI
-Publisher: Muştu Yayınları
-Author: Eyüp ÖZDEMIR
-Book Version: 919
-URL: 
-ThumbMD5: 7d87589723b7d2f43c6fb9935beb9f97
-FileMD5: cb8bd04b8ac7bdc7c09053ec5c5192c1
-Book Area Code: en

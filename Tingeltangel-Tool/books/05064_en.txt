@@ -1,8 +1,0 @@
-Name: Living Together - English for Housekeeping an
-Publisher: Handwerk & Technik
-Author: Maureen Bamming, Horst Beckmann, Gisela Machunsky, Elsa Toben-Vollmer
-Book Version: 245
-URL: 
-ThumbMD5: c002873b37b14028927e0b307e36c46c
-FileMD5: 246e688ef305a9bb86ce30aab5de9ed0
-Book Area Code: en

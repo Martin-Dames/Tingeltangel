@@ -1,8 +1,0 @@
-Name: I love Junior
-Publisher: Bayard Jeunesse
-Author: Bayard Jeunesse
-Book Version: 253
-URL: 
-ThumbMD5: 596190d06545690de0290041e902e167
-FileMD5: 9b51bb17f2f9bbe1ac5b49c894d37685
-Book Area Code: en

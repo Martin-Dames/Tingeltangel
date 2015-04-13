@@ -1,8 +1,0 @@
-Name: Turbokurs - Fit in Türkisch
-Publisher: Cornelsen
-Author: Cornelsen lex:tra
-Book Version: 98
-URL: 
-ThumbMD5: 25fc7e432bb011dee5ac0a7a76221a33
-FileMD5: ac9dc980ff1198c5c7507abd103e9b62
-Book Area Code: en

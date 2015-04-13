@@ -1,8 +1,0 @@
-Name: Mathe-Stars 2 Grundwissen
-Publisher: Oldenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 720
-URL: 
-ThumbMD5: 1bcf3155c6d145795b8567e74455cbe6
-FileMD5: fee599b12d61bd98adec73125e5338fa
-Book Area Code: en

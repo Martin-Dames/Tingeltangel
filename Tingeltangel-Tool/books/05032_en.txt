@@ -1,8 +1,0 @@
-Name: Abenteuer Hurtigruten
-Publisher: Stürtz
-Author: Karl-Uwe Küchler / Manfred Küchler
-Book Version: 65
-URL: 
-ThumbMD5: 86f92f62ecae704d18b8650e9098dffd
-FileMD5: 4d7224bc390c1876e587763381ca2acf
-Book Area Code: en

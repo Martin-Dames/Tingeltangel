@@ -1,8 +1,0 @@
-Name: GÜL GİBİ HAYAT
-Publisher: Muştu Yayınları
-Author: Muştu Yayınları
-Book Version: 922
-URL: 
-ThumbMD5: 6937aeea0f567f0bca04c593be026d5c
-FileMD5: 8ff607934ac8bbf45ec857f681f88635
-Book Area Code: en

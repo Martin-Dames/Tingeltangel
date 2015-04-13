@@ -1,8 +1,0 @@
-Name: Namaz Kılmayı Öğreniyorum
-Publisher: Kuşak Yayınları
-Author: Ümit Yıldırım
-Book Version: 928
-URL: 
-ThumbMD5: 27a4a9f32b21b3dc81bf9a1a472dc5bb
-FileMD5: 51fa29cbd964c6a3040dcd30f239fd6f
-Book Area Code: en

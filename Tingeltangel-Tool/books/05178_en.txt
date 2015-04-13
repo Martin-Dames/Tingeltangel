@@ -1,8 +1,0 @@
-Name: Flyer Erstabschläge in SAilber und Gold
-Publisher: MDM Deutsche Münze
-Author: MDM
-Book Version: 1043
-URL: 
-ThumbMD5: 6461f8cfd50d8d9398dffe3120ba3265
-FileMD5: 3031ecdfa1122ce756001a711d8bb6ca
-Book Area Code: en

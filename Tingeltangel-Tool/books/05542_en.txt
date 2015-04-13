@@ -1,8 +1,0 @@
-Name: Phonics Works 2
-Publisher: Joyous Publishing House
-Author: Patrick Ho
-Book Version: 1306
-URL: 
-ThumbMD5: 70697c17fd9a635836cde7e7e7c63b06
-FileMD5: 7641c3258ae94a738cebabf667795831
-Book Area Code: en

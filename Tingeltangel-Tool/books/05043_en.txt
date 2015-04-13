@@ -1,8 +1,0 @@
-Name: Bastelabenteuer mit der frechen Prinzessin
-Publisher: frechverlag
-Author: frechverlag
-Book Version: 93
-URL: 
-ThumbMD5: e4b261ec81b0351a7a230814aa97b0ce
-FileMD5: 39fa74d6602cf80bc435f1fb475d207e
-Book Area Code: en

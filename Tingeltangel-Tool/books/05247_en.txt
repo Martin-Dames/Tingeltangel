@@ -1,8 +1,0 @@
-Name: Áplus! 2 Vokabeltaschenbuch
-Publisher: Cornelsen
-Author: Cornelsen
-Book Version: 815
-URL: 
-ThumbMD5: 2d521fa801e4c3bb2a86c7712d9566fe
-FileMD5: f283f3f04a87cbf2cc82c3cd2e93378f
-Book Area Code: en

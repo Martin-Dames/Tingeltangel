@@ -1,9 +1,0 @@
-Name: IWW Ponies Wear Shoes
-Publisher: Macmillan
-Author: Macmillan
-Book Version: 225
-URL: 
-ThumbMD5: ded7c1ee5a580801941acfaf63382765
-FileMD5: ef7f0b493aa742b7d41a2b88ba1df693
-ScriptMD5: 4c1747413a6639c398a8e2b14189fd70
-Book Area Code: en

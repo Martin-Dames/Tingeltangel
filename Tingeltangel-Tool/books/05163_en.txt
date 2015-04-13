@@ -1,8 +1,0 @@
-Name: Deutsch-Stars 4 Lesetraining
-Publisher: Oldenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 1208
-URL: 
-ThumbMD5: d1bbd0164e1f52a33cf41acb1bd28511
-FileMD5: 4a19228590f34b4ccfd1d7e197f8f2b7
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Auf dem Bauernhof
-Publisher: Schwager & Steinlein Verlag GmbH
-Author: Carola von Kessel
-Book Version: 763
-URL: 
-ThumbMD5: 3d96a605b5e2b41f09adfeff725bbc87
-FileMD5: ba58f0cba5454a0310d40c8e49baecc3
-Book Area Code: en

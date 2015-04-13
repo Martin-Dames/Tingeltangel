@@ -1,8 +1,0 @@
-Name: Pro Akustik Hörtraining - Übungsheft
-Publisher: Pro Akustik
-Author: Pro Akustik
-Book Version: 1097
-URL: 
-ThumbMD5: 584e5c2e253849f9dee7a6935d52df91
-FileMD5: 2586e039d9fdbcbcd3d2f26924cb709e
-Book Area Code: en

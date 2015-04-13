@@ -1,8 +1,0 @@
-Name: Schecky geht durch! Mein Abenteuer auf dem Po
-Publisher: Bertelsmann JUNIOR
-Author: Nina Heinke - Christiane Güth
-Book Version: 541
-URL: 
-ThumbMD5: 43940bb28993713a77898bea8656533e
-FileMD5: 08b09263d72fe904e43b71e179259db9
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Turbokurs - Fit in Dänisch
-Publisher: Cornelsen
-Author: Cornelsen lex:tra
-Book Version: 343
-URL: 
-ThumbMD5: b9211e8a76c8cbf4cae9bb6a3635aa26
-FileMD5: 0a800cc8439bb805ce54ce75d6ae3772
-Book Area Code: en

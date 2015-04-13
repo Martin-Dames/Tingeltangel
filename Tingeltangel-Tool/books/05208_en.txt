@@ -1,8 +1,0 @@
-Name: Ich bin eine Müllhexe und ich heisse Rosalie 
-Publisher: Trans-World-Musikverlag
-Author: Esslinger, Liese / Scherounigg, Helmut
-Book Version: 599
-URL: 
-ThumbMD5: 27568515d5d1076a55064954d0bedc9f
-FileMD5: 4bc73c7d631b459e1639afef64774c40
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Deutsch-Stars 1 Silbentraining
-Publisher: Oldenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 725
-URL: 
-ThumbMD5: c8b2b71fce12655d6c82c71f54ad5b2d
-FileMD5: 7eb3b44a82cff0bf551dae33b7b62fe2
-Book Area Code: en

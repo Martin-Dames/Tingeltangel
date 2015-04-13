@@ -1,8 +1,0 @@
-Name: DUA ve SÛRE EZBER KARTLARI
-Publisher: Muştu Yayınları
-Author: NAMAZ TESBİHATI / KÜÇÜK TESBİHAT
-Book Version: 920
-URL: 
-ThumbMD5: ee889a142148f2aa4112f9e5b978d633
-FileMD5: 1527b1cc163d223959b05df25beb86c9
-Book Area Code: en

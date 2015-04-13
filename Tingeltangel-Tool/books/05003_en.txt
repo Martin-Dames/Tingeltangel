@@ -1,8 +1,0 @@
-Name: Der Kinder Brockhaus Bei mir zu Hause
-Publisher: Der Kinderbrockhaus
-Author: Hören & entdecken
-Book Version: 80
-URL: 
-ThumbMD5: a7ff084f3a7f65683f9924f2ecffeffb
-FileMD5: aec80df1ad92674391b276cca1eaa7bf
-Book Area Code: en

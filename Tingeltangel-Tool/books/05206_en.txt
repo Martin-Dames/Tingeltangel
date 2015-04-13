@@ -1,8 +1,0 @@
-Name: Lextra jun.: Unterwegs Türkisch
-Publisher: Cornelsen
-Author: Cornelsen
-Book Version: 680
-URL: 
-ThumbMD5: 0fabb4694ddc9be402ee37965a0f68c9
-FileMD5: 5fb9c86456235c68e6765200f3473950
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Der Kinder Brockhaus Die Fahrzeuge
-Publisher: Der Kinderbrockhaus
-Author: Hören & entdecken
-Book Version: 81
-URL: 
-ThumbMD5: 36e6006a958293c9c25804a0e6732523
-FileMD5: f1cf86ac25e6308d707e4eca1d14da3a
-Book Area Code: en

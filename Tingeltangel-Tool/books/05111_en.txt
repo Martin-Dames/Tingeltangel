@@ -1,8 +1,0 @@
-Name: Tiere auf dem Bauernhof
-Publisher: Velber Kinderbuch
-Author: Janine Scott
-Book Version: 327
-URL: 
-ThumbMD5: e7090ee8c88820cbcd4fc38c0a7314ad
-FileMD5: cb4076ed3bd4edb12fde530202ac4abf
-Book Area Code: en

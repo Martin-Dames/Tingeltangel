@@ -1,8 +1,0 @@
-Name: Peygamberimizin Çocukluk Yılları 5 - Develeri
-Publisher: Muştu Yayınları
-Author: Nurefşan ÇAĞLAROĞLU
-Book Version: 1462
-URL: 
-ThumbMD5: 5c8f5ad2a81a17cd98296c8c5a1beef1
-FileMD5: 0ccd08dedc78ca92ad14659a86ccba66
-Book Area Code: en

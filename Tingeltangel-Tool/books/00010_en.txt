@@ -1,9 +1,0 @@
-Name: Stinova OPENURL Test
-Publisher: Stinova
-Author: Stinova
-Book Version: 707
-URL: 
-ThumbMD5: 1fe8cd90e4dad2a89077cfd1b86a09c1
-FileMD5: c279939d7c0daee787927b48a22dc8f7
-ScriptMD5: 3ecde827a9be3e7478c6f5ad6c9c32c3
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Firmware Testbook
-Publisher: Stinova
-Author: Stinova
-Book Version: 1325
-URL: 
-ThumbMD5: 051f17ca29e9c8589db2d3f68c099ba8
-FileMD5: b43a0ebaf6130a3d5ac5d73dff682f72
-Book Area Code: en

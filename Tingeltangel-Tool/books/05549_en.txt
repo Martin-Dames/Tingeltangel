@@ -1,8 +1,0 @@
-Name: 中文3
-Publisher: ting.com.hk
-Author: xxx
-Book Version: 1481
-URL: 
-ThumbMD5: d7f740b74c19cf652d70e41f2a6bc764
-FileMD5: d9d79451bf50d5e3b36dae330a4c8df5
-Book Area Code: en

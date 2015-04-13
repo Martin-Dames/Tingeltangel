@@ -1,8 +1,0 @@
-Name: Erlebe die Natur! - SA für McDonald's
-Publisher: Tessloff
-Author: Tessloff
-Book Version: 1405
-URL: 
-ThumbMD5: 28672dcaadab578dc04c3427afd4b627
-FileMD5: 6f96fde3798a59fb3b68ac14e866eaa1
-Book Area Code: en

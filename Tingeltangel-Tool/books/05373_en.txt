@@ -1,8 +1,0 @@
-Name: Peygamberimizin Çocukluk Yılları 1 - Bilge Ce
-Publisher: Muştu Yayınları
-Author: Nurefşan ÇAĞLAROĞLU
-Book Version: 1463
-URL: 
-ThumbMD5: f62c922575f3a36ef89c2532f5a2893b
-FileMD5: 7fb521edb875fe7e12c730ef78e5dfcb
-Book Area Code: en

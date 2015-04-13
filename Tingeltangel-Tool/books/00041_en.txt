@@ -1,8 +1,0 @@
-Name: Testaktivierung Langenscheidt
-Publisher: Langenscheidt
-Author: Langenscheidt
-Book Version: 549
-URL: 
-ThumbMD5: 7960979e9d1888fe08d81f13f1ad5ffd
-FileMD5: 2c10d5d5e0b96c1f787cd1c63f615df5
-Book Area Code: en

@@ -1,9 +1,0 @@
-Name: Brockhaus Bildwörterbuch International
-Publisher: Brockhaus
-Author: Brockhaus
-Book Version: 728
-URL: 
-ThumbMD5: 7288a72df720482c0c9bc7a164b38283
-FileMD5: 72fa7e15c06724cc75a8ea3c0ed6f653
-ScriptMD5: 2abedd674322ceaeb5fc1f8c8ed8707a
-Book Area Code: en

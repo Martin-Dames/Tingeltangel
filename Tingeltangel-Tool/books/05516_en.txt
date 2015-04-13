@@ -1,8 +1,0 @@
-Name: Rosaryhill coursework
-Publisher: Rosaryhill
-Author: Ms. Raquel and Ms. Ruth
-Book Version: 1402
-URL: 
-ThumbMD5: b7f1ccd0ddff42f01b955bca127d093f
-FileMD5: 299be0df8fab5443d9a357b791475782
-Book Area Code: en

@@ -1,9 +1,0 @@
-Name: Colombo Cruzou o Oceano
-Publisher: GIRASSOL
-Author: Rosie Greenwood
-Book Version: 613
-URL: 
-ThumbMD5: d47606e8ad3caaa1e08a8b7367fe8077
-FileMD5: 6bf41f191a0a0aec8fc0725ff64dd6ea
-ScriptMD5: 4e9368b85036cf7e30253b712c6b391c
-Book Area Code: en

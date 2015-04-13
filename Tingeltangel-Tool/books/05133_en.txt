@@ -1,8 +1,0 @@
-Name: Unsere liebsten Katzen
-Publisher: Velber
-Author: Janine Scott
-Book Version: 426
-URL: 
-ThumbMD5: 47f6a98351a480c03cbec963724a894a
-FileMD5: a1b312f3cc1b3e59c7150877708442b0
-Book Area Code: en

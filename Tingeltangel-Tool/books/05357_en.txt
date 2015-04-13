@@ -1,8 +1,0 @@
-Name: Komm mit, wir reisen zu Mozart
-Publisher: TINGplus!
-Author: Herbert Rosendorfer
-Book Version: 1407
-URL: 
-ThumbMD5: 3fc03eff60e8c54845a099ea26ed5421
-FileMD5: 4334f6bc6f767b3bdffd8cda5c0a4b6a
-Book Area Code: en

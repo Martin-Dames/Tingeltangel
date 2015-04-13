@@ -1,8 +1,0 @@
-Name: Neşeli Bilim Kitaplarım 5 - Uğur Böcekleri
-Publisher: Muştu Yayınları
-Author: Nurşen ŞİRİN
-Book Version: 1459
-URL: 
-ThumbMD5: a7c81f85b5d83d90d3906308dd8e35c8
-FileMD5: 8a5a107be82d9c1d339c759a27975fce
-Book Area Code: en

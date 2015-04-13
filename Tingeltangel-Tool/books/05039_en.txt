@@ -1,8 +1,0 @@
-Name: Turbokurs - Fit in Portugiesisch
-Publisher: Cornelsen
-Author: Cornelsen lex:tra
-Book Version: 97
-URL: 
-ThumbMD5: 1c80fdc5cf224c6306c37807c22a90f9
-FileMD5: 2d894509ff4bb81822e524b265aabc90
-Book Area Code: en

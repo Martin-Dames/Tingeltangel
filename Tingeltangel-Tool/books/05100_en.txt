@@ -1,9 +1,0 @@
-Name: Auf dem Wimmel Bauernhof
-Publisher: HABA
-Author: Stefanie Klinge, Anna Madouche
-Book Version: 552
-URL: 
-ThumbMD5: ea6c7ec61489452e2219ff67b67c1ad7
-FileMD5: 28613c50a1b193712305a8c74e3300c5
-ScriptMD5: 7346c91c9102e8ad7dcda600b89842ab
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: TING Märchen
-Publisher: Bulgarisches Münzenhaus
-Author: Bulgarisches Münzenhaus
-Book Version: 1415
-URL: 
-ThumbMD5: 2e462b809b1968a7325b80e1112858de
-FileMD5: ea0ad18912ae39f1b4e02631c8951a3c
-Book Area Code: en

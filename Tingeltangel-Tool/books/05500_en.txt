@@ -1,8 +1,0 @@
-Name: CDNIS Primary School Chinese course work
-Publisher: Canadian International School Hongkong
-Author: Miyan ZHANG
-Book Version: 1467
-URL: 
-ThumbMD5: d12193077b49ac9d55711d51832da04c
-FileMD5: 1e476e47bdcf786c3246d131fdd16f39
-Book Area Code: en

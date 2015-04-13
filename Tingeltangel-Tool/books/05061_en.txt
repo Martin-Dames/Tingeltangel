@@ -1,8 +1,0 @@
-Name: Reise durch London
-Publisher: Stürtz
-Author: Herzig / Schwikart
-Book Version: 248
-URL: 
-ThumbMD5: 6ff7c7f8c9ad4c503e539241bd7401a9
-FileMD5: ff72bc73497b990f65bf872cf4e5f86f
-Book Area Code: en

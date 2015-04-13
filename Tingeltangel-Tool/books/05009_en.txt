@@ -1,8 +1,0 @@
-Name: Das große ABC-Wimmelbuch
-Publisher: arsEdition
-Author: Stellmacher / Neuendorf
-Book Version: 74
-URL: 
-ThumbMD5: 1d581f9f78aeb135e2fa65357a066a63
-FileMD5: f829582c3b57fef599c73ffb2b3e415c
-Book Area Code: en

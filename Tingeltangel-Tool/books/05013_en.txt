@@ -1,8 +1,0 @@
-Name: Was fliegt denn da?
-Publisher: Kosmos
-Author: Detlef Singer
-Book Version: 571
-URL: 
-ThumbMD5: 2b2de8a0769ce656049f5f7df748d3f5
-FileMD5: 6d54e4d03d499a36859b4c3a562eb61a
-Book Area Code: en

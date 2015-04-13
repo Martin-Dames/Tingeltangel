@@ -1,8 +1,0 @@
-Name: Küçük Hanımlar Mutfağa-Çorbalar
-Publisher: Muştu Yayınları
-Author: Nur Dombaycı
-Book Version: 1113
-URL: 
-ThumbMD5: 2c302d1bb981b6fbcfc4755c74e6a319
-FileMD5: 17ca1fe65e3be55467f55f8e5a4632e1
-Book Area Code: en

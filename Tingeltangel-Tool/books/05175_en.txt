@@ -1,8 +1,0 @@
-Name: Diktat-Stars 4
-Publisher: Oldenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 711
-URL: 
-ThumbMD5: fde29c7dc5d77630fa9967477213aa35
-FileMD5: 9e37933372541abbe917963001c69a28
-Book Area Code: en

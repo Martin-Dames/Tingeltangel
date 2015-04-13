@@ -1,8 +1,0 @@
-Name: Unsere liebsten Hunde
-Publisher: Velber
-Author: Janine Scott
-Book Version: 460
-URL: 
-ThumbMD5: 089e2eb55a1d0a8c5b8dde0c74a42144
-FileMD5: 96a8cf17bece5bd0fdfca4272ff74dca
-Book Area Code: en

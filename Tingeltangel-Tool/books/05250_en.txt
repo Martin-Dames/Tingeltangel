@@ -1,8 +1,0 @@
-Name: Grundschulwörterbuch Deutsch neu
-Publisher: Langenscheidt
-Author: Langenscheidt
-Book Version: 987
-URL: 
-ThumbMD5: 2c0192e267f3a451e66c674691b1d724
-FileMD5: a00578b8b400dc6ff66b61d29bcce04e
-Book Area Code: en

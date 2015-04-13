@@ -1,8 +1,0 @@
-Name: Lotus Tours travel materials
-Publisher: Lotus Tours
-Author: Ms. Cheung Shin Yee
-Book Version: 817
-URL: 
-ThumbMD5: 57db72322a6daca6abd5035843cf39ea
-FileMD5: c1e33644b02bf5e73c057b56e51013db
-Book Area Code: en

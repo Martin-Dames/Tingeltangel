@@ -1,9 +1,0 @@
-Name: Os Cavalos Usam Ferraduras
-Publisher: GIRASSOL
-Author: Jackie Gaff
-Book Version: 622
-URL: 
-ThumbMD5: 21b876e42f49d3ed325ac4c850e8cc1d
-FileMD5: 9a6fdd32af928882c8746b364cc16f37
-ScriptMD5: 4c1747413a6639c398a8e2b14189fd70
-Book Area Code: en

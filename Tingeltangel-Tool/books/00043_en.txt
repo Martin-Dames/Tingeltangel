@@ -1,8 +1,0 @@
-Name: Video Weblink Test
-Publisher: TING GmbH
-Author: Tim Mager
-Book Version: 641
-URL: 
-ThumbMD5: 58faa67e4b0a1ddada83a287a2f81904
-FileMD5: 935d0a27163222182dc6496ff2b634ed
-Book Area Code: en

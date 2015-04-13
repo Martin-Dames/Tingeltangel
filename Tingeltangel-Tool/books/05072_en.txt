@@ -1,9 +1,0 @@
-Name: IWW Soap Makes Bubbles
-Publisher: Macmillan
-Author: Macmillan
-Book Version: 226
-URL: 
-ThumbMD5: 48f0ed12145b2744223e93e11b463380
-FileMD5: cf3771ee163d29982ea26454ed6434ab
-ScriptMD5: 8ffab87b997bbb40d6a9ba9e1d467f03
-Book Area Code: en

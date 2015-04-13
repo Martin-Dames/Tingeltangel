@@ -1,8 +1,0 @@
-Name: KUR'AN-I KERİM
-Publisher: "DEFİNE YAYINLARI" IŞIK YAYINCILIK A.Ş
-Author: Muştu Yayınları
-Book Version: 1310
-URL: 
-ThumbMD5: a6bedeb7c050e4600f840a49c38861a1
-FileMD5: a173f0ca7651fab4401504d7f5d33908
-Book Area Code: en

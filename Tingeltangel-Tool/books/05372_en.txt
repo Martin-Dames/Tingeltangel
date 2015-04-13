@@ -1,8 +1,0 @@
-Name: Neşeli Bilim Kitaplarım 6 - İnekler
-Publisher: Muştu Yayınları
-Author: Nurşen ŞİRİN
-Book Version: 1474
-URL: 
-ThumbMD5: 13a1c2158a53ba6ab3b79a3a031282e1
-FileMD5: 8088669729d81c4222e5fe6c281385c8
-Book Area Code: en

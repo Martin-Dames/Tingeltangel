@@ -1,8 +1,0 @@
-Name: Power Wörterbuch Französisch
-Publisher: Langenscheidt
-Author: Langenscheidt
-Book Version: 87
-URL: 
-ThumbMD5: c6398f35a8e90880dc281ae080332761
-FileMD5: bb54e5a93c687a4922fb83f00f52bc2e
-Book Area Code: en

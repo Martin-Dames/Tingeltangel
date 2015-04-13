@@ -1,8 +1,0 @@
-Name: WAS IST WAS Junior Erlebe die Natur!
-Publisher: Tessloff
-Author: Claudia Kaiser & Martin Lickleder (Autoren), Stefanie Klaßen (Illustratorin)
-Book Version: 796
-URL: 
-ThumbMD5: 973c875ec0e5fba0bf67ab1bf1fc06a0
-FileMD5: 7145832548af7bba07ad4f25f5bb5d51
-Book Area Code: en

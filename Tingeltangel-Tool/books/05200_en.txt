@@ -1,9 +1,0 @@
-Name: Das Geheimnis in der Kiste
-Publisher: Lingen Verlag
-Author: Birgit Ebbert
-Book Version: 788
-URL: 
-ThumbMD5: 7e674607e9151da83e2ec77a6002a666
-FileMD5: b6fdc6775462bcb5ebf7ccdcb7d4e5c4
-ScriptMD5: 0380fe26416f209db301e4c325165de1
-Book Area Code: en

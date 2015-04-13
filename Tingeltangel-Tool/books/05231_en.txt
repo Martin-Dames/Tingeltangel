@@ -1,9 +1,0 @@
-Name: WAS IST WAS Junior Im Einsatz! Polizei & Feue
-Publisher: Tessloff
-Author: Claudia Kaiser & Martin Lickleder (Autoren), Max Walther (Illustratorin)
-Book Version: 1409
-URL: 
-ThumbMD5: b2b8064d40a5951166b539040202b742
-FileMD5: 5573541e1d47791858480b90ce62bd65
-ScriptMD5: a1d310ff387ccf0fa9159d6fdefb2f7d
-Book Area Code: en

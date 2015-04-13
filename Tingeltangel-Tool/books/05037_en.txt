@@ -1,8 +1,0 @@
-Name: Bilderwörterbuch Spanisch
-Publisher: Cornelsen
-Author: Cornelsen lex:tra junior
-Book Version: 647
-URL: 
-ThumbMD5: f23c7b12b3562c8c78dcfccea9d159aa
-FileMD5: 004d570aec8bc3f6181c1f85fe148208
-Book Area Code: en

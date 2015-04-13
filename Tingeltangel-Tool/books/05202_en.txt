@@ -1,9 +1,0 @@
-Name: Bibi und der Turbo-Besen/Mein Ting-Lese-Lernb
-Publisher: Klett
-Author: Vincent Andreas mit Bildern von Linda Kohlbaum
-Book Version: 748
-URL: 
-ThumbMD5: caf79ec89a6b30322c7cb96b79942c4f
-FileMD5: 39d43b28d690070e27ceb43d14bbbb9d
-ScriptMD5: 5c03a6570934c8fa5d7916a06349db1a
-Book Area Code: en

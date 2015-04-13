@@ -1,8 +1,0 @@
-Name: ITAR TASS
-Publisher: Columbus
-Author: Columbus
-Book Version: 976
-URL: 
-ThumbMD5: b9235e1e66be0417553f845f67fd44ad
-FileMD5: 8a019014e0b1546405180a729493ac3b
-Book Area Code: en

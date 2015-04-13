@@ -1,8 +1,0 @@
-Name: Das Wimmelbuch
-Publisher: arsEdition
-Author: Ulla Bartl / Anna Pfeiffer / Claudia Ondracek
-Book Version: 44
-URL: 
-ThumbMD5: 7b1eba359678150d0e6fcc721915e2d1
-FileMD5: df13aaba7c1f04308506801221cf57d7
-Book Area Code: en

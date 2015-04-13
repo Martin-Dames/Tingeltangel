@@ -1,8 +1,0 @@
-Name: Meerestiere
-Publisher: Velber
-Author: Velber Kinderbuch
-Book Version: 58
-URL: 
-ThumbMD5: 67fc7b1f13d9d2c3300b3ec204815bc9
-FileMD5: ebcaa2d4257428259ddc57d87e33550b
-Book Area Code: en

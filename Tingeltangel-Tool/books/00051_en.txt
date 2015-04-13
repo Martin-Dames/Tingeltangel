@@ -1,8 +1,0 @@
-Name: Museumsdemo
-Publisher: Ascan Möller
-Author: Ascan Möller
-Book Version: 984
-URL: 
-ThumbMD5: 380c3273b8bb151e9c8f758d6419a2f9
-FileMD5: f7eeae036d95e859bfa22f9880137f77
-Book Area Code: en

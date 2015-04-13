@@ -1,8 +1,0 @@
-Name: Peygamberimizin Çocukluk Yılları 2 - Yaşlı Me
-Publisher: Muştu Yayınları
-Author: Nurefşan ÇAĞLAROĞLU
-Book Version: 1461
-URL: 
-ThumbMD5: debdb1a5348ce980646fb8a4c484e84f
-FileMD5: ece607f22ed5340b00509deb043494f7
-Book Area Code: en

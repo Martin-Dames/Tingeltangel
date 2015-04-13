@@ -1,8 +1,0 @@
-Name: DBS Demo Files
-Publisher: HimmerWinco
-Author: Patrick Ho
-Book Version: 1436
-URL: 
-ThumbMD5: a095d19ca6b07447b9db7800cd6eb747
-FileMD5: ebc14a5f02b0ba82c5f7e07c924c868a
-Book Area Code: en

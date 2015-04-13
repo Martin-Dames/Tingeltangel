@@ -1,8 +1,0 @@
-Name: Deutsch-Stars 1 Lesetraining
-Publisher: Oldenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 1203
-URL: 
-ThumbMD5: f4390581355d95577f804cb19c489b92
-FileMD5: 7b421a0cb3d53447842217ef182b7119
-Book Area Code: en

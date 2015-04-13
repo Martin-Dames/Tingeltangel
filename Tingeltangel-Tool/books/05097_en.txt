@@ -1,9 +1,0 @@
-Name: Ratz Fatz Buchstaben
-Publisher: HABA
-Author: Hajo Bücken
-Book Version: 555
-URL: 
-ThumbMD5: a635c7f252cb4a2572a7cad5297d5835
-FileMD5: 8999b45aefda8ff33d6d7d24244a8fa1
-ScriptMD5: b9e31e7134706fdce6ea5ee1e1183378
-Book Area Code: en

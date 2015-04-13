@@ -1,8 +1,0 @@
-Name: TING Demoseiten Teststation
-Publisher: Himmer AG Druckerei
-Author: Himmer AG Druckerei
-Book Version: 173
-URL: 
-ThumbMD5: abdcc7a3783e4025d010a35dcc41224b
-FileMD5: 90fb3a009891bd473bce14b6b3be5257
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Access Band 1: 5. Schuljahr Wordmaster Vokabe
-Publisher: Cornelsen
-Author: Cornelsen
-Book Version: 967
-URL: 
-ThumbMD5: 83657fea3eb6e36828ef146f0023d554
-FileMD5: 326b7e596635985d07fb503026cc4a8c
-Book Area Code: en

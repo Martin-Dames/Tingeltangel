@@ -1,9 +1,0 @@
-Name: Im Wimmel Kindergarten
-Publisher: HABA
-Author: Stefanie Klinge, Anna Madouche
-Book Version: 553
-URL: 
-ThumbMD5: 4efcf36b62c3bf613676d3f6b90a5e6b
-FileMD5: 28a744e44bed270b6ab06067444f8f74
-ScriptMD5: bae8cd8d7c121645bb4ab3cc9b59ddce
-Book Area Code: en

@@ -1,9 +1,0 @@
-Name: IWW Kangaroos Have Pouches
-Publisher: Macmillan
-Author: Macmillan
-Book Version: 217
-URL: 
-ThumbMD5: e5205e091efe143db6b05c0e76db7a8f
-FileMD5: 1ea95224a364044147f8a5466e009075
-ScriptMD5: 8d274e3dc2eef9ad0904c731c1e877af
-Book Area Code: en

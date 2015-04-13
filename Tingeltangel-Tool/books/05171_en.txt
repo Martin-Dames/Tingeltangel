@@ -1,9 +1,0 @@
-Name: Mathe-Stars 3 Grundwissen
-Publisher: Oldenbourg bsv
-Author: Oldenbourg bsv
-Book Version: 751
-URL: 
-ThumbMD5: a43f98e8d86a99651b73995a1401c2ba
-FileMD5: bc12463a49ceb0e24cfbe60d0732a531
-ScriptMD5: daa77a6e20b9de240133fd6ce6bedc0b
-Book Area Code: en

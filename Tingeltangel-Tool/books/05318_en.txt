@@ -1,8 +1,0 @@
-Name: Masallarla Değerler Eğitimi 8-Dikkatli Rehber
-Publisher: Muştu Yayınları
-Author: Osman Kaplan
-Book Version: 1231
-URL: 
-ThumbMD5: d92a51908e2050b93e8d42df62d82810
-FileMD5: f2cbb8c023ab6f87f0c67e7a2a054e19
-Book Area Code: en

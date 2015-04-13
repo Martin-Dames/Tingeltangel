@@ -1,8 +1,0 @@
-Name: Komm mit, wir reisen zu Mozart (ima)
-Publisher: arsEdition
-Author: Herbert Rosendorfer / Julia Andreae / Iris Wolfermann
-Book Version: 326
-URL: 
-ThumbMD5: 8a07c3fdb7e32ad25701fa24b971ba7f
-FileMD5: b8c8e734e2ee52f11cef1f509a08bf48
-Book Area Code: en

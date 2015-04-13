@@ -1,8 +1,0 @@
-Name: Learning English - Quizfächer
-Publisher: Ass Altenburger
-Author: Ass Altenburger
-Book Version: 398
-URL: 
-ThumbMD5: ec22446239070957cda8fc4adfd2892e
-FileMD5: 07d86212709a189c537fbae339b3b57a
-Book Area Code: en

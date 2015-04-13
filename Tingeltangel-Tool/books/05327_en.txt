@@ -1,8 +1,0 @@
-Name: Nasrettin Hoca Serisi 1-Parayı Veren Düdüğü Ç
-Publisher: Kuşak Yayınları
-Author: Cengiz Demir
-Book Version: 1239
-URL: 
-ThumbMD5: cd0c56c7ba219801fc75659eb41796d2
-FileMD5: 43e1e68fb0b1ebd59f32a34d65b31f7d
-Book Area Code: en

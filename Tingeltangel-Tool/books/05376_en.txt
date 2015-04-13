@@ -1,8 +1,0 @@
-Name: Peygamberimizin Çocukluk Yılları 6 - Şemsiye 
-Publisher: Muştu Yayınları
-Author: Nurefşan ÇAĞLAROĞLU
-Book Version: 1478
-URL: 
-ThumbMD5: 1ce313e24c266b218a5fc6a387d29761
-FileMD5: 11146ba50e5ddd1b36b56528a5a30878
-Book Area Code: en

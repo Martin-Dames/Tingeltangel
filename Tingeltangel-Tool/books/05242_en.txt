@@ -1,8 +1,0 @@
-Name: Güzel Elifbam
-Publisher: Muştu Yayınları
-Author: Birsen Turan, Aysun Keskin
-Book Version: 830
-URL: 
-ThumbMD5: 2e3f9eff550af4fc5ef372656615fb1c
-FileMD5: d55cc7fcebbc7823cb73040bb2123453
-Book Area Code: en

@@ -1,9 +1,0 @@
-Name: Os Vulcoes Entram em Erupcao
-Publisher: GIRASSOL
-Author: Rosie Greenwood
-Book Version: 812
-URL: 
-ThumbMD5: 00ddce8057b5c333b44d362decfdca6b
-FileMD5: 82996529c6f5ed4a81827720a38f0c6e
-ScriptMD5: 01441d4c17cd47ed88a674070de57783
-Book Area Code: en

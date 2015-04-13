@@ -1,9 +1,0 @@
-Name: IWW Stars Twinkle
-Publisher: Macmillan
-Author: Macmillan
-Book Version: 270
-URL: 
-ThumbMD5: 124b1da4bec738cd79400f5c283fce33
-FileMD5: 0958efd9aa5cb5290e0f6357229e9594
-ScriptMD5: 4570e0180b5073d06b8759ba80e1d735
-Book Area Code: en

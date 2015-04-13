@@ -1,8 +1,0 @@
-Name: Die schönsten Kinderlieder zum Mitsingen
-Publisher: 1Buch
-Author: .
-Book Version: 567
-URL: 
-ThumbMD5: 665869e584ef2f1c596fe0b8efdcef3e
-FileMD5: 8fc2d0ebe09224a2b1cbde2a5f082922
-Book Area Code: en

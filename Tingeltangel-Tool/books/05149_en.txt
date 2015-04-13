@@ -1,8 +1,0 @@
-Name: Bei den Tieren
-Publisher: ars edition
-Author: ars edition
-Book Version: 557
-URL: 
-ThumbMD5: 633e2cd83f9da4deeacffa3ab9273764
-FileMD5: 0006beeb26c194ef672f5aaba5ae1564
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Deutsche Dampflokomotiven - Baureihe 01 bis 9
-Publisher: HEEL Verlag
-Author: Detlef Gerth
-Book Version: 293
-URL: 
-ThumbMD5: a7ae1ea19985c76baad54fff745c668c
-FileMD5: b53896a2fb3407a8b9c364d04c7e49f1
-Book Area Code: en

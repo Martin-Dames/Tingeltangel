@@ -1,8 +1,0 @@
-Name: Krabbeltiere
-Publisher: Velber
-Author: Velber Kinderbuch
-Book Version: 57
-URL: 
-ThumbMD5: f30ee23f12133137846f08d29973d31c
-FileMD5: ca3583c22400410ad75db4cf9eb5fb8e
-Book Area Code: en

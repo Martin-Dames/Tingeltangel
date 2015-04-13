@@ -1,8 +1,0 @@
-Name: Das Early English Kinderliederbuch ab 2 Jahre
-Publisher: Gabriel
-Author: Sangl / Channon / Jensen
-Book Version: 177
-URL: www.gabriel-verlag.de
-ThumbMD5: 2d821903640076d5e14563f4af6fe467
-FileMD5: 85930478f9787302995c30d0c6d86eab
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: 交通工具总动员
-Publisher: himmerWinco
-Author: HimmerWinco
-Book Version: 1429
-URL: 
-ThumbMD5: 0e7dc34e7145b43e10d21f6dc8bf193e
-FileMD5: 8c9928a5d14dd4852c5002d3d9d693fe
-Book Area Code: en

@@ -1,8 +1,0 @@
-Name: Nasrettin Hoca Serisi 10-Zaten İnecektim
-Publisher: Kuşak Yayınları
-Author: Cengiz Demir
-Book Version: 1248
-URL: 
-ThumbMD5: e7ba7321198f34e52601c556b05e797c
-FileMD5: baf39426d78e910c4e9a53e961017b1e
-Book Area Code: en

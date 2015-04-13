@@ -1,8 +1,0 @@
-Name: Ahoi Piraten! Wir wollen den Schatz!
-Publisher: Bertelsmann JUNIOR
-Author: K. Johanna Fritz - Christiane Güth
-Book Version: 540
-URL: 
-ThumbMD5: 5878dfc5545a6d61d0002ea1b43ae01d
-FileMD5: 126fa68a00ac7df7dffb67b614dfdffa
-Book Area Code: en
