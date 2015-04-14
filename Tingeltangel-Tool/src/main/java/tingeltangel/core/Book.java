@@ -578,7 +578,7 @@ public class Book {
                 out.print("[Note]\r\n");
                 out.print(entry.getHint() + "\r\n");
                 out.print("[Content]\r\n");
-                out.print(entry.getMP3().getAbsolutePath().substring(pathLength) + "\r\n");
+                out.print(entry.getMP3().getAbsolutePath().substring(pathLength).replace('\\', '/') + "\r\n");
                 out.print("\r\n");
             } else if(entry.isCode() || entry.isSub()) {
                 out.print("Precode=" + entry.getTingID() + "\r\n");

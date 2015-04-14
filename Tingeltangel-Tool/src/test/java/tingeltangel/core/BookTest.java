@@ -72,6 +72,8 @@ public class BookTest {
         PrintWriter pw = new PrintWriter(baos);
         book.generateScriptFile(pw);
         String result = baos.toString();
+		
+		System.out.println(result);
 
         assertTrue("mp3 entry for code 15001", result.startsWith("Precode=15001\r\n" +
                 "TYPE=1\r\n" +
