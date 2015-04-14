@@ -1,14 +1,12 @@
 package tingeltangel.core;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import javax.sound.sampled.AudioSystem;
 import javazoom.jl.decoder.Bitstream;
 import javazoom.jl.decoder.BitstreamException;
 import javazoom.jl.decoder.Header;
-
-import javax.sound.sampled.AudioSystem;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class Mp3Utils {
 

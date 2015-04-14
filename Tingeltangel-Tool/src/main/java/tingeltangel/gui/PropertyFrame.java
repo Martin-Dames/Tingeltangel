@@ -34,7 +34,7 @@ public class PropertyFrame extends JInternalFrame {
     
     
     JTextField[] TEXT_FIELDS = {
-        name, publisher, author, version, url, magicValue, date
+        id, name, publisher, author, version, url, magicValue, date
     };
     String[] TEXT_FIELD_LABELS = {
         "ID", "Name", "Verleger", "Autor", "Version", "URL", "unbekannter Wert", "Datum"

@@ -319,7 +319,7 @@ public class MasterFrame extends JFrame implements MenuCallback {
                     }
                 }
             }
-        } else if(id.equals("buch.generateCodes")) {
+        } else if(id.equals("buch.generateEpsCodes")) {
             JFileChooser fc = new JFileChooser();
             fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             fc.setAcceptAllFileFilterUsed(false);
@@ -338,6 +338,28 @@ public class MasterFrame extends JFrame implements MenuCallback {
                         e.printStackTrace(System.out);
                     } catch(IllegalArgumentException e) {
                         JOptionPane.showMessageDialog(this, "eps-Generierung fehlgeschlagen: " + e.getMessage());
+                    }
+                }
+            }
+        } else if(id.equals("buch.generatePngCodes")) {
+            JFileChooser fc = new JFileChooser();
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fc.setAcceptAllFileFilterUsed(false);
+            fc.setDialogTitle("Speicherverzeichniss auswählen (png Dateien)");
+            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File dir = fc.getSelectedFile();
+                if(!dir.exists()) {
+                    JOptionPane.showMessageDialog(this, "Das Verzeichniss konnte nicht gefunden werden");
+                } else if(!dir.isDirectory()) {
+                    JOptionPane.showMessageDialog(this, "Kein Verzeichniss ausgewählt");
+                } else {
+                    try {
+                        book.pngExport(dir);
+                    } catch(IOException e) {
+                        JOptionPane.showMessageDialog(this, "png-Generierung fehlgeschlagen");
+                        e.printStackTrace(System.out);
+                    } catch(IllegalArgumentException e) {
+                        JOptionPane.showMessageDialog(this, "png-Generierung fehlgeschlagen: " + e.getMessage());
                     }
                 }
             }

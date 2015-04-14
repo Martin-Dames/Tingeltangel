@@ -460,6 +460,37 @@ public class Book {
         }
     }
     
+    public void pngExport(File dir) throws IOException, IllegalArgumentException {
+        
+        int size = getLastID() - 15000;
+        
+        if(id > 15000) {
+            throw new IllegalArgumentException("maximale Buch ID: 15000");
+        }
+        if(id < 0) {
+            throw new IllegalArgumentException("minimale Buch ID: 0");
+        }
+        if(Translator.ting2code(id) < 0) {
+            throw new IllegalArgumentException("die Code-ID zur Buch ID " + id + " ist zur Zeit noch unbekannt");
+        }
+        if(15000 + size > Translator.getMaxObjectCode()) {
+            throw new IllegalArgumentException("zu viele OIDs. Maximale zur Zeit unterstüzte OIS: " + Translator.getMaxObjectCode());
+        }
+        
+        
+        OutputStream out = new FileOutputStream(new File(dir, "activation.png"));
+        Codes.drawPng(Translator.ting2code(id), 200, 200, out);
+        out.close();
+                
+        for(int i = 0; i < size; i++) {
+            if(getEntryFromTingID(i + 15001).hasCode()) {
+                out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
+                Codes.drawPng(Translator.ting2code(i + 15001), 200, 200, out);
+                out.close();
+            }
+        }
+    }
+    
     public void epsSingleExport(File file, int tingID) throws IOException, IllegalArgumentException {
         
         
