@@ -52,7 +52,7 @@ public class MasterFrame extends JFrame implements MenuCallback {
     
     
     public MasterFrame() {
-        super(Tingeltangel.MAIN_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION_STRING + Tingeltangel.MAIN_FRAME_VERSION);
+        super(Tingeltangel.MAIN_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
         
         
         indexFrame = new IndexFrame(book, this);

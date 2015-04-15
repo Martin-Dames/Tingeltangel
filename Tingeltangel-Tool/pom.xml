@@ -5,6 +5,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <groupId>tingeltangel</groupId>
   <artifactId>tingeltangel</artifactId>
   <version>0.1</version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <build>
     <plugins>
       <plugin>
@@ -45,10 +48,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                     </manifest>
                 </archive>
                 <descriptorRefs>
-                    <descriptorRef>jar-with-dependencies</descriptorRef>
-                    <!-- <descriptorRef>bin</descriptorRef> -->
+                    <!-- <descriptorRef>jar-with-dependencies</descriptorRef> -->
                 </descriptorRefs>
                 <descriptors>
+                    <descriptor>src/main/assembly/jar.xml</descriptor>
                     <descriptor>src/main/assembly/zip.xml</descriptor>
                 </descriptors>
             </configuration>
