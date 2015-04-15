@@ -46,8 +46,21 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                 </archive>
                 <descriptorRefs>
                     <descriptorRef>jar-with-dependencies</descriptorRef>
+                    <!-- <descriptorRef>bin</descriptorRef> -->
                 </descriptorRefs>
+                <descriptors>
+                    <descriptor>src/main/assembly/zip.xml</descriptor>
+                </descriptors>
             </configuration>
+            <executions>
+                <execution>
+                  <id>make-assembly</id>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>single</goal>
+                  </goals>
+                </execution>
+            </executions>
         </plugin>
     </plugins>
   </build>
