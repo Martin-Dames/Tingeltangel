@@ -628,7 +628,7 @@ public class Book {
     /**
      * Return a set of all OIDs used in the book.
      *
-     * @return
+     * @return a set of all OIDs used in the book.
      */
     public Set<Integer> getIds() {
         return this.indexEntries.keySet();

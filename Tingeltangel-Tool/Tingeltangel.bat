@@ -1,1 +1,1 @@
-start javaw -jar Tingeltangel.jar > tt.log 2>&1
+start javaw -jar tingeltangel-0.1-jar-with-dependencies.jar > tt.log 2>&1

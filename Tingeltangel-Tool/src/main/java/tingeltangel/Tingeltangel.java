@@ -13,7 +13,6 @@ public class Tingeltangel {
     public static int MAIN_FRAME_WIDTH = 1200;
     public static int MAIN_FRAME_HEIGHT = 700;
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
-    public static String MAIN_FRAME_VERSION_STRING = " v";
     public static String MAIN_FRAME_VERSION = " v0.1";
         
     private static String mpg123Path;
