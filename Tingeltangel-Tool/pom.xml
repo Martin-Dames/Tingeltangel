@@ -16,6 +16,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
       </plugin>
       <plugin>
