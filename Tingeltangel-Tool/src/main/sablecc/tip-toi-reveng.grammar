@@ -69,7 +69,6 @@ Tokens
    percent_s = '%s';
    slash = '/';
 
-   variable = '$' (digit | nondigit)+;
    identifier = identifier;
    integer = digit_seq;
    blank = blank+;
@@ -79,54 +78,95 @@ Ignored Tokens
   blank;
   
 Productions
+
+  statement {-> statement} = 
+      {conditional}             [head]:comparison quest [body]:statement  {->  New statement.conditional(head.comparison, body.statement) }
+    | {conditional_no_action}   [head]:comparison quest  {-> New statement.noop() }
+    | {action} action+          {-> New statement.action([action.action])}
+  ;
+
+  action {-> action} = 
+      {set}    assignment    {-> assignment.action }
+    | {play}   play_command  {-> play_command.action }
+    | {jump}   jump_command  {-> jump_command.action }
+    | {game}   game_command  {-> game_command.action } 
+    | {cancel} cancel_specifier  {-> New action.cancel() }
+  ;
+  
+  comparison {-> comparison } = 
+          {eq} [e1]:location cop_eq [e2]:term      {-> New comparison.bop_neq(e1.value,e2.value)}
+  	| {neq} [e1]:location cop_neq [e2]:term    {-> New comparison.bop_neq(e1.value,e2.value)}
+  	| {lt} [e1]:location cop_lt [e2]:term      {-> New comparison.bop_lt(e1.value,e2.value)}
+  	| {gt} [e1]:location cop_gt [e2]:term      {-> New comparison.bop_gt(e1.value,e2.value)}
+  	| {lteq} [e1]:location cop_lteq [e2]:term  {-> New comparison.bop_lteq(e1.value,e2.value)}
+  	| {gteq} [e1]:location cop_gteq [e2]:term  {-> New comparison.bop_gteq(e1.value,e2.value)}
+  ;  
+
+  play_command {-> action} = 
+      play_specifier l_par [args]:file_list r_par {-> New action.play([args.file_name]) }
+  ;
+  
+  jump_command {-> action} = 
+  	jump_specifier l_par identifier r_par {-> New action.jump(identifier) }
+  ;
+
+  game_command {-> action} = 
+  	game_specifier  l_par integer r_par {-> New action.game(integer) }
+  ;
+
+  file_name {-> file_name} =
+      {text} identifier  {-> New file_name.text(identifier) }
+    | {number} integer   {-> New file_name.oid(integer) }
+  ;
+
+  file_list {-> file_name*} =  
+      {single}   [arg]:file_name                            {-> [arg.file_name]}
+    | {multiple} [arg]:file_name comma [rest]:file_list    {-> [arg.file_name, rest.file_name]}
+  ;
+
+  assignment {-> action} = 
+      {set}  [left]:location colon_eq [right]:term    {-> New action.set( left.value, right.value) }
+    | {plus} [left]:location plus_eq [right]:term     {-> New action.plus( left.value, right.value) }
+    | {minus} [left]:location minus_eq [right]:term   {-> New action.minus( left.value, right.value) }
+  ;
+
+  term {-> value} =
+      {value}     integer  {-> New value.number(integer) }
+    | {variable}  location {-> location.value }
+  ;
+  
+  location {-> value} = 
+      {variable} dollar identifier  { -> New value.variable(identifier) }
+    | {register} dollar integer     { -> New value.register(integer) }
+  ;
+  
+  
+Abstract Syntax Tree
+
+  statement = {conditional}  comparison statement
+            | {noop}
+            | {action} [actions]:action+;
     
-  statement = 
-      {conditional}   conditional 
-    | {action} action+
+  comparison  = {bop_eq}            [e1]:value [e2]:value               // $x == $y
+              | {bop_lt}            [e1]:value [e2]:value               // $x < $y
+              | {bop_gt}            [e1]:value [e2]:value               // $x > $y
+              | {bop_lteq}          [e1]:value [e2]:value               // $x <= $y
+              | {bop_gteq}          [e1]:value [e2]:value               // $x >= $y
+              | {bop_neq}           [e1]:value [e2]:value               // $x != $y
   ;
+
+  action = {set}  [left]:value [right]:value
+         | {plus}        [left]:value [right]:value
+         | {minus}       [left]:value [right]:value
+         | {cancel}
+         | {jump}  identifier
+         | {game}  integer
+         | {play}        [files]:file_name*;
+	 
+  value = {variable} identifier
+        | {register} integer
+	| {number}   integer;
+       
+  file_name = {text} identifier
+            | {oid} integer;
   
-  
-  action = 
-      {set}    assignment
-    | {jump}   jump_command
-    | {play}   play_command
-    | {game}   game_command
-    | {cancel} cancel_specifier
-  ;
-  
-  play_command = 
-      play_specifier l_par file_list r_par
-  ;
-
-  file_name =
-      {text} identifier
-    | {number} integer
-  ;
-
-  file_list =  file_name file_list_tail*;
-
-  file_list_tail = comma file_name;
-
-  jump_command = jump_specifier l_par identifier r_par;
-
-  game_command = game_specifier  l_par integer r_par;
-
-  assignment = 
-      {set}  variable colon_eq term
-    | {plus} variable plus_eq term
-    | {minus} variable minus_eq term
-  ;
-
-  conditional =
-  	  {eq} variable cop_eq term quest statement?
-  	| {neq} variable cop_neq term quest statement?
-  	| {lt} variable cop_lt term quest statement?
-  	| {gt} variable cop_gt term quest statement?
-  	| {lteq} variable cop_lteq term quest statement?
-  	| {gteq} variable cop_gteq term quest statement?
-  ;
-
-  term =
-      {value}     integer
-    | {variable}  variable
-  ;
