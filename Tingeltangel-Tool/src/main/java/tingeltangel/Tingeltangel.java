@@ -16,30 +16,20 @@ public class Tingeltangel {
     public static String MAIN_FRAME_VERSION = " v0.1";
         
     private static String mpg123Path;
-    //private static String soxPath;
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 
-                //final String INSTALL_SOX = "SOX kann da und da heruntergeladen werden";
                 final String INSTALL_MPG123 = "MPG123 kann da und da heruntergeladen werden";
                 
-                /*final StringCallback callbackSox = new StringCallback() {
-                    @Override
-                    public void callback(String path) {
-                        soxPath = path;
-                        startup();
-                    }
-                };*/
                 
                 StringCallback callbackMpg123 = new StringCallback() {
                     @Override
                     public void callback(String path) {
                         mpg123Path = path;
                         startup();
-                        // Tools.getBinaryPath("win_sox", "sox.exe", "sox", callbackSox, "SOX", "Um die Tracklänge von MP3s zu bestimmen muss SOX installiert sein. Bitte triff eine Wahl.", INSTALL_SOX);
                     }
                 };
                 
@@ -58,11 +48,6 @@ public class Tingeltangel {
         });
     }
     
-    /*
-    public static String soxPath() {
-        return(soxPath);
-    }
-    * */
     
     public static String mpg123Path() {
         return(mpg123Path);

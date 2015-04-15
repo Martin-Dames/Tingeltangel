@@ -260,7 +260,6 @@ public class MasterFrame extends JFrame implements MenuCallback {
                 }
             }
             
-            System.out.println("mgc1 ("+book.hashCode()+") =" + book.getMagicValue());
             propertyFrame.refresh();
             indexFrame.update();
             

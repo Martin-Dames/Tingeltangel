@@ -227,7 +227,6 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                                             throw new Error();
                                         }
                                     }
-                                    
                                 }
                             }
                         }

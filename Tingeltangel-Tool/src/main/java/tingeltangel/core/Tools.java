@@ -136,8 +136,9 @@ public class Tools {
                                 getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
                             }
                         } else if(s.equals("disable")) {
-                            Properties.setProperty(propertyName + ".path", null);
-                            Properties.setProperty(propertyName + ".enabled", null);
+                            Properties.setProperty(propertyName + ".path", "");
+                            Properties.setProperty(propertyName + ".enabled", 0);
+                            System.out.println("props set!");
                             binaryCallback.callback(null);
                         }
                     }
