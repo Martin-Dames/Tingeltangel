@@ -18,8 +18,9 @@ public class Codes {
         private final static float[] PS_BLOCK_SIZE = {0.84f, 0.84f};
         
         
-        private final static int[] PNG_DELTA_SIZE = {4, 8};
-        private final static int[] PNG_BLOCK_SIZE = {24, 48};
+        private final static int[] PNG_DOT_SIZE = {1, 2};
+        private final static int[] PNG_DELTA_SIZE = {2, 3};
+        private final static int[] PNG_BLOCK_SIZE = {6, 12};
         private final static float[] PNG_PIXEL_PER_MM = {23.62205f, 47.24409f};
         
         public final static int DPI600 = 0;
@@ -163,9 +164,10 @@ public class Codes {
                                     int my = iy * 4 * PNG_BLOCK_SIZE[resolution] + dy * PNG_BLOCK_SIZE[resolution] + PNG_BLOCK_SIZE[resolution] / 2;
                                     
                                     int px = mx + pattern[dy][dx][0] * PNG_DELTA_SIZE[resolution];
-                                    int py = my + pattern[dy][dx][1] * PNG_DELTA_SIZE[resolution];
+                                    int py = my - pattern[dy][dx][1] * PNG_DELTA_SIZE[resolution];
                                     
-                                    graphics.drawLine(px, py, px, py); // fix me
+                                    graphics.fillRect(px, py, PNG_DOT_SIZE[resolution], PNG_DOT_SIZE[resolution]);
+                                    // graphics.drawLine(px, py, px, py); // fix me
                             }
                     }
                 }

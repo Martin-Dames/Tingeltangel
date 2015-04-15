@@ -319,7 +319,12 @@ public class MasterFrame extends JFrame implements MenuCallback {
                     }
                 }
             }
-        } else if(id.equals("buch.generateEpsCodes")) {
+        } else if(id.startsWith("buch.generateEpsCodes.")) {
+            if(id.endsWith(".600")) {
+                Codes.setResolution(Codes.DPI600);
+            } else {
+                Codes.setResolution(Codes.DPI1200);
+            }
             JFileChooser fc = new JFileChooser();
             fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             fc.setAcceptAllFileFilterUsed(false);
@@ -341,7 +346,12 @@ public class MasterFrame extends JFrame implements MenuCallback {
                     }
                 }
             }
-        } else if(id.equals("buch.generatePngCodes")) {
+        } else if(id.startsWith("buch.generatePngCodes.")) {
+            if(id.endsWith(".600")) {
+                Codes.setResolution(Codes.DPI600);
+            } else {
+                Codes.setResolution(Codes.DPI1200);
+            }
             JFileChooser fc = new JFileChooser();
             fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             fc.setAcceptAllFileFilterUsed(false);
