@@ -2,23 +2,29 @@
 package tingeltangel.core;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.TreeSet;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.WindowConstants;
 
 public class Books {
     
     
     private final static String BASE_URL = "http://system.ting.eu/book-files";
+    private final static String KNOWN_BOOKS_FILE = "/known_books.txt";
     
     private final static HashMap<Integer, HashMap<String, String>> books = new HashMap<Integer, HashMap<String, String>>();
     
@@ -113,6 +119,90 @@ public class Books {
         init();
     }
 
+    public static void quickSearch(final Thread done) throws IOException {
+        
+       
+        final File booksDir = new File("books");
+        
+        final HashSet<String> toDownload = new HashSet<String>();
+        BufferedReader bin = new BufferedReader(new InputStreamReader(Translator.class.getResourceAsStream(KNOWN_BOOKS_FILE)));
+        String row;
+        while((row = bin.readLine()) != null) {
+            row = row.trim();
+            if((!row.isEmpty()) && (!row.startsWith("#"))) {
+                if(books.get(Integer.parseInt(row)) == null) {
+                    toDownload.add(row);
+                }
+            }
+        }
+        bin.close();
+        
+        final JFrame splash = new JFrame("initialisieren...");
+        splash.setResizable(false);
+        splash.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        splash.setBounds(100, 100, 300, 100);
+        final JProgressBar bar = new JProgressBar();
+        bar.setMaximum(toDownload.size());
+        bar.setValue(0);
+        bar.setBounds(10, 160, 280, 20);
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Bücher herunterladen...");
+        label.setBounds(30, 30, 100, 20);
+        panel.add(label);
+        panel.add(bar);
+        splash.getContentPane().add(panel);
+        splash.setVisible(true);
+        
+        System.out.println("need to download " + toDownload.size() + " book txt files...");
+        
+        new Thread() {
+            public void run() {
+        
+                byte[] buffer = new byte[4096];
+                Iterator<String> ids = toDownload.iterator();
+                int c = 0;
+                while(ids.hasNext()) {
+                    String row = ids.next();
+
+                    bar.setValue(c++);
+
+                    InputStream in = null;
+                    OutputStream out = null;
+                    try {
+                        in = new URL(BASE_URL + "/get-description/id/" + row + "/area/en").openStream();
+                        out = new FileOutputStream(new File(booksDir, row + "_en.txt"));
+
+                        int k;
+                        while((k = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, k);
+                        }
+
+                        in.close();
+                        out.close();
+
+                    } catch(IOException ioe) {
+                        if(in != null) {
+                            try {
+                                in.close();
+                            } catch(Exception e) {
+                            }
+                        }
+                        if(out != null) {
+                            try {
+                                out.close();
+                            } catch(Exception e) {
+                            }
+                        }
+                        System.out.println("failed to load book " + row + ": " + ioe.getMessage());
+                    }
+                }
+                System.out.println("got " + toDownload.size() + " book txt files");
+                splash.dispose();
+                done.start();
+            }
+        }.start();
+    }
+    
     public static void update() throws IOException {
         byte[] buffer = new byte[4096];
         

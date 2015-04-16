@@ -1,7 +1,13 @@
 
 package tingeltangel;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.SplashScreen;
+import java.io.IOException;
 import javax.swing.SwingUtilities;
+import tingeltangel.core.Books;
 import tingeltangel.core.Tools;
 import tingeltangel.gui.MasterFrame;
 import tingeltangel.gui.StringCallback;
@@ -43,7 +49,16 @@ public class Tingeltangel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MasterFrame();
+                try {
+                    Books.quickSearch(new Thread() {
+                        @Override
+                        public void run() {
+                            new MasterFrame();
+                        }
+                    });
+                } catch(IOException ioe) {
+                    ioe.printStackTrace(System.out);
+                }
             }
         });
     }
