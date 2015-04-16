@@ -193,6 +193,7 @@ public class Books {
                             } catch(Exception e) {
                             }
                         }
+                        new File(booksDir, row + "_en.txt").delete();
                         System.out.println("failed to load book " + row + ": " + ioe.getMessage());
                     }
                 }
