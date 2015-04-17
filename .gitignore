@@ -1,3 +1,5 @@
 /target/
 /.idea/
 tingeltangel.iml
+/Tingeltangel-Tool/tt.properties
+/Tingeltangel-Tool/books/*.txt
