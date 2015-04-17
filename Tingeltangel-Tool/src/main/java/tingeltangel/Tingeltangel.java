@@ -1,10 +1,6 @@
 
 package tingeltangel;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.SplashScreen;
 import java.io.IOException;
 import javax.swing.SwingUtilities;
 import tingeltangel.core.Books;
