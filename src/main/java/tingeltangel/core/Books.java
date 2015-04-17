@@ -19,11 +19,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
+import tingeltangel.Tingeltangel;
 
 public class Books {
     
     
-    private final static String BASE_URL = "http://system.ting.eu/book-files";
     private final static String KNOWN_BOOKS_FILE = "/known_books.txt";
     
     private final static HashMap<Integer, HashMap<String, String>> books = new HashMap<Integer, HashMap<String, String>>();
@@ -90,7 +90,7 @@ public class Books {
                 while(_id.length() < 5) {
                     _id = "0" + _id;
                 }
-                in = new URL(BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
+                in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
                 out = new FileOutputStream(new File(new File("books"), _id + "_en.txt"));
                 
                 int k;
@@ -169,7 +169,7 @@ public class Books {
                     InputStream in = null;
                     OutputStream out = null;
                     try {
-                        in = new URL(BASE_URL + "/get-description/id/" + row + "/area/en").openStream();
+                        in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + row + "/area/en").openStream();
                         out = new FileOutputStream(new File(booksDir, row + "_en.txt"));
 
                         int k;
@@ -216,7 +216,7 @@ public class Books {
             while(_id.length() < 5) {
                 _id = "0" + _id;
             }
-            InputStream in = new URL(BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
+            InputStream in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
             OutputStream out = new FileOutputStream(new File(new File("books"), _id + "_en.txt"));
 
             int k;

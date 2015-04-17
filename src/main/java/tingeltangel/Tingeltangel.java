@@ -16,6 +16,11 @@ public class Tingeltangel {
     public static int MAIN_FRAME_HEIGHT = 700;
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
     public static String MAIN_FRAME_VERSION = " v0.1";
+    
+    // public final static String BASE_URL = "http://system.ting.eu/book-files";
+    
+    // for testing (some ting servers may be down :-( )
+    public final static String BASE_URL = "http://62.75.252.55/book-files";
         
     private static String mpg123Path;
     

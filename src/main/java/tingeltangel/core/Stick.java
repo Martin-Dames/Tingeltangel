@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+import tingeltangel.Tingeltangel;
 import tingeltangel.gui.MasterFrame;
 
 
@@ -34,7 +35,6 @@ public class Stick {
     private final static String STICK_DIR = "$ting";
     private final static String SETTINGS_FILE = "SETTINGS.INI";
     private final static String TBD_FILE = "TBD.TXT";
-    private final static String BASE_URL = "http://system.ting.eu/book-files";
     
     private final static String[] STICK_FILES = {
         "TBD.TXT", "SETTINGS.INI", "SETTING.DAT", "BOOK.SYS"
@@ -249,7 +249,7 @@ public class Stick {
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        BufferedReader in = new BufferedReader(new InputStreamReader(new URL(BASE_URL + "/get-description/id/" + _id + "/area/en").openStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream()));
         String row;
         while((row = in.readLine()) != null) {
             row = row.trim();
@@ -277,9 +277,9 @@ public class Stick {
     }
     
     private static void downloadBookLocally(String url, File target) throws IOException {
-        System.out.println("opening url: " + BASE_URL + url);
+        System.out.println("opening url: " + Tingeltangel.BASE_URL + url);
         
-        URLConnection connection = new URL(BASE_URL + url).openConnection();
+        URLConnection connection = new URL(Tingeltangel.BASE_URL + url).openConnection();
         
         InputStream in = connection.getInputStream();
         OutputStream out = new FileOutputStream(target);

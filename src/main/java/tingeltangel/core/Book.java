@@ -28,7 +28,7 @@ import tingeltangel.core.scripting.SyntaxError;
 
 public class Book {
 
-    private final static long DEFAULT_MAGIC_VALUE = 0x00000002;
+    private final static long DEFAULT_MAGIC_VALUE = 0x0000000a;
     
     private SortedIntList indexIDs = new SortedIntList();
     private HashMap<Integer, Entry> indexEntries = new HashMap<Integer, Entry>();

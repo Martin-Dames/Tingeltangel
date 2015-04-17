@@ -45,55 +45,58 @@ public class Importer {
         book.setVersion(Integer.parseInt(txt.get("Book Version")));
         
         // load script file
+        
         HashMap<Integer, String> scripts = new HashMap<Integer, String>();
         HashMap<Integer, String> notes = new HashMap<Integer, String>();
-        BufferedReader in = new BufferedReader(new FileReader(scriptFile));
-        String row;
-        boolean inScript = false;
-        boolean inNote = false;
-        int precode = -1;
-        String script = "";
-        String note = "";
-        while((row = in.readLine()) != null) {
-            System.out.println(row);
-            if(inNote) {
-                if(row.startsWith("[Content]")) {
-                    notes.put(precode, note);
-                    note = "";
-                    inNote = false;
-                    inScript = true;
-                } else if(row.startsWith("Precode=")) {
-                    notes.put(precode, note);
-                    note = "";
-                    inNote = false;
-                    precode = Integer.parseInt(row.substring("Precode=".length()).trim());
+        if(txt.containsKey("ScriptMD5")) {
+        
+            BufferedReader in = new BufferedReader(new FileReader(scriptFile));
+            String row;
+            boolean inScript = false;
+            boolean inNote = false;
+            int precode = -1;
+            String script = "";
+            String note = "";
+            while((row = in.readLine()) != null) {
+                System.out.println(row);
+                if(inNote) {
+                    if(row.startsWith("[Content]")) {
+                        notes.put(precode, note);
+                        note = "";
+                        inNote = false;
+                        inScript = true;
+                    } else if(row.startsWith("Precode=")) {
+                        notes.put(precode, note);
+                        note = "";
+                        inNote = false;
+                        precode = Integer.parseInt(row.substring("Precode=".length()).trim());
+                    } else {
+                        note += row + "\n";
+                    }
+                } else if(inScript) {
+                    if(row.startsWith("Precode=")) {
+                        scripts.put(precode, script);
+                        script = "";
+                        inScript = false;
+                        precode = Integer.parseInt(row.substring("Precode=".length()).trim());
+                    } else {
+                        script += row + "\n";
+                    }
                 } else {
-                    note += row + "\n";
-                }
-            } else if(inScript) {
-                if(row.startsWith("Precode=")) {
-                    scripts.put(precode, script);
-                    script = "";
-                    inScript = false;
-                    precode = Integer.parseInt(row.substring("Precode=".length()).trim());
-                } else {
-                    script += row + "\n";
-                }
-            } else {
-                if(row.startsWith("[Content]")) {
-                    inScript = true;
-                } else if(row.startsWith("[Note]")) {
-                    inNote = true;
+                    if(row.startsWith("[Content]")) {
+                        inScript = true;
+                    } else if(row.startsWith("[Note]")) {
+                        inNote = true;
+                    }
                 }
             }
+            in.close();
+            if(inNote) {
+                notes.put(precode, note);
+            } else if(inScript) {
+                scripts.put(precode, script);
+            }
         }
-        in.close();
-        if(inNote) {
-            notes.put(precode, note);
-        } else if(inScript) {
-            scripts.put(precode, script);
-        }
-        
         
         int startOfIndex = ouf.readInt();
         ouf.readInt(); // 2
@@ -226,7 +229,7 @@ public class Importer {
                 entry.setCode();
             }
             
-            note = notes.get(e[3]);
+            String note = notes.get(e[3]);
             if(note != null) {
                 entry.setHint(note);
             }
