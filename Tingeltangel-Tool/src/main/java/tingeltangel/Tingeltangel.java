@@ -28,7 +28,7 @@ public class Tingeltangel {
             @Override
             public void run() {
                 
-                final String INSTALL_MPG123 = "MPG123 kann da und da heruntergeladen werden";
+                final String INSTALL_MPG123 = "MPG123 kann unter http://www.mpg123.de/download.shtml heruntergeladen werden";
                 
                 
                 StringCallback callbackMpg123 = new StringCallback() {
