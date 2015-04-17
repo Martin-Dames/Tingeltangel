@@ -12,7 +12,7 @@ public class Emulator {
     
     private final LinkedList<RegisterListener> listeners = new LinkedList<RegisterListener>();
     
-    public final static int REGISTERS = 98;
+    public final static int REGISTERS = 99;
     
     private final static int[] register = new int[REGISTERS];
     private final static String[] hints = new String[REGISTERS];

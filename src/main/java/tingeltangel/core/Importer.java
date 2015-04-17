@@ -225,8 +225,13 @@ public class Importer {
                 // script
                 //System.out.println("extracting bin @" + epos + " (id=" + _eid + ") ...");
                 
-                entry.setScript(new Script(scripts.get(e[3]), entry));
-                entry.setCode();
+                Script script = new Script(scripts.get(e[3]), entry);
+                entry.setScript(script);
+                if(script.isSub()) {
+                    entry.setSub();
+                } else {
+                    entry.setCode();
+                }
             }
             
             String note = notes.get(e[3]);

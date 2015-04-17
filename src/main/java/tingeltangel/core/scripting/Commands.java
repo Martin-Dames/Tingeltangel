@@ -99,7 +99,7 @@ public class Commands {
                 return(cmd1);
             }
         }
-        throw new SyntaxError("bad number of arguments or bad argument types");
+        throw new SyntaxError("bad number of arguments or bad argument types (cmd=" + cmd + "; arg1=" + firstArgument + ")");
     }
     
     public static Command getCommand(String cmd, String firstArgument, String secondArgument) throws SyntaxError {
@@ -122,7 +122,7 @@ public class Commands {
                 return(cmd1);
             }
         }
-        throw new SyntaxError("bad number of arguments or bad argument types");
+        throw new SyntaxError("bad number of arguments or bad argument types (cmd=" + cmd + "; arg1=" + firstArgument + "; arg2=" + secondArgument + ")");
     }
     
     private static void addCmd(Command command) {

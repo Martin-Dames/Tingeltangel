@@ -59,7 +59,7 @@ public class Entry {
         if(isMP3()) {
             return(size);
         } else if((isCode() || isSub()) && (script != null)) {
-            return(script.getSize());
+            return(script.getSize(false));
         }
         return(0);
     }

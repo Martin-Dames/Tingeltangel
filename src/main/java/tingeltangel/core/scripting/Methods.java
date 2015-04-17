@@ -59,8 +59,12 @@ public class Methods {
         emulator.setRegister(arg1, emulator.getRegister(arg1) - emulator.getRegister(arg2));
     }
     
-    public static void pause(Emulator emulator, Integer arg1, Integer arg2) {
+    public static void pauseV(Emulator emulator, Integer arg1, Integer arg2) {
         emulator.pause(arg1);
+    }
+    
+    public static void pauseR(Emulator emulator, Integer arg1, Integer arg2) {
+        emulator.pause(emulator.getRegister(arg1));
     }
     
     public static void playoidV(Emulator emulator, Integer arg1, Integer arg2) {

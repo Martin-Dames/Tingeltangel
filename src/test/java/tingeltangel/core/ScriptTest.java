@@ -63,7 +63,7 @@ public class ScriptTest {
                 "end", entry);
 
 
-        assertEquals(13, script.getSize());
+        assertEquals(13, script.getSize(false));
     }
 
 }

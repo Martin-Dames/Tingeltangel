@@ -42,7 +42,7 @@ public class Script {
         return(code);
     }
     
-    public int getSize() throws SyntaxError {
+    public int getSize(boolean calledFromScript) throws SyntaxError {
         int rc = 0;
         int size = 0;
         try {
@@ -57,7 +57,23 @@ public class Script {
                         row = row.substring(0, p);
                     }
                     if(!row.startsWith(":")) {
-                        size += Commands.getSize(row);
+                        if(row.startsWith("call")) {
+                            // extract argument
+                            String callID = row.substring("call".length()).trim();
+                            try {
+                                Script sub = entry.getBook().getEntryByID(Integer.parseInt(callID)).getScript();
+                                if(sub == null) {
+                                    throw new SyntaxError("methode nicht gefunden (oid=" + callID + ")");
+                                }
+                                size += sub.getSize(true);
+                            } catch(NumberFormatException nfe) {
+                                throw new SyntaxError("call benötigt als Argument eine OID");
+                            }
+                        } else if(row.equals("return") && calledFromScript) {
+                            size += 4; // because return gets replaced by jmp command
+                        } else {
+                            size += Commands.getSize(row);
+                        }
                     }
                 }
             }
@@ -69,6 +85,23 @@ public class Script {
             throw se;
         }
         return(size + 1); // +1 for the leading 0x00
+    }
+    
+    public boolean isSub() {
+        try {
+            BufferedReader in = new BufferedReader(new StringReader(code));
+            String row;
+            while((row = in.readLine()) != null) {
+                if(row.trim().startsWith("return")) {
+                    in.close();
+                    return(true);
+                }
+            }
+            in.close();
+        } catch(IOException e) {
+            throw new Error(e);
+        }
+        return(false);
     }
     
     public void execute() throws SyntaxError {
@@ -84,12 +117,18 @@ public class Script {
             Instance instance = script.get(p);
             if(instance.getCommand().getAsm().equals("end")) {
                 return;
-            }
-            boolean doJump = instance.execute(entry.getBook().getEmulator());
-            if(doJump) {
-                p = instanceLabelsII.get(instance.getLabel());
+            } else if(instance.getCommand().getAsm().equals("call")) {
+                int oid = instance.getFirstArgument();
+                entry.getBook().getEntryByID(oid).getScript().execute();
+            } else if(instance.getCommand().getAsm().equals("return")) {
+                return;
             } else {
-                p++;
+                boolean doJump = instance.execute(entry.getBook().getEmulator());
+                if(doJump) {
+                    p = instanceLabelsII.get(instance.getLabel());
+                } else {
+                    p++;
+                }
             }
         }
     }
@@ -98,6 +137,41 @@ public class Script {
     private HashMap<String, Integer> instanceLabelsSI = null;
     private HashMap<Integer, Integer> instanceLabelsII = null;
     
+    private int labelCounter = 0;
+    
+    private String mergeCodeOnCalls() throws IOException, SyntaxError {
+        String returnLabel = "return_" + (labelCounter++);
+        StringBuilder mergedCode = new StringBuilder();
+        BufferedReader in = new BufferedReader(new StringReader(code));
+        String row;
+        int rc = 0;
+        while((row = in.readLine()) != null) {
+            rc++;
+            row = row.trim();
+            if((!row.isEmpty()) && (!row.startsWith("//"))) {
+                if(row.startsWith("call")) {
+                    try {
+                        int oid = Integer.parseInt(row.substring("code".length()).trim());
+                        String subCode = entry.getBook().getEntryByID(oid).getScript().mergeCodeOnCalls();
+                        mergedCode.append(subCode);
+                    } catch(NumberFormatException nfe) {
+                        SyntaxError error = new SyntaxError("call needs a value as argument");
+                        error.setRow(rc);
+                        error.setTingID(entry.getTingID());
+                        throw error;
+                    }
+                } else if(row.equals("return")) {
+                    mergedCode.append("jmp ").append(returnLabel).append("\n");
+                } else {
+                    mergedCode.append(row).append("\n");
+                }
+            }
+        }
+        in.close();
+        mergedCode.append(":").append(returnLabel).append("\n");
+        return(mergedCode.toString());
+    }
+    
     public byte[] compile() throws SyntaxError {
         HashMap<String, Integer> labels = new HashMap<String, Integer>();
         instanceLabelsSI = new HashMap<String, Integer>();
@@ -105,14 +179,17 @@ public class Script {
         script = new LinkedList<Instance>();
         int rc = 0;
         try {
+            
+            String mergedCode = mergeCodeOnCalls();
+            
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(bout);
         
             // generate label map
-            BufferedReader in = new BufferedReader(new StringReader(code));
-            String row;
+            BufferedReader in = new BufferedReader(new StringReader(mergedCode.toString()));
             int position = 0;
             int instancePos = 0;
+            String row;
             while((row = in.readLine()) != null) {
                 rc++;
                 row = row.trim();
@@ -136,7 +213,7 @@ public class Script {
             
             
             // generate binary
-            in = new BufferedReader(new StringReader(code));
+            in = new BufferedReader(new StringReader(mergedCode.toString()));
             rc = 0;
             while((row = in.readLine()) != null) {
                 rc++;
@@ -202,8 +279,12 @@ public class Script {
         } catch(IOException ioe) {
             throw new Error(ioe);
         } catch(SyntaxError se) {
-            se.setRow(rc);
-            se.setTingID(entry.getTingID());
+            
+            if(se.getRow() < 0) {
+            
+                se.setRow(rc);
+                se.setTingID(entry.getTingID());
+            }
             throw se;
         }
     }
