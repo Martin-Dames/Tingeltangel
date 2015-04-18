@@ -6,8 +6,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 import tingeltangel.core.scripting.SyntaxError;
 
@@ -179,7 +177,7 @@ public class Entry {
         // copy to book/audio dir if it is not already there
         File target = new File(book.getMP3Path(), mp3.getName());
         if(!mp3.equals(target)) {
-        	Files.copy(mp3.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        	Tools.copy(mp3, target);
         }
 
         this.mp3 = target;
