@@ -23,7 +23,12 @@ public class Tingeltangel {
     // public final static String BASE_URL = "http://system.ting.eu/book-files";
     
     // for testing (some ting servers may be down :-( )
-    public final static String BASE_URL = "http://62.75.252.55/book-files";
+    public static final String BASE_URL = "http://62.75.252.55/book-files";
+    
+    /**
+     * default area code
+     */
+    public static final String DEFAULT_AREA_CODE="en";
         
     private static String mpg123Path;
     

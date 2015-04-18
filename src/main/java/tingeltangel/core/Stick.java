@@ -26,8 +26,12 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+
 import tingeltangel.Tingeltangel;
-import tingeltangel.gui.MasterFrame;
+import tingeltangel.core.constants.OufFile;
+import tingeltangel.core.constants.PngFile;
+import tingeltangel.core.constants.ScriptFile;
+import tingeltangel.core.constants.TxtFile;
 
 
 public class Stick {
@@ -100,7 +104,7 @@ public class Stick {
         LinkedList<Integer> books = new LinkedList<Integer>();
         File[] files = file.listFiles();
         for(int i = 0; i < files.length; i++) {
-            if(files[i].getName().endsWith("_en.ouf") && (files[i].getName().length() == "_en.ouf".length() + 5)) {
+            if(files[i].getName().endsWith(OufFile._EN_OUF) && (files[i].getName().length() == OufFile._EN_OUF.length() + 5)) {
                 books.add(Integer.parseInt(files[i].getName().substring(0, 5)));
             }
         }
@@ -207,7 +211,7 @@ public class Stick {
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        File txt = new File(Stick.getBookDir(path), _id + "_en.txt");
+        File txt = new File(Stick.getBookDir(path), _id + TxtFile._EN_TXT);
         BufferedReader in = new BufferedReader(new FileReader(txt));
         String row;
         while((row = in.readLine()) != null) {
@@ -227,10 +231,10 @@ public class Stick {
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        File txt = new File(Stick.getBookDir(path), _id + "_en.txt");
-        File png = new File(Stick.getBookDir(path), _id + "_en.png");
-        File ouf = new File(Stick.getBookDir(path), _id + "_en.ouf");
-        File src = new File(Stick.getBookDir(path), _id + "_en.src");
+        File txt = new File(Stick.getBookDir(path), _id + TxtFile._EN_TXT);
+        File png = new File(Stick.getBookDir(path), _id + PngFile._EN_PNG);
+        File ouf = new File(Stick.getBookDir(path), _id + OufFile._EN_OUF);
+        File src = new File(Stick.getBookDir(path), _id + ScriptFile._EN_SRC);
         
         txt.delete();
         png.delete();
@@ -318,11 +322,11 @@ public class Stick {
         
         getBookDir(path).mkdir();
         
-        fileCopy(txtOut, new File(path, _id + "_en.txt"));
-        fileCopy(pngOut, new File(path, _id + "_en.png"));
-        fileCopy(oufOut, new File(path, _id + "_en.ouf"));
+        fileCopy(txtOut, new File(path, _id + TxtFile._EN_TXT));
+        fileCopy(pngOut, new File(path, _id + PngFile._EN_PNG));
+        fileCopy(oufOut, new File(path, _id + OufFile._EN_OUF));
         if(srcOut != null) {
-            fileCopy(srcOut, new File(path, _id + "_en.src"));
+            fileCopy(srcOut, new File(path, _id + ScriptFile._EN_SRC));
         }
         
         txtOut.delete();

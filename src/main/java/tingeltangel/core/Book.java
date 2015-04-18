@@ -22,6 +22,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import tingeltangel.core.constants.OufFile;
+import tingeltangel.core.constants.PngFile;
+import tingeltangel.core.constants.ScriptFile;
+import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
@@ -548,9 +552,9 @@ public class Book {
             idS = "0" + idS;
         }
         
-        File ouf = new File(dir, idS + "_en.ouf");
-        File png = new File(dir, idS + "_en.png");
-        File src = new File(dir, idS + "_en.src");
+        File ouf = new File(dir, idS + OufFile._EN_OUF);
+        File png = new File(dir, idS + PngFile._EN_PNG);
+        File src = new File(dir, idS + ScriptFile._EN_SRC);
         
         // TODO use propert png file
         InputStream fci = new FileInputStream("sample.png");
@@ -573,7 +577,7 @@ public class Book {
         generateOufFile(out);
         out.close();
         
-        PrintWriter txt = new PrintWriter(new FileWriter(new File(dir, idS + "_en.txt")));
+        PrintWriter txt = new PrintWriter(new FileWriter(new File(dir, idS + TxtFile._EN_TXT)));
         
         
         txt.println("Name: " + name.trim());
