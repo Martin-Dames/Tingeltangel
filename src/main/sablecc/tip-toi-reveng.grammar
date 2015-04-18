@@ -94,7 +94,7 @@ Productions
   ;
   
   comparison {-> comparison } = 
-          {eq} [e1]:location cop_eq [e2]:term      {-> New comparison.bop_neq(e1.value,e2.value)}
+      {eq} [e1]:location cop_eq [e2]:term      {-> New comparison.bop_eq(e1.value,e2.value)}
   	| {neq} [e1]:location cop_neq [e2]:term    {-> New comparison.bop_neq(e1.value,e2.value)}
   	| {lt} [e1]:location cop_lt [e2]:term      {-> New comparison.bop_lt(e1.value,e2.value)}
   	| {gt} [e1]:location cop_gt [e2]:term      {-> New comparison.bop_gt(e1.value,e2.value)}
