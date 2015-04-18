@@ -106,7 +106,7 @@ public class MP3Player {
         String mpg123Binary = "mpg123";
         
         if(System.getProperty("os.name").startsWith("Windows")) {
-            mpg123Binary = "win_mpg123\\mpg123.exe";
+            mpg123Binary = Properties.getProperty(Properties.WIN_MPG123+Properties._PATH);
         }
         
         current = _poll();

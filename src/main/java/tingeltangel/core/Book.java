@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +19,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Iterator;
+import java.util.Set;
+
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
@@ -552,7 +552,7 @@ public class Book {
         File png = new File(dir, idS + "_en.png");
         File src = new File(dir, idS + "_en.src");
         
-        
+        // TODO use propert png file
         InputStream fci = new FileInputStream("sample.png");
         OutputStream fco = new FileOutputStream(png);
         int b;

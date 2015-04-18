@@ -1,13 +1,12 @@
 
 package tingeltangel.core;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
+
 import tingeltangel.core.scripting.SyntaxError;
 
 public class Entry {
@@ -175,12 +174,12 @@ public class Entry {
             throw new FileNotFoundException(name);
         }
         
-        // copy to book dir
+        // copy to book/audio dir if it is not already there
         File target = new File(book.getMP3Path(), mp3.getName());
-        
-        Tools.copy(mp3, target);
+        if(!mp3.equals(target)) {
+        	Tools.copy(mp3, target);
+        }
 
-        
         this.mp3 = target;
         try {
             mp3length = Mp3Utils.getDuration(this.mp3) / 1000.f;
