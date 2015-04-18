@@ -52,7 +52,7 @@ public class Importer {
         
             BufferedReader in = new BufferedReader(new FileReader(scriptFile));
             String row;
-            boolean inScript = false;
+            boolean inScript = true;
             boolean inNote = false;
             int precode = -1;
             String script = "";
@@ -205,7 +205,7 @@ public class Importer {
             
             if(e[2] == 1) {
                 // mp3
-                //System.out.println("extracting mp3 @" + epos + " (id=" + _eid + ") ...");
+                System.out.println("extracting mp3 @" + epos + " (id=" + _eid + ") ...");
                 out = new FileOutputStream(new File(mp3Dir, _eid + ".mp3"));
                 
                 int len = e[1];
@@ -223,14 +223,17 @@ public class Importer {
                 }
             } else {
                 // script
-                //System.out.println("extracting bin @" + epos + " (id=" + _eid + ") ...");
-                
-                Script script = new Script(scripts.get(e[3]), entry);
-                entry.setScript(script);
-                if(script.isSub()) {
-                    entry.setSub();
+                System.out.println("extracting bin @" + epos + " (id=" + _eid + ") ...");
+                if(scripts.get(e[3])!=null) {
+	                Script script = new Script(scripts.get(e[3]), entry);
+	                entry.setScript(script);
+	                if(script.isSub()) {
+	                    entry.setSub();
+	                } else {
+	                    entry.setCode();
+	                }
                 } else {
-                    entry.setCode();
+                	System.err.println("\tid " + _eid + " not found in script");	
                 }
             }
             
