@@ -2,8 +2,11 @@
 package tingeltangel;
 
 import java.io.IOException;
+
 import javax.swing.SwingUtilities;
+
 import tingeltangel.core.Books;
+import tingeltangel.core.Properties;
 import tingeltangel.core.Tools;
 import tingeltangel.gui.MasterFrame;
 import tingeltangel.gui.StringCallback;
@@ -40,7 +43,7 @@ public class Tingeltangel {
                     }
                 };
                 
-                Tools.getBinaryPath("win_mpg123", "mpg123.exe", "mpg123", callbackMpg123, "MPG123", "Um MP3s abspielen zu können muss MPG123 installiert sein. Bitte triff eine Wahl.", INSTALL_MPG123);
+                Tools.getBinaryPath(Properties.WIN_MPG123, "mpg123.exe", "mpg123", callbackMpg123, "MPG123", "Um MP3s abspielen zu können muss MPG123 installiert sein. Bitte triff eine Wahl.", INSTALL_MPG123);
                 
             }
         });
