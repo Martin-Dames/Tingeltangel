@@ -23,6 +23,7 @@ import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
 
 import tingeltangel.Tingeltangel;
+import tingeltangel.core.constants.TxtFile;
 
 public class Books {
     
@@ -106,7 +107,7 @@ public class Books {
                     _id = "0" + _id;
                 }
                 in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
-                out = new FileOutputStream(new File(new File("books"), _id + "_en.txt"));
+                out = new FileOutputStream(new File(new File("books"), _id + TxtFile._EN_TXT));
                 
                 int k;
                 while((k = in.read(buffer)) != -1) {
@@ -183,7 +184,7 @@ public class Books {
                     OutputStream out = null;
                     try {
                         in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + row + "/area/en").openStream();
-                        out = new FileOutputStream(new File(booksDir, row + "_en.txt"));
+                        out = new FileOutputStream(new File(booksDir, row + TxtFile._EN_TXT));
 
                         int k;
                         while((k = in.read(buffer)) != -1) {
@@ -206,7 +207,7 @@ public class Books {
                             } catch(Exception e) {
                             }
                         }
-                        new File(booksDir, row + "_en.txt").delete();
+                        new File(booksDir, row + TxtFile._EN_TXT).delete();
                         System.out.println("failed to load book " + row + ": " + ioe.getMessage());
                     }
                 }
@@ -230,7 +231,7 @@ public class Books {
                 _id = "0" + _id;
             }
             InputStream in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
-            OutputStream out = new FileOutputStream(new File(new File("books"), _id + "_en.txt"));
+            OutputStream out = new FileOutputStream(new File(new File("books"), _id + TxtFile._EN_TXT));
 
             int k;
             while((k = in.read(buffer)) != -1) {
