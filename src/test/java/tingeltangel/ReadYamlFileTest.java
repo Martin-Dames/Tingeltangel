@@ -18,14 +18,17 @@
 */
 package tingeltangel;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
+import tingeltangel.core.NoBookException;
 import tiptoi_reveng.lexer.Lexer;
 import tiptoi_reveng.lexer.LexerException;
 import tiptoi_reveng.node.Start;
 import tiptoi_reveng.parser.Parser;
 import tiptoi_reveng.parser.ParserException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.StringReader;
@@ -36,25 +39,24 @@ public class ReadYamlFileTest {
 
     private ReadYamlFile reader = new ReadYamlFile();
 
-    @Test
-    public void testParser() throws ParserException, IOException, LexerException {
-        reader.read(getClass().getResourceAsStream("/tip-toi-reveng/example.yaml"));
+    @Before
+    public void setUp() {
+        reader.ignoreAudioFiles = true;
     }
 
     @Test
-    public void testParser2() throws ParserException, IOException, LexerException {
-        reader.read(getClass().getResourceAsStream("/tip-toi-reveng/vokabeltrainer.yaml"));
-
+    public void testParser() throws ParserException, IOException, LexerException, NoBookException {
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/example.yaml").getFile()))   ;
     }
 
     @Test
-    public void testParser4() throws ParserException, IOException, LexerException {
-        reader.read(getClass().getResourceAsStream("/tip-toi-reveng/WWW_Bauernhof.yaml"));
-
+    public void testParser2() throws ParserException, IOException, LexerException, NoBookException {
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()));
     }
+
     @Test
-    public void testParser5() throws ParserException, IOException, LexerException {
-        reader.read(getClass().getResourceAsStream("/tip-toi-reveng/WWW_Weltatlas.yaml"));
+    public void testParser5() throws ParserException, IOException, LexerException, NoBookException {
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/WWW_Weltatlas.yaml").getFile()));
 
     }
 

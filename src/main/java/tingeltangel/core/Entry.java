@@ -153,6 +153,7 @@ public class Entry {
     public void setScript(Script script) {
         this.script = script;
         mp3 = null;
+        type = CODE;
         changeMade();
     }
     
@@ -189,5 +190,6 @@ public class Entry {
         }
         size = (int)mp3.length();
         script = null;
+        type = MP3;
     }
 }
