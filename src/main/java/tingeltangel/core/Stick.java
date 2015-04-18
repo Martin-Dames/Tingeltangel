@@ -26,8 +26,9 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+
 import tingeltangel.Tingeltangel;
-import tingeltangel.gui.MasterFrame;
+import tingeltangel.core.constants.TxtFile;
 
 
 public class Stick {
@@ -207,7 +208,7 @@ public class Stick {
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        File txt = new File(Stick.getBookDir(path), _id + "_en.txt");
+        File txt = new File(Stick.getBookDir(path), _id + TxtFile._EN_TXT);
         BufferedReader in = new BufferedReader(new FileReader(txt));
         String row;
         while((row = in.readLine()) != null) {
@@ -227,7 +228,7 @@ public class Stick {
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        File txt = new File(Stick.getBookDir(path), _id + "_en.txt");
+        File txt = new File(Stick.getBookDir(path), _id + TxtFile._EN_TXT);
         File png = new File(Stick.getBookDir(path), _id + "_en.png");
         File ouf = new File(Stick.getBookDir(path), _id + "_en.ouf");
         File src = new File(Stick.getBookDir(path), _id + "_en.src");
@@ -318,7 +319,7 @@ public class Stick {
         
         getBookDir(path).mkdir();
         
-        fileCopy(txtOut, new File(path, _id + "_en.txt"));
+        fileCopy(txtOut, new File(path, _id + TxtFile._EN_TXT));
         fileCopy(pngOut, new File(path, _id + "_en.png"));
         fileCopy(oufOut, new File(path, _id + "_en.ouf"));
         if(srcOut != null) {

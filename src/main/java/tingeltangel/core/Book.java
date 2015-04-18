@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +19,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Iterator;
+import java.util.Set;
+
+import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
@@ -573,7 +574,7 @@ public class Book {
         generateOufFile(out);
         out.close();
         
-        PrintWriter txt = new PrintWriter(new FileWriter(new File(dir, idS + "_en.txt")));
+        PrintWriter txt = new PrintWriter(new FileWriter(new File(dir, idS + TxtFile._EN_TXT)));
         
         
         txt.println("Name: " + name.trim());
