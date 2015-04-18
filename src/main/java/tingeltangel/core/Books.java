@@ -14,19 +14,21 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
+
 import tingeltangel.Tingeltangel;
 
 public class Books {
     
-    
     private final static String KNOWN_BOOKS_FILE = "/known_books.txt";
     
-    private final static HashMap<Integer, HashMap<String, String>> books = new HashMap<Integer, HashMap<String, String>>();
+    private final static HashMap<Integer, HashMap<String, String>> BOOKS = new HashMap<Integer, HashMap<String, String>>();
     
     static {
         init();
@@ -34,7 +36,7 @@ public class Books {
     
     private static void init() {
         try {
-            books.clear();
+            BOOKS.clear();
             File booksDir = new File("books");
             if(!booksDir.canRead()) {
                 throw new Error("can't read from books directory");
@@ -42,25 +44,38 @@ public class Books {
             if(!booksDir.canWrite()) {
                 throw new Error("can't write to books directory");
             }
-            File[] bookFiles = booksDir.listFiles();
-            for(int i = 0; i < bookFiles.length; i++) {
-                if(bookFiles[i].getName().endsWith(".txt")) {
-                    String name = bookFiles[i].getName();
+            List<File> bookFiles = Arrays.asList(booksDir.listFiles());
+            for(File bookFile: bookFiles) {
+            	String name = bookFile.getName();
+                if(name.endsWith(".txt")) {
                     int id = Integer.parseInt(name.substring(0, name.indexOf("_")));
-                    BufferedReader in = new BufferedReader(new FileReader(bookFiles[i]));
+                    BufferedReader in = new BufferedReader(new FileReader(bookFile));
                     HashMap<String, String> data = new HashMap<String, String>();
                     String row;
                     while((row = in.readLine()) != null) {
                         row = row.trim();
                         if(!row.isEmpty()) {
                             int p = row.indexOf(":");
-                            String key = row.substring(0, p).trim();
-                            String value = row.substring(p + 1).trim();
-                            data.put(key, value);
+                            if(p>0) {
+	                            String key = row.substring(0, p).trim();
+	                            String value = row.substring(p + 1).trim();
+	                            data.put(key, value);
+                            } else {
+                            	System.err.println(String.format("skipping broken line in %s", name));
+                            	continue;
+                            }
                         }
                     }
-                    books.put(id, data);
                     in.close();
+                    // check if txt-file is valid
+                    if(data.containsKey("Name")) {
+                    	System.out.println(String.format("Imported book %s", data.get("Name")));
+                    	BOOKS.put(id, data);
+                    } else {
+                    	// delete broken txt-file
+                    	System.out.println(String.format("Deleted broken file %s", name));
+                    	bookFile.delete();
+                    }
                 }
             }
         } catch(IOException ioe) {
@@ -69,13 +84,13 @@ public class Books {
     }
     
     public static Integer[] getIDs() {
-        Integer[] bks = books.keySet().toArray(new Integer[0]);
+        Integer[] bks = BOOKS.keySet().toArray(new Integer[0]);
         Arrays.sort(bks);
         return(bks);
     }
     
     public static HashMap<String, String> getBook(int id) {
-        return(books.get(id));
+        return(BOOKS.get(id));
     }
 
     public static void search() {
@@ -120,17 +135,15 @@ public class Books {
     }
 
     public static void quickSearch(final Thread done) throws IOException {
-        
-       
         final File booksDir = new File("books");
         
         final HashSet<String> toDownload = new HashSet<String>();
-        BufferedReader bin = new BufferedReader(new InputStreamReader(Translator.class.getResourceAsStream(KNOWN_BOOKS_FILE)));
+        BufferedReader bin = new BufferedReader(new InputStreamReader(Books.class.getResourceAsStream(KNOWN_BOOKS_FILE)));
         String row;
         while((row = bin.readLine()) != null) {
             row = row.trim();
             if((!row.isEmpty()) && (!row.startsWith("#"))) {
-                if(books.get(Integer.parseInt(row)) == null) {
+                if(BOOKS.get(Integer.parseInt(row)) == null) {
                     toDownload.add(row);
                 }
             }
@@ -203,8 +216,8 @@ public class Books {
             }
         }.start();
     }
-    
-    public static void update() throws IOException {
+
+	public static void update() throws IOException {
         byte[] buffer = new byte[4096];
         
         Integer[] ids = getIDs();

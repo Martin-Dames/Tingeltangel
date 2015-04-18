@@ -100,7 +100,7 @@ public class Tools {
                     if(f.getName().equals(winExeName) && f.canExecute()) {
                         binaryCallback.callback(f.getAbsolutePath());
                     } else {
-                        JOptionPane.showMessageDialog(null, "Fehler", name + " konnte nicht gefunden werden", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(null, name + " konnte nicht gefunden werden", "Fehler", JOptionPane.WARNING_MESSAGE);
                         Properties.setProperty(propertyName + ".path", null);
                         Properties.setProperty(propertyName + ".enabled", null);
                         getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
@@ -114,7 +114,7 @@ public class Tools {
                     @Override
                     public void callback(String s) {
                         if(s.equals("install")) {
-                            JOptionPane.showMessageDialog(null, "Hinweis", installMessage, JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, installMessage, "Hinweis", JOptionPane.INFORMATION_MESSAGE);
                             getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
                         } else if(s.equals("path")) {
                             JFileChooser fc = new JFileChooser();
@@ -129,7 +129,7 @@ public class Tools {
                                     Properties.setProperty(propertyName + ".enabled", 1);
                                     binaryCallback.callback(f.getAbsolutePath());
                                 } else {
-                                    JOptionPane.showMessageDialog(null, "Fehler", name + " konnte nicht gefunden werden", JOptionPane.WARNING_MESSAGE);
+                                    JOptionPane.showMessageDialog(null,  name + " konnte nicht gefunden werden", "Fehler", JOptionPane.WARNING_MESSAGE);
                                     getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
                                 }
                             } else {
