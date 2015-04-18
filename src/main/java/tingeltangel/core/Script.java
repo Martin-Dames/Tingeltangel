@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.LinkedList;
+
+import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.scripting.Command;
 import tingeltangel.core.scripting.Commands;
 import tingeltangel.core.scripting.Instance;
@@ -51,15 +53,15 @@ public class Script {
             while((row = in.readLine()) != null) {
                 rc++;
                 row = row.trim();
-                if((!row.isEmpty()) && (!row.startsWith("//")) && (!row.startsWith(":"))) {
-                    int p = row.indexOf(" ");
+                if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT)) && (!row.startsWith(ScriptFile.COLON))) {
+                    int p = row.indexOf(ScriptFile.SINGLE_SPACE);
                     if(p != -1) {
                         row = row.substring(0, p);
                     }
-                    if(!row.startsWith(":")) {
-                        if(row.startsWith("call")) {
+                    if(!row.startsWith(ScriptFile.COLON)) {
+                        if(row.startsWith(ScriptFile.CALL)) {
                             // extract argument
-                            String callID = row.substring("call".length()).trim();
+                            String callID = row.substring(ScriptFile.CALL.length()).trim();
                             try {
                                 Script sub = entry.getBook().getEntryByID(Integer.parseInt(callID)).getScript();
                                 if(sub == null) {
@@ -67,9 +69,9 @@ public class Script {
                                 }
                                 size += sub.getSize(true);
                             } catch(NumberFormatException nfe) {
-                                throw new SyntaxError("call benötigt als Argument eine OID");
+                                throw new SyntaxError("call benÃ¶tigt als Argument eine OID");
                             }
-                        } else if(row.equals("return") && calledFromScript) {
+                        } else if(row.equals(ScriptFile.RETURN) && calledFromScript) {
                             size += 4; // because return gets replaced by jmp command
                         } else {
                             size += Commands.getSize(row);
@@ -92,7 +94,7 @@ public class Script {
             BufferedReader in = new BufferedReader(new StringReader(code));
             String row;
             while((row = in.readLine()) != null) {
-                if(row.trim().startsWith("return")) {
+                if(row.trim().startsWith(ScriptFile.RETURN)) {
                     in.close();
                     return(true);
                 }
@@ -115,12 +117,12 @@ public class Script {
                 throw error;
             }
             Instance instance = script.get(p);
-            if(instance.getCommand().getAsm().equals("end")) {
+            if(instance.getCommand().getAsm().equals(ScriptFile.END)) {
                 return;
-            } else if(instance.getCommand().getAsm().equals("call")) {
+            } else if(instance.getCommand().getAsm().equals(ScriptFile.CALL)) {
                 int oid = instance.getFirstArgument();
                 entry.getBook().getEntryByID(oid).getScript().execute();
-            } else if(instance.getCommand().getAsm().equals("return")) {
+            } else if(instance.getCommand().getAsm().equals(ScriptFile.RETURN)) {
                 return;
             } else {
                 boolean doJump = instance.execute(entry.getBook().getEmulator());
@@ -148,10 +150,10 @@ public class Script {
         while((row = in.readLine()) != null) {
             rc++;
             row = row.trim();
-            if((!row.isEmpty()) && (!row.startsWith("//"))) {
-                if(row.startsWith("call")) {
+            if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
+                if(row.startsWith(ScriptFile.CALL)) {
                     try {
-                        int oid = Integer.parseInt(row.substring("code".length()).trim());
+                        int oid = Integer.parseInt(row.substring(ScriptFile.CODE.length()).trim());
                         String subCode = entry.getBook().getEntryByID(oid).getScript().mergeCodeOnCalls();
                         mergedCode.append(subCode);
                     } catch(NumberFormatException nfe) {
@@ -160,15 +162,15 @@ public class Script {
                         error.setTingID(entry.getTingID());
                         throw error;
                     }
-                } else if(row.equals("return")) {
-                    mergedCode.append("jmp ").append(returnLabel).append("\n");
+                } else if(row.equals(ScriptFile.RETURN)) {
+                    mergedCode.append("jmp ").append(returnLabel).append(ScriptFile.LB);
                 } else {
-                    mergedCode.append(row).append("\n");
+                    mergedCode.append(row).append(ScriptFile.LB);
                 }
             }
         }
         in.close();
-        mergedCode.append(":").append(returnLabel).append("\n");
+        mergedCode.append(ScriptFile.COLON).append(returnLabel).append(ScriptFile.LB);
         return(mergedCode.toString());
     }
     
@@ -193,13 +195,13 @@ public class Script {
             while((row = in.readLine()) != null) {
                 rc++;
                 row = row.trim();
-                if((!row.isEmpty()) && (!row.startsWith("//"))) {
+                if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
                     row = row.trim();
-                    if(row.startsWith(":")) {
+                    if(row.startsWith(ScriptFile.COLON)) {
                         labels.put(row.substring(1).trim(), position);
                         instanceLabelsSI.put(row, instancePos);
                     } else {
-                        int p = row.indexOf(" ");
+                        int p = row.indexOf(ScriptFile.SINGLE_SPACE);
                         String cmd = row;
                         if(p != -1) {
                             cmd = row.substring(0, p);
@@ -218,10 +220,10 @@ public class Script {
             while((row = in.readLine()) != null) {
                 rc++;
                 row = row.trim();
-                if((!row.isEmpty()) && (!row.startsWith("//")) && (!row.startsWith(":"))) {
+                if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT)) && (!row.startsWith(ScriptFile.COLON))) {
                     
                     
-                    int p = row.indexOf(" ");
+                    int p = row.indexOf(ScriptFile.SINGLE_SPACE);
                     String cmd = row;
                     String args = null;
                     if(p != -1) {

@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import tingeltangel.core.constants.OufFile;
+import tingeltangel.core.constants.ScriptFile;
+import tingeltangel.core.constants.TxtFile;
+
 
 public class Importer {
 
@@ -32,23 +36,23 @@ public class Importer {
         }
         
         Stick.downloadOfficial(tmpDir, id);
-        DataInputStream ouf = new DataInputStream(new FileInputStream(new File(tmpDir, _id + "_en.ouf")));
-        File scriptFile = new File(tmpDir, _id + "_en.src");
+        DataInputStream ouf = new DataInputStream(new FileInputStream(new File(tmpDir, _id + OufFile._EN_OUF)));
+        File scriptFile = new File(tmpDir, _id + ScriptFile._EN_SRC);
         
         
         HashMap<String, String> txt = Books.getBook(id);
         
-        book.setAuthor(txt.get("Author"));
-        book.setName(txt.get("Name"));
-        book.setPublisher(txt.get("Publisher"));
-        book.setURL(txt.get("URL"));
-        book.setVersion(Integer.parseInt(txt.get("Book Version")));
+        book.setAuthor(txt.get(TxtFile.KEY_AUTHOR));
+        book.setName(txt.get(TxtFile.KEY_NAME));
+        book.setPublisher(txt.get(TxtFile.KEY_PUBLISHER));
+        book.setURL(txt.get(TxtFile.KEY_URL));
+        book.setVersion(Integer.parseInt(txt.get(TxtFile.KEY_VERSION)));
         
         // load script file
         
         HashMap<Integer, String> scripts = new HashMap<Integer, String>();
         HashMap<Integer, String> notes = new HashMap<Integer, String>();
-        if(txt.containsKey("ScriptMD5")) {
+        if(txt.containsKey(TxtFile.KEY_SCRIPT_MD5)) {
         
             BufferedReader in = new BufferedReader(new FileReader(scriptFile));
             String row;
@@ -60,32 +64,32 @@ public class Importer {
             while((row = in.readLine()) != null) {
                 System.out.println(row);
                 if(inNote) {
-                    if(row.startsWith("[Content]")) {
+                    if(row.startsWith(ScriptFile.CONTENT)) {
                         notes.put(precode, note);
                         note = "";
                         inNote = false;
                         inScript = true;
-                    } else if(row.startsWith("Precode=")) {
+                    } else if(row.startsWith(ScriptFile.PRECODE)) {
                         notes.put(precode, note);
                         note = "";
                         inNote = false;
-                        precode = Integer.parseInt(row.substring("Precode=".length()).trim());
+                        precode = Integer.parseInt(row.substring(ScriptFile.PRECODE.length()).trim());
                     } else {
-                        note += row + "\n";
+                        note += row + ScriptFile.LB;
                     }
                 } else if(inScript) {
-                    if(row.startsWith("Precode=")) {
+                    if(row.startsWith(ScriptFile.PRECODE)) {
                         scripts.put(precode, script);
                         script = "";
                         inScript = false;
-                        precode = Integer.parseInt(row.substring("Precode=".length()).trim());
+                        precode = Integer.parseInt(row.substring(ScriptFile.PRECODE.length()).trim());
                     } else {
-                        script += row + "\n";
+                        script += row + ScriptFile.LB;
                     }
                 } else {
-                    if(row.startsWith("[Content]")) {
+                    if(row.startsWith(ScriptFile.CONTENT)) {
                         inScript = true;
-                    } else if(row.startsWith("[Note]")) {
+                    } else if(row.startsWith(ScriptFile.NODE)) {
                         inNote = true;
                     }
                 }
@@ -187,7 +191,7 @@ public class Importer {
             int epos = Tools.getPositionInFileFromCode(e[0], c++) + entryOffset;
             
             
-            ouf = new DataInputStream(new FileInputStream(new File(tmpDir, _id + "_en.ouf")));
+            ouf = new DataInputStream(new FileInputStream(new File(tmpDir, _id + OufFile._EN_OUF)));
             ouf.skipBytes(epos);
             
             OutputStream out;
@@ -242,7 +246,7 @@ public class Importer {
             ouf.close();
         }
         
-        new File(tmpDir, _id + "_en.ouf").delete();
+        new File(tmpDir, _id + OufFile._EN_OUF).delete();
         
         
     }
