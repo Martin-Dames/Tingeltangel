@@ -13,4 +13,7 @@ TODO
 ----
 
  * read YAML files from tttool software
+ * use Log4j instead of System.out etc
+ * extract strings to i18n-files
+ * show progress dialog while parsing, importing, creating, ... files
 

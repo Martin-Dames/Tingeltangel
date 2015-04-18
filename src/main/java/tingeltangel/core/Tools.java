@@ -6,9 +6,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import tingeltangel.gui.MultipleChoiceDialog;
 import tingeltangel.gui.StringCallback;
 
@@ -77,11 +79,11 @@ public class Tools {
     
     private static void setBinaryPath(String propertyName, String path) {
         if(path == null) {
-            Properties.setProperty(propertyName + ".path", "");
-            Properties.setProperty(propertyName + ".enabled", 0);
+            Properties.setProperty(propertyName + Properties._PATH, "");
+            Properties.setProperty(propertyName + Properties._ENABLED, 0);
         } else {
-            Properties.setProperty(propertyName + ".path", path);
-            Properties.setProperty(propertyName + ".enabled", 1);
+            Properties.setProperty(propertyName + Properties._PATH, path);
+            Properties.setProperty(propertyName + Properties._ENABLED, 1);
         }
     }
         
@@ -90,19 +92,19 @@ public class Tools {
         
         if(System.getProperty("os.name").startsWith("Windows")) {
             
-            if(Properties.getProperty(propertyName + ".path") != null) {
+            if(Properties.getProperty(propertyName + Properties._PATH) != null) {
                                 
-                if(Properties.getPropertyAsInteger(propertyName + ".enabled") == 0) {
+                if(Properties.getPropertyAsInteger(propertyName + Properties._ENABLED) == 0) {
                     binaryCallback.callback(null);
                 } else {
                 
-                    File f = new File(Properties.getProperty(propertyName + ".path"));
+                    File f = new File(Properties.getProperty(propertyName + Properties._PATH));
                     if(f.getName().equals(winExeName) && f.canExecute()) {
                         binaryCallback.callback(f.getAbsolutePath());
                     } else {
                         JOptionPane.showMessageDialog(null, name + " konnte nicht gefunden werden", "Fehler", JOptionPane.WARNING_MESSAGE);
-                        Properties.setProperty(propertyName + ".path", null);
-                        Properties.setProperty(propertyName + ".enabled", null);
+                        Properties.setProperty(propertyName + Properties._PATH, null);
+                        Properties.setProperty(propertyName + Properties._ENABLED, null);
                         getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
                     }
                 }
@@ -125,8 +127,8 @@ public class Tools {
                                 File f = fc.getSelectedFile();
                                 if(f.getName().equals(winExeName) && f.canExecute()) {
                                     setBinaryPath(propertyName, f.getAbsolutePath());
-                                    Properties.setProperty(propertyName + ".path", f.getAbsolutePath());
-                                    Properties.setProperty(propertyName + ".enabled", 1);
+                                    Properties.setProperty(propertyName + Properties._PATH, f.getAbsolutePath());
+                                    Properties.setProperty(propertyName + Properties._ENABLED, 1);
                                     binaryCallback.callback(f.getAbsolutePath());
                                 } else {
                                     JOptionPane.showMessageDialog(null,  name + " konnte nicht gefunden werden", "Fehler", JOptionPane.WARNING_MESSAGE);
@@ -136,8 +138,8 @@ public class Tools {
                                 getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
                             }
                         } else if(s.equals("disable")) {
-                            Properties.setProperty(propertyName + ".path", "");
-                            Properties.setProperty(propertyName + ".enabled", 0);
+                            Properties.setProperty(propertyName + Properties._PATH, "");
+                            Properties.setProperty(propertyName + Properties._ENABLED, 0);
                             System.out.println("props set!");
                             binaryCallback.callback(null);
                         }

@@ -200,7 +200,6 @@ public class Importer {
             // book.add e to index table
             book.addEntry(e[3]);
             
-            
             Entry entry = book.getEntryByID(e[3]);
             
             if(e[2] == 1) {
@@ -211,8 +210,14 @@ public class Importer {
                 int len = e[1];
                 while(len > 0) {
                     k = ouf.read(buffer, 0, Math.min(buffer.length, len));
-                    out.write(buffer, 0, k);
-                    len -= k;
+                    if(k>0) {
+                        out.write(buffer, 0, k);
+                        len -= k;
+                    } else {
+                    	// TODO analyze why this error occurs at some books
+                    	System.err.println("error reading mp3 with id="+_eid);
+                    	len=-1;
+                    }
                 }
                 out.close();
                 try {
