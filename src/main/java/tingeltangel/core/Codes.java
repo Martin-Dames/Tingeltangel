@@ -19,7 +19,7 @@ public class Codes {
         
         
         private final static int[] PNG_DOT_SIZE = {1, 2};
-        private final static int[] PNG_DELTA_SIZE = {1, 3};
+        private final static int[] PNG_DELTA_SIZE = {1, 2};
         private final static int[] PNG_BLOCK_SIZE = {6, 12};
         private final static float[] PNG_PIXEL_PER_MM = {23.62205f, 47.24409f};
         
