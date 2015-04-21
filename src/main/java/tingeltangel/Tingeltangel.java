@@ -2,13 +2,16 @@
 package tingeltangel;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
 import tingeltangel.core.Books;
-import tingeltangel.core.CLI;
+import tingeltangel.cli.CLI;
 import tingeltangel.core.Properties;
 import tingeltangel.core.Tools;
+import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.gui.MasterFrame;
 import tingeltangel.gui.StringCallback;
 
@@ -33,11 +36,9 @@ public class Tingeltangel {
         
     private static String mpg123Path;
     
-    public static void main(String[] args) {
-        
-        
+    public static void main(String[] args) throws Exception {
         if(!CLI.cli(args)) {
-        
+
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
