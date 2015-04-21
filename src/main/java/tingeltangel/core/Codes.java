@@ -19,7 +19,7 @@ public class Codes {
         
         
         private final static int[] PNG_DOT_SIZE = {1, 2};
-        private final static int[] PNG_DELTA_SIZE = {1, 3};
+        private final static int[] PNG_DELTA_SIZE = {1, 2};
         private final static int[] PNG_BLOCK_SIZE = {6, 12};
         private final static float[] PNG_PIXEL_PER_MM = {23.62205f, 47.24409f};
         
@@ -120,6 +120,8 @@ public class Codes {
         }
         
         public static void drawEps(int code, int width, int height, PrintWriter out) {
+            width = (int)((width * 100.0) / 25.4);
+            height = (int)((height * 100.0) / 25.4);
             out.println("%!PS-Adobe-3.0 EPSF-3.0");
             out.println("%%BoundingBox: 0 0 " + width + " " + height);
             drawCarpet(code, 0, 0, width, height, null, out);

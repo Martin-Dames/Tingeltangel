@@ -3,6 +3,7 @@ package tingeltangel;
 
 import java.io.IOException;
 import javax.swing.SwingUtilities;
+import tingeltangel.cli.CLI;
 import tingeltangel.core.Books;
 import tingeltangel.core.Properties;
 import tingeltangel.core.Tools;
@@ -30,26 +31,29 @@ public class Tingeltangel {
         
     private static String mpg123Path;
     
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                
-                final String INSTALL_MPG123 = "MPG123 kann unter http://www.mpg123.de/download.shtml heruntergeladen werden";
-                
-                
-                StringCallback callbackMpg123 = new StringCallback() {
-                    @Override
-                    public void callback(String path) {
-                        mpg123Path = path;
-                        startup();
-                    }
-                };
-                
-                Tools.getBinaryPath(Properties.WIN_MPG123, "mpg123.exe", "mpg123", callbackMpg123, "MPG123", "Um MP3s abspielen zu können muss MPG123 installiert sein. Bitte triff eine Wahl.", INSTALL_MPG123);
-                
-            }
-        });
+    public static void main(String[] args) throws Exception {
+        if(!CLI.cli(args)) {
+
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+
+                    final String INSTALL_MPG123 = "MPG123 kann unter http://www.mpg123.de/download.shtml heruntergeladen werden";
+
+
+                    StringCallback callbackMpg123 = new StringCallback() {
+                        @Override
+                        public void callback(String path) {
+                            mpg123Path = path;
+                            startup();
+                        }
+                    };
+
+                    Tools.getBinaryPath(Properties.WIN_MPG123, "mpg123.exe", "mpg123", callbackMpg123, "MPG123", "Um MP3s abspielen zu können muss MPG123 installiert sein. Bitte triff eine Wahl.", INSTALL_MPG123);
+
+                }
+            });
+        }
     }
     
     private static void startup() {
