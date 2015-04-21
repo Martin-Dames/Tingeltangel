@@ -36,5 +36,9 @@ public class SortedIntList {
     public int size() {
         return(list.size());
     }
+
+    boolean containsKey(int tingID) {
+        return(list.contains(tingID));
+    }
     
 }

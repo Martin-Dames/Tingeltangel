@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-
 import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
@@ -32,7 +31,7 @@ import tingeltangel.core.scripting.SyntaxError;
 
 public class Book {
 
-    private final static long DEFAULT_MAGIC_VALUE = 0x0000000a;
+    private final static long DEFAULT_MAGIC_VALUE = 0x0000000b;
     
     private SortedIntList indexIDs = new SortedIntList();
     private HashMap<Integer, Entry> indexEntries = new HashMap<Integer, Entry>();
@@ -167,8 +166,10 @@ public class Book {
         if((tingID < 15000) || (tingID > 0x10000)) {
             throw new Error("TingID=" + tingID + " out of range");
         }
-        indexIDs.add(tingID);
-        indexEntries.put(tingID, new Entry(this, tingID));
+        if(!indexIDs.containsKey(tingID)) {
+            indexIDs.add(tingID);
+            indexEntries.put(tingID, new Entry(this, tingID));
+        }
         changeMade();
     }
     

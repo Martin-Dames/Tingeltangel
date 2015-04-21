@@ -15,13 +15,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
-
 import tingeltangel.Tingeltangel;
 import tingeltangel.core.constants.TxtFile;
 
@@ -70,7 +68,7 @@ public class Books {
                     in.close();
                     // check if txt-file is valid
                     if(data.containsKey("Name")) {
-                    	System.out.println(String.format("Imported book %s", data.get("Name")));
+                    	// System.out.println(String.format("Imported book %s", data.get("Name")));
                     	BOOKS.put(id, data);
                     } else {
                     	// delete broken txt-file
