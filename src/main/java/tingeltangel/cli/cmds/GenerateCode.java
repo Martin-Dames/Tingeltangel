@@ -19,7 +19,7 @@ import tingeltangel.core.Translator;
  *
  * @author mdames
  */
-public class CliGenerateCode extends CliCommand {
+public class GenerateCode extends CliCommand {
 
     @Override
     public String getName() {

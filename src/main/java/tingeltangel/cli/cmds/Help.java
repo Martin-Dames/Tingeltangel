@@ -15,7 +15,7 @@ import tingeltangel.cli.CliSwitch;
  *
  * @author mdames
  */
-public class CliHelp extends CliCommand {
+public class Help extends CliCommand {
     
     @Override
     public String getName() {
@@ -47,6 +47,7 @@ public class CliHelp extends CliCommand {
         System.out.println("Kommandos");
         
         while(commands.hasNext()) {
+            System.out.println();
             CliCommand command = commands.next();
             System.out.print("\t" + command.getName());
             Iterator<CliSwitch> switches = command.getSwitches().values().iterator();
@@ -61,8 +62,9 @@ public class CliHelp extends CliCommand {
                 }
                 System.out.print(" " + swTxt);
             }
+            System.out.println();
+            System.out.println("\t" + command.getDescription());
             if(!command.getSwitches().isEmpty()) {
-                System.out.println("");
                 System.out.println("\tOptionen:");
                 switches = command.getSwitches().values().iterator();
                 while(switches.hasNext()) {

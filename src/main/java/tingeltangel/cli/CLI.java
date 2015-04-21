@@ -4,10 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import tingeltangel.cli.cmds.CliGenerateCode;
-import tingeltangel.cli.cmds.CliGenerateRawCode;
-import tingeltangel.cli.cmds.CliHelp;
+import tingeltangel.cli.cmds.*;
 import tingeltangel.core.scripting.SyntaxError;
 
 /**
@@ -17,9 +14,11 @@ import tingeltangel.core.scripting.SyntaxError;
 public class CLI {
     
     private final static Class[] COMMAND_CLASSES = {
-        CliHelp.class,
-        CliGenerateCode.class,
-        CliGenerateRawCode.class
+        Help.class,
+        GenerateCode.class,
+        GenerateRawCode.class,
+        BooksScan.class,
+        BooksUpdate.class,
     };
     
     private final static Map<String, CliCommand> COMMANDS = new HashMap<String, CliCommand>();
