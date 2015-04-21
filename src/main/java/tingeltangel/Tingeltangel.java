@@ -2,9 +2,7 @@
 package tingeltangel;
 
 import java.io.IOException;
-
 import javax.swing.SwingUtilities;
-
 import tingeltangel.core.Books;
 import tingeltangel.core.Properties;
 import tingeltangel.core.Tools;
