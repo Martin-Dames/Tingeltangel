@@ -120,6 +120,8 @@ public class Codes {
         }
         
         public static void drawEps(int code, int width, int height, PrintWriter out) {
+            width = (int)((width * 100.0) / 25.4);
+            height = (int)((height * 100.0) / 25.4);
             out.println("%!PS-Adobe-3.0 EPSF-3.0");
             out.println("%%BoundingBox: 0 0 " + width + " " + height);
             drawCarpet(code, 0, 0, width, height, null, out);

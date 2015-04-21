@@ -452,13 +452,13 @@ public class Book {
         
         
         PrintWriter out = new PrintWriter(new FileWriter(new File(dir, "activation.eps")));
-        Codes.drawEps(Translator.ting2code(id), 200, 200, out);
+        Codes.drawEps(Translator.ting2code(id), 100, 100, out);
         out.close();
         
         for(int i = 0; i < size; i++) {
             if(getEntryFromTingID(i + 15001).hasCode()) {
                 out = new PrintWriter(new FileWriter(new File(dir, (i + 15001) + ".eps")));
-                Codes.drawEps(Translator.ting2code(i + 15001), 200, 200, out);
+                Codes.drawEps(Translator.ting2code(i + 15001), 100, 100, out);
                 out.close();
             }
         }
@@ -483,13 +483,13 @@ public class Book {
         
         
         OutputStream out = new FileOutputStream(new File(dir, "activation.png"));
-        Codes.drawPng(Translator.ting2code(id), 200, 200, out);
+        Codes.drawPng(Translator.ting2code(id), 100, 100, out);
         out.close();
                 
         for(int i = 0; i < size; i++) {
             if(getEntryFromTingID(i + 15001).hasCode()) {
                 out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
-                Codes.drawPng(Translator.ting2code(i + 15001), 200, 200, out);
+                Codes.drawPng(Translator.ting2code(i + 15001), 100, 100, out);
                 out.close();
             }
         }
