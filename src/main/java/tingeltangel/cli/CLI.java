@@ -19,7 +19,9 @@ public class CLI {
         GenerateRawCode.class,
         BooksScan.class,
         BooksUpdate.class,
-        Import.class
+        Import.class,
+            Assemble.class,
+            OidCode.class,
     };
     
     private final static Map<String, CliCommand> COMMANDS = new HashMap<String, CliCommand>();

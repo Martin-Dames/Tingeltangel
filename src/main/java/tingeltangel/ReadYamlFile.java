@@ -32,6 +32,7 @@ import tiptoi_reveng.parser.Parser;
 import tiptoi_reveng.parser.ParserException;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,26 +45,7 @@ public class ReadYamlFile {
 
     boolean ignoreAudioFiles = false;
 
-    public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
-            exitPrintUsage();
-        }
-
-        File file = new File(args[0]);
-
-        if (!file.exists()) {
-            exitPrintUsage();
-        }
-
-        ReadYamlFile ryf = new ReadYamlFile();
-        Book book = ryf.read(file);
-        book.export(file.getParentFile());
-    }
-
-    private static void exitPrintUsage() {
-        System.err.println("USAGE: ReadYamlFile <yaml-file>");
-        System.exit(1);
-    }
+    private Interpreter interpreter = new Interpreter();
 
     private void convertOgg2Mp3(File oggFile, File mp3File) throws IOException {
         Process p = Runtime.getRuntime().exec("/usr/bin/avconv -i " + oggFile.getCanonicalPath() + " " + mp3File.getCanonicalPath());
@@ -74,13 +56,18 @@ public class ReadYamlFile {
         }
     }
 
+    public Map<Integer, String> getUsedOidAndIdentifiers() {
+        return usedOidAndIdentifiers;
+    }
+
+    private Map<Integer, String> usedOidAndIdentifiers = new HashMap<Integer, String>();
+
     public Book read(File yamlFile) throws ParserException, IOException, LexerException, NoBookException {
         Yaml yaml = new Yaml();
         Map data = (Map) yaml.load(new FileInputStream(yamlFile));
 
         Map scripts = (Map) data.get("scripts");
 
-        Interpreter interpreter = new Interpreter();
         File dir = yamlFile.getParentFile();
         Book book = new Book(null, dir);
         book.setID(8000 + ((Integer) data.get("product-id")));
@@ -141,8 +128,12 @@ public class ReadYamlFile {
                 if( oid < 15000) {
                     oid += 7000;
                 }
+
+                usedOidAndIdentifiers.put(oid,null);
+
             } else {
                 oid = interpreter.getIdentifier2oid().get(identifier.toString());
+                usedOidAndIdentifiers.put(oid, identifier.toString());
             }
 
             @SuppressWarnings("unchecked")
