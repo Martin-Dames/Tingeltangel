@@ -73,6 +73,78 @@ public class Import extends CliCommand {
             new CliSwitch() {
                 @Override
                 public String getName() {
+                    return("t");
+                }
+
+                @Override
+                public String getDescription() {
+                    return("die zu importierende txt-Datei");
+                }
+
+                @Override
+                public boolean hasArgument() {
+                    return(true);
+                }
+
+                @Override
+                public boolean isOptional() {
+                    return(true);
+                }
+
+                @Override
+                public String getLabel() {
+                    return("txt-Datei");
+                }
+
+                @Override
+                public String getDefault() {
+                    return(null);
+                }
+
+                @Override
+                public boolean acceptValue(String value) {
+                    return(new File(value).exists());
+                }
+            },
+            new CliSwitch() {
+                @Override
+                public String getName() {
+                    return("s");
+                }
+
+                @Override
+                public String getDescription() {
+                    return("die zu importierende src-Datei");
+                }
+
+                @Override
+                public boolean hasArgument() {
+                    return(true);
+                }
+
+                @Override
+                public boolean isOptional() {
+                    return(true);
+                }
+
+                @Override
+                public String getLabel() {
+                    return("src-Datei");
+                }
+
+                @Override
+                public String getDefault() {
+                    return(null);
+                }
+
+                @Override
+                public boolean acceptValue(String value) {
+                    return(new File(value).exists());
+                }
+            },
+            new CliSwitch() {
+                @Override
+                public String getName() {
                     return("b");
                 }
 
@@ -123,8 +195,19 @@ public class Import extends CliCommand {
         File ouf = new File(args.get("o"));
         File bookDir = new File(args.get("b"));
         
+        String _txt = args.get("t");
+        String _src = args.get("s");
+        File src = null;
+        if(_src != null) {
+            src = new File(_src);
+        }
+        HashMap<String, String> txt = null;
+        if(_txt != null) {
+            txt = Books.getBook(new File(_txt));
+        }
+        
         Book book = new Book(null, bookDir);
-        Importer.importOuf(ouf, book);
+        Importer.importOuf(ouf, txt, src, book);
         
     }
     

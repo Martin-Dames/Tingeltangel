@@ -33,6 +33,27 @@ public class Books {
         init();
     }
     
+    private static HashMap<String, String> readTxt(File txt) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader(txt));
+        HashMap<String, String> data = new HashMap<String, String>();
+        String row;
+        while((row = in.readLine()) != null) {
+            row = row.trim();
+            if(!row.isEmpty()) {
+                int p = row.indexOf(":");
+                if(p>0) {
+                        String key = row.substring(0, p).trim();
+                        String value = row.substring(p + 1).trim();
+                        data.put(key, value);
+                } else {
+                    throw new IOException("txt file broken");
+                }
+            }
+        }
+        in.close();
+        return(data);
+    }
+    
     private static void init() {
         try {
             BOOKS.clear();
@@ -48,24 +69,9 @@ public class Books {
             	String name = bookFile.getName();
                 if(name.endsWith(".txt")) {
                     int id = Integer.parseInt(name.substring(0, name.indexOf("_")));
-                    BufferedReader in = new BufferedReader(new FileReader(bookFile));
-                    HashMap<String, String> data = new HashMap<String, String>();
-                    String row;
-                    while((row = in.readLine()) != null) {
-                        row = row.trim();
-                        if(!row.isEmpty()) {
-                            int p = row.indexOf(":");
-                            if(p>0) {
-	                            String key = row.substring(0, p).trim();
-	                            String value = row.substring(p + 1).trim();
-	                            data.put(key, value);
-                            } else {
-                            	System.err.println(String.format("skipping broken line in %s", name));
-                            	continue;
-                            }
-                        }
-                    }
-                    in.close();
+                    
+                    HashMap<String, String> data = readTxt(bookFile);
+                    
                     // check if txt-file is valid
                     if(data.containsKey("Name")) {
                     	// System.out.println(String.format("Imported book %s", data.get("Name")));
@@ -261,6 +267,10 @@ public class Books {
             System.out.print("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/archive|ouf-Datei]]" + " | ");
             System.out.println("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/script|src-Datei]]" + " |");
         }
+    }
+
+    public static HashMap<String, String> getBook(File file) throws IOException {
+        return(readTxt(file));
     }
     
 }
