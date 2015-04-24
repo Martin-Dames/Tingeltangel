@@ -18,7 +18,6 @@
 */
 package tingeltangel.core;
 
-import static org.junit.Assert.assertEquals;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -30,6 +29,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static org.junit.Assert.assertEquals;
+
 public class CodesTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -39,11 +40,11 @@ public class CodesTest {
         File result = folder.newFile();
         Codes.setResolution(Codes.DPI1200);
         OutputStream out = new FileOutputStream(result);
-        Codes.drawPng(15001, 4800, 2400, out);
+        Codes.drawPng(15001, 102, 51, out);
         out.close();
 
         BufferedImage image = ImageIO.read(result);
-        assertEquals(4800, image.getWidth()   );
-        assertEquals(4800, image.getHeight());
+        assertEquals(4800, image.getWidth());
+        assertEquals(2400, image.getHeight());
     }
 }
