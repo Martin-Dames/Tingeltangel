@@ -19,6 +19,7 @@ public class CLI {
         GenerateRawCode.class,
         BooksScan.class,
         BooksUpdate.class,
+        Import.class
     };
     
     private final static Map<String, CliCommand> COMMANDS = new HashMap<String, CliCommand>();
@@ -44,11 +45,17 @@ public class CLI {
         }
         
         CliCommand command = COMMANDS.get(args[0].toLowerCase().trim());
+        
+        if(command == null) {
+            throw new SyntaxError("unbekanntes Kommando: " + args[0].toLowerCase().trim());
+        }
+        
         Map<String, String> argsMap = new HashMap<String, String>();
         for(int i = 1; i < args.length; i++) {
             
             if(args[i].startsWith("-")) {
                 String option = args[i].substring(1).toLowerCase().trim();
+                
                 
                 CliSwitch sw = command.getSwitches().get(option);
                 if(sw == null) {
