@@ -315,7 +315,23 @@ public class Importer {
         ouf.skipBytes(startOfIndex - 40);
         
         if(firstTingID != 15001) {
-            System.out.println("WARNING: first ting id is " + firstTingID);
+            
+            if(firstTingID == 15000) {
+                System.out.println("WARNING: first ting id is 15000. Trying auto correction...");
+                
+                ouf.readInt();
+                ouf.readInt();
+                int type15000 = ouf.readInt();
+                if(type15000 == 0) {
+                    System.out.println("Auto correction successfull");
+                    firstTingID = 15001;
+                    tingIDCount--;
+                } else {
+                    System.out.println("Auto correction failed. The import is expected to fail.");
+                }
+            } else {
+                System.out.println("WARNING: first ting id is neither 15001 nor 15000. The import is expected to fail.");
+            }
         }
         if(tingIDCount != lastTingID - firstTingID + 1) {
             System.out.println("WARNING: index count missmatch (first=" + firstTingID + ", last=" + lastTingID + ", count=" + tingIDCount + ")");
