@@ -101,7 +101,6 @@ public class OidCode extends CliCommand {
             generateImage(book.getID(), book, "START");
             for (Integer oid : ryf.getUsedOidAndIdentifiers().keySet()) {
                 String identifier = ryf.getUsedOidAndIdentifiers().get(oid);
-                String filename;
                 if (identifier == null) {
                     generateImage(oid, book, oid.toString());
                 } else {
@@ -118,7 +117,7 @@ public class OidCode extends CliCommand {
         System.out.println("Writing " + filename + "...");
 
         OutputStream out = new FileOutputStream(filename);
-        Codes.drawPng(oid, 4800, 4800, out);
+        Codes.drawPng(oid, 102, 102, out);
         out.close();
     }
 }
