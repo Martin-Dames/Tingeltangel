@@ -1,0 +1,11 @@
+product-id: 42
+welcome: hello
+scripts:
+  green_box:
+  - P(first_box)
+  red_box:
+  - P(second_box)
+speak:
+  hello: "Hello"
+  first_box: "This is the first box."
+  second_box: "This is the second box.."
