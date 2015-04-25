@@ -280,11 +280,7 @@ public class GenerateCode extends CliCommand {
             }
         };
         
-        Map<String, CliSwitch> switches = new HashMap<String, CliSwitch>();
-        for(int i = 0; i < list.length; i++) {
-            switches.put(list[i].getName(), list[i]);
-        }
-        return(switches);
+        return list2map(list);
         
     }
 
@@ -301,7 +297,7 @@ public class GenerateCode extends CliCommand {
         
         int codeID = Translator.ting2code(Integer.parseInt(tingID));
         
-        if(resolution.equals("600")) {
+        if("600".equals(resolution)) {
             Codes.setResolution(Codes.DPI600);
         } else {
             Codes.setResolution(Codes.DPI1200);

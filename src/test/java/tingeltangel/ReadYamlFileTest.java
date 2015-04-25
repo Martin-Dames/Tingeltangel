@@ -35,6 +35,8 @@ import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 public class ReadYamlFileTest {
 
     private ReadYamlFile reader = new ReadYamlFile();
@@ -59,5 +61,15 @@ public class ReadYamlFileTest {
         reader.read(new File(getClass().getResource("/tip-toi-reveng/WWW_Weltatlas.yaml").getFile()));
 
     }
+
+    @Test
+    public void testGetUsedOidAndIdentifiers() throws LexerException, NoBookException, ParserException, IOException {
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()));
+
+        Map<Integer, String> result = reader.getUsedOidAndIdentifiers();
+
+        assertEquals(6, result.size());
+    }
+
 
 }
