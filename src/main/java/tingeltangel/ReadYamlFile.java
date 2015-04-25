@@ -46,6 +46,7 @@ public class ReadYamlFile {
     boolean ignoreAudioFiles = false;
 
     private Interpreter interpreter = new Interpreter();
+    private Map<Integer, String> usedOidAndIdentifiers = new HashMap<Integer, String>();
 
     private void convertOgg2Mp3(File oggFile, File mp3File) throws IOException {
         Process p = Runtime.getRuntime().exec("/usr/bin/avconv -i " + oggFile.getCanonicalPath() + " " + mp3File.getCanonicalPath());
@@ -60,8 +61,6 @@ public class ReadYamlFile {
         return usedOidAndIdentifiers;
     }
 
-    private Map<Integer, String> usedOidAndIdentifiers = new HashMap<Integer, String>();
-
     public Book read(File yamlFile) throws ParserException, IOException, LexerException, NoBookException {
         Yaml yaml = new Yaml();
         Map data = (Map) yaml.load(new FileInputStream(yamlFile));
@@ -71,6 +70,13 @@ public class ReadYamlFile {
         File dir = yamlFile.getParentFile();
         Book book = new Book(null, dir);
         book.setID(8000 + ((Integer) data.get("product-id")));
+
+        Map scriptcodes = (Map) data.get("scriptcodes");
+        if (scriptcodes != null) {
+            for (Object identifier : scriptcodes.keySet()) {
+                interpreter.getIdentifier2oid().put(identifier.toString(), (Integer) scriptcodes.get(identifier));
+            }
+        }
 
         for (Object identifier : scripts.keySet()) {
             if (identifier instanceof Integer) {
@@ -105,7 +111,7 @@ public class ReadYamlFile {
             book.addEntry(oid);
             Entry entry = book.getEntryFromTingID(oid);
 
-            if( !ignoreAudioFiles) {
+            if (!ignoreAudioFiles) {
                 // Since the TipToi pen uses OggVorbis files we might have to convert the audio files to mp3.
                 File mp3File = new File(dir, "audio_files/" + filename + ".mp3");
                 if (!mp3File.exists()) {
@@ -125,11 +131,11 @@ public class ReadYamlFile {
             int oid;
             if (identifier instanceof Integer) {
                 oid = (Integer) identifier;
-                if( oid < 15000) {
+                if (oid < 15000) {
                     oid += 7000;
                 }
 
-                usedOidAndIdentifiers.put(oid,null);
+                usedOidAndIdentifiers.put(oid, null);
 
             } else {
                 oid = interpreter.getIdentifier2oid().get(identifier.toString());

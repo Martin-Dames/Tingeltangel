@@ -55,12 +55,14 @@ public class Interpreter extends DepthFirstAdapter {
         // assign OIDs to identifiers
         int oid = 15000;
         for (String identifier : identifiers) {
-            while (oids.contains(oid)) {
+            if (!identifier2oid.containsKey(identifier)) {
+                while (oids.contains(oid)) {
+                    oid++;
+                }
+                identifier2oid.put(identifier, oid);
+                oids.add(oid);
                 oid++;
             }
-            identifier2oid.put(identifier, oid);
-            oids.add(oid);
-            oid++;
         }
 
         // assign OIDs to file names

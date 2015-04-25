@@ -24,7 +24,8 @@ import tingeltangel.cli.CliSwitch;
 import tingeltangel.core.Book;
 
 import java.io.File;
-import java.util.HashMap;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Map;
 
 public class Assemble extends CliCommand {
@@ -91,6 +92,18 @@ public class Assemble extends CliCommand {
             ReadYamlFile ryf = new ReadYamlFile();
             Book book = ryf.read(inputFile);
             book.export( new File("."));
+
+            // Write codes mapping into YAML file
+            File scriptcodesFile = new File(inputFile.getName().replace(".yaml", ".codes.yaml"));
+            PrintStream out = new PrintStream(new FileOutputStream(scriptcodesFile));
+            out.println("scriptcodes:");
+            for (Integer oid : ryf.getUsedOidAndIdentifiers().keySet()) {
+                String identifier = ryf.getUsedOidAndIdentifiers().get(oid);
+                if (identifier != null) {
+                    out.println("   " + identifier + ": " + oid);
+                }
+            }
+            out.close();
         } else {
             System.err.println("Fehler beim Lesen der Eingabedatei.");
         }
