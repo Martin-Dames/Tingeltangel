@@ -20,9 +20,7 @@
 package tingeltangel.core.scripting;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Disassembler {
 
@@ -31,6 +29,7 @@ public class Disassembler {
     int labelCount = 1;
     StringBuffer sb = new StringBuffer();
     int offset = 0;
+    byte[] b;
 
     private void disassembleCommandRegisterRegister(String command) {
         sb.append(command);
@@ -71,7 +70,6 @@ public class Disassembler {
         offset =  offset + 4;
     }
 
-    byte[] b;
     /**
      * Disassemble the specified binary and set the script.
      */
@@ -162,11 +160,12 @@ public class Disassembler {
                 sb.append(register);
                 sb.append('\n');
                 offset += 4;
+            } else if (b[offset] == 0x7d && b[offset + 1] == 0x00) {
+                sb.append("UNKNOWN (0x7d00)\n");
+                offset += 2;
             } else {
                 String msb = Integer.toHexString(b[offset]);
                 String lsb =  Integer.toHexString(b[offset+1]);
-
-                
                 throw new RuntimeException("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"")+lsb);
             }
         }

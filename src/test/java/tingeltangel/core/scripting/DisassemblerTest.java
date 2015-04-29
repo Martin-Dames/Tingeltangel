@@ -110,5 +110,6 @@ public class DisassemblerTest {
         }
     
         String result = d.disassemble(binary);
+        System.out.println(result);
     }
 }
