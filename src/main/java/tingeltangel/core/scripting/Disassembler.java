@@ -24,8 +24,8 @@ import java.util.Map;
 
 public class Disassembler {
 
-
-    Map<Integer, Integer> labels = new HashMap<Integer, Integer>();
+    
+    Map<Integer, Integer> labels = new HashMap<Integer, Integer>(); // f(offset)=label
     int labelCount = 1;
     StringBuffer sb = new StringBuffer();
     int offset = 0;
@@ -61,11 +61,11 @@ public class Disassembler {
         sb.append(command);
         sb.append(" ");
         int label = ((b[offset + 2] & 0xff) << 8) + (b[offset + 3] & 0xff);
-        labels.put(label, labelCount);
+        //labels.put(label, labelCount);
         sb.append('l');
-        sb.append(labelCount);
+        sb.append(labels.get(label));
         sb.append('\n');
-        labelCount++;
+        //labelCount++;
         offset =  offset + 4;
     }
 
@@ -76,6 +76,35 @@ public class Disassembler {
 
         this.b = b;
 
+        // first pass (collect jump targets)
+        while (offset < b.length) {
+            if (offset == b.length - 1) {
+                if (b[offset] != 0) {
+                    throw new RuntimeException("Last byte must be 0x00.");
+                }
+                offset += 1;
+            } else {
+                int opcode = ((b[offset] & 0xff) << 8) | (b[offset + 1] & 0xff);
+                Command command = Commands.getCommand(opcode);
+                if(command == null) {
+                    String msb = Integer.toHexString(b[offset]);
+                    String lsb =  Integer.toHexString(b[offset+1]);
+                    throw new RuntimeException("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"")+lsb);
+                } else if(command.firstArgumentIsLabel()) {
+                    // jump
+                    int label = ((b[offset + 2] & 0xff) << 8) | (b[offset + 3] & 0xff);
+                    if(!labels.containsKey(label)) {
+                        labels.put(label, labelCount++);
+                    }
+                    offset += 4;
+                } else {
+                    offset += (command.getNumberOfArguments() + 1) * 2;
+                }
+            }
+        }
+        
+        // second pass
+        offset = 0;
         while (offset < b.length) {
             if (labels.containsKey(offset)) {
                 sb.append("\n:l");
@@ -159,9 +188,6 @@ public class Disassembler {
                 sb.append(register);
                 sb.append('\n');
                 offset += 4;
-            } else if (b[offset] == 0x7d && b[offset + 1] == 0x00) {
-                sb.append("UNKNOWN (0x7d00)\n");
-                offset += 2;
             } else {
                 String msb = Integer.toHexString(b[offset]);
                 String lsb =  Integer.toHexString(b[offset+1]);

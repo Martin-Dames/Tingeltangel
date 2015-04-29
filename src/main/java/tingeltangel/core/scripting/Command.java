@@ -58,6 +58,7 @@ public class Command implements Comparable {
         this.description = description;
     }
     
+    
     public int getNumberOfArguments() {
         if(firstArgument == NONE) {
             return(0);

@@ -14,6 +14,7 @@ import java.util.TreeSet;
 public class Commands {
     
     private final static HashMap<String, HashSet<Command>> commands = new HashMap<String, HashSet<Command>>();
+    private final static HashMap<Integer, Command> opcode2command = new HashMap<Integer, Command>();
     
     static {
         try {
@@ -51,6 +52,10 @@ public class Commands {
         } else {
             throw new Error();
         }
+    }
+    
+    public static Command getCommand(int opcode) {
+        return(opcode2command.get(opcode));
     }
     
     public static Command getCommand(String cmd) {
@@ -132,6 +137,7 @@ public class Commands {
             commands.put(command.getAsm(), set);
         }
         set.add(command);
+        opcode2command.put(command.getCode(), command);
     }
     
     public static Iterator<Command> iterator() {

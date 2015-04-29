@@ -121,6 +121,22 @@ public class DisassemblerTest {
         }
     
         String result = d.disassemble(binary);
+        //System.out.println(result);
+    }
+    
+    @Test
+    public void testDisassemble_5() throws Exception {
+        
+        String source = 
+                  "jmp b\n"
+                + ":a\n"
+                + "end\n"
+                + ":b\n"
+                + "jmp a\n";
+        
+        Script script = new Script(source, entry);
+        byte[] binary = script.compile();
+        String result = d.disassemble(binary);
         System.out.println(result);
     }
 }
