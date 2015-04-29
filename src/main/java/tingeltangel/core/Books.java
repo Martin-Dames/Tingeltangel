@@ -270,6 +270,9 @@ public class Books {
     }
 
     public static HashMap<String, String> getBook(File file) throws IOException {
+        if(file == null) {
+            return(null);
+        }
         return(readTxt(file));
     }
     

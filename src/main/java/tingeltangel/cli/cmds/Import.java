@@ -12,7 +12,6 @@ import tingeltangel.cli.CliSwitch;
 import tingeltangel.core.Book;
 import tingeltangel.core.Books;
 import tingeltangel.core.Importer;
-import tingeltangel.core.Translator;
 
 /**
  *

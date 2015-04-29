@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.FileChannel;
 
 import javax.swing.JFileChooser;
@@ -47,7 +48,58 @@ public class Tools {
             return(new File("~/"));
         }
     }
+    
+    public static File getWorkingDirectory(String subDirectory) {
+        File wd = new File(getWorkingDirectory(), subDirectory);
+        if(wd.exists()) {
+            if(!wd.isDirectory()) {
+                throw new Error(wd.getAbsolutePath() + " exists but is not a directory");
+            }
+        } else {
+            if(!wd.mkdirs()) {
+                throw new Error("can't create directory " + wd.getAbsolutePath());
+            }
+        }
+        return(wd);
+    }
+    
+    public static File getWorkingDirectory() {
+        File wd = null;
+        if(isWindows()) {
+            String myDocuments = null;
+
+            try {
+                Process p =  Runtime.getRuntime().exec("reg query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\" /v personal");
+                p.waitFor();
+                InputStream in = p.getInputStream();
+                byte[] b = new byte[in.available()];
+                in.read(b);
+                in.close();
+                myDocuments = new String(b);
+                myDocuments = myDocuments.split("\\s\\s+")[4];
+            } catch(Exception e) {
+                throw new Error(e);
+            }
+            wd = new File(myDocuments, "tingeltangel");
+        } else {
+            wd = new File("~/.tingeltangel");
+        }
+        if(wd.exists()) {
+            if(!wd.isDirectory()) {
+                throw new Error(wd.getAbsolutePath() + " exists but is not a directory");
+            }
+        } else {
+            if(!wd.mkdirs()) {
+                throw new Error("can't create directory " + wd.getAbsolutePath());
+            }
+        }
+        return(wd);
+    }
            
+    public static void main(String[] args) {
+        getWorkingDirectory();
+    }
+    
     /**
      *
      * @param code Positionscode in der Indextabelle (1. Feld)

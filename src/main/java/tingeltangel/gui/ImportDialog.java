@@ -5,6 +5,8 @@
 package tingeltangel.gui;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -20,12 +22,15 @@ public class ImportDialog extends javax.swing.JDialog {
     private File txt = null;
     private File png = null;
     private File src = null;
+    private int id = -1;
+    private final MapCallback callback;
     
     /**
      * Creates new form ImportDialog
      */
-    public ImportDialog(java.awt.Frame parent, boolean modal) {
+    public ImportDialog(java.awt.Frame parent, boolean modal, MapCallback callback) {
         super(parent, modal);
+        this.callback = callback;
         initComponents();
     }
 
@@ -253,7 +258,23 @@ public class ImportDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_buttonSrcActionPerformed
 
     private void buttonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonImportActionPerformed
-        // TODO add your handling code here:
+        Map<String, Object> map = new HashMap<String, Object>();
+        if(txt != null) {
+            map.put("txt", txt);
+        }
+        if(png != null) {
+            map.put("png", png);
+        }
+        if(src != null) {
+            map.put("src", src);
+        }
+        if(ouf != null) {
+            map.put("ouf", ouf);
+        }
+        if(id >= 0) {
+            map.put("id", id);
+        }
+        callback.callback(map);
     }//GEN-LAST:event_buttonImportActionPerformed
 
     private void buttonOufActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOufActionPerformed
@@ -276,47 +297,7 @@ public class ImportDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonIDActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ImportDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ImportDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ImportDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ImportDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ImportDialog dialog = new ImportDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonID;
     private javax.swing.JButton buttonImport;

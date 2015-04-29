@@ -297,6 +297,16 @@ public class Importer {
                         }
                     }
 
+                    byte[] bin = bout.toByteArray();
+                    for(int i = 0; i < bin.length; i++) {
+                        String hs = Integer.toHexString(bin[i] & 0xff);
+                        if(hs.length() == 1) {
+                            hs = "0" + hs;
+                        }
+                        System.out.print("0x" + hs + ", ");
+                    }
+                    System.out.println();
+                    
                     Script script = new Script(bout.toByteArray(), entry);
                     entry.setScript(script);
                     if(script.isSub()) {
@@ -317,7 +327,7 @@ public class Importer {
         
     }
     
-    
+    /*
     public static void importOfficial(int id, File path, Book book) throws IOException {
         
         File tmpDir = new File(path, "tmp");
@@ -349,5 +359,5 @@ public class Importer {
         
         
     }
-    
+    */
 }

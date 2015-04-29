@@ -4,13 +4,16 @@ package tingeltangel.gui;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,6 +31,7 @@ import tingeltangel.core.Entry;
 import tingeltangel.core.Importer;
 import tingeltangel.core.MP3Player;
 import tingeltangel.core.NoBookException;
+import tingeltangel.core.Tools;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 
@@ -169,61 +173,54 @@ public class MasterFrame extends JFrame implements MenuCallback {
                 loadBook = true;
             }
             if(loadBook) {
-                final JFileChooser fc = new JFileChooser();
-            
-                fc.setCurrentDirectory(new java.io.File("."));
-                fc.setDialogTitle("Ting-Buch Verzeichniss wählen");
-                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fc.setAcceptAllFileFilterUsed(false);
-
-                if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        book.setDirectory(fc.getSelectedFile());
-                        
-                        StringCallback cb = new StringCallback() {
-                            @Override
-                            public void callback(String s) {
-                                // extract id
-                                int p = s.indexOf(" ");
-                                if(p >= 0) {
-                                    s = s.substring(0, p);
-                                }
-                                int _id = Integer.parseInt(s);
-                                try {
-                                    MasterFrame.this.setEnabled(false);
-                                    Importer.importOfficial(_id, fc.getSelectedFile(), mp3Player, book);
-                                    propertyFrame.refresh();
-                                    indexFrame.update();
-                                } catch(Exception e) {
-                                    JOptionPane.showMessageDialog(MasterFrame.this, "Das Buch konnte nicht importiert werden");
-                                    e.printStackTrace(System.out);
-                                } finally {
-                                    MasterFrame.this.setEnabled(true);
-                                }
-                            }
-                        };
-                        
-                        String[] options;
-                        Integer[] ids = Books.getIDs();
-                        options = new String[ids.length];
-                        for(int i = 0; i < ids.length; i++) {
-                            String m = Integer.toString(ids[i]);
-                            while(m.length() < 5) {
-                                m = "0" + m;
-                            }
-                            m += " " + Books.getBook(ids[i]).get("Name");
-                            m += " (" + Books.getBook(ids[i]).get("Author") + ")";
-                            options[i] = m;
+                
+                
+                MapCallback callback = new MapCallback() {
+                    @Override
+                    public void callback(Map<String, Object> data) {
+                        int id = -1;
+                        if(data.get("id") != null) {
+                            id = (Integer)data.get("id");
                         }
-                        MultipleChoiceDialog.showDropdown(this, "MID auswählen", "Bitte wähle eine Buch-ID aus", "OK", options, 0, cb);
+                        if(id < 0) {
+                            try {
+                                // prefetch id
+                                DataInputStream in = new DataInputStream(new FileInputStream((File)data.get("ouf")));
+                                in.skipBytes(20);
+                                id = in.readInt();
+                                in.close();
+                            } catch(IOException e) {
+                                JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim lesen der ouf Datei");
+                                e.printStackTrace(System.out);
+                                return;
+                            }
+                        }
+                        String _id = Integer.toString(id);
+                        while(_id.length() < 5) {
+                            _id = "0" + _id;
+                        }
                         
-                        
-                        
-                    } catch(Exception e) {
-                        JOptionPane.showMessageDialog(this, "Das Buch konnte nicht importiert werden");
-                        e.printStackTrace(System.out);
+                        File bookDir = new File(Tools.getWorkingDirectory("books"), _id);
+                        if(bookDir.exists()) {
+                            // display proper error
+                            JOptionPane.showMessageDialog(MasterFrame.this, "Das Verzeichniss " + bookDir.getAbsolutePath() + " existiert schon");
+                            return;
+                        }
+
+                        book.setDirectory(bookDir);
+                        MasterFrame.this.setEnabled(false);
+                        try {
+                            Importer.importOuf((File)data.get("ouf"), Books.getBook((File)data.get("txt")), (File)data.get("src"), book);
+                        } catch(IOException e) {
+                            JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
+                            e.printStackTrace(System.out);
+                        }
+                        propertyFrame.refresh();
+                        indexFrame.update();
                     }
-                }
+                };
+                new ImportDialog(this, true, callback).setVisible(true);
+                
             }
         } else if(id.equals("buch.load")) {
             boolean loadBook = false;

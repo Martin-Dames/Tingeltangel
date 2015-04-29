@@ -166,6 +166,7 @@ public class Disassembler {
                 String msb = Integer.toHexString(b[offset]);
                 String lsb =  Integer.toHexString(b[offset+1]);
 
+                
                 throw new RuntimeException("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"")+lsb);
             }
         }
