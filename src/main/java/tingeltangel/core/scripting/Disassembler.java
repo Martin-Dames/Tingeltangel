@@ -36,7 +36,6 @@ public class Disassembler {
         sb.append(" v");
         int register1 = ((b[offset + 2] & 0xff) << 8) + (b[offset + 3] & 0xff);
         int register2 = ((b[offset + 4] & 0xff) << 8) + (b[offset + 5] & 0xff);
-        offset += 6;
         sb.append(register1);
         sb.append(",v");
         sb.append(register2);
