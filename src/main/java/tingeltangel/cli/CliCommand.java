@@ -4,6 +4,7 @@
  */
 package tingeltangel.cli;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,5 +17,13 @@ public abstract class CliCommand {
     public abstract String getDescription();
     public abstract Map<String, CliSwitch> getSwitches();
     public abstract void execute(Map<String, String> args) throws Exception;
-    
+
+
+    protected Map<String, CliSwitch> list2map( CliSwitch[] list) {
+        Map<String, CliSwitch> switches = new HashMap<String, CliSwitch>();
+        for(int i = 0; i < list.length; i++) {
+            switches.put(list[i].getName(), list[i]);
+        }
+        return(switches);
+    }
 }

@@ -277,11 +277,7 @@ public class GenerateRawCode extends CliCommand {
             }
         };
         
-        Map<String, CliSwitch> switches = new HashMap<String, CliSwitch>();
-        for(int i = 0; i < list.length; i++) {
-            switches.put(list[i].getName(), list[i]);
-        }
-        return(switches);
+        return list2map(list);
         
     }
 

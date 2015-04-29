@@ -36,7 +36,18 @@ public class Tools {
         }
     }
 
-   
+    public static boolean isWindows() {
+        return(System.getProperty("os.name").startsWith("Windows"));
+    }
+    
+    public static File getHomeDirectory() {
+        if(isWindows()) {
+            return(new File(System.getProperty("user.home")));
+        } else {
+            return(new File("~/"));
+        }
+    }
+           
     /**
      *
      * @param code Positionscode in der Indextabelle (1. Feld)

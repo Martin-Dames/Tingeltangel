@@ -20,20 +20,15 @@ package tingeltangel;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.yaml.snakeyaml.Yaml;
 import tingeltangel.core.NoBookException;
-import tiptoi_reveng.lexer.Lexer;
 import tiptoi_reveng.lexer.LexerException;
-import tiptoi_reveng.node.Start;
-import tiptoi_reveng.parser.Parser;
 import tiptoi_reveng.parser.ParserException;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PushbackReader;
-import java.io.StringReader;
-import java.util.List;
 import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public class ReadYamlFileTest {
 
@@ -57,7 +52,31 @@ public class ReadYamlFileTest {
     @Test
     public void testParser5() throws ParserException, IOException, LexerException, NoBookException {
         reader.read(new File(getClass().getResource("/tip-toi-reveng/WWW_Weltatlas.yaml").getFile()));
-
     }
+
+    /**
+     * This YAML file contains a fix mapping of identifiers to codes.
+     */
+    @Test
+    public void testParser_FixedCodes() throws ParserException, IOException, LexerException, NoBookException {
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer-codes.yaml").getFile()));
+
+        assertEquals("teddy", reader.getUsedOidAndIdentifiers().get(16001));
+        assertEquals("wichtel", reader.getUsedOidAndIdentifiers().get(16002));
+        assertEquals("fragezeichen", reader.getUsedOidAndIdentifiers().get(16010));
+        assertEquals("franzoesisch", reader.getUsedOidAndIdentifiers().get(16011));
+        assertEquals("deutsch", reader.getUsedOidAndIdentifiers().get(16012));
+        assertEquals("ball", reader.getUsedOidAndIdentifiers().get(16004));
+    }
+
+    @Test
+    public void testGetUsedOidAndIdentifiers() throws LexerException, NoBookException, ParserException, IOException {
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()));
+
+        Map<Integer, String> result = reader.getUsedOidAndIdentifiers();
+
+        assertEquals(6, result.size());
+    }
+
 
 }
