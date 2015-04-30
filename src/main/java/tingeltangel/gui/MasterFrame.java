@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.Tingeltangel;
 import tingeltangel.core.Book;
@@ -175,9 +176,9 @@ public class MasterFrame extends JFrame implements MenuCallback {
             if(loadBook) {
                 
                 
-                MapCallback callback = new MapCallback() {
+                final MapCallback callback = new MapCallback() {
                     @Override
-                    public void callback(Map<String, Object> data) {
+                    public void callback(final Map<String, Object> data) {
                         int id = -1;
                         if(data.get("id") != null) {
                             id = (Integer)data.get("id");
@@ -205,21 +206,36 @@ public class MasterFrame extends JFrame implements MenuCallback {
                             // display proper error
                             JOptionPane.showMessageDialog(MasterFrame.this, "Das Verzeichniss " + bookDir.getAbsolutePath() + " existiert schon");
                             return;
+                        } else {
+                            bookDir.mkdir();
+                            new File(bookDir, "audio").mkdir();
                         }
 
                         book.setDirectory(bookDir);
                         MasterFrame.this.setEnabled(false);
-                        try {
-                            Importer.importOuf((File)data.get("ouf"), Books.getBook((File)data.get("txt")), (File)data.get("src"), book);
-                        } catch(IOException e) {
-                            JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
-                            e.printStackTrace(System.out);
-                        }
-                        propertyFrame.refresh();
-                        indexFrame.update();
+                        final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "importiere Buch");
+                        SwingWorker t = new SwingWorker() {
+                            @Override
+                            protected Object doInBackground() throws Exception {
+                                try {
+                                    Importer.importOuf((File)data.get("ouf"), Books.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
+                                } catch(IOException e) {
+                                    JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
+                                    e.printStackTrace(System.out);
+                                }
+                                progressDialog.done();
+                                propertyFrame.refresh();
+                                indexFrame.update();
+                                return(null);
+                            }
+                        };
+                        t.execute();
+                        //Importer.importOuf((File)data.get("ouf"), Books.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
+                        
                     }
                 };
-                new ImportDialog(this, true, callback).setVisible(true);
+                new ImportDialog(MasterFrame.this, true, callback).setVisible(true);
+                
                 
             }
         } else if(id.equals("buch.load")) {

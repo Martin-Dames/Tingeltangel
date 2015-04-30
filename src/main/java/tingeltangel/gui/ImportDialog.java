@@ -274,6 +274,7 @@ public class ImportDialog extends javax.swing.JDialog {
         if(id >= 0) {
             map.put("id", id);
         }
+        setVisible(false);
         callback.callback(map);
     }//GEN-LAST:event_buttonImportActionPerformed
 

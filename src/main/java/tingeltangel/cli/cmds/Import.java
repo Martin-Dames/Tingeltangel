@@ -206,7 +206,7 @@ public class Import extends CliCommand {
         }
         
         Book book = new Book(null, bookDir);
-        Importer.importOuf(ouf, txt, src, book);
+        Importer.importOuf(ouf, txt, src, book, null);
         
     }
     

@@ -126,17 +126,10 @@ public class DisassemblerTest {
     
     @Test
     public void testDisassemble_5() throws Exception {
-        
-        String source = 
-                  "jmp b\n"
-                + ":a\n"
-                + "end\n"
-                + ":b\n"
-                + "jmp a\n";
-        
+        String source = "jmp l1\n\n:l2\nend\n\n:l1\njmp l2\n";
         Script script = new Script(source, entry);
         byte[] binary = script.compile();
         String result = d.disassemble(binary);
-        System.out.println(result);
+        assertEquals("Correctly disassembled code", source, result);
     }
 }

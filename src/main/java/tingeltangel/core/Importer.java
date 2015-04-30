@@ -18,6 +18,7 @@ import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
+import tingeltangel.gui.ProgressDialog;
 
 
 public class Importer {
@@ -30,7 +31,7 @@ public class Importer {
      * @param book
      * @throws Exception 
      */
-    public static void importOuf(File oufFile, HashMap<String, String> txt, File scriptFile, Book book) throws IOException {
+    public static void importOuf(File oufFile, HashMap<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException {
         
         DataInputStream ouf = new DataInputStream(new FileInputStream(oufFile));
         
@@ -164,12 +165,8 @@ public class Importer {
             }
         }
         
-        // print index table
-        Iterator<int[]> indexIterator = index.iterator();
-        while(indexIterator.hasNext()) {
-            int[] entry = indexIterator.next();
-            System.out.println(entry[3] + "\t" + entry[2]);
-        }
+        progress.setMax(index.size());
+        int counter = 0;
         
         // find first entry
         int pos = 12 * (lastTingID - firstTingID + 1) + startOfIndex;
@@ -213,11 +210,12 @@ public class Importer {
         
         ouf.close();
         
-        indexIterator = index.iterator();
+        Iterator<int[]> indexIterator = index.iterator();
         buffer = new byte[4096];
         while(indexIterator.hasNext()) {
             int[] e = indexIterator.next();
             
+            progress.setVal(counter++);
             
             int epos = Tools.getPositionInFileFromCode(e[0], e[3] - 15001) + entryOffset;
             
@@ -238,7 +236,6 @@ public class Importer {
             
             if(e[2] == 1) {
                 // mp3
-                System.out.println("extracting mp3 @" + Integer.toHexString(epos) + " (id=" + _eid + "; size=" + e[1] + ") ...");
                 try {
                     out = new FileOutputStream(new File(book.getMP3Path(), _eid + ".mp3"));
                 } catch(NoBookException nbo) {
@@ -266,7 +263,6 @@ public class Importer {
                 }
             } else {
                 // script
-                System.out.println("extracting bin @" + Integer.toHexString(epos) + " (id=" + _eid + "; size=" + e[1] + ") ...");
                 
                 if(scriptFile != null) {
                     if(scripts.get(e[3])!=null) {
@@ -297,15 +293,6 @@ public class Importer {
                         }
                     }
 
-                    byte[] bin = bout.toByteArray();
-                    for(int i = 0; i < bin.length; i++) {
-                        String hs = Integer.toHexString(bin[i] & 0xff);
-                        if(hs.length() == 1) {
-                            hs = "0" + hs;
-                        }
-                        System.out.print("0x" + hs + ", ");
-                    }
-                    System.out.println();
                     
                     Script script = new Script(bout.toByteArray(), entry);
                     entry.setScript(script);
@@ -324,7 +311,7 @@ public class Importer {
             
             ouf.close();
         }
-        
+        book.save();
     }
     
     /*
