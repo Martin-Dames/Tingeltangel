@@ -1,7 +1,6 @@
 
 package tingeltangel.gui;
 
-import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
@@ -14,14 +13,12 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.Tingeltangel;
@@ -249,32 +246,24 @@ public class MasterFrame extends JFrame implements MenuCallback {
                 loadBook = true;
             }
             if(loadBook) {
-                JFileChooser fc = new JFileChooser();
                 
-                fc.setCurrentDirectory(new java.io.File("."));
-                fc.setDialogTitle("Ting-Buch öffnen");
-                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fc.setAcceptAllFileFilterUsed(false);
-              
-                if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        book.setDirectory(fc.getSelectedFile());
-                        Book.load(new File(fc.getSelectedFile(), "book.tbu"), book);
-                    } catch(FileNotFoundException e) {
-                        JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gefunden werden");
-                        e.printStackTrace(System.out);
-                    } catch(IOException e) {
-                        JOptionPane.showMessageDialog(this, "Das Buch konnte nicht geladen werden");
-                        e.printStackTrace(System.out);
-                    } catch (NoBookException ex) {
-                        JOptionPane.showMessageDialog(this, "Ein unbekannter Fehler ist aufgetreten");
-                        ex.printStackTrace(System.out);
+                new ChooseBook(this) {
+                    @Override
+                    public void selected(File dir) {
+                        try {
+                            book.setDirectory(dir);
+                            Book.load(new File(dir, "book.tbu"), book);
+                        } catch (IOException ex) {
+                            ex.printStackTrace(System.err);
+                        }
+                        propertyFrame.refresh();
+                        indexFrame.update();
                     }
-                }
+                }.setVisible(true);
+                
+                
             }
             
-            propertyFrame.refresh();
-            indexFrame.update();
             
         } else if(id.equals("buch.save")) {
             

@@ -49,6 +49,15 @@ public class Tools {
         }
     }
     
+    /**
+     * 
+     * used directories:
+     *      books:      my books
+     *      ting:       download of official books
+     * 
+     * @param subDirectory
+     * @return 
+     */
     public static File getWorkingDirectory(String subDirectory) {
         File wd = new File(getWorkingDirectory(), subDirectory);
         if(wd.exists()) {
@@ -64,7 +73,7 @@ public class Tools {
     }
     
     public static File getWorkingDirectory() {
-        File wd = null;
+        File wd;
         if(isWindows()) {
             String myDocuments = null;
 
@@ -82,7 +91,7 @@ public class Tools {
             }
             wd = new File(myDocuments, "tingeltangel");
         } else {
-            wd = new File("~/.tingeltangel");
+            wd = new File(new File(System.getProperty("user.home")), ".tingeltangel");
         }
         if(wd.exists()) {
             if(!wd.isDirectory()) {

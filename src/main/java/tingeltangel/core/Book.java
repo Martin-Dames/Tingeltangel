@@ -53,11 +53,8 @@ public class Book {
     
     private Emulator emulator;
     
-    public File getMP3Path() throws NoBookException {
+    public File getMP3Path() {
         
-        if(dir == null) {
-            throw new NoBookException();
-        }
         
         File mp3Path = new File(dir, "audio");
         if(mp3Path.isDirectory()) {
@@ -273,11 +270,11 @@ public class Book {
         changed = false;
     }
     
-    public static void load(File file, Book book) throws FileNotFoundException, IOException, NoBookException {
+    public static void load(File file, Book book) throws IOException {
         load(new FileInputStream(file), book);
     }
 
-    public static void load(InputStream inputStream, Book book) throws IOException, NoBookException {
+    public static void load(InputStream inputStream, Book book) throws IOException {
         DataInputStream in = new DataInputStream(inputStream);
         
         book.clear();

@@ -72,7 +72,7 @@ public class Entry {
         changeMade();
     }
     
-    static Entry load(DataInputStream in, Book book) throws IOException, NoBookException {
+    static Entry load(DataInputStream in, Book book) throws IOException {
         Entry entry = new Entry(book, in.readInt());
         
         String sMp3 = in.readUTF();
