@@ -32,6 +32,7 @@ public class IDChooser extends javax.swing.JDialog {
         this.callback = callback;
         list.setModel(model);
         niceIDActionPerformed(null);
+        setVisible(true);
     }
 
     /**

@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileChannel;
-import tingeltangel.core.IndexTableCalculator;
 
 /**
  *
@@ -19,11 +18,7 @@ import tingeltangel.core.IndexTableCalculator;
 public class FileEnvironment {
 
     public static File getHomeDirectory() {
-        if (OS.isWindows()) {
-            return new File(System.getProperty("user.home"));
-        } else {
-            return new File("~/");
-        }
+        return new File(System.getProperty("user.home"));
     }
 
     public static File getBooksDirectory() {
@@ -102,7 +97,7 @@ public class FileEnvironment {
             }
             wd = new File(myDocuments, "tingeltangel");
         } else {
-            wd = new File("~/.tingeltangel");
+            wd = new File(getHomeDirectory(), ".tingeltangel");
         }
         if (wd.exists()) {
             if (!wd.isDirectory()) {

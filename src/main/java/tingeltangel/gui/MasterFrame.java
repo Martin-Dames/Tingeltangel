@@ -6,15 +6,12 @@ import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -23,12 +20,11 @@ import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.Tingeltangel;
 import tingeltangel.core.Book;
-import tingeltangel.core.Repository;
 import tingeltangel.core.Codes;
 import tingeltangel.core.Entry;
 import tingeltangel.core.Importer;
 import tingeltangel.core.MP3Player;
-import tingeltangel.core.IndexTableCalculator;
+import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
@@ -151,15 +147,42 @@ public class MasterFrame extends JFrame implements MenuCallback {
         if(id.equals("buch.exit")) {
             closeMasterFrame();
         } else if(id.equals("buch.new")) {
+            boolean newBook = false;
             if(book.unsaved()) {
                 int value =  JOptionPane.showConfirmDialog(this, "Das aktuelle Buch ist nicht gespeichert. wollen sie trotzdem ein neues Buch erstellen?", "Frage...", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (value == JOptionPane.YES_OPTION) {
-                    book.clear();
+                    newBook = true;
                 }
             } else {
-                book.clear();
+                newBook = true;
             }
-            indexFrame.update();
+            if(newBook) {
+                
+                IDChooser ic = new IDChooser(this, new IntegerCallback() {
+
+                    @Override
+                    public void callback(int id) {
+                        String _id = Integer.toString(id);
+                        while(_id.length() < 5) {
+                            _id = "0" + _id;
+                        }
+                        
+                        // check if there is already a book with this id
+                        if(new File(FileEnvironment.getBooksDirectory(), _id).exists()) {
+                            JOptionPane.showMessageDialog(MasterFrame.this, "Dieses Buch existiert schon");
+                            return;
+                        }
+                        
+                        book.clear();
+                        book.setID(id);
+                        propertyFrame.refresh();
+                        indexFrame.update();
+                        
+                    }
+                });
+                
+            }
+                
         } else if(id.equals("buch.import")) {
             boolean loadBook = false;
             if(book.unsaved()) {
@@ -239,19 +262,20 @@ public class MasterFrame extends JFrame implements MenuCallback {
             }
             if(loadBook) {
                 
-                new ChooseBook(this) {
+                ChooseBook cb = new ChooseBook(this, new IntegerCallback() {
                     @Override
-                    public void selected(File dir) {
+                    public void callback(int _id) {
                         try {
-                            //book.setDirectory(dir);
-                            Book.load(new File(dir, "book.tbu"), book);
+                            book.clear();
+                            book.setID(_id);
+                            Book.load(FileEnvironment.getTBU(_id), book);
                         } catch (IOException ex) {
                             ex.printStackTrace(System.err);
                         }
                         propertyFrame.refresh();
                         indexFrame.update();
                     }
-                }.setVisible(true);
+                });
                 
                 
             }
@@ -267,22 +291,6 @@ public class MasterFrame extends JFrame implements MenuCallback {
                 e.printStackTrace(System.out);
             }
             
-        } else if(id.equals("buch.saveas")) {
-            JFileChooser fc = new JFileChooser();
-            
-            fc.setCurrentDirectory(new java.io.File("."));
-            fc.setDialogTitle("Ting-Buch speichern");
-            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fc.setAcceptAllFileFilterUsed(false);
-            
-            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                try {
-                    book.save(new File(fc.getSelectedFile(), "book.tbu"));
-                } catch(Exception e) {
-                    JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gespeichert werden");
-                    e.printStackTrace(System.out);
-                }
-            }
         } else if(id.equals("buch.generate")) {
             JFileChooser fc = new JFileChooser();
             fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

@@ -4,17 +4,12 @@
  */
 package tingeltangel.gui;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 import tingeltangel.core.Tupel;
@@ -24,95 +19,63 @@ import tingeltangel.tools.FileEnvironment;
  *
  * @author martin
  */
-public abstract class ChooseBook extends javax.swing.JDialog {
+public class ChooseBook extends javax.swing.JDialog {
 
+    private final LinkedList<Tupel<Integer, String>> idList = new LinkedList<Tupel<Integer, String>>();
+    private MyListModel model = new MyListModel();
+    private final IntegerCallback callback;
+    
+    
+    private String getLabel(int id) throws IOException {
+        DataInputStream in = new DataInputStream(new FileInputStream(FileEnvironment.getTBU(id)));
+        // compatibility hack
+        int _id;
+        int fileFormatVersion = in.readInt();
+        if(fileFormatVersion <= 15000) {
+            _id = fileFormatVersion;
+            fileFormatVersion = 0;
+        } else {
+            _id = in.readInt();
+            fileFormatVersion -= 15000;
+        }
+        if(id != _id) {
+            throw new IOException("dir-id=" + id + "; file-id=" + _id);
+        }
+        String name = in.readUTF();
+        String publisher = in.readUTF();
+        String author = in.readUTF();
+        in.close();
+        return(name + " (" + author + ")");
+    }
+    
     /**
      * Creates new form ChooseBook
      */
-    public ChooseBook(java.awt.Frame parent) {
+    public ChooseBook(java.awt.Frame parent, IntegerCallback callback) {
         super(parent, false);
         initComponents();
+        this.callback = callback;
+        bookList.setModel(model);
+        
         
         File[] books = FileEnvironment.getBooksDirectory().listFiles();
-        final LinkedList<Tupel<Integer, String>> list = new LinkedList<Tupel<Integer, String>>();
         for(int i = 0; i < books.length; i++) {
             if(books[i].isDirectory()) {
-                DataInputStream in = null;
                 try {
                     int id = Integer.parseInt(books[i].getName());
-                    in = new DataInputStream(new FileInputStream(new File(books[i], "book.tbu")));
-                    int _id;
-                    // compatibility hack
-                    int fileFormatVersion = in.readInt();
-                    if(fileFormatVersion <= 15000) {
-                        _id = fileFormatVersion;
-                        fileFormatVersion = 0;
-                    } else {
-                        _id = in.readInt();
-                        fileFormatVersion -= 15000;
-                    }
-                    if(id != _id) {
-                        throw new IOException("dir-id=" + id + "; file-id=" + _id);
-                    }
-                    String name = in.readUTF();
-                    String publisher = in.readUTF();
-                    String author = in.readUTF();
-                    in.close();
-                    list.add(new Tupel(id, name + " (" + author + ")"));
+                    idList.add(new Tupel(id, getLabel(id)));
                 } catch(NumberFormatException nfe) {
                 } catch(IOException ioe) {
                     ioe.printStackTrace(System.err);
-                    try {
-                        in.close();
-                    } catch (IOException ex) {
-                    }
                 }
             }
         }
         
-        bookList.setCellRenderer(new ListCellRenderer() {
-
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Tupel<Integer, String> book = (Tupel<Integer, String>)value;
-                JLabel label = new JLabel(book.a + ": " + book.b);
-                if(isSelected) {
-                    label.setBackground(Color.black);
-                } else {
-                    label.setBackground(Color.white);
-                }
-                return(label);
-            }
-        });
-        
-        // add list to model
-        
-        bookList.setModel(new ListModel() {
-
-            private HashSet<ListDataListener> dataListenerList = new HashSet<ListDataListener>();
-            
-            @Override
-            public int getSize() {
-                return(list.size());
-            }
-
-            @Override
-            public Object getElementAt(int index) {
-                return(list.get(index));
-            }
-
-            @Override
-            public void addListDataListener(ListDataListener l) {
-                dataListenerList.add(l);
-            }
-
-            @Override
-            public void removeListDataListener(ListDataListener l) {
-                dataListenerList.remove(l);
-            }
-        });
-        
+        model.refresh();
+        setVisible(true);
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -169,15 +132,14 @@ public abstract class ChooseBook extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public abstract void selected(File dir);
     
     private void buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActionPerformed
-        
-        Tupel<Integer, String> book = (Tupel<Integer, String>)bookList.getSelectedValue();
-        if(book != null) {
-            selected(FileEnvironment.getBookDirectory(book.a));
+         int index = bookList.getSelectedIndex();
+        if(index != -1) {
+            int id = idList.get(index).a;
+            callback.callback(id);
+            setVisible(false);
         }
-        
     }//GEN-LAST:event_buttonActionPerformed
 
     /**
@@ -210,13 +172,13 @@ public abstract class ChooseBook extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ChooseBook dialog = new ChooseBook(new javax.swing.JFrame()) {
+                ChooseBook dialog = new ChooseBook(new javax.swing.JFrame(), new IntegerCallback() {
 
                     @Override
-                    public void selected(File dir) {
-                        System.out.println(dir.getAbsolutePath());
+                    public void callback(int i) {
+                        System.out.println(i);
                     }
-                };
+                });
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -232,4 +194,39 @@ public abstract class ChooseBook extends javax.swing.JDialog {
     private javax.swing.JButton button;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+
+    
+    class MyListModel implements ListModel {
+
+        private LinkedList<ListDataListener> listeners = new LinkedList<ListDataListener>();
+
+        @Override
+        public int getSize() {
+            return(idList.size());
+        }
+
+        @Override
+        public Object getElementAt(int index) {
+            return(idList.get(index).b);
+        }
+
+        @Override
+        public void addListDataListener(ListDataListener l) {
+            listeners.add(l);
+        }
+
+        @Override
+        public void removeListDataListener(ListDataListener l) {
+            listeners.remove(l);
+        }
+        
+        public void refresh() {
+            Iterator<ListDataListener> i = listeners.iterator();
+            while(i.hasNext()) {
+                i.next().contentsChanged(null);
+            }   
+        }
+    }
+
 }

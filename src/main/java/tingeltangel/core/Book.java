@@ -39,7 +39,7 @@ public class Book {
         
     private boolean changed = false;
     
-    private final int id;
+    private int id;
     private String name;
     private String publisher;
     private String author;
@@ -133,6 +133,10 @@ public class Book {
     public void setVersion(int version) {
         this.version = version;
         changeMade();
+    }
+    
+    public void setID(int id) {
+        this.id = id;
     }
     
     public void setURL(String url) {

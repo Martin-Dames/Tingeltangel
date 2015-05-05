@@ -26,6 +26,12 @@ public class Mp3Utils {
             nTotalMS = Math.round(m_header.total_ms(mediaLength));
         }
 
+        try {
+            bitstream.close();
+        } catch(BitstreamException e) {
+            throw new IOException(e);
+        }
+        
         return nTotalMS  ;
     }
 }
