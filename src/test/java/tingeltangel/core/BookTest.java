@@ -36,6 +36,9 @@ public class BookTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
+    
+    /*
+    
     @Test
     public void testLoad() throws IOException {
         File dir = new File(getClass().getResource("/book.tbu").getFile()).getParentFile();
@@ -108,4 +111,6 @@ public class BookTest {
                 "playoid 15002\n" +
                 "end"));
     }
+    
+    **/
 }

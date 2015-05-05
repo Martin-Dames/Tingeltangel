@@ -259,9 +259,9 @@ public class Book {
         
         // compatibility hack
         int fileFormatVersion = in.readInt();
-        
-        if(book.id != in.readInt()) {
-            throw new IOException("mid missmatch");
+        int rid = in.readInt();
+        if(book.id != rid) {
+            throw new IOException("mid missmatch (book.id=" + book.id + ";rid=" + rid + ")");
         }
             
         book.name = in.readUTF();
