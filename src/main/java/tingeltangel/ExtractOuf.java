@@ -29,17 +29,17 @@ import java.util.Map;
 
 public class ExtractOuf {
 
-    public static void main(String[] args) throws IOException, NoBookException {
+    public static void main(String[] args) throws IOException {
         ExtractOuf self = new ExtractOuf() ;
 
-        File targetDir =                                               new File("/tmp/dump");
+        File targetDir = new File("/tmp/dump");
 
         Book book = self.extract(new File("/tmp/bauernhof/05045_en.ouf"), targetDir);
         book.generateScriptFile( new File(targetDir,"0"+book.getID()+"_en.src"));
 
     }
 
-    Book extract(File ouf, File targetDir) throws IOException, NoBookException {
+    Book extract(File ouf, File targetDir) throws IOException {
         RandomAccessFile in = new RandomAccessFile(ouf, "r");
 
         // HEADER
@@ -57,15 +57,14 @@ public class ExtractOuf {
         Map<Integer, IndexTableEntry> code2entry = new HashMap<Integer, IndexTableEntry>();
         for (int i = 0; i < numberOfTingCodes; i++) {
             IndexTableEntry ite = new IndexTableEntry();
-            ite.position = Tools.getPositionInFileFromCode(in.readInt(), i);
+            ite.position = IndexTableCalculator.getPositionInFileFromCode(in.readInt(), i);
             ite.size = in.readInt();
             ite.type = in.readInt();
 
             code2entry.put(i + smallestTingId, ite);
         }
 
-        Book book = new Book(null, targetDir);
-        book.setID(bookId);
+        Book book = new Book(bookId, null);
 
         for (Integer code : code2entry.keySet()) {
             IndexTableEntry ite = code2entry.get(code);

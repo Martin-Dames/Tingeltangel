@@ -26,20 +26,20 @@ import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.Tingeltangel;
 import tingeltangel.core.Book;
-import tingeltangel.core.Books;
+import tingeltangel.core.Repository;
 import tingeltangel.core.Codes;
 import tingeltangel.core.Entry;
 import tingeltangel.core.Importer;
 import tingeltangel.core.MP3Player;
-import tingeltangel.core.NoBookException;
-import tingeltangel.core.Tools;
+import tingeltangel.core.IndexTableCalculator;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
+import tingeltangel.tools.FileEnvironment;
 
 public class MasterFrame extends JFrame implements MenuCallback {
 
     private MP3Player mp3Player = new MP3Player();
-    private Book book = new Book(mp3Player, null);
+    private Book book = new Book(15000, mp3Player);
     
     private JDesktopPane desktop;
     private IndexFrame indexFrame;
@@ -196,29 +196,21 @@ public class MasterFrame extends JFrame implements MenuCallback {
                                 return;
                             }
                         }
-                        String _id = Integer.toString(id);
-                        while(_id.length() < 5) {
-                            _id = "0" + _id;
-                        }
                         
-                        File bookDir = new File(Tools.getWorkingDirectory("books"), _id);
+                        File bookDir = FileEnvironment.getBookDirectory(id);
                         if(bookDir.exists()) {
                             // display proper error
                             JOptionPane.showMessageDialog(MasterFrame.this, "Das Verzeichniss " + bookDir.getAbsolutePath() + " existiert schon");
                             return;
-                        } else {
-                            bookDir.mkdir();
-                            new File(bookDir, "audio").mkdir();
                         }
 
-                        book.setDirectory(bookDir);
                         MasterFrame.this.setEnabled(false);
                         final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "importiere Buch");
                         SwingWorker t = new SwingWorker() {
                             @Override
                             protected Object doInBackground() throws Exception {
                                 try {
-                                    Importer.importOuf((File)data.get("ouf"), Books.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
+                                    Importer.importOuf((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
                                 } catch(IOException e) {
                                     JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
                                     e.printStackTrace(System.out);
@@ -258,7 +250,6 @@ public class MasterFrame extends JFrame implements MenuCallback {
               
                 if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     try {
-                        book.setDirectory(fc.getSelectedFile());
                         Book.load(new File(fc.getSelectedFile(), "book.tbu"), book);
                     } catch(FileNotFoundException e) {
                         JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gefunden werden");
@@ -266,9 +257,6 @@ public class MasterFrame extends JFrame implements MenuCallback {
                     } catch(IOException e) {
                         JOptionPane.showMessageDialog(this, "Das Buch konnte nicht geladen werden");
                         e.printStackTrace(System.out);
-                    } catch (NoBookException ex) {
-                        JOptionPane.showMessageDialog(this, "Ein unbekannter Fehler ist aufgetreten");
-                        ex.printStackTrace(System.out);
                     }
                 }
             }
@@ -279,15 +267,11 @@ public class MasterFrame extends JFrame implements MenuCallback {
         } else if(id.equals("buch.save")) {
             
             
-            if(!book.hasDirectory()) {
-                callback("buch.saveas");
-            } else {
-                try {
-                    book.save();
-                } catch(Exception e) {
-                    JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gespeichert werden");
-                    e.printStackTrace(System.out);
-                }
+            try {
+                book.save();
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gespeichert werden");
+                e.printStackTrace(System.out);
             }
             
         } else if(id.equals("buch.saveas")) {
@@ -429,10 +413,10 @@ public class MasterFrame extends JFrame implements MenuCallback {
         } else if(id.equals("codes.tabular.code2ting")) {
             generateTabular(false);
         } else if(id.equals("books.search")) {
-            Books.search();
+            Repository.search();
         } else if(id.equals("books.update")) {
             try {
-                Books.update();
+                Repository.update();
             } catch(IOException ioe) {
                 ioe.printStackTrace(System.out);
                 JOptionPane.showMessageDialog(this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());

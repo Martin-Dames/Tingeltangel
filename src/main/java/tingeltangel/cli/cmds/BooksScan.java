@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import tingeltangel.cli.CliCommand;
 import tingeltangel.cli.CliSwitch;
-import tingeltangel.core.Books;
+import tingeltangel.core.Repository;
 
 /**
  *
@@ -34,7 +34,7 @@ public class BooksScan extends CliCommand {
 
     @Override
     public void execute(Map<String, String> args) throws Exception {
-        Books.search();
+        Repository.search();
     }
     
 }

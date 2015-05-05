@@ -37,10 +37,10 @@ public class BookTest {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
-    public void testLoad() throws IOException, NoBookException {
+    public void testLoad() throws IOException {
         File dir = new File(getClass().getResource("/book.tbu").getFile()).getParentFile();
 
-        Book book = new Book(null, dir);
+        Book book = new Book(8091, null);
         Book.load(getClass().getResourceAsStream("/book.tbu"), book);
 
         assertEquals("Me", book.getAuthor());
@@ -63,9 +63,8 @@ public class BookTest {
 
     @Test
     public void testGenerateScriptFile() throws Exception {
-        File dir = new File(getClass().getResource("/book.tbu").getFile()).getParentFile();
 
-        Book book = new Book(null, dir);
+        Book book = new Book(8091, null);
         Book.load(getClass().getResourceAsStream("/book.tbu"), book);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -91,10 +90,10 @@ public class BookTest {
     }
 
     @Test
-    public void testImportFromScriptFile() throws IOException, NoBookException {
-        File dir = new File(getClass().getResource("/08091_en.src").getFile()).getParentFile();
+    public void testImportFromScriptFile() throws IOException {
+        //File dir = new File(getClass().getResource("/08091_en.src").getFile()).getParentFile();
 
-        Book book = new Book(null, dir);
+        Book book = new Book(8091, null);
         book.importFromScriptFile(getClass().getResourceAsStream("/08091_en.src"));
 
         List<Integer> expectedIds = Arrays.asList(15001, 15002, 15004, 15005, 15006, 15007, 15009, 15010);

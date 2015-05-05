@@ -19,6 +19,7 @@ import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
 import tingeltangel.gui.ProgressDialog;
+import tingeltangel.tools.FileEnvironment;
 
 
 public class Importer {
@@ -60,7 +61,6 @@ public class Importer {
         System.out.println("last id  = " + lastTingID);
         System.out.println("id count = " + tingIDCount);
         
-        book.setID(ouf.readInt());
         book.setMagicValue(ouf.readInt());
         book.setDate(ouf.readInt());
         ouf.readInt(); // 0
@@ -203,7 +203,7 @@ public class Importer {
                 }
             }
         }
-        int entryOffset = pos - Tools.getPositionInFileFromCode(firstEntryCode, 0);
+        int entryOffset = pos - IndexTableCalculator.getPositionInFileFromCode(firstEntryCode, 0);
         if(entryOffset != 0) {
             System.out.println("INFO: entryOffest=" + entryOffset);
         }
@@ -217,7 +217,7 @@ public class Importer {
             
             progress.setVal(counter++);
             
-            int epos = Tools.getPositionInFileFromCode(e[0], e[3] - 15001) + entryOffset;
+            int epos = IndexTableCalculator.getPositionInFileFromCode(e[0], e[3] - 15001) + entryOffset;
             
             ouf = new DataInputStream(new FileInputStream(oufFile));
             ouf.skipBytes(epos);
@@ -236,11 +236,7 @@ public class Importer {
             
             if(e[2] == 1) {
                 // mp3
-                try {
-                    out = new FileOutputStream(new File(book.getMP3Path(), _eid + ".mp3"));
-                } catch(NoBookException nbo) {
-                    throw new Error(nbo);
-                }
+                out = new FileOutputStream(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
                 
                 int len = e[1];
                 while(len > 0) {
@@ -255,12 +251,8 @@ public class Importer {
                     }
                 }
                 out.close();
-                try {
-                    entry.setMP3(new File(book.getMP3Path(), _eid + ".mp3"));
-                    entry.setMP3();
-                } catch(NoBookException nbo) {
-                    throw new Error(nbo);
-                }
+                entry.setMP3(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
+                entry.setMP3();
             } else {
                 // script
                 

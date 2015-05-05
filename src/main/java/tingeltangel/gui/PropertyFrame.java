@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import tingeltangel.core.Book;
-import tingeltangel.core.Books;
+import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
 
 public class PropertyFrame extends JInternalFrame {
@@ -83,6 +83,7 @@ public class PropertyFrame extends JInternalFrame {
         
         enableListeners(true);
         
+        /*
         id.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -110,15 +111,15 @@ public class PropertyFrame extends JInternalFrame {
                             
                             if(s.equals("existing")) {
                                 
-                                Integer[] ids = Books.getIDs();
+                                Integer[] ids = Repository.getIDs();
                                 options = new String[ids.length];
                                 for(int i = 0; i < ids.length; i++) {
                                     String m = Integer.toString(ids[i]);
                                     while(m.length() < 5) {
                                         m = "0" + m;
                                     }
-                                    m += " " + Books.getBook(ids[i]).get("Name");
-                                    m += " (" + Books.getBook(ids[i]).get("Author") + ")";
+                                    m += " " + Repository.getBookTxt(ids[i]).get("Name");
+                                    m += " (" + Repository.getBookTxt(ids[i]).get("Author") + ")";
                                     options[i] = m;
                                 }
                                 
@@ -128,7 +129,7 @@ public class PropertyFrame extends JInternalFrame {
                                 LinkedList<Integer> free = new LinkedList<Integer>();
                                 for(int i = 0; i <= 15000; i++) {
                                     if(Translator.ting2code(i) >= 0) {
-                                        if(Books.getBook(i) == null) {
+                                        if(Repository.getBookTxt(i) == null) {
                                             free.add(i);
                                         }
                                     }
@@ -180,7 +181,7 @@ public class PropertyFrame extends JInternalFrame {
                 }
             }
         });
-        
+        */
         
         JPanel labels = new JPanel();
         labels.setLayout(new GridLayout(TEXT_FIELD_LABELS.length, 1));

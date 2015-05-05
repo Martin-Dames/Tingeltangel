@@ -10,7 +10,8 @@ import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import tingeltangel.core.Tools;
+import tingeltangel.core.IndexTableCalculator;
+import tingeltangel.tools.FileEnvironment;
 
 /**
  *
@@ -211,7 +212,7 @@ public class ImportDialog extends javax.swing.JDialog {
     
     private void buttonPngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPngActionPerformed
         JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(Tools.getHomeDirectory());
+        fc.setCurrentDirectory(FileEnvironment.getHomeDirectory());
         fc.setDialogTitle("png-Datei auswählen");
         fc.setFileFilter(new FileNameExtensionFilter("png Datei (*.png)", "png"));
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -227,7 +228,7 @@ public class ImportDialog extends javax.swing.JDialog {
 
     private void buttonTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTxtActionPerformed
         JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(Tools.getHomeDirectory());
+        fc.setCurrentDirectory(FileEnvironment.getHomeDirectory());
         fc.setDialogTitle("txt-Datei auswählen");
         fc.setFileFilter(new FileNameExtensionFilter("txt Datei (*.txt)", "txt"));
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -243,7 +244,7 @@ public class ImportDialog extends javax.swing.JDialog {
 
     private void buttonSrcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSrcActionPerformed
         JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(Tools.getHomeDirectory());
+        fc.setCurrentDirectory(FileEnvironment.getHomeDirectory());
         fc.setDialogTitle("src-Datei auswählen");
         fc.setFileFilter(new FileNameExtensionFilter("src Datei (*.src)", "src"));
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -280,7 +281,7 @@ public class ImportDialog extends javax.swing.JDialog {
 
     private void buttonOufActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOufActionPerformed
         JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(Tools.getHomeDirectory());
+        fc.setCurrentDirectory(FileEnvironment.getHomeDirectory());
         fc.setDialogTitle("ouf-Datei auswählen");
         fc.setFileFilter(new FileNameExtensionFilter("ouf Datei (*.ouf)", "ouf"));
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {

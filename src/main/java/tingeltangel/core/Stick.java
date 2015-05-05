@@ -121,7 +121,7 @@ public class Stick {
             while(bookID.length() < 5) {
                 bookID = "0" + bookID;
             }
-            HashMap<String, String> book = Books.getBook(id);
+            HashMap<String, String> book = Repository.getBookTxt(id);
             if(book == null) {
                 buffer.append(bookID).append("\n");
             } else {
@@ -142,7 +142,7 @@ public class Stick {
             while(bookID.length() < 5) {
                 bookID = "0" + bookID;
             }
-            HashMap<String, String> book = Books.getBook(id);
+            HashMap<String, String> book = Repository.getBookTxt(id);
             if(book == null) {
                 buffer.append(bookID).append("\n");
             } else {
@@ -246,7 +246,7 @@ public class Stick {
     }
     
     public static int getOnlineBookVersion(int id) throws IOException {
-        if(Books.getBook(id) == null) {
+        if(Repository.getBookTxt(id) == null) {
             return(-1);
         }
         String _id = Integer.toString(id);
@@ -315,7 +315,7 @@ public class Stick {
         downloadBookLocally("/get/id/" + _id + "/area/en/type/archive", oufOut);
         
         File srcOut = null;
-        if(Books.getBook(id).containsKey("ScriptMD5")) {
+        if(Repository.getBookTxt(id).containsKey("ScriptMD5")) {
             srcOut = File.createTempFile("ting_src_", null);
             downloadBookLocally("/get/id/" + _id + "/area/en/type/script", srcOut);
         }

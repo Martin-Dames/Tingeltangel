@@ -23,7 +23,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.core.Book;
-import tingeltangel.core.Books;
+import tingeltangel.core.Repository;
 import tingeltangel.core.Stick;
 import tingeltangel.core.scripting.SyntaxError;
 
@@ -289,15 +289,15 @@ public class StickFrame extends JInternalFrame implements ActionListener {
     }
 
     private void official2stick() {
-        Integer[] ids = Books.getIDs();
+        Integer[] ids = Repository.getIDs();
         String[] options = new String[ids.length];
         for(int i = 0; i < ids.length; i++) {
             String m = Integer.toString(ids[i]);
             while(m.length() < 5) {
                 m = "0" + m;
             }
-            m += " " + Books.getBook(ids[i]).get("Name");
-            m += " (" + Books.getBook(ids[i]).get("Author") + ")";
+            m += " " + Repository.getBookTxt(ids[i]).get("Name");
+            m += " (" + Repository.getBookTxt(ids[i]).get("Author") + ")";
             options[i] = m;
         }
         StringCallback cb = new StringCallback() {
@@ -334,7 +334,7 @@ public class StickFrame extends JInternalFrame implements ActionListener {
         LinkedList<Integer> newTbd = new LinkedList<Integer>();
         while(tbd.hasNext()) {
             int id = tbd.next();
-            if(Books.getBook(id) != null) {
+            if(Repository.getBookTxt(id) != null) {
                 Stick.downloadOfficial(Stick.getBookDir(stick), id);
             } else {
                 newTbd.add(id);
@@ -365,8 +365,8 @@ public class StickFrame extends JInternalFrame implements ActionListener {
             while(m.length() < 5) {
                 m = "0" + m;
             }
-            m += " " + Books.getBook(id).get("Name");
-            m += " (" + Books.getBook(id).get("Author") + ")";
+            m += " " + Repository.getBookTxt(id).get("Name");
+            m += " (" + Repository.getBookTxt(id).get("Author") + ")";
             options[i++] = m;
         }
         StringCallback cb = new StringCallback() {
@@ -394,8 +394,8 @@ public class StickFrame extends JInternalFrame implements ActionListener {
             while(m.length() < 5) {
                 m = "0" + m;
             }
-            m += " " + Books.getBook(id).get("Name");
-            m += " (" + Books.getBook(id).get("Author") + ")";
+            m += " " + Repository.getBookTxt(id).get("Name");
+            m += " (" + Repository.getBookTxt(id).get("Author") + ")";
             options[i++] = m;
         }
         StringCallback cb = new StringCallback() {

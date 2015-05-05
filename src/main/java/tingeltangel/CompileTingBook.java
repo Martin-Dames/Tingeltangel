@@ -19,7 +19,6 @@
 package tingeltangel;
 
 import tingeltangel.core.Book;
-import tingeltangel.core.NoBookException;
 import tingeltangel.core.scripting.SyntaxError;
 
 import java.io.File;
@@ -28,17 +27,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class CompileTingBook {
-    public static void main(String[] args) throws IOException, NoBookException, SyntaxError {
+    public static void main(String[] args) throws IOException, SyntaxError {
         File srcFile = new File("/tmp/zahlen/08071_en.src");
 
 
         File inputDir = srcFile.getParentFile();
 
-        Book book = new Book(null, inputDir);
+        Book book = new Book(8071, null);
         book.importFromScriptFile(new FileInputStream(srcFile));
         if( srcFile.getName().matches("[0-9][0-9][0-9][0-9][0-9]_en.src")) {
             int id = Integer.parseInt(srcFile.getName().substring(0, 5));
-            book.setID(id);
+            
         }  else {
             throw   new RuntimeException("Need book id");
 
