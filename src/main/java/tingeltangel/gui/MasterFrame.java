@@ -243,7 +243,7 @@ public class MasterFrame extends JFrame implements MenuCallback {
                     @Override
                     public void selected(File dir) {
                         try {
-                            book.setDirectory(dir);
+                            //book.setDirectory(dir);
                             Book.load(new File(dir, "book.tbu"), book);
                         } catch (IOException ex) {
                             ex.printStackTrace(System.err);

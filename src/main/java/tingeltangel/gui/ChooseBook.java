@@ -12,15 +12,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
-import tingeltangel.core.Tools;
 import tingeltangel.core.Tupel;
+import tingeltangel.tools.FileEnvironment;
 
 /**
  *
@@ -35,7 +33,7 @@ public abstract class ChooseBook extends javax.swing.JDialog {
         super(parent, false);
         initComponents();
         
-        File[] books = Tools.getWorkingDirectory("books").listFiles();
+        File[] books = FileEnvironment.getBooksDirectory().listFiles();
         final LinkedList<Tupel<Integer, String>> list = new LinkedList<Tupel<Integer, String>>();
         for(int i = 0; i < books.length; i++) {
             if(books[i].isDirectory()) {
@@ -177,11 +175,7 @@ public abstract class ChooseBook extends javax.swing.JDialog {
         
         Tupel<Integer, String> book = (Tupel<Integer, String>)bookList.getSelectedValue();
         if(book != null) {
-            String id = Integer.toString(book.a);
-            while(id.length() < 5) {
-                id = "0" + id;
-            }
-            selected(new File(Tools.getWorkingDirectory("books"), id));
+            selected(FileEnvironment.getBookDirectory(book.a));
         }
         
     }//GEN-LAST:event_buttonActionPerformed
