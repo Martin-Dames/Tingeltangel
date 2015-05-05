@@ -20,7 +20,6 @@ package tingeltangel;
 
 import org.junit.Before;
 import org.junit.Test;
-import tingeltangel.core.NoBookException;
 import tiptoi_reveng.lexer.LexerException;
 import tiptoi_reveng.parser.ParserException;
 
@@ -40,17 +39,17 @@ public class ReadYamlFileTest {
     }
 
     @Test
-    public void testParser() throws ParserException, IOException, LexerException, NoBookException {
+    public void testParser() throws ParserException, IOException, LexerException {
         reader.read(new File(getClass().getResource("/tip-toi-reveng/example.yaml").getFile()))   ;
     }
 
     @Test
-    public void testParser2() throws ParserException, IOException, LexerException, NoBookException {
+    public void testParser2() throws ParserException, IOException, LexerException {
         reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()));
     }
 
     @Test
-    public void testParser5() throws ParserException, IOException, LexerException, NoBookException {
+    public void testParser5() throws ParserException, IOException, LexerException {
         reader.read(new File(getClass().getResource("/tip-toi-reveng/WWW_Weltatlas.yaml").getFile()));
     }
 
@@ -58,7 +57,7 @@ public class ReadYamlFileTest {
      * This YAML file contains a fix mapping of identifiers to codes.
      */
     @Test
-    public void testParser_FixedCodes() throws ParserException, IOException, LexerException, NoBookException {
+    public void testParser_FixedCodes() throws ParserException, IOException, LexerException {
         reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer-codes.yaml").getFile()));
 
         assertEquals("teddy", reader.getUsedOidAndIdentifiers().get(16001));
@@ -70,7 +69,7 @@ public class ReadYamlFileTest {
     }
 
     @Test
-    public void testGetUsedOidAndIdentifiers() throws LexerException, NoBookException, ParserException, IOException {
+    public void testGetUsedOidAndIdentifiers() throws LexerException, ParserException, IOException {
         reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()));
 
         Map<Integer, String> result = reader.getUsedOidAndIdentifiers();

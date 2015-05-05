@@ -28,6 +28,7 @@ import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
+import tingeltangel.tools.FileEnvironment;
 
 public class Book {
 
@@ -38,7 +39,7 @@ public class Book {
         
     private boolean changed = false;
     
-    private int id = 8000;
+    private final int id;
     private String name;
     private String publisher;
     private String author;
@@ -48,24 +49,11 @@ public class Book {
     private long date = new Date().getTime() / 1000;
     private long magicValue = DEFAULT_MAGIC_VALUE;
     
-    private File dir;
-    
     
     private Emulator emulator;
     
-    public File getMP3Path() {
-        
-        
-        File mp3Path = new File(dir, "audio");
-        if(mp3Path.isDirectory()) {
-            mp3Path.mkdir();
-        }
-        return(mp3Path);
-        
-    }
     
     public final void clear() {
-        id = Translator.getRandomBookCode();
         name = "My Book";
         publisher = "Me";
         author = "Me";
@@ -152,9 +140,8 @@ public class Book {
         changeMade();
     }
     
-    public Book(MP3Player player, File dir) {
-        this.dir = dir;
-        checkDir();
+    public Book(int id, MP3Player player) {
+        this.id = id;
         clear();
         emulator = new Emulator(this, player);
     }
@@ -190,21 +177,12 @@ public class Book {
         return(e);
     }
     
-    public void setID(int id) {
-        this.id = id;
-        changeMade();
-    }
-    
     public int getID() {
         return(id);
     }
     
     public int getSize() {
         return(indexIDs.size());
-    }
-    
-    public boolean hasDirectory() {
-        return(dir != null);
     }
     
     public int getLastID() {
@@ -234,7 +212,7 @@ public class Book {
     }
 
     public void save() throws IOException {
-        save(new File(dir, "book.tbu"));
+        save(FileEnvironment.getTBU(id));
     }
     
     public void save(File file) throws IOException {
@@ -281,13 +259,11 @@ public class Book {
         
         // compatibility hack
         int fileFormatVersion = in.readInt();
-        if(fileFormatVersion <= 15000) {
-            book.id = fileFormatVersion;
-            fileFormatVersion = 0;
-        } else {
-            book.id = in.readInt();
-            fileFormatVersion -= 15000;
+        int rid = in.readInt();
+        if(book.id != rid) {
+            throw new IOException("mid missmatch (book.id=" + book.id + ";rid=" + rid + ")");
         }
+            
         book.name = in.readUTF();
         book.publisher = in.readUTF();
         book.author = in.readUTF();
@@ -312,21 +288,6 @@ public class Book {
                 
         
         book.changed = false;
-    }
-    
-    public void setDirectory(File dir) {
-        this.dir = dir;
-        checkDir();
-    }
-
-    private void checkDir() {
-        if(dir == null) {
-            return;
-        }
-        File audioDir = new File(dir, "audio");
-        if(!audioDir.isDirectory()) {
-            audioDir.mkdir();
-        }
     }
     
     final protected static char[] hexArray = "0123456789abcdef".toCharArray();
@@ -387,7 +348,7 @@ public class Book {
                 out.writeInt(0x0000);
             } else {
                 pos += 0x100 - (pos & 0xff);
-                out.writeInt(Tools.getCodeFromPositionInFile(pos, i));
+                out.writeInt(IndexTableCalculator.getCodeFromPositionInFile(pos, i));
                 out.writeInt(entry.getSize());
                 if(entry.isMP3()) {
                     out.writeInt(0x0001);
@@ -602,7 +563,7 @@ public class Book {
 
     void generateScriptFile(PrintWriter out) throws IOException {
         Iterator<Integer> ids = indexIDs.iterator();
-        int pathLength = this.dir.getCanonicalPath().length() +1 ;
+        int pathLength = FileEnvironment.getBookDirectory(id).getCanonicalPath().length() +1 ;
         while(ids.hasNext()) {
             Entry entry = indexEntries.get(ids.next());
             if(entry.isMP3()) {
@@ -636,7 +597,7 @@ public class Book {
         return this.indexEntries.keySet();
     }
     
-    public void importFromScriptFile(InputStream scriptFile) throws IOException, NoBookException {
+    public void importFromScriptFile(InputStream scriptFile) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(scriptFile));
 
         Entry entry = null;
@@ -668,7 +629,7 @@ public class Book {
                 inContent = true;
             } else if( type == 1 && inContent) {
                 if( !line.trim().isEmpty()) {
-                    entry.setMP3(new File(this.dir, line));
+                    entry.setMP3(new File(FileEnvironment.getAudioDirectory(id), line));
                 } else {
                     inContent = false;
                 }

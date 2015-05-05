@@ -30,7 +30,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
-import tingeltangel.core.NoBookException;
 import tingeltangel.core.Translator;
 
 
@@ -202,28 +201,6 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                                 } catch(IOException ex) {
                                     JOptionPane.showMessageDialog(IndexFrame.this, "Die Datei '" + fc.getSelectedFile() + "' konnte nicht gelesen werden.");
                                     ex.printStackTrace(System.out);
-                                } catch(NoBookException nbo) {
-                                    JOptionPane.showMessageDialog(IndexFrame.this, "Bitte gib zuerst ein Verzeichniss an, in dem das Ting-Buch gespeichert werden soll.");
-                                    JFileChooser fc2 = new JFileChooser(lastChooseMp3DialogPath);
-                                    fc2.setCurrentDirectory(new java.io.File("."));
-                                    fc2.setDialogTitle("Ting-Buch Verzeichniss auswählen");
-                                    fc2.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                                    fc2.setAcceptAllFileFilterUsed(false);
-                                    
-                                    if(fc2.showOpenDialog(IndexFrame.this) == JFileChooser.APPROVE_OPTION) {
-                                        book.setDirectory(fc2.getSelectedFile());
-                                        try {
-                                            book.getEntry(row).setMP3(fc.getSelectedFile());
-                                        } catch (FileNotFoundException ex) {
-                                            JOptionPane.showMessageDialog(IndexFrame.this, "Die Datei '" + fc.getSelectedFile() + "' konnte nicht gefunden werden.");
-                                            ex.printStackTrace(System.out);
-                                        } catch (IOException ex) {
-                                            JOptionPane.showMessageDialog(IndexFrame.this, "Die Datei '" + fc.getSelectedFile() + "' konnte nicht gelesen werden.");
-                                            ex.printStackTrace(System.out);
-                                        } catch (NoBookException ex) {
-                                            throw new Error();
-                                        }
-                                    }
                                 }
                             }
                         }

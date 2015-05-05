@@ -4,13 +4,16 @@
  */
 package tingeltangel.cli.cmds;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import tingeltangel.cli.CliCommand;
 import tingeltangel.cli.CliSwitch;
 import tingeltangel.core.Book;
-import tingeltangel.core.Books;
+import tingeltangel.core.Repository;
 import tingeltangel.core.Importer;
 
 /**
@@ -141,42 +144,6 @@ public class Import extends CliCommand {
                     return(new File(value).exists());
                 }
             },
-            new CliSwitch() {
-                @Override
-                public String getName() {
-                    return("b");
-                }
-
-                @Override
-                public String getDescription() {
-                    return("setzt das (existierende) Zielverzeichniss im dem Buch gespeichert werden soll");
-                }
-
-                @Override
-                public boolean hasArgument() {
-                    return(true);
-                }
-
-                @Override
-                public boolean isOptional() {
-                    return(false);
-                }
-
-                @Override
-                public String getLabel() {
-                    return("Buch-Verzeichniss");
-                }
-
-                @Override
-                public String getDefault() {
-                    return(null);
-                }
-
-                @Override
-                public boolean acceptValue(String value) {
-                    return(new File(value).exists() && new File(value).isDirectory());
-                }
-            },
         };
         
         Map<String, CliSwitch> switches = new HashMap<String, CliSwitch>();
@@ -192,7 +159,6 @@ public class Import extends CliCommand {
     @Override
     public void execute(Map<String, String> args) throws Exception {
         File ouf = new File(args.get("o"));
-        File bookDir = new File(args.get("b"));
         
         String _txt = args.get("t");
         String _src = args.get("s");
@@ -202,11 +168,16 @@ public class Import extends CliCommand {
         }
         HashMap<String, String> txt = null;
         if(_txt != null) {
-            txt = Books.getBook(new File(_txt));
+            txt = Repository.getBook(new File(_txt));
         }
         
-        Book book = new Book(null, bookDir);
-        Importer.importOuf(ouf, txt, src, book, null);
+        // preread mid
+        DataInputStream in = new DataInputStream(new FileInputStream(ouf));
+        in.readInt();
+        int id = in.readInt();
+        in.close();
+        
+        Importer.importOuf(ouf, txt, src, new Book(id, null), null);
         
     }
     

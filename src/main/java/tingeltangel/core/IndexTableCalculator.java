@@ -2,11 +2,6 @@
 package tingeltangel.core;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.channels.FileChannel;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -16,98 +11,9 @@ import tingeltangel.gui.MultipleChoiceDialog;
 import tingeltangel.gui.StringCallback;
 
 
-public class Tools {
+public class IndexTableCalculator {
     static final int[] E = {578, 562, 546, 530, 514, 498, 482, 466, 322, 306, 290, 274, 258, 242, 226, 210, -446, -462, -478, -494, -510, -526, -542, -558, -702, -718, -734, -750, -766, -782, -798, -814};
 
-    static void copy(File source, File destination) throws IOException {
-        //System.out.println(source.getAbsolutePath() + " -> " + destination.getAbsolutePath());
-        FileChannel sourceChannel = null;
-        FileChannel destChannel;
-        try {
-            sourceChannel = new FileInputStream(source).getChannel();
-            destChannel = new FileOutputStream(destination).getChannel();
-            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-        } catch(Exception e) {
-            throw new IOException(e);
-        } finally {
-            if(sourceChannel != null) {
-                sourceChannel.close();
-            }
-            // destChannel.close();
-        }
-    }
-
-    public static boolean isWindows() {
-        return(System.getProperty("os.name").startsWith("Windows"));
-    }
-    
-    public static File getHomeDirectory() {
-        if(isWindows()) {
-            return(new File(System.getProperty("user.home")));
-        } else {
-            return(new File("~/"));
-        }
-    }
-    
-    /**
-     * 
-     * used directories:
-     *      books:      my books
-     *      ting:       download of official books
-     * 
-     * @param subDirectory
-     * @return 
-     */
-    public static File getWorkingDirectory(String subDirectory) {
-        File wd = new File(getWorkingDirectory(), subDirectory);
-        if(wd.exists()) {
-            if(!wd.isDirectory()) {
-                throw new Error(wd.getAbsolutePath() + " exists but is not a directory");
-            }
-        } else {
-            if(!wd.mkdirs()) {
-                throw new Error("can't create directory " + wd.getAbsolutePath());
-            }
-        }
-        return(wd);
-    }
-    
-    public static File getWorkingDirectory() {
-        File wd;
-        if(isWindows()) {
-            String myDocuments = null;
-
-            try {
-                Process p =  Runtime.getRuntime().exec("reg query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\" /v personal");
-                p.waitFor();
-                InputStream in = p.getInputStream();
-                byte[] b = new byte[in.available()];
-                in.read(b);
-                in.close();
-                myDocuments = new String(b);
-                myDocuments = myDocuments.split("\\s\\s+")[4];
-            } catch(Exception e) {
-                throw new Error(e);
-            }
-            wd = new File(myDocuments, "tingeltangel");
-        } else {
-            wd = new File(new File(System.getProperty("user.home")), ".tingeltangel");
-        }
-        if(wd.exists()) {
-            if(!wd.isDirectory()) {
-                throw new Error(wd.getAbsolutePath() + " exists but is not a directory");
-            }
-        } else {
-            if(!wd.mkdirs()) {
-                throw new Error("can't create directory " + wd.getAbsolutePath());
-            }
-        }
-        return(wd);
-    }
-           
-    public static void main(String[] args) {
-        getWorkingDirectory();
-    }
     
     /**
      *
@@ -140,7 +46,7 @@ public class Tools {
         int b = (position >> 8) + n * 26;
         for (int k = 0; k < E.length; k++) {
             int v = (b - E[k]) << 8;
-            if (Tools.getPositionInFileFromCode(v, n + 1) == position) {
+            if (IndexTableCalculator.getPositionInFileFromCode(v, n + 1) == position) {
                 return v;
             }
         }

@@ -22,7 +22,6 @@ package tingeltangel;
 import org.yaml.snakeyaml.Yaml;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
-import tingeltangel.core.NoBookException;
 import tingeltangel.core.Script;
 import tingeltangel.tiptoireveng.Interpreter;
 import tiptoi_reveng.lexer.Lexer;
@@ -61,15 +60,14 @@ public class ReadYamlFile {
         return usedOidAndIdentifiers;
     }
 
-    public Book read(File yamlFile) throws ParserException, IOException, LexerException, NoBookException {
+    public Book read(File yamlFile) throws ParserException, IOException, LexerException {
         Yaml yaml = new Yaml();
         Map data = (Map) yaml.load(new FileInputStream(yamlFile));
 
         Map scripts = (Map) data.get("scripts");
 
         File dir = yamlFile.getParentFile();
-        Book book = new Book(null, dir);
-        book.setID(8000 + ((Integer) data.get("product-id")));
+        Book book = new Book(8000 + ((Integer) data.get("product-id")), null);
 
         Map scriptcodes = (Map) data.get("scriptcodes");
         if (scriptcodes != null) {

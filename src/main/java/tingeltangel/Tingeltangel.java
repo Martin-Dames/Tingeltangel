@@ -4,9 +4,9 @@ package tingeltangel;
 import java.io.IOException;
 import javax.swing.SwingUtilities;
 import tingeltangel.cli.CLI;
-import tingeltangel.core.Books;
+import tingeltangel.core.Repository;
 import tingeltangel.core.Properties;
-import tingeltangel.core.Tools;
+import tingeltangel.core.IndexTableCalculator;
 import tingeltangel.gui.MasterFrame;
 import tingeltangel.gui.StringCallback;
 
@@ -49,7 +49,7 @@ public class Tingeltangel {
                         }
                     };
 
-                    Tools.getBinaryPath(Properties.WIN_MPG123, "mpg123.exe", "mpg123", callbackMpg123, "MPG123", "Um MP3s abspielen zu können muss MPG123 installiert sein. Bitte triff eine Wahl.", INSTALL_MPG123);
+                    IndexTableCalculator.getBinaryPath(Properties.WIN_MPG123, "mpg123.exe", "mpg123", callbackMpg123, "MPG123", "Um MP3s abspielen zu können muss MPG123 installiert sein. Bitte triff eine Wahl.", INSTALL_MPG123);
 
                 }
             });
@@ -61,7 +61,7 @@ public class Tingeltangel {
             @Override
             public void run() {
                 try {
-                    Books.quickSearch(new Thread() {
+                    Repository.initialUpdate(new Thread() {
                         @Override
                         public void run() {
                             new MasterFrame();

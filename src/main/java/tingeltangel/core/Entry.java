@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import tingeltangel.core.scripting.SyntaxError;
+import tingeltangel.tools.FileEnvironment;
 
 public class Entry {
 
@@ -77,7 +78,7 @@ public class Entry {
         
         String sMp3 = in.readUTF();
         if(!sMp3.isEmpty()) {
-            entry.mp3 = new File(book.getMP3Path(), sMp3);
+            entry.mp3 = new File(FileEnvironment.getAudioDirectory(book.getID()), sMp3);
             if(!entry.mp3.canRead()) {
                 entry.mp3 = null;
             } else {
@@ -160,7 +161,7 @@ public class Entry {
         return(script);
     }
     
-    public void setMP3(File mp3) throws IOException, NoBookException {
+    public void setMP3(File mp3) throws IOException {
         changeMade();
         String name = mp3.getAbsolutePath();
         if(!mp3.isFile()) {
@@ -175,9 +176,9 @@ public class Entry {
         }
         
         // copy to book/audio dir if it is not already there
-        File target = new File(book.getMP3Path(), mp3.getName());
+        File target = new File(FileEnvironment.getAudioDirectory(book.getID()), mp3.getName());
         if(!mp3.equals(target)) {
-        	Tools.copy(mp3, target);
+        	FileEnvironment.copy(mp3, target);
         }
 
         this.mp3 = target;
