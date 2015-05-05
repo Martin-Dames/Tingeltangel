@@ -79,7 +79,7 @@ public abstract class ChooseBook extends javax.swing.JDialog {
                 Tupel<Integer, String> book = (Tupel<Integer, String>)value;
                 JLabel label = new JLabel(book.a + ": " + book.b);
                 if(isSelected) {
-                    label.setBackground(Color.gray);
+                    label.setBackground(Color.black);
                 } else {
                     label.setBackground(Color.white);
                 }

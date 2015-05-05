@@ -236,12 +236,7 @@ public class Importer {
             
             if(e[2] == 1) {
                 // mp3
-                try {
-                    out = new FileOutputStream(new File(book.getMP3Path(), _eid + ".mp3"));
-                } catch(NoBookException nbo) {
-                    throw new Error(nbo);
-                }
-                
+                out = new FileOutputStream(new File(book.getMP3Path(), _eid + ".mp3"));
                 int len = e[1];
                 while(len > 0) {
                     k = ouf.read(buffer, 0, Math.min(buffer.length, len));
