@@ -49,7 +49,7 @@ public class Entry {
         }
         
         if(script == null) {
-            out.writeUTF("");
+            writeLongUTF(out, "");
         } else {
             writeLongUTF(out, script.toString());
         }
@@ -96,6 +96,8 @@ public class Entry {
         Entry entry = new Entry(book, in.readInt());
         
         String sMp3 = in.readUTF();
+        
+        
         if(!sMp3.isEmpty()) {
             entry.mp3 = new File(FileEnvironment.getAudioDirectory(book.getID()), sMp3);
             if(!entry.mp3.canRead()) {
