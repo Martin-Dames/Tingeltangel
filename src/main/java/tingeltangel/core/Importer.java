@@ -61,6 +61,8 @@ public class Importer {
         System.out.println("last id  = " + lastTingID);
         System.out.println("id count = " + tingIDCount);
         
+        ouf.readInt(); // book id
+        
         book.setMagicValue(ouf.readInt());
         book.setDate(ouf.readInt());
         ouf.readInt(); // 0
@@ -211,6 +213,16 @@ public class Importer {
         ouf.close();
         
         Iterator<int[]> indexIterator = index.iterator();
+        
+        /*
+        while(indexIterator.hasNext()) {
+            int[] e = indexIterator.next();
+            int epos = IndexTableCalculator.getPositionInFileFromCode(e[0], e[3] - 15001) + entryOffset;
+            System.out.println(e[3] + ": " + Integer.toHexString(epos) + " (len=" + e[1] + ")");
+        }      
+        indexIterator = index.iterator();
+        */
+        
         buffer = new byte[4096];
         while(indexIterator.hasNext()) {
             int[] e = indexIterator.next();
@@ -233,6 +245,7 @@ public class Importer {
             book.addEntry(e[3]);
             
             Entry entry = book.getEntryByID(e[3]);
+            System.out.println("importing oid " + e[3] + " ...");
             
             if(e[2] == 1) {
                 // mp3
@@ -284,7 +297,6 @@ public class Importer {
                             len=-1;
                         }
                     }
-
                     
                     Script script = new Script(bout.toByteArray(), entry);
                     entry.setScript(script);

@@ -8,7 +8,6 @@ import java.util.Iterator;
 import javax.swing.JEditorPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
-import tingeltangel.core.Book;
 import tingeltangel.core.scripting.Command;
 import tingeltangel.core.scripting.Commands;
 
@@ -16,7 +15,7 @@ public class ReferenceFrame extends JInternalFrame {
     
     private JEditorPane text = new JEditorPane();
     
-    public ReferenceFrame(Book book, MasterFrame frame) {
+    public ReferenceFrame(MasterFrame frame) {
         super("Code Referenz", true, true, true, true);
         setVisible(false);
         setBounds(315, 5, 600, 400);

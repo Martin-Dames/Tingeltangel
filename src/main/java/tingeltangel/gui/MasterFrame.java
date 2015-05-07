@@ -53,13 +53,13 @@ public class MasterFrame extends JFrame implements MenuCallback {
         super(Tingeltangel.MAIN_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
         
         
-        indexFrame = new IndexFrame(book, this);
-        playerFrame = new PlayerFrame(book, this);
-        registerFrame = new RegisterFrame(book, this);
-        codeFrame = new CodeFrame(book, this);
-        propertyFrame = new PropertyFrame(book, this);
-        stickFrame = new StickFrame(book, this);
-        referenceFrame = new ReferenceFrame(book, this);
+        indexFrame = new IndexFrame(this);
+        playerFrame = new PlayerFrame(this);
+        registerFrame = new RegisterFrame(this);
+        codeFrame = new CodeFrame(this);
+        propertyFrame = new PropertyFrame(this);
+        stickFrame = new StickFrame(this);
+        referenceFrame = new ReferenceFrame(this);
         translatorFrame = new TranslatorFrame(this);
         
         book.addRegisterListener(registerFrame);
@@ -217,19 +217,23 @@ public class MasterFrame extends JFrame implements MenuCallback {
                             }
                         }
                         
+                        /*
                         File bookDir = FileEnvironment.getBookDirectory(id);
                         if(bookDir.exists()) {
                             // display proper error
                             JOptionPane.showMessageDialog(MasterFrame.this, "Das Verzeichniss " + bookDir.getAbsolutePath() + " existiert schon");
                             return;
                         }
+                        */
 
+                        final int _id = id;
                         MasterFrame.this.setEnabled(false);
                         final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "importiere Buch");
                         SwingWorker t = new SwingWorker() {
                             @Override
                             protected Object doInBackground() throws Exception {
                                 try {
+                                    book = new Book(_id, mp3Player);
                                     Importer.importOuf((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
                                 } catch(IOException e) {
                                     JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");

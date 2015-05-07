@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
@@ -46,10 +47,11 @@ public class Entry {
         } else {
             out.writeUTF(mp3.getName());
         }
+        
         if(script == null) {
             out.writeUTF("");
         } else {
-            out.writeUTF(script.toString());
+            writeLongUTF(out, script.toString());
         }
         out.writeInt(type);
         out.writeUTF(hint);
@@ -62,6 +64,23 @@ public class Entry {
             return(script.getSize(false));
         }
         return(0);
+    }
+    
+    public static void writeLongUTF(DataOutputStream out, String s) throws IOException {
+        byte[] b = s.getBytes(Charset.forName("UTF8"));
+        out.writeInt(b.length);
+        out.write(b);
+    }
+    
+    public static String readLongUTF(DataInputStream in) throws IOException {
+        int length = in.readInt();
+        byte[] b = new byte[length];
+        int off = 0;
+        while(off < length) {
+            off += in.read(b, off, length - off);
+        }
+        return(new String(b, Charset.forName("UTF8")));
+        
     }
     
     public String getHint() {
@@ -87,7 +106,7 @@ public class Entry {
             entry.mp3length = Mp3Utils.getDuration(entry.mp3) / 1000.f;
         }
         
-        String sScript = in.readUTF();
+        String sScript = readLongUTF(in);
         if(!sScript.isEmpty()) {
             entry.script = new Script(sScript, entry);
         }

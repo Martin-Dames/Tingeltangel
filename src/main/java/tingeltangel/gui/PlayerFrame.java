@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
@@ -27,7 +26,7 @@ public class PlayerFrame extends JInternalFrame implements EntryListener, Action
     private JLabel codeID = new JLabel();
     private JTextArea playlist = new JTextArea();
     
-    public PlayerFrame(Book book, final MasterFrame frame) {
+    public PlayerFrame(final MasterFrame frame) {
         super("Player", true, true, true, true);
         this.frame = frame;
         setVisible(true);

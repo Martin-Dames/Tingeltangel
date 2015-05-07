@@ -29,9 +29,7 @@ public class PropertyFrame extends JInternalFrame {
     private JTextField magicValue = new JTextField();
     private JTextField date = new JTextField();
     
-    private final Book book;
-    
-    
+    private final MasterFrame masterFrame;
     
     JTextField[] TEXT_FIELDS = {
         id, name, publisher, author, version, url, magicValue, date
@@ -43,13 +41,15 @@ public class PropertyFrame extends JInternalFrame {
     
     private DocumentListener dl;
     
-    public PropertyFrame(final Book book, final JFrame masterFrame) {
+    public PropertyFrame(MasterFrame masterFrame) {
         super("Eigenschaften", true, true, true, true);
-        this.book = book;
         setVisible(true);
         setBounds(610, 5, 300, 150);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         
+        this.masterFrame = masterFrame;
+        
+        Book book = masterFrame.getBook();
         
         id.setText(Integer.toString(book.getID()));
         name.setText(book.getName());
@@ -215,6 +215,7 @@ public class PropertyFrame extends JInternalFrame {
     
     public void refresh() {
         enableListeners(false);
+        Book book = masterFrame.getBook();
         id.setText(Integer.toString(book.getID()));
         name.setText(book.getName());
         publisher.setText(book.getPublisher());
@@ -227,6 +228,7 @@ public class PropertyFrame extends JInternalFrame {
     }
     
     public void update() {
+        Book book = masterFrame.getBook();
         book.setName(name.getText());
         book.setPublisher(publisher.getText());
         book.setAuthor(author.getText());

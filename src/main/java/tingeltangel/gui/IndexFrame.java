@@ -35,7 +35,7 @@ import tingeltangel.core.Translator;
 
 public class IndexFrame extends JInternalFrame implements ActionListener {
     
-    private final TableModel model;
+    private TableModel model;
     private final JTable table;
     
     private String lastChooseMp3DialogPath = null;
@@ -53,12 +53,12 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
         return(mainFrame.getBook());
     }
     
-    public IndexFrame(final Book book, final MasterFrame mainFrame) {
+    public IndexFrame(final MasterFrame mainFrame) {
         super("Index", true, true, true, true);
         
         this.mainFrame = mainFrame;
         
-        model = new IndexTableModel(book);
+        model = new IndexTableModel(mainFrame.getBook());
         table = new JTable(model);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.getColumnModel().getColumn(0).setPreferredWidth(65);
@@ -110,6 +110,7 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 
+                Book book = mainFrame.getBook();
                 JTable target = (JTable)e.getSource();
                 int row = target.getSelectedRow();
                 int column = target.getSelectedColumn();
@@ -249,6 +250,8 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
     }
     
     public void update() {
+        model = new IndexTableModel(mainFrame.getBook());
+        table.setModel(model);
         ((IndexTableModel)model).update();
     }
     

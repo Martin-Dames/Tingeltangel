@@ -13,7 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.Script;
 import tingeltangel.core.scripting.SyntaxError;
@@ -25,7 +24,7 @@ public class CodeFrame extends JInternalFrame implements EntryListener, ActionLi
     private DocumentListener docListener;
     private MasterFrame frame;
     
-    public CodeFrame(Book book, MasterFrame frame) {
+    public CodeFrame(MasterFrame frame) {
         super("Code Editor", true, true, true, true);
         this.frame = frame;
         setVisible(true);

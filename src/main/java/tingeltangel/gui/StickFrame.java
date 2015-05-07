@@ -22,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import tingeltangel.core.Book;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Stick;
 import tingeltangel.core.scripting.SyntaxError;
@@ -41,7 +40,7 @@ public class StickFrame extends JInternalFrame implements ActionListener {
     private JTextArea stickBookContent = new JTextArea();
     private JTextArea stickTBDContent = new JTextArea();
     
-    public StickFrame(Book book, final MasterFrame frame) {
+    public StickFrame(final MasterFrame frame) {
         super("Ting-Stift", true, true, true, true);
         this.frame = frame;
         setVisible(false);

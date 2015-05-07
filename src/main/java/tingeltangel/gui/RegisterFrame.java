@@ -20,14 +20,14 @@ public class RegisterFrame extends JInternalFrame implements RegisterListener {
     
     private JTable table;
     private RegisterTableModel model;
-    private final Book book;
+    private final MasterFrame frame;
     
-    public RegisterFrame(Book book, MasterFrame frame) {
+    public RegisterFrame(MasterFrame frame) {
         super("Register", true, true, true, true);
         setVisible(true);
         setBounds(610, 345, 300, 250);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
-        this.book = book;
+        this.frame = frame;
         model = new RegisterTableModel();
         table = new JTable(model);
         setContentPane(new JScrollPane(table));
@@ -80,6 +80,7 @@ public class RegisterFrame extends JInternalFrame implements RegisterListener {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
+            Book book = frame.getBook();
             switch(columnIndex) {
                 case 0: return(registers.get(rowIndex));
                 case 1: return(book.getEmulator().getHint(registers.get(rowIndex)));
@@ -90,6 +91,7 @@ public class RegisterFrame extends JInternalFrame implements RegisterListener {
 
         @Override
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+            Book book = frame.getBook();
             switch(columnIndex) {
                 case 1:
                     book.getEmulator().setHint(registers.get(rowIndex), (String)aValue);
