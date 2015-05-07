@@ -77,13 +77,13 @@ public class DisassemblerTest {
     }
 
     @Test
-    public void testDisassemble_3() {
+    public void testDisassemble_3() throws Exception {
         byte[] binary = new byte[] {0x02,0x01,0x00,0x01,0x00,30,0x16,0x01,58,-103,0x17,0x02,0,1,0x16,0x01,58,-102,0,0,0};
         String result = d.disassemble(binary);
     }
     
     @Test
-    public void testDisassemble_4() {
+    public void testDisassemble_4() throws Exception {
         // taken from MID=05289
         int[] bin = new int[] {
                 0x03, 0x01, 0x00, 0x50, 0x00, 0x0e,     // cmp v80, 14

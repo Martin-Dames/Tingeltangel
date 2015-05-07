@@ -25,7 +25,7 @@ public class Script {
         this.code = code;
     }
 
-    public Script(byte[] binary, Entry entry) {
+    public Script(byte[] binary, Entry entry) throws SyntaxError {
         this.entry = entry;
         this.code = new Disassembler().disassemble(binary);
     }

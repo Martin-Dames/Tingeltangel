@@ -231,13 +231,16 @@ public class MasterFrame extends JFrame implements MenuCallback {
                         final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "importiere Buch");
                         SwingWorker t = new SwingWorker() {
                             @Override
-                            protected Object doInBackground() throws Exception {
+                            protected Object doInBackground() {
                                 try {
                                     book = new Book(_id, mp3Player);
                                     Importer.importOuf((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
                                 } catch(IOException e) {
                                     JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
                                     e.printStackTrace(System.out);
+                                } catch(SyntaxError se) {
+                                    JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
+                                    se.printStackTrace(System.out);
                                 }
                                 progressDialog.done();
                                 propertyFrame.refresh();

@@ -18,6 +18,7 @@ import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
+import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.gui.ProgressDialog;
 import tingeltangel.tools.FileEnvironment;
 
@@ -32,7 +33,7 @@ public class Importer {
      * @param book
      * @throws Exception 
      */
-    public static void importOuf(File oufFile, HashMap<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException {
+    public static void importOuf(File oufFile, HashMap<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException, SyntaxError {
         
         DataInputStream ouf = new DataInputStream(new FileInputStream(oufFile));
         
@@ -210,6 +211,11 @@ public class Importer {
             System.out.println("INFO: entryOffest=" + entryOffset);
         }
         
+        // experimental !!!
+        if(entryOffset == -0x100) {
+            entryOffset = 0;
+        }
+        
         ouf.close();
         
         Iterator<int[]> indexIterator = index.iterator();
@@ -297,7 +303,6 @@ public class Importer {
                             len=-1;
                         }
                     }
-                    
                     Script script = new Script(bout.toByteArray(), entry);
                     entry.setScript(script);
                     if(script.isSub()) {

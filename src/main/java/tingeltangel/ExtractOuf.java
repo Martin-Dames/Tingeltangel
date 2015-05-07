@@ -26,10 +26,11 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
+import tingeltangel.core.scripting.SyntaxError;
 
 public class ExtractOuf {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         ExtractOuf self = new ExtractOuf() ;
 
         File targetDir = new File("/tmp/dump");
@@ -39,7 +40,7 @@ public class ExtractOuf {
 
     }
 
-    Book extract(File ouf, File targetDir) throws IOException {
+    Book extract(File ouf, File targetDir) throws IOException, SyntaxError {
         RandomAccessFile in = new RandomAccessFile(ouf, "r");
 
         // HEADER

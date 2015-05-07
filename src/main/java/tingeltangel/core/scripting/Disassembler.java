@@ -82,15 +82,16 @@ public class Disassembler {
     /**
      * Disassemble the specified binary and set the script.
      */
-    public String disassemble(byte[] b) {
+    public String disassemble(byte[] b) throws SyntaxError {
 
         this.b = b;
 
+        
         // first pass (collect jump targets)
         while (offset < b.length) {
             if (offset == b.length - 1) {
                 if (b[offset] != 0) {
-                    throw new RuntimeException("Last byte must be 0x00.");
+                    throw new SyntaxError("Last byte must be 0x00.");
                 }
                 offset += 1;
             } else {
@@ -99,7 +100,7 @@ public class Disassembler {
                 if(command == null) {
                     String msb = Integer.toHexString(b[offset]);
                     String lsb =  Integer.toHexString(b[offset+1]);
-                    throw new RuntimeException("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"")+lsb);
+                    throw new SyntaxError("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"")+lsb);
                 } else if(command.firstArgumentIsLabel()) {
                     // jump
                     int label = ((b[offset + 2] & 0xff) << 8) | (b[offset + 3] & 0xff);
@@ -205,7 +206,7 @@ public class Disassembler {
             } else {
                 String msb = Integer.toHexString(b[offset]);
                 String lsb =  Integer.toHexString(b[offset+1]);
-                throw new RuntimeException("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"")+lsb);
+                throw new SyntaxError("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"")+lsb);
             }
         }
         return sb.toString();
