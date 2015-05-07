@@ -299,84 +299,71 @@ public class MasterFrame extends JFrame implements Callback<String> {
             }
             
         } else if(id.equals("buch.generate")) {
-            JFileChooser fc = new JFileChooser();
-            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fc.setAcceptAllFileFilterUsed(false);
-            fc.setDialogTitle("Speicherverzeichniss auswählen (Ting Dateien)");
-            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File dir = fc.getSelectedFile();
-                if(!dir.exists()) {
-                    JOptionPane.showMessageDialog(this, "Das Verzeichniss konnte nicht gefunden werden");
-                } else if(!dir.isDirectory()) {
-                    JOptionPane.showMessageDialog(this, "Kein Verzeichniss ausgewählt");
-                } else {
+           final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "erzeuge Codes");
+            SwingWorker t = new SwingWorker() {
+                @Override
+                protected Object doInBackground() {
                     try {
-                        book.export(dir);
+                        book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
                     } catch(IOException e) {
-                        JOptionPane.showMessageDialog(this, "Buchgenerierung fehlgeschlagen");
+                        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen");
                         e.printStackTrace(System.out);
                     } catch(IllegalArgumentException e) {
-                        JOptionPane.showMessageDialog(this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
+                        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
                     } catch(SyntaxError e) {
                         e.printStackTrace(System.out);
-                        JOptionPane.showMessageDialog(this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
+                        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
                     }
+                    progressDialog.done();
+                    return(null);
                 }
-            }
+            };
+            t.execute();
+            
         } else if(id.startsWith("buch.generateEpsCodes.")) {
             if(id.endsWith(".600")) {
                 Codes.setResolution(Codes.DPI600);
             } else {
                 Codes.setResolution(Codes.DPI1200);
             }
-            JFileChooser fc = new JFileChooser();
-            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fc.setAcceptAllFileFilterUsed(false);
-            fc.setDialogTitle("Speicherverzeichniss auswählen (eps Dateien)");
-            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File dir = fc.getSelectedFile();
-                if(!dir.exists()) {
-                    JOptionPane.showMessageDialog(this, "Das Verzeichniss konnte nicht gefunden werden");
-                } else if(!dir.isDirectory()) {
-                    JOptionPane.showMessageDialog(this, "Kein Verzeichniss ausgewählt");
-                } else {
+            final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "erzeuge Codes");
+            SwingWorker t = new SwingWorker() {
+                @Override
+                protected Object doInBackground() {
                     try {
-                        book.epsExport(dir);
+                        book.epsExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
                     } catch(IOException e) {
-                        JOptionPane.showMessageDialog(this, "eps-Generierung fehlgeschlagen");
+                        JOptionPane.showMessageDialog(MasterFrame.this, "eps-Generierung fehlgeschlagen");
                         e.printStackTrace(System.out);
-                    } catch(IllegalArgumentException e) {
-                        JOptionPane.showMessageDialog(this, "eps-Generierung fehlgeschlagen: " + e.getMessage());
                     }
+                    progressDialog.done();
+                    return(null);
                 }
-            }
+            };
+            t.execute();
         } else if(id.startsWith("buch.generatePngCodes.")) {
             if(id.endsWith(".600")) {
                 Codes.setResolution(Codes.DPI600);
             } else {
                 Codes.setResolution(Codes.DPI1200);
             }
-            JFileChooser fc = new JFileChooser();
-            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fc.setAcceptAllFileFilterUsed(false);
-            fc.setDialogTitle("Speicherverzeichniss auswählen (png Dateien)");
-            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File dir = fc.getSelectedFile();
-                if(!dir.exists()) {
-                    JOptionPane.showMessageDialog(this, "Das Verzeichniss konnte nicht gefunden werden");
-                } else if(!dir.isDirectory()) {
-                    JOptionPane.showMessageDialog(this, "Kein Verzeichniss ausgewählt");
-                } else {
+            
+            final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "erzeuge Codes");
+            SwingWorker t = new SwingWorker() {
+                @Override
+                protected Object doInBackground() {
                     try {
-                        book.pngExport(dir);
+                        book.pngExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
                     } catch(IOException e) {
-                        JOptionPane.showMessageDialog(this, "png-Generierung fehlgeschlagen");
+                        JOptionPane.showMessageDialog(MasterFrame.this, "eps-Generierung fehlgeschlagen");
                         e.printStackTrace(System.out);
-                    } catch(IllegalArgumentException e) {
-                        JOptionPane.showMessageDialog(this, "png-Generierung fehlgeschlagen: " + e.getMessage());
                     }
+                    progressDialog.done();
+                    return(null);
                 }
-            }
+            };
+            t.execute();
+            
         } else if(id.equals("windows.stick")) {
             stickFrame.setVisible(true);
         } else if(id.equals("windows.player")) {

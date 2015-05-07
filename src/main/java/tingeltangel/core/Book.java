@@ -28,6 +28,7 @@ import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
+import tingeltangel.gui.ProgressDialog;
 import tingeltangel.tools.FileEnvironment;
 
 public class Book {
@@ -317,7 +318,7 @@ public class Book {
     
     
     
-    private void generateOufFile(DataOutputStream out) throws IOException, SyntaxError {
+    private void generateOufFile(DataOutputStream out, ProgressDialog progress) throws IOException, SyntaxError {
         
         int startOfIndexTable = 0x0068;
         
@@ -363,10 +364,17 @@ public class Book {
             }
         }
         
+        if(progress != null) {
+            progress.setMax(size);
+        }
+        
         pos = startOfIndexTable + 12 * size;
         // write data
         byte[] buffer = new byte[4096];
         for(int t = 0; t < size; t++) {
+            if(progress != null) {
+                progress.setVal(t);
+            }
             Entry e = getEntryFromTingID(t + 15001);
             
             if(!e.isEmpty()) {
@@ -395,7 +403,7 @@ public class Book {
         out.close();
     }
     
-    public void epsExport(File dir) throws IOException, IllegalArgumentException {
+    public void epsExport(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException {
         
         int size = getLastID() - 15000;
         
@@ -418,7 +426,14 @@ public class Book {
         Codes.drawEps(Translator.ting2code(id), 100, 100, out);
         out.close();
         
+        if(progress != null) {
+            progress.setMax(size);
+        }
+        
         for(int i = 0; i < size; i++) {
+            if(progress != null) {
+                progress.setVal(i);
+            }
             if(getEntryFromTingID(i + 15001).hasCode()) {
                 out = new PrintWriter(new FileWriter(new File(dir, (i + 15001) + ".eps")));
                 Codes.drawEps(Translator.ting2code(i + 15001), 100, 100, out);
@@ -427,7 +442,7 @@ public class Book {
         }
     }
     
-    public void pngExport(File dir) throws IOException, IllegalArgumentException {
+    public void pngExport(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException {
         
         int size = getLastID() - 15000;
         
@@ -448,8 +463,15 @@ public class Book {
         OutputStream out = new FileOutputStream(new File(dir, "activation.png"));
         Codes.drawPng(Translator.ting2code(id), 100, 100, out);
         out.close();
-                
+        
+        if(progress != null) {
+            progress.setMax(size);
+        }
+        
         for(int i = 0; i < size; i++) {
+            if(progress != null) {
+                progress.setVal(i);
+            }
             if(getEntryFromTingID(i + 15001).hasCode()) {
                 out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
                 Codes.drawPng(Translator.ting2code(i + 15001), 100, 100, out);
@@ -477,7 +499,7 @@ public class Book {
         
     }
     
-    public void export(File dir) throws IOException, IllegalArgumentException, SyntaxError {
+    public void export(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException, SyntaxError {
         
         int size = getLastID() - 15000;
         
@@ -497,16 +519,14 @@ public class Book {
             url = "";
         }
         
+        
         // test if index table is valid
-        boolean needScriptFile = false;
         for(int i = 0; i < size; i++) {
             Entry entry = getEntryFromTingID(i + 15001);
             if(entry.isMP3() && (entry.getMP3() != null)) {
                 if(!entry.getMP3().canRead()) {
                     throw new IllegalArgumentException("Die Datei '" + entry.getMP3().getAbsolutePath() + "' konnte nicht gelesen werden.");
                 }
-            } else if(entry.isCode() || entry.isSub()) {
-                needScriptFile = true;
             }
         }
         
@@ -519,7 +539,7 @@ public class Book {
         File png = new File(dir, idS + PngFile._EN_PNG);
         File src = new File(dir, idS + ScriptFile._EN_SRC);
         
-        // TODO use propert png file
+        // TODO use proper png file
         InputStream fci = new FileInputStream("sample.png");
         OutputStream fco = new FileOutputStream(png);
         int b;
@@ -530,14 +550,12 @@ public class Book {
         fco.close();
         fci.close();
               
-        if(needScriptFile) {
-            PrintWriter srcOut = new PrintWriter(new FileWriter(src));
-            generateScriptFile(srcOut);
-            srcOut.close();
-        }
+        PrintWriter srcOut = new PrintWriter(new FileWriter(src));
+        generateScriptFile(srcOut);
+        srcOut.close();
                 
         DataOutputStream out = new DataOutputStream(new FileOutputStream(ouf));
-        generateOufFile(out);
+        generateOufFile(out, progress);
         out.close();
         
         PrintWriter txt = new PrintWriter(new FileWriter(new File(dir, idS + TxtFile._EN_TXT)));
@@ -550,9 +568,7 @@ public class Book {
         txt.println("URL: " + url);
         txt.println("ThumbMD5: " + md5(png));
         txt.println("FileMD5: " + md5(ouf));
-        if(needScriptFile) {
-            txt.println("ScriptMD5: " + md5(src));
-        }
+        txt.println("ScriptMD5: " + md5(src));
         txt.println("Book Area Code: en");
         txt.close();
     }

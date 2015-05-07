@@ -46,19 +46,32 @@ public class FileEnvironment {
     public static File getRepositoryDirectory() {
         return getWorkingDirectory("repository");
     }
+    
 
     public static File getAudioDirectory(int id) {
-        File audio = new File(getBookDirectory(id), "audio");
-        if (audio.exists()) {
-            if (!audio.isDirectory()) {
-                throw new Error(audio.getAbsolutePath() + " exists but is not a directory");
+        return(getBookSubDirectory(id, "audio"));
+    }
+    
+    public static File getDistDirectory(int id) {
+        return(getBookSubDirectory(id, "dist"));
+    }
+    
+    public static File getCodesDirectory(int id) {
+        return(getBookSubDirectory(id, "codes"));
+    }
+    
+    private static File getBookSubDirectory(int id, String subDirectory) {
+        File codes = new File(getBookDirectory(id), subDirectory);
+        if (codes.exists()) {
+            if (!codes.isDirectory()) {
+                throw new Error(codes.getAbsolutePath() + " exists but is not a directory");
             }
         } else {
-            if (!audio.mkdirs()) {
-                throw new Error("can't create directory " + audio.getAbsolutePath());
+            if (!codes.mkdirs()) {
+                throw new Error("can't create directory " + codes.getAbsolutePath());
             }
         }
-        return audio;
+        return codes;
     }
     
     public static File getTBU(int id) {

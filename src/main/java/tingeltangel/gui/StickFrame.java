@@ -284,7 +284,7 @@ public class StickFrame extends JInternalFrame implements ActionListener {
     }
     
     private void current2stick() throws IOException, SyntaxError {
-        frame.getBook().export(Stick.getBookDir(stick));
+        frame.getBook().export(Stick.getBookDir(stick), null);
     }
 
     private void official2stick() {

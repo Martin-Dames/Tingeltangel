@@ -91,7 +91,7 @@ public class Assemble extends CliCommand {
         if( inputFile.canRead()) {
             ReadYamlFile ryf = new ReadYamlFile();
             Book book = ryf.read(inputFile);
-            book.export( new File("."));
+            book.export( new File("."), null);
 
             // Write codes mapping into YAML file
             File scriptcodesFile = new File(inputFile.getName().replace(".yaml", ".codes.yaml"));

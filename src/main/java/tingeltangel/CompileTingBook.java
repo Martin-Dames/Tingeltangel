@@ -44,6 +44,6 @@ public class CompileTingBook {
         }
 
 
-        book.export(inputDir);
+        book.export(inputDir, null);
     }
 }

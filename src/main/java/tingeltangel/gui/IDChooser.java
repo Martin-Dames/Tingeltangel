@@ -175,7 +175,7 @@ public class IDChooser extends javax.swing.JDialog {
     
     private void niceIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_niceIDActionPerformed
         idList.clear();
-        for(int i = 0; i <= 15000; i++) {
+        for(int i = 0; i < 10000; i++) {
             if((Translator.ting2code(i) >= 0) && isNiceID(i)) {
                 idList.add(new Tupel(i, renderName(i)));
             }
@@ -185,7 +185,7 @@ public class IDChooser extends javax.swing.JDialog {
 
     private void freeIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_freeIDActionPerformed
         idList.clear();
-        for(int i = 0; i <= 15000; i++) {
+        for(int i = 0; i < 10000; i++) {
             if(Repository.getBookTxt(i) == null) {
                 idList.add(new Tupel(i, renderName(i)));
             }
@@ -195,7 +195,7 @@ public class IDChooser extends javax.swing.JDialog {
 
     private void anyIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anyIDActionPerformed
         idList.clear();
-        for(int i = 0; i <= 15000; i++) {
+        for(int i = 0; i < 10000; i++) {
             idList.add(new Tupel(i, renderName(i)));
         }
         model.refresh();
