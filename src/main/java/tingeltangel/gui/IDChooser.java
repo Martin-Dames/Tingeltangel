@@ -22,12 +22,12 @@ public class IDChooser extends javax.swing.JDialog {
 
     private final LinkedList<Tupel<Integer, String>> idList = new LinkedList<Tupel<Integer, String>>();
     private MyListModel model = new MyListModel();
-    private IntegerCallback callback;
+    private Callback<Integer> callback;
     
     /**
      * Creates new form IDChooser
      */
-    public IDChooser(java.awt.Frame parent, IntegerCallback callback) {
+    public IDChooser(java.awt.Frame parent, Callback<Integer> callback) {
         super(parent, false);
         initComponents();
         this.callback = callback;
@@ -36,7 +36,7 @@ public class IDChooser extends javax.swing.JDialog {
         setVisible(true);
     }
     
-    public IDChooser(Dialog parent, IntegerCallback callback) {
+    public IDChooser(Dialog parent, Callback<Integer> callback) {
         super(parent, false);
         initComponents();
         this.callback = callback;
@@ -239,11 +239,12 @@ public class IDChooser extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                IDChooser dialog = new IDChooser(new javax.swing.JFrame(), new IntegerCallback() {
+                IDChooser dialog = new IDChooser(new javax.swing.JFrame(), new Callback<Integer>() {
 
                     @Override
-                    public void callback(int i) {
+                    public void callback(Integer i) {
                         System.out.println(i);
                     }
                 });

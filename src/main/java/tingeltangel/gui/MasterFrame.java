@@ -29,7 +29,7 @@ import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
 
-public class MasterFrame extends JFrame implements MenuCallback {
+public class MasterFrame extends JFrame implements Callback<String> {
 
     private MP3Player mp3Player = new MP3Player();
     private Book book = new Book(15000, mp3Player);
@@ -158,10 +158,10 @@ public class MasterFrame extends JFrame implements MenuCallback {
             }
             if(newBook) {
                 
-                IDChooser ic = new IDChooser(this, new IntegerCallback() {
+                IDChooser ic = new IDChooser(this, new Callback<Integer>() {
 
                     @Override
-                    public void callback(int id) {
+                    public void callback(Integer id) {
                         String _id = Integer.toString(id);
                         while(_id.length() < 5) {
                             _id = "0" + _id;
@@ -196,9 +196,9 @@ public class MasterFrame extends JFrame implements MenuCallback {
             if(loadBook) {
                 
                 
-                final MapCallback callback = new MapCallback() {
+                final Callback<Map> callback = new Callback<Map>() {
                     @Override
-                    public void callback(final Map<String, Object> data) {
+                    public void callback(final Map data) {
                         int id = -1;
                         if(data.get("id") != null) {
                             id = (Integer)data.get("id");
@@ -269,9 +269,9 @@ public class MasterFrame extends JFrame implements MenuCallback {
             }
             if(loadBook) {
                 
-                ChooseBook cb = new ChooseBook(this, new IntegerCallback() {
+                ChooseBook cb = new ChooseBook(this, new Callback<Integer>() {
                     @Override
-                    public void callback(int _id) {
+                    public void callback(Integer _id) {
                         try {
                             book.clear();
                             book.setID(_id);

@@ -22,12 +22,12 @@ public class ImportDialog extends javax.swing.JDialog {
     private File png = null;
     private File src = null;
     private int id = -1;
-    private final MapCallback callback;
+    private final Callback<Map> callback;
     
     /**
      * Creates new form ImportDialog
      */
-    public ImportDialog(java.awt.Frame parent, boolean modal, MapCallback callback) {
+    public ImportDialog(java.awt.Frame parent, boolean modal, Callback<Map> callback) {
         super(parent, modal);
         this.callback = callback;
         initComponents();
@@ -298,11 +298,11 @@ public class ImportDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_buttonOufActionPerformed
 
     private void buttonIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIDActionPerformed
-        IDChooser idc = new IDChooser(this, new IntegerCallback() {
+        IDChooser idc = new IDChooser(this, new Callback<Integer>() {
 
             @Override
-            public void callback(int i) {
-                textFieldID.setText(Integer.toString(i));
+            public void callback(Integer i) {
+                textFieldID.setText(i.toString());
             }
         });
     }//GEN-LAST:event_buttonIDActionPerformed

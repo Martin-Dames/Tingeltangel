@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import tingeltangel.gui.MultipleChoiceDialog;
-import tingeltangel.gui.StringCallback;
+import tingeltangel.gui.Callback;
 
 
 public class IndexTableCalculator {
@@ -65,7 +65,7 @@ public class IndexTableCalculator {
         }
     }
         
-    public static void getBinaryPath(final String propertyName, final String winExeName, final String linuxExeName, final StringCallback binaryCallback, final String name, final String question, final String installMessage) {
+    public static void getBinaryPath(final String propertyName, final String winExeName, final String linuxExeName, final Callback binaryCallback, final String name, final String question, final String installMessage) {
         
         
         if(System.getProperty("os.name").startsWith("Windows")) {
@@ -90,7 +90,7 @@ public class IndexTableCalculator {
             } else {
                 
                 
-                StringCallback callback = new StringCallback() {
+                Callback<String> callback = new Callback<String>() {
                     @Override
                     public void callback(String s) {
                         if(s.equals("install")) {

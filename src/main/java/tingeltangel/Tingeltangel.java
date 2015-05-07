@@ -8,7 +8,7 @@ import tingeltangel.core.Repository;
 import tingeltangel.core.Properties;
 import tingeltangel.core.IndexTableCalculator;
 import tingeltangel.gui.MasterFrame;
-import tingeltangel.gui.StringCallback;
+import tingeltangel.gui.Callback;
 
 public class Tingeltangel {
     
@@ -41,7 +41,7 @@ public class Tingeltangel {
                     final String INSTALL_MPG123 = "MPG123 kann unter http://www.mpg123.de/download.shtml heruntergeladen werden";
 
 
-                    StringCallback callbackMpg123 = new StringCallback() {
+                    Callback<String> callbackMpg123 = new Callback<String>() {
                         @Override
                         public void callback(String path) {
                             mpg123Path = path;

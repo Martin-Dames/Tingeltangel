@@ -23,7 +23,7 @@ public class ChooseBook extends javax.swing.JDialog {
 
     private final LinkedList<Tupel<Integer, String>> idList = new LinkedList<Tupel<Integer, String>>();
     private MyListModel model = new MyListModel();
-    private final IntegerCallback callback;
+    private final Callback<Integer> callback;
     
     
     private String getLabel(int id) throws IOException {
@@ -33,16 +33,14 @@ public class ChooseBook extends javax.swing.JDialog {
         int fileFormatVersion = in.readInt();
         if(fileFormatVersion <= 15000) {
             _id = fileFormatVersion;
-            fileFormatVersion = 0;
         } else {
             _id = in.readInt();
-            fileFormatVersion -= 15000;
         }
         if(id != _id) {
             throw new IOException("dir-id=" + id + "; file-id=" + _id);
         }
         String name = in.readUTF();
-        String publisher = in.readUTF();
+        in.readUTF(); // publisher
         String author = in.readUTF();
         in.close();
         return(name + " (" + author + ")");
@@ -51,7 +49,7 @@ public class ChooseBook extends javax.swing.JDialog {
     /**
      * Creates new form ChooseBook
      */
-    public ChooseBook(java.awt.Frame parent, IntegerCallback callback) {
+    public ChooseBook(java.awt.Frame parent, Callback<Integer> callback) {
         super(parent, false);
         initComponents();
         this.callback = callback;
@@ -171,12 +169,12 @@ public class ChooseBook extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                ChooseBook dialog = new ChooseBook(new javax.swing.JFrame(), new IntegerCallback() {
-
+                ChooseBook dialog = new ChooseBook(new javax.swing.JFrame(), new Callback<Integer>() {
                     @Override
-                    public void callback(int i) {
-                        System.out.println(i);
+                    public void callback(Integer i) {
+                        System.out.println(i.toString());
                     }
                 });
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {

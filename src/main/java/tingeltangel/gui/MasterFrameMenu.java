@@ -18,7 +18,7 @@ public class MasterFrameMenu implements ActionListener {
     private final static LinkedList<String> keys = new LinkedList<String>();
     private final static HashMap<String, String> values = new HashMap<String, String>();
     private final static HashMap<String, MenuItem> items = new HashMap<String, MenuItem>();
-    private static MenuCallback callback = null;
+    private static Callback<String> callback = null;
     private String id;
     
     private MasterFrameMenu(String id) {
@@ -48,7 +48,7 @@ public class MasterFrameMenu implements ActionListener {
         items.get(id).setEnabled(enabled);
     }
     
-    public static void setMenuCallback(MenuCallback menuCallback) {
+    public static void setMenuCallback(Callback<String> menuCallback) {
         callback = menuCallback;
     }
     

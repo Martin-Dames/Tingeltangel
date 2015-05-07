@@ -299,7 +299,7 @@ public class StickFrame extends JInternalFrame implements ActionListener {
             m += " (" + Repository.getBookTxt(ids[i]).get("Author") + ")";
             options[i] = m;
         }
-        StringCallback cb = new StringCallback() {
+        Callback<String> cb = new Callback<String>() {
             @Override
             public void callback(String s) {
                 // extract id
@@ -368,7 +368,7 @@ public class StickFrame extends JInternalFrame implements ActionListener {
             m += " (" + Repository.getBookTxt(id).get("Author") + ")";
             options[i++] = m;
         }
-        StringCallback cb = new StringCallback() {
+        Callback<String> cb = new Callback<String>() {
             @Override
             public void callback(String s) {
                 // extract id
@@ -397,7 +397,7 @@ public class StickFrame extends JInternalFrame implements ActionListener {
             m += " (" + Repository.getBookTxt(id).get("Author") + ")";
             options[i++] = m;
         }
-        StringCallback cb = new StringCallback() {
+        Callback<String> cb = new Callback<String>() {
             @Override
             public void callback(String s) {
                 // extract id

@@ -16,7 +16,7 @@ import javax.swing.JRadioButton;
 
 public class MultipleChoiceDialog {
  
-    public static void showDropdown(JFrame frame, String title, String question, String button, String[] options, int preSelected, final StringCallback callback) {
+    public static void showDropdown(JFrame frame, String title, String question, String button, String[] options, int preSelected, final Callback callback) {
         String answer = (String)JOptionPane.showInputDialog(
                     frame,
                     question,
@@ -30,7 +30,7 @@ public class MultipleChoiceDialog {
         }
     }
     
-    public static void show(JFrame frame, String title, String question, String button, String[] options, String[] actions, int preSelected, final StringCallback callback) {
+    public static void show(JFrame frame, String title, String question, String button, String[] options, String[] actions, int preSelected, final Callback callback) {
         JRadioButton[] buttons = new JRadioButton[options.length];
         final ButtonGroup group = new ButtonGroup();
 

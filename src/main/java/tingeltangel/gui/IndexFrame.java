@@ -152,7 +152,7 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                         
                         final Entry entry = book.getEntry(row);
                         
-                        StringCallback callback = new StringCallback() {
+                        Callback<String> callback = new Callback<String>() {
                             @Override
                             public void callback(String s) {
                                 if(s.equals(MP3)) {
@@ -216,7 +216,7 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
         String action = e.getActionCommand();
         if(action.equals("append_entry")) {
             String _count = appendEntries.getText().trim();
-            int count = -1;
+            int count;
             try {
                 count = Integer.parseInt(_count);
             } catch(NumberFormatException nfe) {
