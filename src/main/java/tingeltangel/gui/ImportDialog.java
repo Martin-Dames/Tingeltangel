@@ -8,9 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import tingeltangel.core.IndexTableCalculator;
 import tingeltangel.tools.FileEnvironment;
 
 /**
@@ -272,8 +270,12 @@ public class ImportDialog extends javax.swing.JDialog {
         if(ouf != null) {
             map.put("ouf", ouf);
         }
-        if(id >= 0) {
-            map.put("id", id);
+        try {
+            id = Integer.parseInt(textFieldID.getText());
+            if(id >= 0) {
+                map.put("id", id);
+            }
+        } catch(NumberFormatException nfe) {
         }
         setVisible(false);
         callback.callback(map);
@@ -296,7 +298,13 @@ public class ImportDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_buttonOufActionPerformed
 
     private void buttonIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIDActionPerformed
-        // TODO add your handling code here:
+        IDChooser idc = new IDChooser(this, new IntegerCallback() {
+
+            @Override
+            public void callback(int i) {
+                textFieldID.setText(Integer.toString(i));
+            }
+        });
     }//GEN-LAST:event_buttonIDActionPerformed
 
 

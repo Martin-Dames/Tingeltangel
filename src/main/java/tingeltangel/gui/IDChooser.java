@@ -4,6 +4,7 @@
  */
 package tingeltangel.gui;
 
+import java.awt.Dialog;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -27,6 +28,15 @@ public class IDChooser extends javax.swing.JDialog {
      * Creates new form IDChooser
      */
     public IDChooser(java.awt.Frame parent, IntegerCallback callback) {
+        super(parent, false);
+        initComponents();
+        this.callback = callback;
+        list.setModel(model);
+        niceIDActionPerformed(null);
+        setVisible(true);
+    }
+    
+    public IDChooser(Dialog parent, IntegerCallback callback) {
         super(parent, false);
         initComponents();
         this.callback = callback;
