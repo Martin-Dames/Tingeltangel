@@ -1,5 +1,5 @@
 
-package tingeltangel.gui;
+package tingeltangel.tools;
 
 public interface Callback<T> {
     

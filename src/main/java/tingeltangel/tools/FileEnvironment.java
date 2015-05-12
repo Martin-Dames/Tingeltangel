@@ -74,8 +74,8 @@ public class FileEnvironment {
         return codes;
     }
     
-    public static File getTBU(int id) {
-        return(new File(getBookDirectory(id), "book.tbu"));
+    public static File getXML(int id) {
+        return(new File(getBookDirectory(id), "book.xml"));
     }
     
     private static File getWorkingDirectory(String subDirectory) {

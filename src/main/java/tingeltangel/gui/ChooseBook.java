@@ -4,6 +4,7 @@
  */
 package tingeltangel.gui;
 
+import tingeltangel.tools.Callback;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
+import tingeltangel.core.Book;
 import tingeltangel.core.Tupel;
 import tingeltangel.tools.FileEnvironment;
 
@@ -27,23 +29,7 @@ public class ChooseBook extends javax.swing.JDialog {
     
     
     private String getLabel(int id) throws IOException {
-        DataInputStream in = new DataInputStream(new FileInputStream(FileEnvironment.getTBU(id)));
-        // compatibility hack
-        int _id;
-        int fileFormatVersion = in.readInt();
-        if(fileFormatVersion <= 15000) {
-            _id = fileFormatVersion;
-        } else {
-            _id = in.readInt();
-        }
-        if(id != _id) {
-            throw new IOException("dir-id=" + id + "; file-id=" + _id);
-        }
-        String name = in.readUTF();
-        in.readUTF(); // publisher
-        String author = in.readUTF();
-        in.close();
-        return(name + " (" + author + ")");
+        return(Book.getLabel(FileEnvironment.getXML(id)));
     }
     
     /**

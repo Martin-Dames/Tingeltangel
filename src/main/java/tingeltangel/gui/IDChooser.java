@@ -4,6 +4,7 @@
  */
 package tingeltangel.gui;
 
+import tingeltangel.tools.Callback;
 import java.awt.Dialog;
 import java.util.HashMap;
 import java.util.Iterator;

@@ -6,13 +6,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -21,6 +21,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
@@ -28,7 +36,7 @@ import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
-import tingeltangel.gui.ProgressDialog;
+import tingeltangel.tools.ProgressDialog;
 import tingeltangel.tools.FileEnvironment;
 
 public class Book {
@@ -216,41 +224,183 @@ public class Book {
         changeMade();
     }
 
-    public void save() throws IOException {
-        save(FileEnvironment.getTBU(id));
+    private static String encodeAttribute(String v) {
+        return(v.replace("&", "&amp;").replace("\"", "&quot;"));
     }
     
-    public void save(File file) throws IOException {
-        DataOutputStream out = new DataOutputStream(new FileOutputStream(file));
+    private static String encodeValue(String v) {
+        return(v.replace("&", "&amp;").replace("<", "&gt;"));
+    }
+    
+    public void save() throws IOException {
         
-        // version
-        int fileFormatVersion = 1;
-        out.writeInt(fileFormatVersion + 15000);
-        
-        out.writeInt(id);
-        out.writeUTF(name);
-        out.writeUTF(publisher);
-        out.writeUTF(author);
-        out.writeInt(version);
-        out.writeUTF(url);
-        
-        out.writeLong(magicValue);
-        out.writeLong(date);
-        
-        out.writeInt(indexIDs.size());
+        PrintWriter xml = new PrintWriter(new OutputStreamWriter(new FileOutputStream(FileEnvironment.getXML(id)), "UTF-8"));
+        xml.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        xml.println("<book");
+        xml.println("\t\tformat=\"1\"");
+        xml.println("\t\tid=\"" + id + "\"");
+        xml.println("\t\tversion=\"" + version + "\"");
+        xml.println("\t\tdate=\"" + date + "\"");
+        xml.println("\t\ttitle=\"" + encodeAttribute(name) + "\"");
+        xml.println("\t\tpublisher=\"" + encodeAttribute(publisher) + "\"");
+        xml.println("\t\tauthor=\"" + encodeAttribute(author) + "\"");
+        xml.println("\t\turl=\"" + encodeAttribute(url) + "\"");
+        xml.println("\t\tmagic=\"" + magicValue + "\"");
+        xml.println(">");
+        xml.println("\t<entries>");
         Iterator<Integer> iterator = indexIDs.iterator();
         while(iterator.hasNext()) {
-            indexEntries.get(iterator.next()).save(out);
+            Entry entry = indexEntries.get(iterator.next());
+            if(!entry.isEmpty()) {
+                String type = "script";
+                if(entry.isSub()) {
+                    type = "sub";
+                } else if(entry.isMP3()) {
+                    type = "mp3";
+                }
+                xml.print("\t\t<entry id=\"" + entry.getTingID() + "\" type=\"" + type + "\"");
+                if(entry.isMP3()) {
+                     xml.print(" mp3=\"" + encodeAttribute(entry.getMP3().getName()) + "\"");
+                }
+                xml.println(">");
+                if(!entry.isMP3()) {
+                    xml.println("\t\t\t<code>" + encodeValue(entry.getScript().toString()) + "</code>");
+                }
+                xml.println("\t\t\t<hint>" + encodeValue(entry.getHint()) + "</hint>");
+                xml.println("\t\t</entry>");
+            }
         }
-        
-        out.writeInt(emulator.getMaxRegister() + 1);
+        xml.println("\t</entries>");
+        xml.println("\t<registers>");
         for(int i = 0; i <= emulator.getMaxRegister(); i++) {
-            out.writeUTF(emulator.getHint(i));
+            if(!emulator.getHint(i).trim().isEmpty()) {
+                xml.println("\t\t<register id=\"" + i + "\">");
+                xml.println("\t\t\t<hint>" + encodeValue(emulator.getHint(i)) + "</hint>");
+                xml.println("\t\t</register>");
+            }
         }
+        xml.println("\t</registers>");
+        xml.println("</book>");
+        xml.close();
         
-        
-        out.close();
         changed = false;
+    }
+    
+    public static String getLabel(File xmlFile) throws IOException {
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(xmlFile);
+            doc.getDocumentElement().normalize();
+            
+            Element bookElement = doc.getDocumentElement();
+            
+            int format = Integer.parseInt(bookElement.getAttribute("format")); // sould be 1
+            if(format != 1) {
+                throw new IOException("unknown file format");
+            }
+            
+            String id = bookElement.getAttribute("id");
+            while(id.length() < 5) {
+                id = "0" + id;
+            }
+            
+            return(id + ": " + bookElement.getAttribute("title") + " (" + bookElement.getAttribute("author") + ")");
+        } catch (SAXException ex) {
+            throw new IOException(ex);
+        } catch (ParserConfigurationException ex) {
+            throw new Error();
+        } catch (NumberFormatException ex) {
+            throw new IOException(ex);
+        }
+    }
+    
+    private static String getTagContent(Node node) {
+        NodeList childNodes = node.getChildNodes();
+        String content = "";
+        if(childNodes.getLength() > 0) {
+            content = childNodes.item(0).getNodeValue();
+        }
+        return(content);
+    }
+    
+    public static void loadXML(File file, Book book) throws IOException {
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(file);
+            doc.getDocumentElement().normalize();
+            
+            Element bookElement = doc.getDocumentElement();
+            
+            int format = Integer.parseInt(bookElement.getAttribute("format")); // sould be 1
+            if(format != 1) {
+                throw new IOException("unknown file format");
+            }
+            
+            if(book.getID() != Integer.parseInt(bookElement.getAttribute("id"))) {
+                throw new IOException("book id missmatch");
+            };
+            
+            book.version = Integer.parseInt(bookElement.getAttribute("version"));
+            book.date = Integer.parseInt(bookElement.getAttribute("date"));
+            book.magicValue = Integer.parseInt(bookElement.getAttribute("magic"));
+            book.name = bookElement.getAttribute("title");
+            book.publisher = bookElement.getAttribute("publisher");
+            book.author = bookElement.getAttribute("author");
+            book.url = bookElement.getAttribute("url");
+                        
+            
+            NodeList entries = doc.getElementsByTagName("entry");
+            for(int i = 0; i < entries.getLength(); i++) {
+                Node entryNode = entries.item(i);
+                if(entryNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element)entryNode;
+                    int tingID = Integer.parseInt(eElement.getAttribute("id"));
+                    String type = eElement.getAttribute("type");
+                    String mp3 = eElement.getAttribute("mp3");
+                    Entry entry = new Entry(book, tingID);
+                    if(type.equals("mp3")) {
+                        entry.setMP3(new File(FileEnvironment.getAudioDirectory(book.getID()), mp3));
+                    } else if(type.equals("script") || type.equals("sub")) {
+                        // get code
+                        String code = getTagContent(eElement.getElementsByTagName("code").item(0));
+                        Script script = new Script(code, entry);
+                        if(type.equals("sub")) {
+                            entry.setSub();
+                        }
+                        entry.setScript(script);
+                    } else {
+                        throw new IOException("unknown type: " + type);
+                    }
+                    // get hint
+                    entry.setHint(getTagContent(eElement.getElementsByTagName("hint").item(0)));
+                    
+                    book.addEntry(entry.getTingID());
+                    book.indexEntries.put(entry.getTingID(), entry);
+                    
+                }
+            }
+            
+            
+            NodeList registers = doc.getElementsByTagName("register");
+            for(int i = 0; i < registers.getLength(); i++) {
+                Node registerNode = registers.item(i);
+                if(registerNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element registerElement = (Element)registerNode;
+                    int rID = Integer.parseInt(registerElement.getAttribute("id"));
+                    String hint = getTagContent(registerElement.getElementsByTagName("hint").item(0));
+                    book.emulator.setHint(rID, hint);
+                }
+            }  
+                    
+        } catch (SAXException ex) {
+            throw new IOException(ex);
+        } catch (ParserConfigurationException ex) {
+            throw new Error();
+        } catch (NumberFormatException ex) {
+            throw new IOException(ex);
+        }
     }
     
     public static void load(File file, Book book) throws IOException {

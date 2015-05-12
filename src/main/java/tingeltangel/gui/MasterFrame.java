@@ -1,6 +1,8 @@
 
 package tingeltangel.gui;
 
+import tingeltangel.tools.ProgressDialog;
+import tingeltangel.tools.Callback;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
@@ -28,6 +30,7 @@ import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
+import tingeltangel.tools.Progress;
 
 public class MasterFrame extends JFrame implements Callback<String> {
 
@@ -183,7 +186,25 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 
             }
                 
-        } else if(id.equals("buch.import")) {
+        } else if(id.equals("buch.import.repo")) {
+            boolean loadBook = false;
+            if(book.unsaved()) {
+                int value =  JOptionPane.showConfirmDialog(this, "Das aktuelle Buch ist nicht gespeichert. wollen sie trotzdem ein Buch importieren?", "Frage...", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (value == JOptionPane.YES_OPTION) {
+                    loadBook = true;
+                }
+            } else {
+                loadBook = true;
+            }
+            if(loadBook) {
+                new IDChooser(this, new Callback<Integer>() {
+                    @Override
+                    public void callback(Integer t) {
+                        
+                    }
+                });
+            }
+        } else if(id.equals("buch.import.ouf")) {
             boolean loadBook = false;
             if(book.unsaved()) {
                 int value =  JOptionPane.showConfirmDialog(this, "Das aktuelle Buch ist nicht gespeichert. wollen sie trotzdem ein Buch importieren?", "Frage...", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -217,21 +238,13 @@ public class MasterFrame extends JFrame implements Callback<String> {
                             }
                         }
                         
-                        /*
-                        File bookDir = FileEnvironment.getBookDirectory(id);
-                        if(bookDir.exists()) {
-                            // display proper error
-                            JOptionPane.showMessageDialog(MasterFrame.this, "Das Verzeichniss " + bookDir.getAbsolutePath() + " existiert schon");
-                            return;
-                        }
-                        */
-
                         final int _id = id;
                         MasterFrame.this.setEnabled(false);
-                        final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "importiere Buch");
-                        SwingWorker t = new SwingWorker() {
+                        
+                        
+                        Progress pr = new Progress(MasterFrame.this, "importiere Buch") {
                             @Override
-                            protected Object doInBackground() {
+                            public void action(ProgressDialog progressDialog) {
                                 try {
                                     book = new Book(_id, mp3Player);
                                     Importer.importOuf((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
@@ -242,14 +255,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                     JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
                                     se.printStackTrace(System.out);
                                 }
-                                progressDialog.done();
                                 propertyFrame.refresh();
                                 indexFrame.update();
-                                return(null);
                             }
                         };
-                        t.execute();
-                        //Importer.importOuf((File)data.get("ouf"), Books.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
                         
                     }
                 };
@@ -275,7 +284,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         try {
                             book.clear();
                             book.setID(_id);
-                            Book.load(FileEnvironment.getTBU(_id), book);
+                            //Book.load(FileEnvironment.getTBU(_id), book);
+                            Book.loadXML(FileEnvironment.getXML(_id), book);
                         } catch (IOException ex) {
                             ex.printStackTrace(System.err);
                         }
@@ -299,10 +309,9 @@ public class MasterFrame extends JFrame implements Callback<String> {
             }
             
         } else if(id.equals("buch.generate")) {
-           final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "erzeuge Codes");
-            SwingWorker t = new SwingWorker() {
+            new Progress(MasterFrame.this, "erzeuge Codes") {
                 @Override
-                protected Object doInBackground() {
+                public void action(ProgressDialog progressDialog) {
                     try {
                         book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
                     } catch(IOException e) {
@@ -314,11 +323,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         e.printStackTrace(System.out);
                         JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
                     }
-                    progressDialog.done();
-                    return(null);
                 }
             };
-            t.execute();
+            
+            
             
         } else if(id.startsWith("buch.generateEpsCodes.")) {
             if(id.endsWith(".600")) {
@@ -326,44 +334,35 @@ public class MasterFrame extends JFrame implements Callback<String> {
             } else {
                 Codes.setResolution(Codes.DPI1200);
             }
-            final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "erzeuge Codes");
-            SwingWorker t = new SwingWorker() {
+            new Progress(MasterFrame.this, "erzeuge Codes") {
                 @Override
-                protected Object doInBackground() {
+                public void action(ProgressDialog progressDialog) {
                     try {
                         book.epsExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
                     } catch(IOException e) {
                         JOptionPane.showMessageDialog(MasterFrame.this, "eps-Generierung fehlgeschlagen");
                         e.printStackTrace(System.out);
                     }
-                    progressDialog.done();
-                    return(null);
                 }
             };
-            t.execute();
         } else if(id.startsWith("buch.generatePngCodes.")) {
             if(id.endsWith(".600")) {
                 Codes.setResolution(Codes.DPI600);
             } else {
                 Codes.setResolution(Codes.DPI1200);
             }
-            
-            final ProgressDialog progressDialog = new ProgressDialog(MasterFrame.this, "erzeuge Codes");
-            SwingWorker t = new SwingWorker() {
+            new Progress(MasterFrame.this, "erzeuge Codes") {
                 @Override
-                protected Object doInBackground() {
+                public void action(ProgressDialog progressDialog) {
                     try {
                         book.pngExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
                     } catch(IOException e) {
                         JOptionPane.showMessageDialog(MasterFrame.this, "eps-Generierung fehlgeschlagen");
                         e.printStackTrace(System.out);
                     }
-                    progressDialog.done();
-                    return(null);
                 }
+                
             };
-            t.execute();
-            
         } else if(id.equals("windows.stick")) {
             stickFrame.setVisible(true);
         } else if(id.equals("windows.player")) {

@@ -13,13 +13,10 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import tingeltangel.core.constants.OufFile;
-import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.SyntaxError;
-import tingeltangel.gui.ProgressDialog;
+import tingeltangel.tools.ProgressDialog;
 import tingeltangel.tools.FileEnvironment;
 
 

@@ -8,7 +8,8 @@ import tingeltangel.core.Repository;
 import tingeltangel.core.Properties;
 import tingeltangel.core.IndexTableCalculator;
 import tingeltangel.gui.MasterFrame;
-import tingeltangel.gui.Callback;
+import tingeltangel.tools.Callback;
+import tingeltangel.tools.ExternalBinary;
 
 public class Tingeltangel {
     
@@ -49,7 +50,7 @@ public class Tingeltangel {
                         }
                     };
 
-                    IndexTableCalculator.getBinaryPath(Properties.WIN_MPG123, "mpg123.exe", "mpg123", callbackMpg123, "MPG123", "Um MP3s abspielen zu können muss MPG123 installiert sein. Bitte triff eine Wahl.", INSTALL_MPG123);
+                    ExternalBinary.getBinaryPath(Properties.WIN_MPG123, "mpg123.exe", "mpg123", callbackMpg123, "MPG123", "Um MP3s abspielen zu können muss MPG123 installiert sein. Bitte triff eine Wahl.", INSTALL_MPG123);
 
                 }
             });

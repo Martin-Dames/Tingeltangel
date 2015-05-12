@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import tingeltangel.gui.MultipleChoiceDialog;
-import tingeltangel.gui.Callback;
+import tingeltangel.tools.Callback;
 
 
 public class IndexTableCalculator {
@@ -51,109 +51,6 @@ public class IndexTableCalculator {
             }
         }
         return -1;
-    }
-    
-    
-    
-    private static void setBinaryPath(String propertyName, String path) {
-        if(path == null) {
-            Properties.setProperty(propertyName + Properties._PATH, "");
-            Properties.setProperty(propertyName + Properties._ENABLED, 0);
-        } else {
-            Properties.setProperty(propertyName + Properties._PATH, path);
-            Properties.setProperty(propertyName + Properties._ENABLED, 1);
-        }
-    }
-        
-    public static void getBinaryPath(final String propertyName, final String winExeName, final String linuxExeName, final Callback binaryCallback, final String name, final String question, final String installMessage) {
-        
-        
-        if(System.getProperty("os.name").startsWith("Windows")) {
-            
-            if(Properties.getProperty(propertyName + Properties._PATH) != null) {
-                                
-                if(Properties.getPropertyAsInteger(propertyName + Properties._ENABLED) == 0) {
-                    binaryCallback.callback(null);
-                } else {
-                
-                    File f = new File(Properties.getProperty(propertyName + Properties._PATH));
-                    if(f.getName().equals(winExeName) && f.canExecute()) {
-                        binaryCallback.callback(f.getAbsolutePath());
-                    } else {
-                        JOptionPane.showMessageDialog(null, name + " konnte nicht gefunden werden", "Fehler", JOptionPane.WARNING_MESSAGE);
-                        Properties.setProperty(propertyName + Properties._PATH, null);
-                        Properties.setProperty(propertyName + Properties._ENABLED, null);
-                        getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
-                    }
-                }
-                
-            } else {
-                
-                
-                Callback<String> callback = new Callback<String>() {
-                    @Override
-                    public void callback(String s) {
-                        if(s.equals("install")) {
-                            JOptionPane.showMessageDialog(null, installMessage, "Hinweis", JOptionPane.INFORMATION_MESSAGE);
-                            getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
-                        } else if(s.equals("path")) {
-                            JFileChooser fc = new JFileChooser();
-                            fc.setCurrentDirectory(new java.io.File("."));
-                            fc.setDialogTitle("Installationsverzeichniss von " + name);
-                            fc.setFileFilter(new FileNameExtensionFilter("windows Executable (*.exe)", "exe"));
-                            if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                                File f = fc.getSelectedFile();
-                                if(f.getName().equals(winExeName) && f.canExecute()) {
-                                    setBinaryPath(propertyName, f.getAbsolutePath());
-                                    Properties.setProperty(propertyName + Properties._PATH, f.getAbsolutePath());
-                                    Properties.setProperty(propertyName + Properties._ENABLED, 1);
-                                    binaryCallback.callback(f.getAbsolutePath());
-                                } else {
-                                    JOptionPane.showMessageDialog(null,  name + " konnte nicht gefunden werden", "Fehler", JOptionPane.WARNING_MESSAGE);
-                                    getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
-                                }
-                            } else {
-                                getBinaryPath(propertyName, winExeName, linuxExeName, binaryCallback, name, question, installMessage);
-                            }
-                        } else if(s.equals("disable")) {
-                            Properties.setProperty(propertyName + Properties._PATH, "");
-                            Properties.setProperty(propertyName + Properties._ENABLED, 0);
-                            System.out.println("props set!");
-                            binaryCallback.callback(null);
-                        }
-                    }
-                };
-                
-                String[] options = {
-                    "Ich möchte " + name + " installieren",
-                    name + " ist installiert. Ich möchte den Pfad zu " + name + " angeben.",
-                    "Ich verzichte auf " + name + "."
-                };
-                
-                String[] actions = {"install", "path", "disable"};
-                
-                MultipleChoiceDialog.show(null, name + " nicht gefunden", question, "OK", options, actions, 0, callback);
-                
-            }
-            
-        } else {
-            // linux
-            String[] path = System.getenv("PATH").split(":");
-            for(int i = 0; i < path.length; i++) {
-                File file = new File(new File(path[i]), linuxExeName);
-                if(file.exists() && file.canExecute()) {
-                    binaryCallback.callback(file.getAbsolutePath());
-                    return;
-                }
-            }
-            
-            JOptionPane.showMessageDialog(null, "Warnung", name + " konnte nicht gefunden werden", JOptionPane.WARNING_MESSAGE);
-            binaryCallback.callback(null);
-            
-        }
-        
-        
-        
     }
     
     

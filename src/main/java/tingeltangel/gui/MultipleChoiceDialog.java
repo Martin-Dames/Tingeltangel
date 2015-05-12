@@ -1,6 +1,7 @@
 
 package tingeltangel.gui;
 
+import tingeltangel.tools.Callback;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

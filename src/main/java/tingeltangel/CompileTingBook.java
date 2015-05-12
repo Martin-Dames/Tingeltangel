@@ -18,13 +18,11 @@
 */
 package tingeltangel;
 
-import tingeltangel.core.Book;
-import tingeltangel.core.scripting.SyntaxError;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import tingeltangel.core.Book;
+import tingeltangel.core.scripting.SyntaxError;
 
 public class CompileTingBook {
     public static void main(String[] args) throws IOException, SyntaxError {

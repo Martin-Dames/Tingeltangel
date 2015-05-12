@@ -1,6 +1,7 @@
 
 package tingeltangel.gui;
 
+import tingeltangel.tools.Callback;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;

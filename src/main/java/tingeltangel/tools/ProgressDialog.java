@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package tingeltangel.gui;
+package tingeltangel.tools;
 
 import java.awt.Frame;
 
@@ -14,7 +14,7 @@ public class ProgressDialog extends javax.swing.JDialog {
 
     private Frame parent;
     
-    public ProgressDialog(java.awt.Frame parent, String label) {
+    ProgressDialog(java.awt.Frame parent, String label) {
         super(parent, false);
         initComponents();
         setVisible(true);
@@ -41,6 +41,8 @@ public class ProgressDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
+        text.setEditable(false);
+        text.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         text.setText("jTextField1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -78,7 +80,7 @@ public class ProgressDialog extends javax.swing.JDialog {
         bar.setValue(val);
     }
     
-    public void done() {
+    void done() {
         setVisible(false);
         parent.setEnabled(true);
     }
