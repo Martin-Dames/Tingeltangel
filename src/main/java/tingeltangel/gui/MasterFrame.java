@@ -46,6 +46,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
     private StickFrame stickFrame;
     private ReferenceFrame referenceFrame;
     private TranslatorFrame translatorFrame;
+    private RepositoryManager repositoryFrame;
     
     private InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
     private InfoFrame licenseFrame = new InfoFrame("Kontakt", "html/license.html");
@@ -64,6 +65,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
         stickFrame = new StickFrame(this);
         referenceFrame = new ReferenceFrame(this);
         translatorFrame = new TranslatorFrame(this);
+        repositoryFrame = new RepositoryManager();
         
         book.addRegisterListener(registerFrame);
         
@@ -379,6 +381,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
             referenceFrame.setVisible(true);
         } else if(id.equals("windows.translator")) {
             translatorFrame.setVisible(true);
+        } else if(id.equals("windows.repository")) {
+            repositoryFrame.setVisible(true);
         } else if(id.startsWith("codes.raw.")) {
             id = id.substring("codes.raw.".length());
             int start = Integer.parseInt(id.substring(0, 1)) * 10000 + Integer.parseInt(id.substring(2)) * 1000;
@@ -407,10 +411,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
         } else if(id.equals("codes.tabular.code2ting")) {
             generateTabular(false);
         } else if(id.equals("books.search")) {
-            Repository.search();
+            Repository.search(null);
         } else if(id.equals("books.update")) {
             try {
-                Repository.update();
+                Repository.update(null);
             } catch(IOException ioe) {
                 ioe.printStackTrace(System.out);
                 JOptionPane.showMessageDialog(this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());

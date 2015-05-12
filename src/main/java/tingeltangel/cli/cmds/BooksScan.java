@@ -34,7 +34,7 @@ public class BooksScan extends CliCommand {
 
     @Override
     public void execute(Map<String, String> args) throws Exception {
-        Repository.search();
+        Repository.search(null);
     }
     
 }

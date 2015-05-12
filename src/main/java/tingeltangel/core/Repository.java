@@ -3,6 +3,7 @@ package tingeltangel.core;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -11,10 +12,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,6 +29,7 @@ import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
+import tingeltangel.gui.ProgressDialog;
 import tingeltangel.tools.FileEnvironment;
 
 public class Repository {
@@ -39,7 +43,7 @@ public class Repository {
     }
     
     private static HashMap<String, String> readTxt(File txt) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader(txt));
+        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(txt), "UTF-8"));
         HashMap<String, String> data = new HashMap<String, String>();
         String row;
         while((row = in.readLine()) != null) {
@@ -62,6 +66,33 @@ public class Repository {
     private static void init() {
         try {
             BOOKS.clear();
+            
+            File booksDir = FileEnvironment.getRepositoryDirectory();
+            if(!booksDir.canRead()) {
+                throw new Error("can't read from books directory");
+            }
+            if(!booksDir.canWrite()) {
+                throw new Error("can't write to books directory");
+            }
+            List<File> bookFiles = Arrays.asList(booksDir.listFiles());
+            for(File bookFile: bookFiles) {
+            	String name = bookFile.getName();
+                if(name.endsWith(".txt")) {
+                    int id = Integer.parseInt(name.substring(0, name.indexOf("_")));
+            
+                    HashMap<String, String> data = readTxt(bookFile);
+                    if(data.containsKey("Name")) {
+                        // System.out.println(String.format("Imported book %s", data.get("Name")));
+                        BOOKS.put(id, data);
+                    } else {
+                        // delete broken txt-file
+                        System.out.println(String.format("Deleted broken file %s", data.get(TxtFile.KEY_NAME)));
+                        bookFile.delete();
+                    }
+                }
+            }
+            
+            /*
             File booksDir = new File("books");
             if(!booksDir.canRead()) {
                 throw new Error("can't read from books directory");
@@ -88,11 +119,16 @@ public class Repository {
                     }
                 }
             }
+            */
         } catch(IOException ioe) {
             throw new Error(ioe);
         }
     }
     
+    /**
+     * 
+     * @return all ids of known books in repository
+     */
     public static Integer[] getIDs() {
         Integer[] bks = BOOKS.keySet().toArray(new Integer[0]);
         Arrays.sort(bks);
@@ -115,6 +151,14 @@ public class Repository {
         return(file);
     }
     
+    public static boolean exists(int id) {
+        return(getBookFile(id, OufFile._EN_OUF) != null);
+    }
+    
+    public static boolean txtExists(int id) {
+        return(getBookFile(id, TxtFile._EN_TXT) != null);
+    }
+    
     public static File getBookOuf(int id) {
         return(getBookFile(id, OufFile._EN_OUF));
     }
@@ -127,61 +171,73 @@ public class Repository {
         return(getBookFile(id, ScriptFile._EN_SRC));
     }
 
-    private static void download(String url, File dest) throws FileNotFoundException, IOException {
+    private static void download(String url, File dest, ProgressDialog progress) throws FileNotFoundException, IOException {
         byte[] buffer = new byte[4096];
-        InputStream in = new URL(url).openStream();
+        
+        URLConnection connection = new URL(url).openConnection();
+        int size = connection.getContentLength();
+        if(progress != null) {
+            progress.setMax(size);
+        }
+        InputStream in = connection.getInputStream();
         OutputStream out = new FileOutputStream(dest);
         int k;
+        int s = 0;
         while((k = in.read(buffer)) != -1) {
             out.write(buffer, 0, k);
+            s += k;
+            if(progress != null) {
+                progress.setVal(s);
+            }
         }
 
         in.close();
         out.close();
     }
     
-    public static void download(int id) throws IOException {
+    public static void download(int id, ProgressDialog progress) throws IOException {
         String _id = Integer.toString(id);
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
         File txtFile = new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT);
-        download(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en", txtFile);
+        download(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en", txtFile, null);
         BOOKS.put(id, readTxt(txtFile));
         File pngFile = new File(FileEnvironment.getRepositoryDirectory(), _id + PngFile._EN_PNG);
-        download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/thumb", pngFile);
+        download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/thumb", pngFile, null);
         File oufFile = new File(FileEnvironment.getRepositoryDirectory(), _id + OufFile._EN_OUF);
-        download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/archive", oufFile);
+        download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/archive", oufFile, progress);
         if(getBookTxt(id).containsKey("ScriptMD5")) {
             File scriptFile = new File(FileEnvironment.getRepositoryDirectory(), _id + ScriptFile._EN_SRC);
             try {
-                download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/script", scriptFile);
+                download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/script", scriptFile, null);
             } catch(FileNotFoundException fnfe) {
                 // ignore this
             }
         }
     }
     
-    public static void update(int id) throws IOException {
+    public static void update(int id, ProgressDialog progress) throws IOException {
         // update txt file
         String _id = Integer.toString(id);
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        int version = Integer.parseInt(getBookTxt(id).get("Version"));
+        
+        int version = Integer.parseInt(getBookTxt(id).get(TxtFile.KEY_VERSION));
         File txtFile = new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT);
-        download(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en", txtFile);
+        download(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en", txtFile, null);
         BOOKS.put(id, readTxt(txtFile));
-        int version2 = Integer.parseInt(getBookTxt(id).get("Version"));
+        int version2 = Integer.parseInt(getBookTxt(id).get(TxtFile.KEY_VERSION));
         if(version2 > version) {
             File pngFile = new File(FileEnvironment.getRepositoryDirectory(), _id + PngFile._EN_PNG);
-            download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/thumb", pngFile);
+            download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/thumb", pngFile, null);
             File oufFile = new File(FileEnvironment.getRepositoryDirectory(), _id + OufFile._EN_OUF);
-            download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/archive", oufFile);
+            download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/archive", oufFile, progress);
             if(getBookTxt(id).containsKey("ScriptMD5")) {
                 File scriptFile = new File(FileEnvironment.getRepositoryDirectory(), _id + ScriptFile._EN_SRC);
                 try {
-                    download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/script", scriptFile);
+                    download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/script", scriptFile, null);
                 } catch(FileNotFoundException fnfe) {
                     // ignore this
                 }
@@ -189,11 +245,14 @@ public class Repository {
         }
     }
     
-    public static void search() {
+    public static void search(ProgressDialog progress) {
+        
+        progress.setMax(10000);
         
         byte[] buffer = new byte[4096];
         
-        for(int id = 0; id <= 15000; id++) {
+        for(int id = 0; id <= 10000; id++) {
+            progress.setVal(id);
             InputStream in = null;
             OutputStream out = null;
             try {
@@ -237,7 +296,7 @@ public class Repository {
         while((row = bin.readLine()) != null) {
             row = row.trim();
             if((!row.isEmpty()) && (!row.startsWith("#"))) {
-                if(BOOKS.get(Integer.parseInt(row)) == null) {
+                if(!txtExists(Integer.parseInt(row))) {
                     toDownload.add(row);
                 }
             }
@@ -253,7 +312,7 @@ public class Repository {
         bar.setValue(0);
         bar.setBounds(10, 160, 280, 20);
         JPanel panel = new JPanel();
-        JLabel label = new JLabel("Bücher herunterladen...");
+        JLabel label = new JLabel("Bücher-Index herunterladen...");
         label.setBounds(30, 30, 100, 20);
         panel.add(label);
         panel.add(bar);
@@ -263,6 +322,7 @@ public class Repository {
         System.out.println("need to download " + toDownload.size() + " book txt files...");
         
         new Thread() {
+            @Override
             public void run() {
         
                 byte[] buffer = new byte[4096];
@@ -306,15 +366,28 @@ public class Repository {
                 }
                 System.out.println("got " + toDownload.size() + " book txt files");
                 splash.dispose();
+                init();
                 done.start();
             }
         }.start();
     }
 
-    public static void update() throws IOException {
+    public static void update(ProgressDialog progress) throws IOException {
         Integer[] ids = getIDs();
+        List<Integer> _ids = new LinkedList<Integer>();
         for(int r = 0; r < ids.length; r++) {
-            update(ids[r]);
+            if(Repository.exists(ids[r])) {
+                _ids.add(ids[r]);
+            }
+        }
+        if(progress != null) {
+            progress.setMax(_ids.size());
+        }
+        for(int r = 0; r < _ids.size(); r++) {
+            if(progress != null) {
+                progress.setVal(r);
+            }
+            update(_ids.get(r), null);
         }
     }
     
