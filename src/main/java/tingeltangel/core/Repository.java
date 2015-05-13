@@ -29,8 +29,8 @@ import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
-import tingeltangel.gui.ProgressDialog;
 import tingeltangel.tools.FileEnvironment;
+import tingeltangel.tools.ProgressDialog;
 
 public class Repository {
     

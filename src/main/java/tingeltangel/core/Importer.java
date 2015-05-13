@@ -13,11 +13,12 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.SyntaxError;
-import tingeltangel.tools.ProgressDialog;
 import tingeltangel.tools.FileEnvironment;
+import tingeltangel.tools.ProgressDialog;
 
 
 public class Importer {
@@ -30,7 +31,7 @@ public class Importer {
      * @param book
      * @throws Exception 
      */
-    public static void importOuf(File oufFile, HashMap<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException, SyntaxError {
+    public static void importOuf(File oufFile, Map<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException, SyntaxError {
         
         DataInputStream ouf = new DataInputStream(new FileInputStream(oufFile));
         
@@ -50,15 +51,17 @@ public class Importer {
         
         
         int startOfIndex = ouf.readInt();
-        if(startOfIndex != 0x66)
-        ouf.readInt(); // 2
+        if(startOfIndex != 0x66) { // why ?
+            ouf.readInt(); // 2
+        } 
         int firstTingID = ouf.readInt();
         int lastTingID = ouf.readInt();
         int tingIDCount = ouf.readInt();
+        /*
         System.out.println("first id = " + firstTingID);
         System.out.println("last id  = " + lastTingID);
         System.out.println("id count = " + tingIDCount);
-        
+        */
         ouf.readInt(); // book id
         
         book.setMagicValue(ouf.readInt());

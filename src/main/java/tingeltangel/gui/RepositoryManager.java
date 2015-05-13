@@ -9,7 +9,6 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,12 +18,11 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
-import javax.swing.SwingWorker;
 import javax.swing.event.ListDataListener;
 import tingeltangel.core.Repository;
 import tingeltangel.core.constants.TxtFile;
-import tingeltangel.core.scripting.SyntaxError;
-import tingeltangel.tools.FileEnvironment;
+import tingeltangel.tools.Progress;
+import tingeltangel.tools.ProgressDialog;
 
 /**
  *
@@ -66,11 +64,9 @@ public class RepositoryManager extends javax.swing.JFrame {
                 JList list = (JList)evt.getSource();
                 if (evt.getClickCount() == 2) {
                     
-                    
-                    final ProgressDialog progressDialog = new ProgressDialog(RepositoryManager.this, "Suche nach Aktualisierungen");
-                    new SwingWorker() {
+                    new Progress(RepositoryManager.this, "Suche nach Aktualisierungen") {
                         @Override
-                        protected Object doInBackground() {
+                        public void action(ProgressDialog progressDialog) {
                             try {
                                 int index = _list.locationToIndex(evt.getPoint());
                                 Map<String, String> txt = (Map<String, String>)model.getElementAt(index);
@@ -84,12 +80,9 @@ public class RepositoryManager extends javax.swing.JFrame {
                                 JOptionPane.showMessageDialog(RepositoryManager.this, "Download fehlgeschlagen: " + e.toString());
                                 e.printStackTrace(System.out);
                             }
-                            progressDialog.done();
                             update();
-                            return(null);
                         }
-                    }.execute();
-                    
+                    };
                     
                     
                     
@@ -180,11 +173,9 @@ public class RepositoryManager extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        
-        final ProgressDialog progressDialog = new ProgressDialog(RepositoryManager.this, "Suche nach Aktualisierungen");
-        new SwingWorker() {
+        new Progress(RepositoryManager.this, "Suche nach Aktualisierungen") {
             @Override
-            protected Object doInBackground() {
+            public void action(ProgressDialog progressDialog) {
                 try {
                     Repository.update(progressDialog);
                 } catch(IOException e) {
@@ -193,29 +184,24 @@ public class RepositoryManager extends javax.swing.JFrame {
                 } catch(IllegalArgumentException e) {
                     JOptionPane.showMessageDialog(RepositoryManager.this, "Suche nach Aktualisierungen fehlgeschlagen: " + e.getMessage());
                 }
-                progressDialog.done();
                 update();
-                return(null);
             }
-        }.execute();
+        };
         
     }//GEN-LAST:event_updateActionPerformed
 
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
-        final ProgressDialog progressDialog = new ProgressDialog(RepositoryManager.this, "Suche nach neuen Büchern");
-        new SwingWorker() {
+        new Progress(RepositoryManager.this, "Suche nach neuen Büchern") {
             @Override
-            protected Object doInBackground() {
+            public void action(ProgressDialog progressDialog) {
                 try {
                     Repository.search(progressDialog);
                 } catch(IllegalArgumentException e) {
                     JOptionPane.showMessageDialog(RepositoryManager.this, "Suche nach neuen Büchern fehlgeschlagen: " + e.getMessage());
                 }
-                progressDialog.done();
                 update();
-                return(null);
             }
-        }.execute();
+        };
     }//GEN-LAST:event_searchActionPerformed
 
     /**

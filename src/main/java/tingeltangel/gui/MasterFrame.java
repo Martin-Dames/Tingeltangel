@@ -11,9 +11,12 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,6 +31,9 @@ import tingeltangel.core.Importer;
 import tingeltangel.core.MP3Player;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
+import tingeltangel.core.constants.OufFile;
+import tingeltangel.core.constants.ScriptFile;
+import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.Progress;
@@ -199,12 +205,54 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 loadBook = true;
             }
             if(loadBook) {
-                new IDChooser(this, new Callback<Integer>() {
+/*
+                BookIDChoose bidc = new BookIDChoose(this, new Callback<Integer>() {
                     @Override
-                    public void callback(Integer t) {
-                        
+                    public void callback(final Integer id) {
+                        // check repository
+                        if(!Repository.exists(id)) {
+                            new Progress(MasterFrame.this, "Buch wird heruntergeladen") {
+                                @Override
+                                public void action(ProgressDialog progressDialog) {
+                                    try {
+                                        Repository.download(id, progressDialog);
+                                        new Progress(MasterFrame.this, "Buch wird importiert") {
+                                            @Override
+                                            public void action(ProgressDialog progressDialog) {
+                                                try {
+                                                    book = new Book(id, mp3Player);
+                                                    String _id = Integer.toString(id);
+                                                    while(_id.length() < 5) {
+                                                        _id = "0" + _id;
+                                                    }
+                                                    File dist = FileEnvironment.getDistDirectory(id);
+                                                    File ouf = new File(dist, _id + OufFile._EN_OUF);
+
+                                                    Map<String, String> txt = Repository.getBook(new File(dist, _id + TxtFile._EN_TXT));
+                                                    File src = new File(dist, _id + ScriptFile._EN_SRC);
+                                                    if(!src.exists()) {
+                                                        src = null;
+                                                    }
+                                                    Importer.importOuf(ouf, txt, src, book, progressDialog);
+                                                } catch (SyntaxError ex) {
+                                                    JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
+                                                    ex.printStackTrace(System.out);
+                                                } catch (IOException ex) {
+                                                    JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
+                                                    ex.printStackTrace(System.out);
+                                                }
+                                            }
+                                        };
+                                    } catch (IOException ex) {
+                                        JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Herunterladen des Buches");
+                                        ex.printStackTrace(System.out);
+                                    }
+                                }
+                            };
+                        }
                     }
                 });
+*/
             }
         } else if(id.equals("buch.import.ouf")) {
             boolean loadBook = false;
