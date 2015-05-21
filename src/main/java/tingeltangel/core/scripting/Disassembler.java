@@ -86,6 +86,9 @@ public class Disassembler {
 
         this.b = b;
 
+        if(b[0] == 0 && b[1] == 0 && b[2] == 0 && b[3] == 0) {
+            throw new SyntaxError("Script stats with 0x00000000. That's an invalid script.");
+        }
         
         // first pass (collect jump targets)
         while (offset < b.length) {
@@ -98,9 +101,9 @@ public class Disassembler {
                 int opcode = ((b[offset] & 0xff) << 8) | (b[offset + 1] & 0xff);
                 Command command = Commands.getCommand(opcode);
                 if(command == null) {
-                    String msb = Integer.toHexString(b[offset]);
-                    String lsb =  Integer.toHexString(b[offset+1]);
-                    throw new SyntaxError("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"")+lsb);
+                    String msb = Integer.toHexString(b[offset] & 0xff);
+                    String lsb =  Integer.toHexString(b[offset+1] & 0xff);
+                    throw new SyntaxError("unknown byte code 0x"+(msb.length()==1?'0':"")+msb+" 0x"+(lsb.length()==1?'0':"") + lsb + "@ 0x" + Integer.toHexString(offset));
                 } else if(command.firstArgumentIsLabel()) {
                     // jump
                     int label = ((b[offset + 2] & 0xff) << 8) | (b[offset + 3] & 0xff);
