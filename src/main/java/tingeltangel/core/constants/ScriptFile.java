@@ -28,7 +28,7 @@ public interface ScriptFile {
 	static final String RETURN = "return";
 	static final String END = "end";
 	static final String CONTENT = "[Content]";
-	static final String NODE = "[Note]";
+	static final String NOTE = "[Note]";
 	static final String PRECODE = "Precode=";
 
 	static final String COLON = ":";

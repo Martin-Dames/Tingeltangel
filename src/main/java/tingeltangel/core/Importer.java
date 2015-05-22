@@ -26,6 +26,7 @@ import tingeltangel.tools.ProgressDialog;
 
 public class Importer {
 
+    
     /**
      * 
      * @param oufFile
@@ -34,9 +35,7 @@ public class Importer {
      * @param book
      * @throws Exception 
      */
-    public static void importOuf(File oufFile, Map<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException, SyntaxError {
-
-        DataInputStream ouf = new DataInputStream(new FileInputStream(oufFile));
+    public static void importBook(File oufFile, Map<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException, SyntaxError {
 
         if(txt != null) {
             book.setAuthor(txt.get(TxtFile.KEY_AUTHOR));
@@ -52,6 +51,104 @@ public class Importer {
             book.setVersion(1);
         }
         
+        // load script file
+        HashMap<Integer, String> scripts = new HashMap<Integer, String>();
+        HashMap<Integer, String> notes = new HashMap<Integer, String>();
+        HashMap<Integer, Boolean> scriptEntryIsMP3 = new HashMap<Integer, Boolean>();
+        if(scriptFile != null) {
+        
+            BufferedReader in = new BufferedReader(new FileReader(scriptFile));
+            String row;
+            boolean inScript = true;
+            boolean inNote = false;
+            int precode = -1;
+            String script = "";
+            String note = "";
+            while((row = in.readLine()) != null) {
+                //System.out.println(row);
+                if(inNote) {
+                    if(row.startsWith(ScriptFile.CONTENT)) {
+                        notes.put(precode, note);
+                        note = "";
+                        inNote = false;
+                        inScript = true;
+                    } else if(row.startsWith(ScriptFile.PRECODE)) {
+                        if(precode != -1) {
+                            notes.put(precode, note);
+                        }
+                        note = "";
+                        inNote = false;
+                        precode = Integer.parseInt(row.substring(ScriptFile.PRECODE.length()).trim());
+                    } else {
+                        note += row + ScriptFile.LB;
+                    }
+                } else if(inScript) {
+                    if(row.startsWith(ScriptFile.PRECODE)) {
+                        if(precode != -1) {
+                            scripts.put(precode, script);
+                        }
+                        script = "";
+                        inScript = false;
+                        precode = Integer.parseInt(row.substring(ScriptFile.PRECODE.length()).trim());
+                    } else {
+                        script += row + ScriptFile.LB;
+                    }
+                } else {
+                    if(row.startsWith(ScriptFile.CONTENT)) {
+                        inScript = true;
+                    } else if(row.toUpperCase().startsWith("TYPE=")) {
+                        String type = row.substring("TYPE=".length()).trim();
+                        if(type.equals("1")) {
+                            scriptEntryIsMP3.put(precode, true);
+                        } else {
+                            scriptEntryIsMP3.put(precode, false);
+                        }
+                    } else if(row.startsWith(ScriptFile.NOTE)) {
+                        inNote = true;
+                    }
+                }
+                if(inNote) {
+                    notes.put(precode, note);
+                } else if(inScript) {
+                    if(precode != -1) {
+                        scripts.put(precode, script);
+                    }
+                }
+            }
+            in.close();
+        }
+        
+        if((oufFile == null) && (scriptFile != null)) {
+            Iterator<Integer> ids = scripts.keySet().iterator();
+            while(ids.hasNext()) {
+                int id = ids.next();
+                
+                book.addEntry(id);
+                Entry entry = book.getEntryByID(id);
+                
+                if(scriptEntryIsMP3.get(id)) {
+                    entry.setMP3();
+                } else {
+                    Script script = new Script(scripts.get(id), entry);
+                    entry.setScript(script);
+                    if(script.isSub()) {
+                        entry.setSub();
+                    } else {
+                        entry.setCode();
+                    }
+                }
+                String note = notes.get(id);
+                if(note != null) {
+                    entry.setHint(note);
+                }
+
+            }
+            book.save();
+            return;
+        }
+        
+        
+        DataInputStream ouf = new DataInputStream(new FileInputStream(oufFile));
         
         int startOfIndex = ouf.readInt();
         if(startOfIndex != 0x66) { // why ?
@@ -72,59 +169,7 @@ public class Importer {
         ouf.readInt(); // 0
         ouf.readInt(); // 0xffff
         
-        // load script file
         
-        HashMap<Integer, String> scripts = new HashMap<Integer, String>();
-        HashMap<Integer, String> notes = new HashMap<Integer, String>();
-        if(scriptFile != null) {
-        
-            BufferedReader in = new BufferedReader(new FileReader(scriptFile));
-            String row;
-            boolean inScript = true;
-            boolean inNote = false;
-            int precode = -1;
-            String script = "";
-            String note = "";
-            while((row = in.readLine()) != null) {
-                System.out.println(row);
-                if(inNote) {
-                    if(row.startsWith(ScriptFile.CONTENT)) {
-                        notes.put(precode, note);
-                        note = "";
-                        inNote = false;
-                        inScript = true;
-                    } else if(row.startsWith(ScriptFile.PRECODE)) {
-                        notes.put(precode, note);
-                        note = "";
-                        inNote = false;
-                        precode = Integer.parseInt(row.substring(ScriptFile.PRECODE.length()).trim());
-                    } else {
-                        note += row + ScriptFile.LB;
-                    }
-                } else if(inScript) {
-                    if(row.startsWith(ScriptFile.PRECODE)) {
-                        scripts.put(precode, script);
-                        script = "";
-                        inScript = false;
-                        precode = Integer.parseInt(row.substring(ScriptFile.PRECODE.length()).trim());
-                    } else {
-                        script += row + ScriptFile.LB;
-                    }
-                } else {
-                    if(row.startsWith(ScriptFile.CONTENT)) {
-                        inScript = true;
-                    } else if(row.startsWith(ScriptFile.NODE)) {
-                        inNote = true;
-                    }
-                }
-            }
-            in.close();
-            if(inNote) {
-                notes.put(precode, note);
-            } else if(inScript) {
-                scripts.put(precode, script);
-            }
-        }
         
         boolean firstTingIdCorrected = false;
         

@@ -272,6 +272,7 @@ public class Book {
         while(iterator.hasNext()) {
             Entry entry = indexEntries.get(iterator.next());
             if(!entry.isEmpty()) {
+                
                 String type = "script";
                 if(entry.isSub()) {
                     type = "sub";
@@ -280,7 +281,11 @@ public class Book {
                 }
                 xml.print("\t\t<entry id=\"" + entry.getTingID() + "\" type=\"" + type + "\"");
                 if(entry.isMP3()) {
-                     xml.print(" mp3=\"" + encodeAttribute(entry.getMP3().getName()) + "\"");
+                    String mp3name = "";
+                    if(entry.getMP3() != null) {
+                        mp3name = entry.getMP3().getName();
+                    }
+                    xml.print(" mp3=\"" + encodeAttribute(mp3name) + "\"");
                 }
                 xml.println(">");
                 if(!entry.isMP3()) {
@@ -304,6 +309,7 @@ public class Book {
         xml.close();
         
         changed = false;
+        
     }
     
     public static String getLabel(File xmlFile) throws IOException {

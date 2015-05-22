@@ -11,17 +11,13 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.Tingeltangel;
 import tingeltangel.core.Book;
@@ -31,9 +27,6 @@ import tingeltangel.core.Importer;
 import tingeltangel.core.MP3Player;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
-import tingeltangel.core.constants.OufFile;
-import tingeltangel.core.constants.ScriptFile;
-import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.Progress;
@@ -224,7 +217,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                                     File ouf = Repository.getBookOuf(id);
                                                     Map<String, String> txt = Repository.getBookTxt(id);
                                                     File src = Repository.getBookSrc(id);
-                                                    Importer.importOuf(ouf, txt, src, book, progressDialog);
+                                                    Importer.importBook(ouf, txt, src, book, progressDialog);
                                                     propertyFrame.refresh();
                                                     indexFrame.update();
                                                 } catch (SyntaxError ex) {
@@ -251,7 +244,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                         File ouf = Repository.getBookOuf(id);
                                         Map<String, String> txt = Repository.getBookTxt(id);
                                         File src = Repository.getBookSrc(id);
-                                        Importer.importOuf(ouf, txt, src, book, progressDialog);
+                                        Importer.importBook(ouf, txt, src, book, progressDialog);
                                         propertyFrame.refresh();
                                         indexFrame.update();
                                     } catch (SyntaxError ex) {
@@ -311,7 +304,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
                             public void action(ProgressDialog progressDialog) {
                                 try {
                                     book = new Book(_id, mp3Player);
-                                    Importer.importOuf((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
+                                    Importer.importBook((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
+                                    
                                 } catch(IOException e) {
                                     JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
                                     e.printStackTrace(System.out);

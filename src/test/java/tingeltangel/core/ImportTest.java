@@ -38,7 +38,7 @@ public class ImportTest {
                 if(ouf != null) {
                     System.out.println("\nImporting " + id + " ...");
                     try {
-                        Importer.importOuf(ouf, null, null, new Book(id, null), null);
+                        Importer.importBook(ouf, null, null, new Book(id, null), null);
 			success.add(id);
                     } catch(Exception e) {
                         System.out.println("********** ERROR: " + e.getMessage() + " ****************");

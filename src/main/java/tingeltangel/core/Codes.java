@@ -183,7 +183,7 @@ public class Codes {
         
         public static void drawBooklet(String title, List<Tupel<Integer, String>> booklet, PrintWriter out) {
             
-            int entriesPerPage = 5;
+            int entriesPerPage = 32;
             int pages = booklet.size() / entriesPerPage;
             if(booklet.size() % entriesPerPage > 0) {
                 pages++;
@@ -201,22 +201,28 @@ public class Codes {
                 Tupel<Integer, String> tupel = entries.next();
                 
                 if(entry % entriesPerPage == 0) {
+                    if(entry != 0) {
+                        out.println("showpage");
+                        page++;
+                    }
                     out.println("%%Page: " + (page + 1) + " " + (page + 1));
                     out.println("/Times-Roman findfont");
-                    out.println("6 scalefont");
+                    out.println("8 scalefont");
                     out.println("setfont");
-                    drawText(50, 815, "Buch: " + title + " (Seite " + (page + 1) + " von " + pages + ")", out);
+                    drawText(50, 815, "Buch: " + title + " [Seite " + (page + 1) + " von " + pages + "]", out);
                 }
 
-                drawText(50, 800 - (entry % entriesPerPage) * 100, tupel.b, out);
                 
-                if(entry % entriesPerPage == 0) {
-                    out.println("showpage");
-                    page++;
+                drawText(80, 800 - (entry % entriesPerPage) * 25, Integer.toString(tupel.a) + ": " + tupel.b, out);
+                
+                int cid = Translator.ting2code(tupel.a);
+                if(cid >= 0) {
+                    drawCarpet(cid, 50, 795 - (entry % entriesPerPage) * 25, 20, 20, null, out);
                 }
+                
                 entry++;
             }
-            
+            out.println("showpage");
             out.flush();
         }
         
