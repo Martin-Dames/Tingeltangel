@@ -30,7 +30,6 @@ public class ImportTest {
 
         Integer[] iDs = Repository.getIDs();
         
-        // int[] iDs = {5236, 5246};
         
         for(int i = 0; i < iDs.length; i++) {
             int id = iDs[i];

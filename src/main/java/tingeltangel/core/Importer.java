@@ -292,17 +292,22 @@ public class Importer {
                 out.close();
 
 		// check if it's really a mp3
+                
 		InputStream in = new FileInputStream(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
-		byte[] _buffer = new byte[10];
+		byte[] _buffer = new byte[Math.min(10, e[1])];
 		int j = 0;
 		while(j < _buffer.length) {
-			j += in.read(_buffer, j, _buffer.length - j);
+                    j += in.read(_buffer, j, _buffer.length - j);
 		}
 		in.close();
 		if(!isMp3Data(_buffer)) {
-			System.err.println("extracted data for oid=" + _eid + " seems to be not an mp3");
-			throw new IOException("extracted data for oid=" + _eid + " seems to be not an mp3");
+                    if(e[1] == 0) {
+                        System.err.println("extracted no data for oid=" + _eid + " (file is empty)");
+                    } else {
+                        System.err.println("extracted data for oid=" + _eid + " seems to be not an mp3 or is corrupted");
+                    }
 		}
+                
 
                 entry.setMP3(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
                 entry.setMP3();
@@ -364,6 +369,9 @@ public class Importer {
     }
     
     private static boolean isMp3Data(byte[] data) {
+        if(data.length <= 3) {
+            return(false);
+        }
         // check for id3
         if(data[0] == 'I' && data[1] == 'D' && data[2] == '3') {
             return(true);
@@ -383,7 +391,7 @@ public class Importer {
     }
     
     private static boolean isScriptData(byte[] data) {
-        if(data[0] == 0 && data[1] == 0 && data[2] == 0 && data[3] == 0) {
+        if((data.length > 3) && (data[0] == 0 && data[1] == 0 && data[2] == 0 && data[3] == 0)) {
             return(false);
         }
         int p = 0;
