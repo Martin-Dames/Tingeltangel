@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -76,6 +77,25 @@ public class Book {
         magicValue = DEFAULT_MAGIC_VALUE;
     }
         
+    public void generateTestBooklet(PrintWriter out) {
+        LinkedList<Tupel<Integer, String>> booklet = new LinkedList<Tupel<Integer, String>>();
+        Iterator<Integer> ids = indexIDs.iterator();
+        while(ids.hasNext()) {
+            int tid = ids.next();
+            Entry entry = indexEntries.get(tid);
+            if(entry.isMP3() || entry.isCode()) {
+                String txt = entry.getHint();
+                if(entry.isMP3()) {
+                    txt += " (" + entry.getMP3().getName() + ")";
+                }
+                booklet.add(new Tupel<Integer, String>(tid, txt));
+            }
+        }
+        // generate booklet
+        Codes.setResolution(Codes.DPI600);
+        Codes.drawBooklet(name, booklet, out);
+    }
+    
     public long getMagicValue() {
         return(magicValue);
     }

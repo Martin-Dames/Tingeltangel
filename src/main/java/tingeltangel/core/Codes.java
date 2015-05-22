@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
 import javax.imageio.ImageIO;
 
 
@@ -177,6 +179,45 @@ public class Codes {
             
             
             ImageIO.write(image, "PNG", out);
+        }
+        
+        public static void drawBooklet(String title, List<Tupel<Integer, String>> booklet, PrintWriter out) {
+            
+            int entriesPerPage = 5;
+            int pages = booklet.size() / entriesPerPage;
+            if(booklet.size() % entriesPerPage > 0) {
+                pages++;
+            }
+            int page = 0;
+            int entry = 0;
+            
+            out.println("%!PS-Adobe-2.0");
+            out.println();
+            out.println("%%Pages: " + pages);
+            
+            Iterator<Tupel<Integer, String>> entries = booklet.iterator();
+            while(entries.hasNext()) {
+                
+                Tupel<Integer, String> tupel = entries.next();
+                
+                if(entry % entriesPerPage == 0) {
+                    out.println("%%Page: " + (page + 1) + " " + (page + 1));
+                    out.println("/Times-Roman findfont");
+                    out.println("6 scalefont");
+                    out.println("setfont");
+                    drawText(50, 815, "Buch: " + title + " (Seite " + (page + 1) + " von " + pages + ")", out);
+                }
+
+                drawText(50, 800 - (entry % entriesPerPage) * 100, tupel.b, out);
+                
+                if(entry % entriesPerPage == 0) {
+                    out.println("showpage");
+                    page++;
+                }
+                entry++;
+            }
+            
+            out.flush();
         }
         
         public static void drawPage(int start, PrintWriter out) {

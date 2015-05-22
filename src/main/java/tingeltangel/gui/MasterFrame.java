@@ -395,6 +395,23 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     }
                 }
             };
+        } else if(id.startsWith("buch.booklet")) {
+            JFileChooser fc = new JFileChooser();
+            fc.setFileFilter(new FileNameExtensionFilter("Code Tabelle (*.ps)", "ps"));
+            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    String file = fc.getSelectedFile().getCanonicalPath();
+                    if(!file.toLowerCase().endsWith(".ps")) {
+                        file = file + ".ps";
+                    }
+                    PrintWriter out = new PrintWriter(new FileWriter(file));
+                    book.generateTestBooklet(out);
+                    out.close();
+                } catch(Exception e) {
+                    JOptionPane.showMessageDialog(this, "Die Codetabelle konnte nicht gespeichert werden");
+                    e.printStackTrace(System.out);
+                }
+            }
         } else if(id.startsWith("buch.generatePngCodes.")) {
             if(id.endsWith(".600")) {
                 Codes.setResolution(Codes.DPI600);

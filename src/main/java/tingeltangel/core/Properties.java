@@ -23,7 +23,10 @@ public class Properties {
     static {
         try {
             File propertyFile = new File(PROPERTY_FILE);
-            propertyFile.createNewFile();
+            if(propertyFile.createNewFile()) {
+                // do init of propertys here
+                // setProperty("propertyName", "propertyValue");
+            }
             BufferedReader in = new BufferedReader(new FileReader(propertyFile));
             String row;
             while((row = in.readLine()) != null) {
