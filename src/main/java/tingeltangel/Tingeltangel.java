@@ -4,9 +4,8 @@ package tingeltangel;
 import java.io.IOException;
 import javax.swing.SwingUtilities;
 import tingeltangel.cli.CLI;
-import tingeltangel.core.Repository;
 import tingeltangel.core.Properties;
-import tingeltangel.core.IndexTableCalculator;
+import tingeltangel.core.Repository;
 import tingeltangel.gui.MasterFrame;
 import tingeltangel.tools.Callback;
 import tingeltangel.tools.ExternalBinary;
@@ -20,10 +19,8 @@ public class Tingeltangel {
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
     public static String MAIN_FRAME_VERSION = " v0.1";
     
-    // public final static String BASE_URL = "http://system.ting.eu/book-files";
+    public final static String BASE_URL = "http://system.ting.eu/book-files";
     
-    // for testing (some ting servers may be down :-( )
-    public static final String BASE_URL = "http://62.75.252.55/book-files";
     
     /**
      * default area code

@@ -16,12 +16,25 @@ import java.nio.channels.FileChannel;
  * @author mdames
  */
 public class FileEnvironment {
+    
+    private static boolean test = false;
+    
+    /**
+     * switch on test mode
+     * to be able to import books without overwriting existing books
+     */
+    public static void test() {
+        test = true;
+    }
 
     public static File getHomeDirectory() {
         return new File(System.getProperty("user.home"));
     }
 
     public static File getBooksDirectory() {
+        if(test) {
+            return getWorkingDirectory("books-test");
+        }
         return getWorkingDirectory("books");
     }
 
@@ -30,7 +43,7 @@ public class FileEnvironment {
         while (_id.length() < 5) {
             _id = "0" + _id;
         }
-        File bd = new File(getWorkingDirectory("books"), _id);
+        File bd = new File(getBooksDirectory(), _id);
         if (bd.exists()) {
             if (!bd.isDirectory()) {
                 throw new Error(bd.getAbsolutePath() + " exists but is not a directory");
@@ -56,8 +69,16 @@ public class FileEnvironment {
         return(getBookSubDirectory(id, "dist"));
     }
     
+    public static File getBinDirectory(int id) {
+        return(getBookSubDirectory(id, "bin"));
+    }
+    
     public static File getCodesDirectory(int id) {
         return(getBookSubDirectory(id, "codes"));
+    }
+    
+    public static File getBinObjectFile(int mid, int oid) {
+        return(new File(getBinDirectory(mid), Integer.toString(oid) + ".bin"));
     }
     
     private static File getBookSubDirectory(int id, String subDirectory) {

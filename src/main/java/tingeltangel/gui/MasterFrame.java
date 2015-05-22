@@ -205,8 +205,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 loadBook = true;
             }
             if(loadBook) {
-/*
-                BookIDChoose bidc = new BookIDChoose(this, new Callback<Integer>() {
+
+                BookIDChooser bidc = new BookIDChooser(this, new Callback<Integer>() {
                     @Override
                     public void callback(final Integer id) {
                         // check repository
@@ -221,19 +221,12 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                             public void action(ProgressDialog progressDialog) {
                                                 try {
                                                     book = new Book(id, mp3Player);
-                                                    String _id = Integer.toString(id);
-                                                    while(_id.length() < 5) {
-                                                        _id = "0" + _id;
-                                                    }
-                                                    File dist = FileEnvironment.getDistDirectory(id);
-                                                    File ouf = new File(dist, _id + OufFile._EN_OUF);
-
-                                                    Map<String, String> txt = Repository.getBook(new File(dist, _id + TxtFile._EN_TXT));
-                                                    File src = new File(dist, _id + ScriptFile._EN_SRC);
-                                                    if(!src.exists()) {
-                                                        src = null;
-                                                    }
+                                                    File ouf = Repository.getBookOuf(id);
+                                                    Map<String, String> txt = Repository.getBookTxt(id);
+                                                    File src = Repository.getBookSrc(id);
                                                     Importer.importOuf(ouf, txt, src, book, progressDialog);
+                                                    propertyFrame.refresh();
+                                                    indexFrame.update();
                                                 } catch (SyntaxError ex) {
                                                     JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
                                                     ex.printStackTrace(System.out);
@@ -249,10 +242,31 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                     }
                                 }
                             };
+                        } else {
+                            new Progress(MasterFrame.this, "Buch wird importiert") {
+                                @Override
+                                public void action(ProgressDialog progressDialog) {
+                                    try {
+                                        book = new Book(id, mp3Player);
+                                        File ouf = Repository.getBookOuf(id);
+                                        Map<String, String> txt = Repository.getBookTxt(id);
+                                        File src = Repository.getBookSrc(id);
+                                        Importer.importOuf(ouf, txt, src, book, progressDialog);
+                                        propertyFrame.refresh();
+                                        indexFrame.update();
+                                    } catch (SyntaxError ex) {
+                                        JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
+                                        ex.printStackTrace(System.out);
+                                    } catch (IOException ex) {
+                                        JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
+                                        ex.printStackTrace(System.out);
+                                    }
+                                }
+                            };
                         }
                     }
                 });
-*/
+
             }
         } else if(id.equals("buch.import.ouf")) {
             boolean loadBook = false;

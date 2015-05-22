@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -16,6 +17,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
+import tingeltangel.core.scripting.Command;
+import tingeltangel.core.scripting.Commands;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.ProgressDialog;
@@ -32,9 +35,9 @@ public class Importer {
      * @throws Exception 
      */
     public static void importOuf(File oufFile, Map<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException, SyntaxError {
-        
+
         DataInputStream ouf = new DataInputStream(new FileInputStream(oufFile));
-        
+
         if(txt != null) {
             book.setAuthor(txt.get(TxtFile.KEY_AUTHOR));
             book.setName(txt.get(TxtFile.KEY_NAME));
@@ -123,6 +126,7 @@ public class Importer {
             }
         }
         
+        boolean firstTingIdCorrected = false;
         
         // read till startOfIndex
         ouf.skipBytes(startOfIndex - 40);
@@ -137,6 +141,7 @@ public class Importer {
                 int type15000 = ouf.readInt();
                 if(type15000 == 0) {
                     System.out.println("Auto correction successfull");
+                    firstTingIdCorrected = true;
                     firstTingID = 15001;
                     tingIDCount--;
                 } else {
@@ -151,7 +156,11 @@ public class Importer {
         }
         
         LinkedList<int[]> index = new LinkedList<int[]>();
-        int firstEntryCode = -1;
+        int firstEntryCode = 0;
+        int firstEntryN = 0;
+        int firstEntryLength = 0;
+        boolean firstEntryTypeIsScript = false;
+        boolean foundFirstEntryCode = false;
         
         // read index table
         for(int i = firstTingID; i <= lastTingID; i++) {
@@ -161,79 +170,89 @@ public class Importer {
             }
             if(e[2] != 0) {
                 e[3] = i;
-                if(firstEntryCode < 0) {
+                if(!foundFirstEntryCode) {
                     firstEntryCode = e[0];
+                    firstEntryN = i - 15001;
+                    if(e[2] == 2) {
+                        firstEntryTypeIsScript = true;
+                    }
+                    firstEntryLength = e[1];
+                    foundFirstEntryCode = true;
                 }
                 index.add(e);
             }
         }
         
-        progress.setMax(index.size());
+        if(progress != null) {
+            progress.setMax(index.size());
+        }
         int counter = 0;
         
         // find first entry
         int pos = 12 * (lastTingID - firstTingID + 1) + startOfIndex;
+        System.out.println("end of index table: 0x" + Integer.toHexString(pos));
         int diff = (0x100 - (pos % 0x100)) % 0x100;
-        ouf.skipBytes(diff);
         pos += diff;
+        if(firstTingIdCorrected) {
+            diff -= 12;
+        }
+        ouf.skipBytes(diff);
         
-        System.out.println("possible start of first entry: " + Integer.toHexString(pos));
+        System.out.println("possible start of first entry: 0x" + Integer.toHexString(pos));
+        System.out.println("firstEntryCode: " + firstEntryCode);
         
-        byte[] buffer = new byte[12];
+        
+        // try to find first entry starting at pos
+        
+        // reopen file (why this? should work without)
+        /*
+        ouf.close();
+        ouf = new DataInputStream(new FileInputStream(oufFile));
+        ouf.skipBytes(pos);
+        */
+        
+        byte[] buffer = new byte[Math.min(firstEntryLength, 50)];
         
         int k = 0;
         while(k != buffer.length) {
             k += ouf.read(buffer, k, buffer.length - k);
         }
-        boolean isempty = true;
-        for(k = 0; k < buffer.length; k++) {
-            if(buffer[k] != 0) {
-                isempty = false;
-                break;
+        
+        
+        if(firstEntryTypeIsScript) {
+            System.out.println("searching for script...");
+            while(!isScriptData(buffer)) {
+                pos += 0x100;
+                ouf.skipBytes(0x100 - buffer.length);
+                k = 0;
+                while(k != buffer.length) {
+                    k += ouf.read(buffer, k, buffer.length - k);
+                }
             }
-        }
-        while(isempty) {
-            pos += 0x100;
-            ouf.skipBytes(0x100 - buffer.length);
-            k = 0;
-            while(k != buffer.length) {
-                k += ouf.read(buffer, k, buffer.length - k);
-            }
-            for(k = 0; k < buffer.length; k++) {
-                if(buffer[k] != 0) {
-                    isempty = false;
-                    break;
+        } else {
+            System.out.println("searching for mp3...");
+            while(!isMp3Data(buffer)) {
+                pos += 0x100;
+                ouf.skipBytes(0x100 - buffer.length);
+                k = 0;
+                while(k != buffer.length) {
+                    k += ouf.read(buffer, k, buffer.length - k);
                 }
             }
         }
-        int entryOffset = pos - IndexTableCalculator.getPositionInFileFromCode(firstEntryCode, 0);
-        if(entryOffset != 0) {
-            System.out.println("INFO: entryOffest=" + entryOffset);
-        }
-        
-        // experimental !!!
-        if(entryOffset == -0x100) {
-            entryOffset = 0;
-        }
-        
+        System.out.println("start of first entry: 0x" + Integer.toHexString(pos));
+
+        int entryOffset = pos - IndexTableCalculator.getPositionInFileFromCode(firstEntryCode, firstEntryN);
         ouf.close();
         
         Iterator<int[]> indexIterator = index.iterator();
-        
-        /*
-        while(indexIterator.hasNext()) {
-            int[] e = indexIterator.next();
-            int epos = IndexTableCalculator.getPositionInFileFromCode(e[0], e[3] - 15001) + entryOffset;
-            System.out.println(e[3] + ": " + Integer.toHexString(epos) + " (len=" + e[1] + ")");
-        }      
-        indexIterator = index.iterator();
-        */
-        
         buffer = new byte[4096];
         while(indexIterator.hasNext()) {
             int[] e = indexIterator.next();
             
-            progress.setVal(counter++);
+            if(progress != null) {
+                progress.setVal(counter++);
+            }
             
             int epos = IndexTableCalculator.getPositionInFileFromCode(e[0], e[3] - 15001) + entryOffset;
             
@@ -251,9 +270,9 @@ public class Importer {
             book.addEntry(e[3]);
             
             Entry entry = book.getEntryByID(e[3]);
-            System.out.println("importing oid " + e[3] + " ...");
             
             if(e[2] == 1) {
+                //System.out.println("@0x" + Integer.toHexString(epos) + " importing oid " + e[3] + " (mp3 len=" + e[1] + ") ...");
                 // mp3
                 out = new FileOutputStream(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
                 
@@ -267,14 +286,30 @@ public class Importer {
                     	// TODO analyze why this error occurs at some books
                     	System.err.println("error reading mp3 with id="+_eid);
                     	len=-1;
+			throw new IOException("error reading mp3 with id=" + _eid);
                     }
                 }
                 out.close();
+
+		// check if it's really a mp3
+		InputStream in = new FileInputStream(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
+		byte[] _buffer = new byte[10];
+		int j = 0;
+		while(j < _buffer.length) {
+			j += in.read(_buffer, j, _buffer.length - j);
+		}
+		in.close();
+		if(!isMp3Data(_buffer)) {
+			System.err.println("extracted data for oid=" + _eid + " seems to be not an mp3");
+			throw new IOException("extracted data for oid=" + _eid + " seems to be not an mp3");
+		}
+
                 entry.setMP3(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
                 entry.setMP3();
             } else {
+                //System.out.println("@0x" + Integer.toHexString(epos) + " importing oid " + e[3] + " (script len=" + e[1] + ") ...");
                 // script
-                
+
                 if(scriptFile != null) {
                     if(scripts.get(e[3])!=null) {
                             Script script = new Script(scripts.get(e[3]), entry);
@@ -285,24 +320,29 @@ public class Importer {
                                 entry.setCode();
                             }
                     } else {
-                            System.err.println("\tid " + _eid + " not found in script");	
+                            System.err.println("\tid " + _eid + " not found in script");
+                            throw new IOException("id " + _eid + " not found in script");
                     }
                 } else {
 
                     ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    OutputStream bin = new FileOutputStream(FileEnvironment.getBinObjectFile(book.getID(), entry.getTingID()));
 
                     int len = e[1];
                     while(len > 0) {
                         k = ouf.read(buffer, 0, Math.min(buffer.length, len));
-                        if(k>0) {
+                        if(k > 0) {
                             bout.write(buffer, 0, k);
+                            bin.write(buffer, 0, k);
                             len -= k;
                         } else {
                             // TODO analyze why this error occurs at some books
                             System.err.println("error reading bin with id="+_eid);
                             len=-1;
+                            throw new IOException("error reading bin with id="+_eid);
                         }
                     }
+                    bin.close();
                     Script script = new Script(bout.toByteArray(), entry);
                     entry.setScript(script);
                     if(script.isSub()) {
@@ -321,6 +361,41 @@ public class Importer {
             ouf.close();
         }
         book.save();
+    }
+    
+    private static boolean isMp3Data(byte[] data) {
+        // check for id3
+        if(data[0] == 'I' && data[1] == 'D' && data[2] == '3') {
+            return(true);
+        }
+        
+        // check for mp3
+        if(
+                            (data[0] == 'I' && data[1] == 'D' && data[2] == '3')   || // id3
+                            ((data[0] & 0xFF) == 0xFF && (data[1] & 0xFF) == 0xF2) || // mpeg v2 layer 3 (crc)
+                            ((data[0] & 0xFF) == 0xFF && (data[1] & 0xFF) == 0xF3) || // mpeg v2 layer 3
+                            ((data[0] & 0xFF) == 0xFF && (data[1] & 0xFF) == 0xFA) || // mpeg v1 layer 3 (crc)
+                            ((data[0] & 0xFF) == 0xFF && (data[1] & 0xFF) == 0xFB) || // mpeg v1 layer 3
+                            ((data[0] & 0xFF) == 0xFF && (data[1] & 0xFF) == 0x00)) { // ? (seems to be valid)
+            return(true);
+        }
+        return(false);
+    }
+    
+    private static boolean isScriptData(byte[] data) {
+        if(data[0] == 0 && data[1] == 0 && data[2] == 0 && data[3] == 0) {
+            return(false);
+        }
+        int p = 0;
+        while(p + 1 < data.length) {
+            int opcode = (data[p + 1] & 0xff) | ((data[p] & 0xff) << 8);
+            Command command = Commands.getCommand(opcode);
+            if(command == null) {
+                return(false);
+            }
+            p += command.getNumberOfArguments() * 2 + 2;
+        }
+        return(true);
     }
     
     /*
