@@ -201,7 +201,7 @@ public class Script {
                     row = row.trim();
                     if(row.startsWith(ScriptFile.COLON)) {
                         labels.put(row.substring(1).trim(), position);
-                        instanceLabelsSI.put(row, instancePos);
+                        instanceLabelsSI.put(row.substring(1).trim(), instancePos);
                     } else {
                         int p = row.indexOf(ScriptFile.SINGLE_SPACE);
                         String cmd = row;

@@ -66,7 +66,9 @@ public class Emulator {
     }
     
     public void setRegister(int i, int value) {
-        if(register[i] != value) {
+        int oval = register[i];
+        register[i] = value;
+        if(oval != value) {
             Iterator<RegisterListener> it = listeners.iterator();
             while(it.hasNext()) {
                 it.next().registerChanged(i, value);

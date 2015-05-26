@@ -50,7 +50,7 @@ public class Instance {
     }
     
     private int removeRegister(String s) {
-        if(s.startsWith("v")) {
+        if(s.startsWith("v") || s.startsWith("V")) {
             s = s.substring(1);
         }
         return(Integer.parseInt(s));

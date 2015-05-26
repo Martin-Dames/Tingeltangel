@@ -96,6 +96,9 @@ public class MP3Player {
         if(process != null) {
             try {
                 process.exitValue();
+            } catch(IllegalThreadStateException e) {
+                // still running
+                return;
             } catch(IllegalStateException e) {
                 // still running
                 return;

@@ -5,14 +5,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class SortedIntList {
-    
+
     LinkedList<Integer> list = new LinkedList<Integer>();
     
     public void add(Integer element) {
         Iterator<Integer> i = list.iterator();
         int p = 0;
         while(i.hasNext()) {
-            if(i.next().compareTo(element) > 0) {
+            Integer n = i.next();
+            if(n.compareTo(element) == 0) {
+                i.remove();
+                list.add(p, element);
+                return;
+            } else if(n.compareTo(element) > 0) {
                 list.add(p, element);
                 return;
             }
@@ -40,5 +45,6 @@ public class SortedIntList {
     boolean containsKey(int tingID) {
         return(list.contains(tingID));
     }
+    
     
 }

@@ -76,7 +76,7 @@ public class Commands {
     }
     
     private static boolean isRegister(String s) {
-        if(!s.startsWith("v")) {
+        if(!s.toLowerCase().startsWith("v")) {
             return(false);
         }
         s = s.substring(1);
@@ -166,8 +166,5 @@ public class Commands {
         return(set.iterator().next().getNumberOfArguments());
     }
     
-    public static void main(String[] args) {
-        new Commands();
-    }
     
 }
