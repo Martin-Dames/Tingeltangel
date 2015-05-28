@@ -25,6 +25,7 @@ import tingeltangel.core.Codes;
 import tingeltangel.core.Entry;
 import tingeltangel.core.Importer;
 import tingeltangel.core.MP3Player;
+import tingeltangel.core.ReadYamlFile;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
@@ -260,6 +261,30 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     }
                 });
 
+            }
+        } else if(id.equals("buch.import.yaml")) {
+            boolean loadBook = false;
+            if(book.unsaved()) {
+                int value =  JOptionPane.showConfirmDialog(this, "Das aktuelle Buch ist nicht gespeichert. wollen sie trotzdem ein Buch importieren?", "Frage...", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (value == JOptionPane.YES_OPTION) {
+                    loadBook = true;
+                }
+            } else {
+                loadBook = true;
+            }
+            if(loadBook) {
+                JFileChooser fc = new JFileChooser();
+                fc.setFileFilter(new FileNameExtensionFilter("tiptoi Buch (*.yaml)", "yaml"));
+                if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        new ReadYamlFile().read(fc.getSelectedFile()).save();
+                        propertyFrame.refresh();
+                        indexFrame.update();
+                    } catch(Exception e) {
+                        JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
+                        e.printStackTrace(System.out);
+                    }
+                }
             }
         } else if(id.equals("buch.import.ouf")) {
             boolean loadBook = false;
