@@ -216,13 +216,15 @@ public class Importer {
             if(e[2] != 0) {
                 e[3] = i;
                 if(!foundFirstEntryCode) {
-                    firstEntryCode = e[0];
-                    firstEntryN = i - 15001;
-                    if(e[2] == 2) {
-                        firstEntryTypeIsScript = true;
+                    if(e[1] > 0) { // entry must not be empty
+                        firstEntryCode = e[0];
+                        firstEntryN = i - 15001;
+                        if(e[2] == 2) {
+                            firstEntryTypeIsScript = true;
+                        }
+                        firstEntryLength = e[1];
+                        foundFirstEntryCode = true;
                     }
-                    firstEntryLength = e[1];
-                    foundFirstEntryCode = true;
                 }
                 index.add(e);
             }
@@ -245,6 +247,7 @@ public class Importer {
         
         System.out.println("possible start of first entry: 0x" + Integer.toHexString(pos));
         System.out.println("firstEntryCode: " + firstEntryCode);
+        System.out.println("firstEntryLength: " + firstEntryLength);
         
         
         // try to find first entry starting at pos
