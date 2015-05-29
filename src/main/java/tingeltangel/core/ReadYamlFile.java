@@ -20,9 +20,6 @@ package tingeltangel.core;
 
 
 import org.yaml.snakeyaml.Yaml;
-import tingeltangel.core.Book;
-import tingeltangel.core.Entry;
-import tingeltangel.core.Script;
 import tingeltangel.tiptoireveng.Interpreter;
 import tiptoi_reveng.lexer.Lexer;
 import tiptoi_reveng.lexer.LexerException;

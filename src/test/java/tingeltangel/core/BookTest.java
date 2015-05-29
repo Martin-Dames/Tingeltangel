@@ -16,6 +16,9 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   
 */
+
+// this test was replaced by ImportTest
+
 package tingeltangel.core;
 
 import org.junit.Rule;
