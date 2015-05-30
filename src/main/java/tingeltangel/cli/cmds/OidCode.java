@@ -18,7 +18,7 @@
 */
 package tingeltangel.cli.cmds;
 
-import tingeltangel.ReadYamlFile;
+import tingeltangel.core.ReadYamlFile;
 import tingeltangel.cli.CliCommand;
 import tingeltangel.cli.CliSwitch;
 import tingeltangel.core.Book;

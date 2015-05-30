@@ -29,21 +29,19 @@
       </includes>
     </fileSet>
     
-    <fileSet>
-      <directory>${project.basedir}</directory>
-      <outputDirectory>/</outputDirectory>
-      <includes>
-        <include>sample.png</include>
-      </includes>
-    </fileSet>
     
     <fileSet>
       <directory>${project.basedir}</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
+        <include>LICENSE</include>
+        <include>README.md</include>
+        <include>sample.png</include>
+        <include>logo.png</include>
         <include>Tingeltangel.*</include>
       </includes>
     </fileSet>
+    
     
   </fileSets>
 </assembly>

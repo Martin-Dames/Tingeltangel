@@ -1,3 +1,21 @@
+/*
+    Copyright (C) 2015   Martin Dames <martin@bastionbytes.de>
+  
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  
+*/
 
 package tingeltangel.core;
 
@@ -216,13 +234,15 @@ public class Importer {
             if(e[2] != 0) {
                 e[3] = i;
                 if(!foundFirstEntryCode) {
-                    firstEntryCode = e[0];
-                    firstEntryN = i - 15001;
-                    if(e[2] == 2) {
-                        firstEntryTypeIsScript = true;
+                    if(e[1] > 0) { // entry must not be empty
+                        firstEntryCode = e[0];
+                        firstEntryN = i - 15001;
+                        if(e[2] == 2) {
+                            firstEntryTypeIsScript = true;
+                        }
+                        firstEntryLength = e[1];
+                        foundFirstEntryCode = true;
                     }
-                    firstEntryLength = e[1];
-                    foundFirstEntryCode = true;
                 }
                 index.add(e);
             }
@@ -245,6 +265,7 @@ public class Importer {
         
         System.out.println("possible start of first entry: 0x" + Integer.toHexString(pos));
         System.out.println("firstEntryCode: " + firstEntryCode);
+        System.out.println("firstEntryLength: " + firstEntryLength);
         
         
         // try to find first entry starting at pos

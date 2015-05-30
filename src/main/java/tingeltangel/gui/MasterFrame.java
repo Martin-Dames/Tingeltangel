@@ -1,3 +1,21 @@
+/*
+    Copyright (C) 2015   Martin Dames <martin@bastionbytes.de>
+  
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  
+*/
 
 package tingeltangel.gui;
 
@@ -25,6 +43,7 @@ import tingeltangel.core.Codes;
 import tingeltangel.core.Entry;
 import tingeltangel.core.Importer;
 import tingeltangel.core.MP3Player;
+import tingeltangel.core.ReadYamlFile;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
@@ -260,6 +279,30 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     }
                 });
 
+            }
+        } else if(id.equals("buch.import.yaml")) {
+            boolean loadBook = false;
+            if(book.unsaved()) {
+                int value =  JOptionPane.showConfirmDialog(this, "Das aktuelle Buch ist nicht gespeichert. wollen sie trotzdem ein Buch importieren?", "Frage...", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (value == JOptionPane.YES_OPTION) {
+                    loadBook = true;
+                }
+            } else {
+                loadBook = true;
+            }
+            if(loadBook) {
+                JFileChooser fc = new JFileChooser();
+                fc.setFileFilter(new FileNameExtensionFilter("tiptoi Buch (*.yaml)", "yaml"));
+                if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        new ReadYamlFile().read(fc.getSelectedFile()).save();
+                        propertyFrame.refresh();
+                        indexFrame.update();
+                    } catch(Exception e) {
+                        JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
+                        e.printStackTrace(System.out);
+                    }
+                }
             }
         } else if(id.equals("buch.import.ouf")) {
             boolean loadBook = false;
