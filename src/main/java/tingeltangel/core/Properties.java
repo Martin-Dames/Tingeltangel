@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
+import tingeltangel.tools.Preferences;
 
 public class Properties {
     
@@ -16,6 +17,7 @@ public class Properties {
     
     private final static HashMap<String, String> PROPERTIES = new HashMap<String, String>();
     
+    // todo: remove this
     public final static String WIN_MPG123 ="win_mpg123";
     public final static String _PATH =".path";
     public final static String _ENABLED=".enabled";
@@ -24,8 +26,13 @@ public class Properties {
         try {
             File propertyFile = new File(PROPERTY_FILE);
             if(propertyFile.createNewFile()) {
-                // do init of propertys here
-                // setProperty("propertyName", "propertyValue");
+                // init of propertys
+                Iterator<String> i = Preferences.getKeys().iterator();
+                while(i.hasNext()) {
+                    String key = i.next();
+                    setProperty(key, Preferences.getDefault(key), false);
+                }
+                save();
             }
             BufferedReader in = new BufferedReader(new FileReader(propertyFile));
             String row;
@@ -46,13 +53,8 @@ public class Properties {
         }
     }
     
-    public static void setProperty(String name, String value) {
-        name = name.trim();
-        if(value == null) {
-            PROPERTIES.remove(name);
-        } else {
-            PROPERTIES.put(name, value.trim());
-        }
+    
+    private static void save() {
         try {
             PrintWriter out = new PrintWriter(new FileWriter(PROPERTY_FILE));
             Iterator<String> keys = PROPERTIES.keySet().iterator();
@@ -67,19 +69,47 @@ public class Properties {
         }
     }
     
+    private static void setProperty(String name, String value, boolean save) {
+        name = name.trim();
+        if(value == null) {
+            PROPERTIES.remove(name);
+        } else {
+            PROPERTIES.put(name, value.trim());
+        }
+        if(save) {
+            save();
+        }
+    }
+    
     public static void setProperty(String name, int value) {
-        setProperty(name, Integer.toString(value));
+        setProperty(name, Integer.toString(value), true);
     }
     
-    public static String getProperty(String name) {
-        return(PROPERTIES.get(name.trim()));
+    public static void setProperty(String name, String value) {
+        setProperty(name, value, true);
     }
     
-    public static int getPropertyAsInteger(String name) {
+    public static void setProperty(String name, boolean value) {
+        setProperty(name, Boolean.toString(value), true);
+    }
+    
+    public static String getStringProperty(String name) {
+        return(PROPERTIES.get(name));
+    }
+    
+    public static int getIntegerProperty(String name) {
         try {
             return(Integer.parseInt(PROPERTIES.get(name)));
         } catch(NumberFormatException nfe) {
             throw new Error("property '" + name.trim() + "' is not of type int");
+        }
+    }
+    
+    public static boolean getBooleanProperty(String name) {
+        try {
+            return(Boolean.parseBoolean(PROPERTIES.get(name)));
+        } catch(NumberFormatException nfe) {
+            throw new Error("property '" + name.trim() + "' is not of type bool");
         }
     }
 }

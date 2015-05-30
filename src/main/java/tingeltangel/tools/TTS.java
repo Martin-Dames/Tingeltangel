@@ -11,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Comparator;
@@ -64,7 +63,7 @@ public class TTS {
                 LAME = "c:\\Users\\mdames\\Desktop\\lame3.99.5\\lame.exe";
             } else {
                 ESPEAK_BIN = "espeak";
-                ESPEAK_DATA = "/usr/lib/i386-linux-gnu/espeak-data";
+                ESPEAK_DATA = "/usr/share/espeak-data";
                 LAME = "lame";
             }
 
@@ -263,7 +262,7 @@ public class TTS {
             System.out.println("\t" + t.a + "\t" + t.b);
         }
         
-        generate("Hallo, ich bin Tingeltangel.", 100, 50, 100, "mb/mb-de2", "", new File("c:\\Users\\mdames\\Desktop\\test.mp3"));
+        generate("Hallo, ich bin Tingeltangel.", 100, 50, 100, "mb/mb-de2", "", new File("/home/martin/test.mp3"));
         
     }
     

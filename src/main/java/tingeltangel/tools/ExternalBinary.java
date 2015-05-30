@@ -19,11 +19,11 @@ public class ExternalBinary {
 
     public static void getBinaryPath(final String propertyName, final String winExeName, final String linuxExeName, final Callback<String> binaryCallback, final String name, final String question, final String installMessage) {
         if (System.getProperty("os.name").startsWith("Windows")) {
-            if (Properties.getProperty(propertyName + Properties._PATH) != null) {
-                if (Properties.getPropertyAsInteger(propertyName + Properties._ENABLED) == 0) {
+            if (Properties.getStringProperty(propertyName + Properties._PATH) != null) {
+                if (Properties.getIntegerProperty(propertyName + Properties._ENABLED) == 0) {
                     binaryCallback.callback(null);
                 } else {
-                    File f = new File(Properties.getProperty(propertyName + Properties._PATH));
+                    File f = new File(Properties.getStringProperty(propertyName + Properties._PATH));
                     if (f.getName().equals(winExeName) && f.canExecute()) {
                         binaryCallback.callback(f.getAbsolutePath());
                     } else {
@@ -92,5 +92,44 @@ public class ExternalBinary {
             Properties.setProperty(propertyName + Properties._ENABLED, 1);
         }
     }
+    
+    
+    
+    
+    
+    
+    public static boolean checkTTSBinaryConfiguration() {
+        if(Properties.getBooleanProperty("tts.enabled")) {
+            // eSpeak
+            File espeak = new File(Properties.getStringProperty("tts.espeak-bin"));
+            File espeakData = new File(Properties.getStringProperty("tts.espeak-data"));
+            if(!espeak.canExecute()) {
+                return(false);
+            }
+            if(!espeakData.isDirectory()) {
+                return(false);
+            }
+            if(!new File(espeakData, "!v").isDirectory()) {
+                return(false);
+            }
+            // lame
+            File lame = new File(Properties.getStringProperty("tts.lame"));
+            if(!lame.canExecute()) {
+                return(false);
+            }
+        }
+        return(true);
+    }
+    
+    public static boolean checkPlayerBinaryConfiguration() {
+        if(Properties.getBooleanProperty("mpg123.enabled")) {
+            File bin = new File(Properties.getStringProperty("mpg123.bin"));
+            return(bin.canExecute());
+        }
+        return(true);
+    }
+    
+    
+    
     
 }
