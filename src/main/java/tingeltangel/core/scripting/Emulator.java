@@ -43,11 +43,9 @@ public class Emulator {
     
     private int leftValue = 0;
     private int rightValue = 0;
-    private final MP3Player player;
     private final Book book;
     
-    public Emulator(Book book, MP3Player player) {
-        this.player = player;
+    public Emulator(Book book) {
         this.book = book;
     }
     
@@ -103,12 +101,12 @@ public class Emulator {
             if(!indexHint.isEmpty()) {
                 hint += " (" + indexHint + ")";
             }
-            player.add(entry.getMP3(), hint);
+            MP3Player.getPlayer().add(entry.getMP3(), hint, entry.getLength());
         }
     }
     
     public void pause(int ms) {
-        player.addPause(ms);
+        MP3Player.getPlayer().addPause(ms);
     }
 
     public void addRegisterListener(RegisterListener listener) {

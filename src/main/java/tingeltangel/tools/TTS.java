@@ -23,16 +23,16 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import tingeltangel.core.Tupel;
 
 /**
  *
@@ -40,80 +40,102 @@ import tingeltangel.core.Tupel;
  */
 public class TTS {
     
-    private final static String ESPEAK_DATA;
-    private final static String ESPEAK_BIN;
-    private final static String LAME;
+    private final static int UNKNOWN = 0;
+    private final static int FEMALE = 1;
+    private final static int MALE = 2;
     
-    private final static SortedSet<Tupel<String, String>> eVoices = new TreeSet<Tupel<String, String>>(new MyComparator());
-    private final static SortedSet<Tupel<String, String>> mVoices = new TreeSet<Tupel<String, String>>(new MyComparator());
-    private final static SortedSet<Tupel<String, String>> variants = new TreeSet<Tupel<String, String>>(new MyComparator());
+    private final static File ESPEAK;
+    private final static File LAME;
+    private final static boolean ENABLED;
     
-    private static String getLangName(File langFile) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader(langFile));
-        String r;
-        while((r = in.readLine()) != null) {
-            if(r.trim().toLowerCase().startsWith("name ")) {
-                in.close();
-                return(r.trim().substring("name ".length()).trim());
-            }
-        }
-        in.close();
-        return("unknown");
+    private final static Map<String, Language> voices = new HashMap<String, Language>();
+    private final static Map<String, Language> variants = new HashMap<String, Language>();
+    private final static SortedSet<String> voiceIDs = new TreeSet<String>();
+    private final static SortedSet<String> variantIDs = new TreeSet<String>();
+    
+    
+    public static SortedSet<String> getVoiceIDs() {
+        return(voiceIDs);
     }
     
-    private static void addLanguageFiles(File dir, String prefix, SortedSet<Tupel<String, String>> set) throws IOException {
-        File[] files = dir.listFiles();
-        for(int i = 0; i < files.length; i++) {
-            if(!files[i].getName().startsWith(".")) {
-                set.add(new Tupel(prefix + files[i].getName(), getLangName(files[i])));
-            }
-        }
+    public static SortedSet<String> getVariantIDs() {
+        return(variantIDs);
+    }
+    
+    public static String getVoiceName(String id) {
+        return(voices.get(id).name);
+    }
+    
+    public static String getVariantName(String id) {
+        return(variants.get(id).name);
+    }
+    
+    public static int getVoiceGender(String id) {
+        return(voices.get(id).gender);
+    }
+    
+    public static int getVariantGender(String id) {
+        return(variants.get(id).gender);
     }
     
     static {
         try {
-            if(System.getProperty("os.name").startsWith("Windows")) {
-                ESPEAK_BIN = "c:\\Program Files (x86)\\eSpeak\\command_line\\espeak.exe";
-                ESPEAK_DATA = "c:\\Program Files (x86)\\eSpeak\\espeak-data";
-                LAME = "c:\\Users\\mdames\\Desktop\\lame3.99.5\\lame.exe";
-            } else {
-                ESPEAK_BIN = "espeak";
-                ESPEAK_DATA = "/usr/share/espeak-data";
-                LAME = "lame";
-            }
+            
+            ESPEAK = Binary.getBinary(Binary.ESPEAK);
+            LAME = Binary.getBinary(Binary.LAME);
+            ENABLED = (ESPEAK != null) && (LAME != null);
 
-            // collect voices and variants
-            File voices = new File(new File(ESPEAK_DATA), "voices");
+            if(ENABLED) {
 
-            File[] files = voices.listFiles();
-            for(int i = 0; i < files.length; i++) {
-                if(!files[i].getName().startsWith(".")) {
-                    if(files[i].isDirectory()) {
-                        String dir = files[i].getName();
-                        if(dir.equals("!v")) {
-                            // variant dir
-                            addLanguageFiles(files[i], "", variants);
-                        } else if(dir.equals("mb")) {
-                            // mbrola dir
-                            addLanguageFiles(files[i], dir + "/", mVoices);
-                        } else {
-                            // voice dir
-                            addLanguageFiles(files[i], dir + "/", eVoices);
-                        }
+                // collect voices
+                String[] cmd1 = {ESPEAK.getCanonicalPath(), "--voices"};
+                Process process = new ProcessBuilder(cmd1).start();
+                BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                in.readLine(); // remove heading
+                String row;
+                while((row = in.readLine()) != null) {
+                    String[] r = row.trim().split("[ ]+");
+                    Language lang = new Language();
+                    lang.id = r[4];
+                    lang.name = r[3];
+                    if(r[2].endsWith("F")) {
+                        lang.gender = FEMALE;
+                    } else if(r[2].endsWith("M")) {
+                        lang.gender = MALE;
                     } else {
-                        // top level language
-                        eVoices.add(new Tupel(files[i].getName(), getLangName(files[i])));
+                        lang.gender = UNKNOWN;
                     }
+                    voiceIDs.add(lang.id);
+                    voices.put(lang.id, lang);
                 }
-            }
-
-            // check for mbrola language packs
-            Iterator<Tupel<String, String>> i = mVoices.iterator();
-            File mbrola = new File(new File(ESPEAK_DATA), "mbrola");
-            while(i.hasNext()) {
-                String langName = i.next().a.substring("mb/mb-".length());
-                if(!new File(mbrola, langName).exists()) {
-                    i.remove();
+                
+                // collect variants
+                String[] cmd2 = {ESPEAK.getCanonicalPath(), "--voices=variant"};
+                process = new ProcessBuilder(cmd2).start();
+                in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                in.readLine(); // remove heading
+                while((row = in.readLine()) != null) {
+                    String[] r = row.trim().split("[ ]+");
+                    Language lang = new Language();
+                    lang.id = r[4].substring(3); // remove "v!\\"
+                    lang.name = r[3];
+                    if(r[2].endsWith("F")) {
+                        lang.gender = FEMALE;
+                    } else if(r[2].endsWith("M")) {
+                        lang.gender = MALE;
+                    } else {
+                        lang.gender = UNKNOWN;
+                    }
+                    variantIDs.add(lang.id);
+                    variants.put(lang.id, lang);
+                }
+            } else {
+                System.out.println("WARNING: tts not enabled");
+                if(LAME == null) {
+                    System.out.println("'lame' not found");
+                }
+                if(ESPEAK == null) {
+                    System.out.println("'espeak' not found");
                 }
             }
         } catch(IOException ioe) {
@@ -132,6 +154,12 @@ public class TTS {
      * @param mp3 The MP§ to generate
      */
     public static void generate(final String text, int amplitude, int pitch, int speed, String voice, String variant, final File mp3) throws IOException {
+        
+        if(ENABLED == false) {
+            System.out.println("unable to execute tts request: tts not enabled");
+            return;
+        }
+        
         speed = Math.max(Math.min(speed, 450), 80);
         amplitude = Math.max(Math.min(amplitude, 200), 0);
         pitch = Math.max(Math.min(pitch, 99), 0);
@@ -143,7 +171,7 @@ public class TTS {
         }
         
         String[] cmd1 = {
-            ESPEAK_BIN,
+            ESPEAK.getCanonicalPath(),
             "--stdin",
             "--stdout",
             "-b",
@@ -160,7 +188,7 @@ public class TTS {
         };
         
         String[] cmd2 = {
-            LAME,
+            LAME.getCanonicalPath(),
             "-",
             "-"
         };
@@ -253,40 +281,17 @@ public class TTS {
         }
     }
     
-    public static void main(String[] args) throws IOException {
-        Iterator<Tupel<String, String>> i;
-        
-        System.out.println("eSpeak voices:");
-        i = eVoices.iterator();
-        while(i.hasNext()) {
-            Tupel<String, String> t = i.next();
-            System.out.println("\t" + t.a + "\t" + t.b);
-        }
-        
-        System.out.println("mbrola voices:");
-        i = mVoices.iterator();
-        while(i.hasNext()) {
-            Tupel<String, String> t = i.next();
-            System.out.println("\t" + t.a + "\t" + t.b);
-        }
-        
-        System.out.println("variants:");
-        i = variants.iterator();
-        while(i.hasNext()) {
-            Tupel<String, String> t = i.next();
-            System.out.println("\t" + t.a + "\t" + t.b);
-        }
-        
-        generate("Hallo, ich bin Tingeltangel.", 100, 50, 100, "mb/mb-de2", "", new File("/home/martin/test.mp3"));
-        
-    }
-    
-    
 }
 
-class MyComparator implements Comparator<Tupel<String, String>> {
+class MyComparator implements Comparator<Language> {
     @Override
-    public int compare(Tupel<String, String> o1, Tupel<String, String> o2) {
-        return(o1.a.compareTo(o2.a));
+    public int compare(Language lang1, Language lang2) {
+        return(lang1.name.compareTo(lang2.name));
     }
+}
+
+class Language {
+    String id;
+    String name;
+    int gender;
 }

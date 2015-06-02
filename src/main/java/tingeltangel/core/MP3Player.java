@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import tingeltangel.tools.Binary;
 
 public class MP3Player {
 
@@ -32,6 +33,16 @@ public class MP3Player {
     private LinkedList<PlaylistEntry> playlist = new LinkedList<PlaylistEntry>();
     private PlaylistEntry current = null;
     private HashSet<ActionListener> listeners = new HashSet<ActionListener>();
+    
+    private static MP3Player _player = new MP3Player();
+    
+    private MP3Player() {
+        
+    }
+    
+    public static MP3Player getPlayer() {
+        return(_player);
+    }
     
     private synchronized void _add(PlaylistEntry x) {
         playlist.add(x);
@@ -60,9 +71,9 @@ public class MP3Player {
         }
     }
     
-    public void add(File file, String hint) {
+    public void add(File file, String hint, float length) {
         System.out.println("mp3 player: add to playlist " + file.getAbsolutePath());
-        _add(new PlaylistEntry(file, hint));
+        _add(new PlaylistEntry(file, hint, length));
         playlistChanged();
         new Thread() {
             @Override
@@ -124,11 +135,7 @@ public class MP3Player {
         }
         
         
-        String mpg123Binary = "mpg123";
-        
-        if(System.getProperty("os.name").startsWith("Windows")) {
-            mpg123Binary = Properties.getStringProperty(Properties.WIN_MPG123+Properties._PATH);
-        }
+        File mpg123 = Binary.getBinary(Binary.MPG123);
         
         current = _poll();
         playlistChanged();
@@ -144,10 +151,21 @@ public class MP3Player {
             } else {
                 try {
                     System.out.println("mp3 player: " + current.getMP3().getAbsolutePath());
-                    process = new ProcessBuilder(mpg123Binary, current.getMP3().getAbsolutePath()).start();
-                    try {
-                        process.waitFor();
-                    } catch (InterruptedException ex) {
+                    if(mpg123 != null) {
+                        process = new ProcessBuilder(mpg123.getCanonicalPath(), current.getMP3().getAbsolutePath()).start();
+                        try {
+                            process.waitFor();
+                        } catch (InterruptedException ex) {
+                        }
+                    } else {
+                        // pause for length of track
+                        synchronized(this) {
+                            try {
+                                System.out.println("pause " + ((int)(current.getLength() * 1000)) + "ms");
+                                wait((int)(current.getLength() * 1000));
+                            } catch (InterruptedException ex) {
+                            }
+                        }
                     }
                 } catch(IOException ioe) {
                     ioe.printStackTrace(System.out);
@@ -170,10 +188,12 @@ class PlaylistEntry {
     private File mp3 = null;
     private int pause = 0;
     private String hint = null;
+    private float length;
     
-    public PlaylistEntry(File mp3, String hint) {
+    public PlaylistEntry(File mp3, String hint, float length) {
         this.mp3 = mp3;
         this.hint = hint;
+        this.length = length;
     }
     
     public PlaylistEntry(int pause) {
@@ -190,6 +210,10 @@ class PlaylistEntry {
     
     public File getMP3() {
         return(mp3);
+    }
+    
+    public float getLength() {
+        return(length);
     }
     
     public String getHint() {

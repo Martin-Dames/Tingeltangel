@@ -107,12 +107,12 @@ public class Properties {
         setProperty(name, value, true);
     }
     
-    public static void setProperty(String name, boolean value) {
-        setProperty(name, Boolean.toString(value), true);
+    public static String getStringProperty(String name) {
+        return(PROPERTIES.get(name.trim()));
     }
     
-    public static String getStringProperty(String name) {
-        return(PROPERTIES.get(name));
+    public static void setProperty(String name, boolean value) {
+        setProperty(name, Boolean.toString(value), true);
     }
     
     public static int getIntegerProperty(String name) {
