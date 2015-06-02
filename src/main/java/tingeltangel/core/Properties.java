@@ -89,11 +89,11 @@ public class Properties {
         setProperty(name, Integer.toString(value));
     }
     
-    public static String getProperty(String name) {
+    public static String getStringProperty(String name) {
         return(PROPERTIES.get(name.trim()));
     }
     
-    public static int getPropertyAsInteger(String name) {
+    public static int getIntegerProperty(String name) {
         try {
             return(Integer.parseInt(PROPERTIES.get(name)));
         } catch(NumberFormatException nfe) {

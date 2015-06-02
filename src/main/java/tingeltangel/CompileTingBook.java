@@ -31,7 +31,7 @@ public class CompileTingBook {
 
         File inputDir = srcFile.getParentFile();
 
-        Book book = new Book(8071, null);
+        Book book = new Book(8071);
         book.importFromScriptFile(new FileInputStream(srcFile));
         if( srcFile.getName().matches("[0-9][0-9][0-9][0-9][0-9]_en.src")) {
             int id = Integer.parseInt(srcFile.getName().substring(0, 5));

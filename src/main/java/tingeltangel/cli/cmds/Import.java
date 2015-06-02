@@ -191,7 +191,7 @@ public class Import extends CliCommand {
         int id = in.readInt();
         in.close();
         
-        Importer.importBook(ouf, txt, src, new Book(id, null), null);
+        Importer.importBook(ouf, txt, src, new Book(id), null);
         
     }
     

@@ -191,10 +191,10 @@ public class Book {
         changeMade();
     }
     
-    public Book(int id, MP3Player player) {
+    public Book(int id) {
         this.id = id;
         clear();
-        emulator = new Emulator(this, player);
+        emulator = new Emulator(this);
     }
     
     public void addEntry(int tingID) {
@@ -296,6 +296,8 @@ public class Book {
                     type = "sub";
                 } else if(entry.isMP3()) {
                     type = "mp3";
+                } else if(entry.isTTS()) {
+                    type = "tts";
                 }
                 xml.print("\t\t<entry id=\"" + entry.getTingID() + "\" type=\"" + type + "\"");
                 if(entry.isMP3()) {
@@ -306,8 +308,10 @@ public class Book {
                     xml.print(" mp3=\"" + encodeAttribute(mp3name) + "\"");
                 }
                 xml.println(">");
-                if(!entry.isMP3()) {
+                if(entry.isCode() || entry.isSub()) {
                     xml.println("\t\t\t<code>" + encodeValue(entry.getScript().toString()) + "</code>");
+                } else if(entry.isTTS()) {
+                    xml.println("\t\t\t<tts>" + encodeValue(entry.getScript().toString()) + "</tts>");
                 }
                 xml.println("\t\t\t<hint>" + encodeValue(entry.getHint()) + "</hint>");
                 xml.println("\t\t</entry>");
@@ -410,10 +414,14 @@ public class Book {
                         // get code
                         String code = getTagContent(eElement.getElementsByTagName("code").item(0));
                         Script script = new Script(code, entry);
+                        entry.setScript(script);
                         if(type.equals("sub")) {
                             entry.setSub();
                         }
-                        entry.setScript(script);
+                    } else if(type.equals("tts")) {
+                        // get tts
+                        String tts = getTagContent(eElement.getElementsByTagName("tts").item(0));
+                        entry.setTTS(tts);
                     } else {
                         throw new IOException("unknown type: " + type);
                     }
@@ -447,48 +455,7 @@ public class Book {
         }
     }
     
-    public static void load(File file, Book book) throws IOException {
-        load(new FileInputStream(file), book);
-    }
 
-    public static void load(InputStream inputStream, Book book) throws IOException {
-        DataInputStream in = new DataInputStream(inputStream);
-        
-        book.clear();
-        
-        // compatibility hack
-        int fileFormatVersion = in.readInt();
-        int rid = in.readInt();
-        if(book.id != rid) {
-            throw new IOException("mid missmatch (book.id=" + book.id + ";rid=" + rid + ")");
-        }
-            
-        book.name = in.readUTF();
-        book.publisher = in.readUTF();
-        book.author = in.readUTF();
-        book.version = in.readInt();
-        book.url = in.readUTF();
-        if(fileFormatVersion > 0) {
-            book.magicValue = in.readLong();
-            book.date = in.readLong();
-        }
-        
-        int size = in.readInt();
-        for(int i = 0; i < size; i++) {
-            Entry entry = Entry.load(in, book);
-            book.addEntry(entry.getTingID());
-            book.indexEntries.put(entry.getTingID(), entry);
-        }
-        
-        size = in.readInt();
-        for(int i = 0; i < size; i++) {
-            book.emulator.setHint(i, in.readUTF());
-        }
-                
-        
-        book.changed = false;
-    }
-    
     final protected static char[] hexArray = "0123456789abcdef".toCharArray();
     private String md5(File file) throws IOException {
         try {
@@ -549,7 +516,7 @@ public class Book {
                 pos += 0x100 - (pos & 0xff);
                 out.writeInt(IndexTableCalculator.getCodeFromPositionInFile(pos, i));
                 out.writeInt(entry.getSize());
-                if(entry.isMP3()) {
+                if(entry.isMP3() || entry.isTTS()) {
                     out.writeInt(0x0001);
                 } else {
                     out.writeInt(0x0002);
@@ -577,7 +544,7 @@ public class Book {
                 for(int i = 0; i < pad; i++) {
                     out.write(0x0);
                 }
-                if(e.isMP3()) {
+                if(e.isMP3() || e.isTTS()) {
                     InputStream in = new FileInputStream(e.getMP3());
                     int b;
                     while((b = in.read(buffer)) >= 0) {

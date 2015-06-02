@@ -52,8 +52,7 @@ import tingeltangel.tools.Progress;
 
 public class MasterFrame extends JFrame implements Callback<String> {
 
-    private MP3Player mp3Player = new MP3Player();
-    private Book book = new Book(15000, mp3Player);
+    private Book book = new Book(15000);
     
     private JDesktopPane desktop;
     private IndexFrame indexFrame;
@@ -126,10 +125,6 @@ public class MasterFrame extends JFrame implements Callback<String> {
         
         setContentPane(desktop);
 
-    }
-    
-    public MP3Player getMP3Player() {
-        return(mp3Player);
     }
     
     public void showReferenceFrame() {
@@ -232,7 +227,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                             @Override
                                             public void action(ProgressDialog progressDialog) {
                                                 try {
-                                                    book = new Book(id, mp3Player);
+                                                    book = new Book(id);
                                                     File ouf = Repository.getBookOuf(id);
                                                     Map<String, String> txt = Repository.getBookTxt(id);
                                                     File src = Repository.getBookSrc(id);
@@ -259,7 +254,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                 @Override
                                 public void action(ProgressDialog progressDialog) {
                                     try {
-                                        book = new Book(id, mp3Player);
+                                        book = new Book(id);
                                         File ouf = Repository.getBookOuf(id);
                                         Map<String, String> txt = Repository.getBookTxt(id);
                                         File src = Repository.getBookSrc(id);
@@ -346,7 +341,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                             @Override
                             public void action(ProgressDialog progressDialog) {
                                 try {
-                                    book = new Book(_id, mp3Player);
+                                    book = new Book(_id);
                                     Importer.importBook((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
                                     
                                 } catch(IOException e) {

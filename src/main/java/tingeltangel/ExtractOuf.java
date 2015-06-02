@@ -65,7 +65,7 @@ public class ExtractOuf {
             code2entry.put(i + smallestTingId, ite);
         }
 
-        Book book = new Book(bookId, null);
+        Book book = new Book(bookId);
 
         for (Integer code : code2entry.keySet()) {
             IndexTableEntry ite = code2entry.get(code);

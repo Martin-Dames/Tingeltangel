@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import tingeltangel.core.Entry;
+import tingeltangel.core.MP3Player;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 
@@ -80,10 +81,10 @@ public class PlayerFrame extends JInternalFrame implements EntryListener, Action
         panel.add(buttons, BorderLayout.SOUTH);
         
         setContentPane(panel);
-        frame.getMP3Player().addActionListener(new ActionListener() {
+        MP3Player.getPlayer().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                playlist.setText(frame.getMP3Player().getCurrent() + "\n" + frame.getMP3Player().getPlaylist()); 
+                playlist.setText(MP3Player.getPlayer().getCurrent() + "\n" + MP3Player.getPlayer().getPlaylist()); 
             }
         });
         frame.addEntryListener(this);
@@ -117,7 +118,7 @@ public class PlayerFrame extends JInternalFrame implements EntryListener, Action
                     if(!indexHint.isEmpty()) {
                         hint += " (" + indexHint + ")";
                     }
-                    frame.getMP3Player().add(entry.getMP3(), hint);
+                    MP3Player.getPlayer().add(entry.getMP3(), hint, entry.getLength());
                 } else if((entry.isCode() || entry.isSub()) && (entry.getScript() != null)) {
                     try {
                         entry.getScript().execute();
@@ -128,7 +129,7 @@ public class PlayerFrame extends JInternalFrame implements EntryListener, Action
             }
         } else if(e.getActionCommand().equals("stop")) {
             if(entry != null) {
-                frame.getMP3Player().stopAndClean();
+                MP3Player.getPlayer().stopAndClean();
             }
         }
     }

@@ -64,7 +64,7 @@ public class ReadYamlFile {
         Map scripts = (Map) data.get("scripts");
 
         File dir = yamlFile.getParentFile();
-        Book book = new Book(8000 + ((Integer) data.get("product-id")), null);
+        Book book = new Book(8000 + ((Integer) data.get("product-id")));
 
         Map scriptcodes = (Map) data.get("scriptcodes");
         if (scriptcodes != null) {
