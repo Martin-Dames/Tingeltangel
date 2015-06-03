@@ -206,7 +206,9 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                         } else {
                             throw new Error();
                         }
-                        MultipleChoiceDialog.show(mainFrame, "Frage...", "Bitte treffe eine Auswahl", "OK", options, actions, preselection, callback);
+                        int x = e.getXOnScreen();
+                        int y = e.getYOnScreen();
+                        MultipleChoiceDialog.show(mainFrame, "Frage...", "Bitte treffe eine Auswahl", "OK", options, actions, preselection, callback, x, y);
                         
                         
                     } else if(column == 3) {

@@ -49,7 +49,7 @@ public class MultipleChoiceDialog {
         }
     }
     
-    public static void show(JFrame frame, String title, String question, String button, String[] options, String[] actions, int preSelected, final Callback callback) {
+    public static void show(JFrame frame, String title, String question, String button, String[] options, String[] actions, int preSelected, final Callback callback, int x, int y) {
         JRadioButton[] buttons = new JRadioButton[options.length];
         final ButtonGroup group = new ButtonGroup();
 
@@ -62,6 +62,7 @@ public class MultipleChoiceDialog {
         buttons[preSelected].setSelected(true);
 
         final JDialog dialog = new JDialog(frame, title, true);
+        dialog.setBounds(x, y, 100, 100);
 
         JButton okButton = new JButton(button);
         okButton.addActionListener(new ActionListener() {
