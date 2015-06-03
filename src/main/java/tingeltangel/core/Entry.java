@@ -36,7 +36,7 @@ public class Entry {
     
     private File mp3 = null;
     private Script script = null;
-    private String tts = null;
+    private TTSEntry tts = null;
     private float mp3length = -1;
     private int size = -1;
     private Book book;
@@ -93,7 +93,7 @@ public class Entry {
         
         if(!mp3.canRead()) {
             try {
-                TTS.generate(tts, 100, 50, 130, "de", null, mp3);
+                TTS.generate(tts.text, tts.amplitude, tts.pitch, tts.speed, tts.voice, tts.variant, mp3);
             
                 if(!mp3.canRead()) {
                     return(null);
@@ -167,7 +167,7 @@ public class Entry {
         changeMade();
     }
     
-    public void setTTS(String tts) {
+    public void setTTS(TTSEntry tts) {
         this.tts = tts;
         mp3 = null;
         script = null;
@@ -175,7 +175,7 @@ public class Entry {
         changeMade();
     }
     
-    public String getTTS() {
+    public TTSEntry getTTS() {
         return(tts);
     }
     

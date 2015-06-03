@@ -45,7 +45,7 @@ public class Preferences {
             while((row = in.readLine()) != null) {
                 
                 row = row.trim();
-                if(!row.startsWith("#")) {
+                if((!row.startsWith("#")) && (!row.isEmpty())) {
                     
                     int p = row.indexOf('=');
                     if(p < 0) {

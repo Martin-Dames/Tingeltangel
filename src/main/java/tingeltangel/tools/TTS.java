@@ -40,9 +40,9 @@ import java.util.TreeSet;
  */
 public class TTS {
     
-    private final static int UNKNOWN = 0;
-    private final static int FEMALE = 1;
-    private final static int MALE = 2;
+    public final static int UNKNOWN = 0;
+    public final static int FEMALE = 1;
+    public final static int MALE = 2;
     
     private final static File ESPEAK;
     private final static File LAME;
@@ -96,13 +96,20 @@ public class TTS {
                 while((row = in.readLine()) != null) {
                     String[] r = row.trim().split("[ ]+");
                     Language lang = new Language();
-                    lang.id = r[4];
-                    lang.name = r[3];
-                    if(r[2].endsWith("F")) {
-                        lang.gender = FEMALE;
-                    } else if(r[2].endsWith("M")) {
-                        lang.gender = MALE;
+                    
+                    if(r[2].endsWith("F") || r[2].endsWith("M") || r[2].endsWith("-")) {
+                        lang.id = r[4];
+                        lang.name = r[3];
+                        if(r[2].endsWith("F")) {
+                            lang.gender = FEMALE;
+                        } else if(r[2].endsWith("M")) {
+                            lang.gender = MALE;
+                        } else {
+                            lang.gender = UNKNOWN;
+                        }
                     } else {
+                        lang.id = r[3];
+                        lang.name = r[2];
                         lang.gender = UNKNOWN;
                     }
                     voiceIDs.add(lang.id);
@@ -117,15 +124,23 @@ public class TTS {
                 while((row = in.readLine()) != null) {
                     String[] r = row.trim().split("[ ]+");
                     Language lang = new Language();
-                    lang.id = r[4].substring(3); // remove "v!\\"
-                    lang.name = r[3];
-                    if(r[2].endsWith("F")) {
-                        lang.gender = FEMALE;
-                    } else if(r[2].endsWith("M")) {
-                        lang.gender = MALE;
+                    
+                    if(r[2].endsWith("F") || r[2].endsWith("M") || r[2].endsWith("-")) {
+                        lang.id = r[4].substring(3);
+                        lang.name = r[3];
+                        if(r[2].endsWith("F")) {
+                            lang.gender = FEMALE;
+                        } else if(r[2].endsWith("M")) {
+                            lang.gender = MALE;
+                        } else {
+                            lang.gender = UNKNOWN;
+                        }
                     } else {
+                        lang.id = r[3].substring(3);
+                        lang.name = r[2];
                         lang.gender = UNKNOWN;
                     }
+                    
                     variantIDs.add(lang.id);
                     variants.put(lang.id, lang);
                 }
@@ -161,7 +176,7 @@ public class TTS {
         }
         
         speed = Math.max(Math.min(speed, 450), 80);
-        amplitude = Math.max(Math.min(amplitude, 200), 0);
+        amplitude = Math.max(Math.min(amplitude, 20), 0);
         pitch = Math.max(Math.min(pitch, 99), 0);
 
         if((variant == null) || (variant.isEmpty())) {

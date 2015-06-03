@@ -20,7 +20,6 @@
 package tingeltangel.core;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -311,7 +310,14 @@ public class Book {
                 if(entry.isCode() || entry.isSub()) {
                     xml.println("\t\t\t<code>" + encodeValue(entry.getScript().toString()) + "</code>");
                 } else if(entry.isTTS()) {
-                    xml.println("\t\t\t<tts>" + encodeValue(entry.getScript().toString()) + "</tts>");
+                    TTSEntry tts = entry.getTTS();
+                    String arguments = " voice=\"" + tts.voice + "\"";
+                    arguments += " variant=\"" + tts.variant + "\"";
+                    arguments += " amplitude=\"" + tts.amplitude + "\"";
+                    arguments += " pitch=\"" + tts.pitch + "\"";
+                    arguments += " speed=\"" + tts.speed + "\"";
+                    
+                    xml.println("\t\t\t<tts" + arguments + ">" + encodeValue(tts.text) + "</tts>");
                 }
                 xml.println("\t\t\t<hint>" + encodeValue(entry.getHint()) + "</hint>");
                 xml.println("\t\t</entry>");
@@ -388,7 +394,7 @@ public class Book {
             
             if(book.getID() != Integer.parseInt(bookElement.getAttribute("id"))) {
                 throw new IOException("book id missmatch");
-            };
+            }
             
             book.version = Integer.parseInt(bookElement.getAttribute("version"));
             book.date = Integer.parseInt(bookElement.getAttribute("date"));
@@ -420,8 +426,17 @@ public class Book {
                         }
                     } else if(type.equals("tts")) {
                         // get tts
-                        String tts = getTagContent(eElement.getElementsByTagName("tts").item(0));
-                        entry.setTTS(tts);
+                        Element ttsElement = (Element)eElement.getElementsByTagName("tts").item(0);
+                        String ttsText = getTagContent(ttsElement);
+                        
+                        TTSEntry ttsEntry = new TTSEntry(ttsText);
+                        ttsEntry.voice = ttsElement.getAttribute("voice");
+                        ttsEntry.variant = ttsElement.getAttribute("variant");
+                        ttsEntry.amplitude = Integer.parseInt(ttsElement.getAttribute("amplitude"));
+                        ttsEntry.speed = Integer.parseInt(ttsElement.getAttribute("speed"));
+                        ttsEntry.pitch = Integer.parseInt(ttsElement.getAttribute("pitch"));
+                        
+                        entry.setTTS(ttsEntry);
                     } else {
                         throw new IOException("unknown type: " + type);
                     }

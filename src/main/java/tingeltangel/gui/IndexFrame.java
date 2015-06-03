@@ -19,7 +19,6 @@
 
 package tingeltangel.gui;
 
-import tingeltangel.tools.Callback;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,7 +48,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
+import tingeltangel.core.TTSEntry;
 import tingeltangel.core.Translator;
+import tingeltangel.tools.Callback;
 
 
 public class IndexFrame extends JInternalFrame implements ActionListener {
@@ -62,6 +63,7 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
     private final static String MP3 = "MP3";
     private final static String EMPTY = "Leer";
     private final static String SCRIPT = "Skript";
+    private final static String T2S = "TTS";
     private final static String SUB = "Skript (Subrutine)";
     
     private JTextField appendEntries;
@@ -166,8 +168,8 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                         
                     } else if(column == 1) {
                         
-                        String[] options = {"MP3 Track", "Skript", "Skript (Unterprogramm)", "Leerer Eintrag"};
-                        String[] actions = {MP3, SCRIPT, SUB, EMPTY};
+                        String[] options = {"MP3 Track", "Skript", "Skript (Unterprogramm)", "TTS", "Leerer Eintrag"};
+                        String[] actions = {MP3, SCRIPT, SUB, T2S, EMPTY};
                         
                         final Entry entry = book.getEntry(row);
                         
@@ -182,6 +184,8 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                                     entry.setSub();
                                 } else if(s.equals(EMPTY)) {
                                     entry.setEmpty();
+                                } else if(s.equals(T2S)) {
+                                    entry.setTTS();
                                 }
                                 update();
                             }
@@ -195,8 +199,10 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                             preselection = 1;
                         } else if(entry.isSub()) {
                             preselection = 2;
-                        } else if(entry.isEmpty()) {
+                        } else if(entry.isTTS()) {
                             preselection = 3;
+                        } else if(entry.isEmpty()) {
+                            preselection = 4;
                         } else {
                             throw new Error();
                         }
@@ -223,6 +229,24 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                                     ex.printStackTrace(System.out);
                                 }
                             }
+                        } else if(book.getEntry(row).isTTS()) {
+                            
+                            TTSEntry entry = book.getEntry(row).getTTS();
+                            if(entry == null) {
+                                entry = new TTSEntry("");
+                                book.getEntry(row).setTTS(entry);
+                            }
+                            final TTSEntry _entry = entry;
+                            final Book _book = book;
+                            final int _row = row;
+                            new TTSDialog(mainFrame, true, entry, new Runnable() {
+                                @Override
+                                public void run() {
+                                    _entry.generateTTS(_book.getEntry(_row));
+                                }
+                            }).setVisible(true);
+                            
+                            
                         }
                     }
                 }
