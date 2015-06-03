@@ -22,8 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.SortedSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -70,9 +68,13 @@ public class TTSDialog extends javax.swing.JDialog {
         SortedSet<String> voiceIDs = TTS.getVoiceIDs();
         voiceIDTable = new String[voiceIDs.size()];
         int c = 0;
+        int currentVoice = 0;
         Iterator<String> i = voiceIDs.iterator();
         while(i.hasNext()) {
             voiceIDTable[c] = i.next();
+            if(voiceIDTable[c].equals(entry.voice)) {
+                currentVoice = c;
+            }
             String name = TTS.getVoiceName(voiceIDTable[c]);
             if(voiceIDTable[c].startsWith("mb" + File.separator)) {
                 // mbrola
@@ -88,9 +90,13 @@ public class TTSDialog extends javax.swing.JDialog {
         variantIDTable[0] = "";
         variantModel.addElement("keine Variante");
         c = 1;
+        int currentVariant = 0;
         i = variantIDs.iterator();
         while(i.hasNext()) {
             variantIDTable[c] = i.next();
+            if(variantIDTable[c].equals(entry.variant)) {
+                currentVariant = c;
+            }
             String name = TTS.getVariantName(variantIDTable[c]);
             switch(TTS.getVariantGender(variantIDTable[c])) {
                 case TTS.FEMALE:
@@ -102,6 +108,14 @@ public class TTSDialog extends javax.swing.JDialog {
             variantModel.addElement(name);
             c++;
         }
+        
+        // preselection
+        amplitudeSlider.setValue(entry.amplitude);
+        speedSlider.setValue(entry.speed);
+        pitchSlider.setValue(entry.pitch);
+        textArea.setText(entry.text);
+        voiceComboBox.setSelectedIndex(currentVoice);
+        variantComboBox.setSelectedIndex(currentVariant);
     }
 
     /**

@@ -45,6 +45,7 @@ public class TTSEntry {
     public void generateTTS(Entry entry) throws IOException {
         File mp3 = new File(FileEnvironment.getAudioDirectory(entry.getBook().getID()), "tts_" + entry.getTingID() + ".mp3");
         TTS.generate(text, amplitude, pitch, speed, voice, variant, mp3);
+        entry.setSize((int)mp3.length());
     }
 
 }

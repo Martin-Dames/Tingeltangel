@@ -539,6 +539,9 @@ public class Book {
                 out.writeInt(entry.getSize());
                 if(entry.isMP3() || entry.isTTS()) {
                     out.writeInt(0x0001);
+                    // pre calculate size
+                    System.err.println("pre calculate size (i=" + i + ")");
+                    entry.getMP3();
                 } else {
                     out.writeInt(0x0002);
                 }
@@ -550,6 +553,8 @@ public class Book {
             progress.setMax(size);
         }
         
+        System.err.println("write data...");
+        
         pos = startOfIndexTable + 12 * size;
         // write data
         byte[] buffer = new byte[4096];
@@ -558,6 +563,8 @@ public class Book {
                 progress.setVal(t);
             }
             Entry e = getEntryFromTingID(t + 15001);
+            
+            System.err.println("oid=" + e.getTingID() + " size=" + e.getSize());
             
             if(!e.isEmpty()) {
                 int pad = 0x100 - (pos & 0xff);
@@ -731,14 +738,15 @@ public class Book {
         }
         fco.close();
         fci.close();
-              
+        
         PrintWriter srcOut = new PrintWriter(new FileWriter(src));
         generateScriptFile(srcOut);
         srcOut.close();
-                
+        
         DataOutputStream out = new DataOutputStream(new FileOutputStream(ouf));
         generateOufFile(out, progress);
         out.close();
+        
         
         PrintWriter txt = new PrintWriter(new FileWriter(new File(dir, idS + TxtFile._EN_TXT)));
         

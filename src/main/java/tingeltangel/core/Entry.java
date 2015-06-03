@@ -59,12 +59,16 @@ public class Entry {
     
     
     public int getSize() throws SyntaxError {
-        if(isMP3()) {
+        if(isMP3() || isTTS()) {
             return(size);
         } else if((isCode() || isSub()) && (script != null)) {
             return(script.getSize(false));
         }
         return(0);
+    }
+    
+    public void setSize(int size) {
+        this.size = size;
     }
     
     
@@ -91,13 +95,16 @@ public class Entry {
         // tts
         File ttsMp3 = new File(FileEnvironment.getAudioDirectory(book.getID()), "tts_" + tingID + ".mp3");
         
-        if(!mp3.canRead()) {
+        if(!ttsMp3.canRead()) {
             try {
-                TTS.generate(tts.text, tts.amplitude, tts.pitch, tts.speed, tts.voice, tts.variant, mp3);
-            
-                if(!mp3.canRead()) {
+                System.err.println("TTS: " + tts.text);
+                TTS.generate(tts.text, tts.amplitude, tts.pitch, tts.speed, tts.voice, tts.variant, ttsMp3);
+                
+                System.err.println("TTS done");
+                if(!ttsMp3.canRead()) {
                     return(null);
                 }
+                size = (int)ttsMp3.length();
             } catch(IOException ioe) {
                 ioe.printStackTrace();
                 return(null);
