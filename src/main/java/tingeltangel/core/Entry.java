@@ -97,10 +97,8 @@ public class Entry {
         
         if(!ttsMp3.canRead()) {
             try {
-                System.err.println("TTS: " + tts.text);
                 TTS.generate(tts.text, tts.amplitude, tts.pitch, tts.speed, tts.voice, tts.variant, ttsMp3);
                 
-                System.err.println("TTS done");
                 if(!ttsMp3.canRead()) {
                     return(null);
                 }
