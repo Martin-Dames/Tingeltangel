@@ -89,7 +89,7 @@ public class Entry {
             return(mp3);
         }
         // tts
-        File ttsMp3 = new File(FileEnvironment.getAudioDirectory(tingID), "tts_" + tingID + ".mp3");
+        File ttsMp3 = new File(FileEnvironment.getAudioDirectory(book.getID()), "tts_" + tingID + ".mp3");
         
         if(!mp3.canRead()) {
             try {

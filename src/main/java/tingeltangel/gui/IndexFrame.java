@@ -242,7 +242,11 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                             new TTSDialog(mainFrame, true, entry, new Runnable() {
                                 @Override
                                 public void run() {
-                                    _entry.generateTTS(_book.getEntry(_row));
+                                    try {
+                                        _entry.generateTTS(_book.getEntry(_row));
+                                    } catch(IOException ioe) {
+                                        ioe.printStackTrace();
+                                    }
                                 }
                             }).setVisible(true);
                             
@@ -351,7 +355,7 @@ class IndexTableModel implements TableModel {
             case 0: return("OID");
             case 1: return("Typ");
             case 2: return("Bemerkung");
-            case 3: return("Dateiname");
+            case 3: return("Dateiname / TTS");
         }
         throw new Error();
     }
@@ -392,6 +396,8 @@ class IndexTableModel implements TableModel {
                     return("SKRIPT");
                 } else if(entry.isSub()) {
                     return("METHODE");
+                } else if(entry.isTTS()) {
+                    return("TTS");
                 } else {
                     return("-");
                 }
@@ -409,6 +415,11 @@ class IndexTableModel implements TableModel {
                         return("kein Skript vorhanden");
                     }
                     return("");
+                } else if(entry.isTTS()) {
+                    if(entry.getTTS() == null) {
+                        return("kein TTS vorhanden");
+                    }
+                    return(entry.getTTS().text);
                 } else {
                     return("");
                 }

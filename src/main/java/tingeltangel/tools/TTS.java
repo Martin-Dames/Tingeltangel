@@ -158,6 +158,59 @@ public class TTS {
         }
     }
     
+    public static void play(final String text, int amplitude, int pitch, int speed, String voice, String variant) throws IOException {
+        
+        if(ENABLED == false) {
+            System.out.println("unable to execute tts request: tts not enabled");
+            return;
+        }
+        
+        speed = Math.max(Math.min(speed, 450), 80);
+        amplitude = Math.max(Math.min(amplitude, 20), 0);
+        pitch = Math.max(Math.min(pitch, 99), 0);
+
+        if((variant == null) || (variant.isEmpty())) {
+            variant = "";
+        } else {
+            variant = "+" + variant;
+        }
+        
+        String[] cmd = {
+            ESPEAK.getCanonicalPath(),
+            "--stdin",
+            "-b",
+            "1",
+            "-z",
+            "-a",
+            Integer.toString(amplitude),
+            "-p",
+            Integer.toString(pitch),
+            "-s",
+            Integer.toString(speed),
+            "-v",
+            voice + variant
+        };
+        
+        final Process p = new ProcessBuilder(cmd).start();
+      
+        
+        // copy text to p1
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    InputStream in = new ByteArrayInputStream(text.getBytes(Charset.forName("UTF-8")));
+                    OutputStream out = p.getOutputStream();
+                    copyStream(in, null, out);
+                } catch(IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+        }.start();
+        
+    }
+    
+    
     /**
      *
      * @param text The text to read

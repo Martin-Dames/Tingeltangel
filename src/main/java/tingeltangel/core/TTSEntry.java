@@ -18,6 +18,11 @@
 */
 package tingeltangel.core;
 
+import java.io.File;
+import java.io.IOException;
+import tingeltangel.tools.FileEnvironment;
+import tingeltangel.tools.TTS;
+
 /**
  *
  * @author martin
@@ -37,8 +42,9 @@ public class TTSEntry {
     public int speed = 160;
     
 
-    public void generateTTS(Entry entry) {
-
+    public void generateTTS(Entry entry) throws IOException {
+        File mp3 = new File(FileEnvironment.getAudioDirectory(entry.getBook().getID()), "tts_" + entry.getTingID() + ".mp3");
+        TTS.generate(text, amplitude, pitch, speed, voice, variant, mp3);
     }
 
 }
