@@ -35,11 +35,6 @@ public class Properties {
     
     private final static HashMap<String, String> PROPERTIES = new HashMap<String, String>();
     
-    // todo: remove this
-    public final static String WIN_MPG123 ="win_mpg123";
-    public final static String _PATH =".path";
-    public final static String _ENABLED=".enabled";
-    
     static {
         try {
             File propertyFile = new File(PROPERTY_FILE);

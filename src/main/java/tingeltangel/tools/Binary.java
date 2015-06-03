@@ -59,6 +59,17 @@ public class Binary {
         }
     }
     
+    public static void setBinary(String binary, File file) {
+        if(file.canExecute()) {
+            try {
+            Properties.setProperty(binary, file.getCanonicalPath());
+            } catch(IOException ioe) {
+                throw new Error(ioe);
+            }
+            binMap.put(binary, file);
+        }
+    }
+    
     public static File getBinary(String binary) {
         return(binMap.get(binary));
     }

@@ -199,9 +199,11 @@ public class Codes {
             ImageIO.write(image, "PNG", out);
         }
         
-        public static void drawBooklet(String title, List<Tupel<Integer, String>> booklet, PrintWriter out) {
+        public static void drawBooklet(String title, int mid, List<Tupel<Integer, String>> booklet, PrintWriter out) {
             
-            int entriesPerPage = 32;
+            mid = Translator.ting2code(mid);
+            
+            int entriesPerPage = 30;
             int pages = booklet.size() / entriesPerPage;
             if(booklet.size() % entriesPerPage > 0) {
                 pages++;
@@ -225,17 +227,23 @@ public class Codes {
                     }
                     out.println("%%Page: " + (page + 1) + " " + (page + 1));
                     out.println("/Times-Roman findfont");
+                    out.println("10 scalefont");
+                    out.println("setfont");
+                    drawText(80, 815, "Buch: " + title + " [Seite " + (page + 1) + " von " + pages + "]", out);
+                    out.println("/Times-Roman findfont");
                     out.println("8 scalefont");
                     out.println("setfont");
-                    drawText(50, 815, "Buch: " + title + " [Seite " + (page + 1) + " von " + pages + "]", out);
+                    if(mid >= 0) {
+                        drawCarpet(mid, 50, 810, 20, 20, null, out);
+                    }
                 }
 
                 
-                drawText(80, 800 - (entry % entriesPerPage) * 25, Integer.toString(tupel.a) + ": " + tupel.b, out);
+                drawText(80, 780 - (entry % entriesPerPage) * 25, Integer.toString(tupel.a) + ": " + tupel.b, out);
                 
                 int cid = Translator.ting2code(tupel.a);
                 if(cid >= 0) {
-                    drawCarpet(cid, 50, 795 - (entry % entriesPerPage) * 25, 20, 20, null, out);
+                    drawCarpet(cid, 50, 775 - (entry % entriesPerPage) * 25, 20, 20, null, out);
                 }
                 
                 entry++;

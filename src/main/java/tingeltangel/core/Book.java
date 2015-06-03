@@ -102,15 +102,21 @@ public class Book {
             Entry entry = indexEntries.get(tid);
             if(entry.isMP3() || entry.isCode()) {
                 String txt = entry.getHint();
-                if(entry.isMP3()) {
+                if(entry.isMP3() && (entry.getMP3() != null)) {
                     txt += " (" + entry.getMP3().getName() + ")";
+                } else if(entry.isTTS() && (entry.getTTS() != null)) {
+                    String text = entry.getTTS().text;
+                    if(text.length() > 100) {
+                        text = text.substring(0, 100) + " ...";
+                    }
+                    txt += " (" + text + ")";
                 }
                 booklet.add(new Tupel<Integer, String>(tid, txt));
             }
         }
         // generate booklet
         Codes.setResolution(Codes.DPI600);
-        Codes.drawBooklet(name, booklet, out);
+        Codes.drawBooklet(name, id, booklet, out);
     }
     
     public long getMagicValue() {

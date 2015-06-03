@@ -131,6 +131,8 @@ public class TTSDialog extends javax.swing.JDialog {
         amplitudeLabel = new javax.swing.JLabel();
         playButton = new javax.swing.JButton();
 
+        setTitle("Text To Speech (TTS)");
+
         voiceComboBox.setModel(new DefaultComboBoxModel());
 
         variantComboBox.setModel(new DefaultComboBoxModel());

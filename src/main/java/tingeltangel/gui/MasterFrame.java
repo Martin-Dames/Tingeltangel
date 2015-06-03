@@ -42,7 +42,6 @@ import tingeltangel.core.Book;
 import tingeltangel.core.Codes;
 import tingeltangel.core.Entry;
 import tingeltangel.core.Importer;
-import tingeltangel.core.MP3Player;
 import tingeltangel.core.ReadYamlFile;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
@@ -476,6 +475,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 }
                 
             };
+        } else if(id.equals("about.binary")) {
+            new BinaryLocationsDialog(this, true).setVisible(true);
         } else if(id.equals("windows.stick")) {
             stickFrame.setVisible(true);
         } else if(id.equals("windows.player")) {

@@ -39,8 +39,9 @@ public class CLI {
         BooksScan.class,
         BooksUpdate.class,
         Import.class,
-            Assemble.class,
-            OidCode.class,
+        Assemble.class,
+        OidCode.class,
+        Booklet.class
     };
     
     private final static Map<String, CliCommand> COMMANDS = new HashMap<String, CliCommand>();
