@@ -68,20 +68,24 @@ public class TTSDialog extends javax.swing.JDialog {
         SortedSet<String> voiceIDs = TTS.getVoiceIDs();
         voiceIDTable = new String[voiceIDs.size()];
         int c = 0;
-        int currentVoice = 0;
+        String defVoiceID = TTSPreferences.getDefaultVoice();
+        int currentVoice = -1;
+        int currentVoiceDef = 0;
         Iterator<String> i = voiceIDs.iterator();
         while(i.hasNext()) {
             voiceIDTable[c] = i.next();
             if(voiceIDTable[c].equals(entry.voice)) {
                 currentVoice = c;
             }
-            String name = TTS.getVoiceName(voiceIDTable[c]);
-            if(voiceIDTable[c].startsWith("mb" + File.separator)) {
-                // mbrola
-                name += " (mbrola)";
+            if(voiceIDTable[c].equals(defVoiceID)) {
+                currentVoiceDef = c;
             }
+            String name = TTS.getVoiceName(voiceIDTable[c]);
             voiceModel.addElement(name);
             c++;
+        }
+        if(currentVoice < 0) {
+            currentVoice = currentVoiceDef;
         }
         
         DefaultComboBoxModel variantModel = (DefaultComboBoxModel)variantComboBox.getModel();
@@ -90,14 +94,20 @@ public class TTSDialog extends javax.swing.JDialog {
         variantIDTable[0] = "";
         variantModel.addElement("keine Variante");
         c = 1;
-        int currentVariant = 0;
+        String defVariantID = TTSPreferences.getDefaultVoice();
+        int currentVariant = -1;
+        int currentVariantDef = 0;
         i = variantIDs.iterator();
         while(i.hasNext()) {
             variantIDTable[c] = i.next();
             if(variantIDTable[c].equals(entry.variant)) {
                 currentVariant = c;
             }
+            if(variantIDTable[c].equals(defVariantID)) {
+                currentVariantDef = c;
+            }
             String name = TTS.getVariantName(variantIDTable[c]);
+            /*
             switch(TTS.getVariantGender(variantIDTable[c])) {
                 case TTS.FEMALE:
                     name += " (Frau)";
@@ -105,8 +115,12 @@ public class TTSDialog extends javax.swing.JDialog {
                 case TTS.MALE:
                     name += " (Mann)";
             }
+            */
             variantModel.addElement(name);
             c++;
+        }
+        if(currentVariant < 0) {
+            currentVariant = currentVariantDef;
         }
         
         // preselection

@@ -65,7 +65,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
     private RepositoryManager repositoryFrame;
     
     private InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
-    private InfoFrame licenseFrame = new InfoFrame("Kontakt", "html/license.html");
+    private InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
 
     
     
@@ -477,6 +477,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
             };
         } else if(id.equals("about.binary")) {
             new BinaryLocationsDialog(this, true).setVisible(true);
+        } else if(id.equals("about.tts_prefs")) {
+            new TTSPreferences().setVisible(true);
         } else if(id.equals("windows.stick")) {
             stickFrame.setVisible(true);
         } else if(id.equals("windows.player")) {

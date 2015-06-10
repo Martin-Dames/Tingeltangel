@@ -561,7 +561,6 @@ public class Book {
             progress.setMax(size);
         }
         
-        System.err.println("write data...");
         
         pos = startOfIndexTable + 12 * size;
         // write data
@@ -571,8 +570,6 @@ public class Book {
                 progress.setVal(t);
             }
             Entry e = getEntryFromTingID(t + 15001);
-            
-            System.err.println("oid=" + e.getTingID() + " size=" + e.getSize());
             
             if(!e.isEmpty()) {
                 System.out.println("write entry: " + e.getTingID());

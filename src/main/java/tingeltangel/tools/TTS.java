@@ -112,6 +112,11 @@ public class TTS {
                         lang.name = r[2];
                         lang.gender = UNKNOWN;
                     }
+                    
+                    if(lang.id.startsWith("mb" + File.separator)) {
+                        lang.name += " (mbrola)";
+                    }
+                    
                     voiceIDs.add(lang.id);
                     voices.put(lang.id, lang);
                 }
@@ -139,6 +144,12 @@ public class TTS {
                         lang.id = r[3].substring(3);
                         lang.name = r[2];
                         lang.gender = UNKNOWN;
+                    }
+                    
+                    if(lang.gender == FEMALE) {
+                        lang.name += " (Frau)";
+                    } else if(lang.gender == MALE) {
+                        lang.name += " (Mann)";
                     }
                     
                     variantIDs.add(lang.id);

@@ -231,6 +231,7 @@ public class Importer {
             for(int k = 0; k < 3; k++) {
                 e[k] = ouf.readInt();
             }
+            System.out.println(e[0] + " " + e[1] + " " + e[2]);
             if(e[2] != 0) {
                 e[3] = i;
                 if(!foundFirstEntryCode) {
@@ -314,6 +315,8 @@ public class Importer {
         System.out.println("offset: " + entryOffset);
         
         ouf.close();
+        
+        System.out.println("offset=" + entryOffset);
         
         Iterator<int[]> indexIterator = index.iterator();
         buffer = new byte[4096];
