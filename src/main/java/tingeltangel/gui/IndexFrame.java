@@ -169,7 +169,13 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                         
                     } else if(column == 1) {
                         
-                        String[] options = {"MP3 Track", "Skript", "Skript (Unterprogramm)", "TTS", Lang.get("indexFrame.dialog.empty")};
+                        String[] options = {
+                            Lang.get("indexFrame.dialog.mp3"),
+                            Lang.get("indexFrame.dialog.script"),
+                            Lang.get("indexFrame.dialog.sub"),
+                            Lang.get("indexFrame.dialog.tts"),
+                            Lang.get("indexFrame.dialog.empty")
+                        };
                         String[] actions = {MP3, SCRIPT, SUB, T2S, EMPTY};
                         
                         final Entry entry = book.getEntry(row);
