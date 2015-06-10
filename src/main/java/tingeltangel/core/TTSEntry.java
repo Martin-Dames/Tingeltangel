@@ -37,7 +37,7 @@ public class TTSEntry {
     public String voice = "de";
     public String variant = null;
     
-    public int amplitude = 10;
+    public int amplitude = 20;
     public int pitch = 50;
     public int speed = 160;
     

@@ -49,7 +49,7 @@ public class IndexTableCalculator {
      */
     static int getCodeFromPositionInFile(int position, int n) {
         if (((position & 255) != 0) | (n < 0)) {
-            return -1;
+            return Integer.MIN_VALUE;
         }
         n--;
         int b = (position >> 8) + n * 26;
@@ -59,7 +59,7 @@ public class IndexTableCalculator {
                 return v;
             }
         }
-        return -1;
+        return Integer.MIN_VALUE;
     }
     
     
