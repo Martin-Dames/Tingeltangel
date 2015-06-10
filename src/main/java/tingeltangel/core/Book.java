@@ -54,12 +54,14 @@ import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
-import tingeltangel.tools.ProgressDialog;
 import tingeltangel.tools.FileEnvironment;
+import tingeltangel.tools.ProgressDialog;
 
 public class Book {
 
     private final static long DEFAULT_MAGIC_VALUE = 0x0000000b;
+    
+    private final static int PADDING_BOUNDARY = 0x100;
     
     private SortedIntList indexIDs = new SortedIntList();
     private HashMap<Integer, Entry> indexEntries = new HashMap<Integer, Entry>();
@@ -534,9 +536,16 @@ public class Book {
                 out.writeInt(0x0000);
                 out.writeInt(0x0000);
             } else {
-                pos += 0x100 - (pos & 0xff);
-                out.writeInt(IndexTableCalculator.getCodeFromPositionInFile(pos, i));
-                out.writeInt(entry.getSize());
+                pos += PADDING_BOUNDARY - (pos & 0xff);
+                
+                
+                int code = IndexTableCalculator.getCodeFromPositionInFile(pos, i);
+                int _size = entry.getSize();
+                out.writeInt(code);
+                out.writeInt(_size);
+                
+                System.out.println(i + " @0x" + Integer.toHexString(pos) + " code=0x" + Integer.toHexString(code) + " size=" + _size);
+                
                 if(entry.isMP3() || entry.isTTS()) {
                     out.writeInt(0x0001);
                     // pre calculate size
@@ -566,7 +575,9 @@ public class Book {
             System.err.println("oid=" + e.getTingID() + " size=" + e.getSize());
             
             if(!e.isEmpty()) {
-                int pad = 0x100 - (pos & 0xff);
+                System.out.println("write entry: " + e.getTingID());
+                int pad = PADDING_BOUNDARY - (pos & 0xff);
+                                
                 pos += pad;
                 for(int i = 0; i < pad; i++) {
                     out.write(0x0);

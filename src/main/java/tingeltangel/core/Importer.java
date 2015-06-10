@@ -309,6 +309,10 @@ public class Importer {
         System.out.println("start of first entry: 0x" + Integer.toHexString(pos));
 
         int entryOffset = pos - IndexTableCalculator.getPositionInFileFromCode(firstEntryCode, firstEntryN);
+        
+        
+        System.out.println("offset: " + entryOffset);
+        
         ouf.close();
         
         Iterator<int[]> indexIterator = index.iterator();
