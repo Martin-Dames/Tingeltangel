@@ -57,6 +57,7 @@ public class ImportTest {
 			success.add(id);
                     } catch(Exception e) {
                         System.out.println("********** ERROR: " + e.getMessage() + " ****************");
+                        e.printStackTrace();
                         failed.add(id);
                     }
                 }

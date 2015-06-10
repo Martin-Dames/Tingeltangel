@@ -65,7 +65,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
     private RepositoryManager repositoryFrame;
     
     private InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
-    private InfoFrame licenseFrame = new InfoFrame("Kontakt", "html/license.html");
+    private InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
 
     
     

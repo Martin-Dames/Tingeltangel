@@ -51,6 +51,7 @@ import tingeltangel.core.Entry;
 import tingeltangel.core.TTSEntry;
 import tingeltangel.core.Translator;
 import tingeltangel.tools.Callback;
+import tingeltangel.tools.Lang;
 
 
 public class IndexFrame extends JInternalFrame implements ActionListener {
@@ -168,7 +169,7 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                         
                     } else if(column == 1) {
                         
-                        String[] options = {"MP3 Track", "Skript", "Skript (Unterprogramm)", "TTS", "Leerer Eintrag"};
+                        String[] options = {"MP3 Track", "Skript", "Skript (Unterprogramm)", "TTS", Lang.get("indexFrame.dialog.empty")};
                         String[] actions = {MP3, SCRIPT, SUB, T2S, EMPTY};
                         
                         final Entry entry = book.getEntry(row);
