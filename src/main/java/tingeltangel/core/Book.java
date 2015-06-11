@@ -499,7 +499,13 @@ public class Book {
         }
     }
     
-    
+    private static int getNextAddress(int x) {
+        x += 0x100 - (x & 0xff);
+        while(x % 0x200 != 0) {
+            x += 0x100;
+        }
+        return(x);
+    }
     
     private void generateOufFile(DataOutputStream out, ProgressDialog progress) throws IOException, SyntaxError {
         
@@ -536,10 +542,7 @@ public class Book {
                 out.writeInt(0x0000);
             } else {
                 
-                pos += 0x100 - (pos & 0xff);
-                while(pos % 0x200 != 0) {
-                    pos += 0x100;
-                }
+                pos = getNextAddress(pos);
                 
                 
                 int code = IndexTableCalculator.getCodeFromPositionInFile(pos, i);
@@ -547,7 +550,7 @@ public class Book {
                 out.writeInt(code);
                 out.writeInt(_size);
                 
-                System.out.println((i + 15001) + " @0x" + Integer.toHexString(pos)); // + " code=0x" + Integer.toHexString(code) + " size=" + _size);
+                // System.out.println((i + 15001) + " @0x" + Integer.toHexString(pos)); // + " code=0x" + Integer.toHexString(code) + " size=" + _size);
                 
                 if(entry.isMP3() || entry.isTTS()) {
                     out.writeInt(0x0001);
@@ -575,13 +578,10 @@ public class Book {
             Entry e = getEntryFromTingID(t + 15001);
             
             if(!e.isEmpty()) {
-                System.out.println("write entry: " + e.getTingID());
-                int pad = 0x100 - (pos & 0xff);
-                while((pos + pad) % 0x200 != 0) {
-                    pad += 0x100;
-                }
                 
+                int pad = getNextAddress(pos) - pos;
                 pos += pad;
+                
                 for(int i = 0; i < pad; i++) {
                     out.write(0x0);
                 }
