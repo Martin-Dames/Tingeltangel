@@ -18,7 +18,6 @@
 */
 package tingeltangel.gui;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -94,7 +93,7 @@ public class TTSDialog extends javax.swing.JDialog {
         variantIDTable[0] = "";
         variantModel.addElement("keine Variante");
         c = 1;
-        String defVariantID = TTSPreferences.getDefaultVoice();
+        String defVariantID = TTSPreferences.getDefaultVariant();
         int currentVariant = -1;
         int currentVariantDef = 0;
         i = variantIDs.iterator();

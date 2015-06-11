@@ -61,7 +61,6 @@ public class Book {
 
     private final static long DEFAULT_MAGIC_VALUE = 0x0000000b;
     
-    private final static int PADDING_BOUNDARY = 0x100;
     
     private SortedIntList indexIDs = new SortedIntList();
     private HashMap<Integer, Entry> indexEntries = new HashMap<Integer, Entry>();
@@ -536,7 +535,11 @@ public class Book {
                 out.writeInt(0x0000);
                 out.writeInt(0x0000);
             } else {
-                pos += PADDING_BOUNDARY - (pos & 0xff);
+                
+                pos += 0x100 - (pos & 0xff);
+                while(pos % 0x200 != 0) {
+                    pos += 0x100;
+                }
                 
                 
                 int code = IndexTableCalculator.getCodeFromPositionInFile(pos, i);
@@ -544,7 +547,7 @@ public class Book {
                 out.writeInt(code);
                 out.writeInt(_size);
                 
-                System.out.println(i + " @0x" + Integer.toHexString(pos) + " code=0x" + Integer.toHexString(code) + " size=" + _size);
+                System.out.println((i + 15001) + " @0x" + Integer.toHexString(pos)); // + " code=0x" + Integer.toHexString(code) + " size=" + _size);
                 
                 if(entry.isMP3() || entry.isTTS()) {
                     out.writeInt(0x0001);
@@ -573,8 +576,11 @@ public class Book {
             
             if(!e.isEmpty()) {
                 System.out.println("write entry: " + e.getTingID());
-                int pad = PADDING_BOUNDARY - (pos & 0xff);
-                                
+                int pad = 0x100 - (pos & 0xff);
+                while((pos + pad) % 0x200 != 0) {
+                    pad += 0x100;
+                }
+                
                 pos += pad;
                 for(int i = 0; i < pad; i++) {
                     out.write(0x0);
@@ -586,6 +592,7 @@ public class Book {
                         out.write(buffer, 0, b);
                         pos += b;
                     }
+                    in.close();
                 } else {
                     byte[] bin = e.getScript().compile();
                     out.write(bin);

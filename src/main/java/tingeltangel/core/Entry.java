@@ -102,12 +102,12 @@ public class Entry {
                 if(!ttsMp3.canRead()) {
                     return(null);
                 }
-                size = (int)ttsMp3.length();
             } catch(IOException ioe) {
                 ioe.printStackTrace();
                 return(null);
             }
         }
+        size = (int)ttsMp3.length();
         return(ttsMp3);
     }
     
@@ -177,6 +177,10 @@ public class Entry {
         mp3 = null;
         script = null;
         type = T2S;
+        
+        // prefetch track length
+        getMP3();
+        
         changeMade();
     }
     

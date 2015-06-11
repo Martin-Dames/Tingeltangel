@@ -316,8 +316,6 @@ public class Importer {
         
         ouf.close();
         
-        System.out.println("offset=" + entryOffset);
-        
         Iterator<int[]> indexIterator = index.iterator();
         buffer = new byte[4096];
         while(indexIterator.hasNext()) {
