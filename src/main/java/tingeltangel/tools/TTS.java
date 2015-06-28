@@ -30,6 +30,8 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -78,6 +80,43 @@ public class TTS {
         return(variants.get(id).gender);
     }
     
+    private static void getLanguages(String eSpeakArgument) throws IOException {
+        String[] cmd1 = {ESPEAK.getCanonicalPath(), eSpeakArgument};
+        Process process = new ProcessBuilder(cmd1).start();
+        BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        in.readLine(); // remove heading
+        String row;
+        while((row = in.readLine()) != null) {
+            String[] r = row.trim().split("[ ]+");
+            Language lang = new Language();
+
+            lang.lang = r[1];
+
+            if(r[2].endsWith("F") || r[2].endsWith("M") || r[2].endsWith("-")) {
+                lang.id = r[4];
+                lang.name = r[3];
+                if(r[2].endsWith("F")) {
+                    lang.gender = FEMALE;
+                } else if(r[2].endsWith("M")) {
+                    lang.gender = MALE;
+                } else {
+                    lang.gender = UNKNOWN;
+                }
+            } else {
+                lang.id = r[3];
+                lang.name = r[2];
+                lang.gender = UNKNOWN;
+            }
+
+            if(lang.id.startsWith("mb" + File.separator)) {
+                lang.name += " (mbrola)";
+            }
+
+            voiceIDs.add(lang.id);
+            voices.put(lang.id, lang);
+        }
+    }
+    
     static {
         try {
             
@@ -88,44 +127,27 @@ public class TTS {
             if(ENABLED) {
 
                 // collect voices
-                String[] cmd1 = {ESPEAK.getCanonicalPath(), "--voices"};
-                Process process = new ProcessBuilder(cmd1).start();
-                BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                in.readLine(); // remove heading
-                String row;
-                while((row = in.readLine()) != null) {
-                    String[] r = row.trim().split("[ ]+");
-                    Language lang = new Language();
-                    
-                    if(r[2].endsWith("F") || r[2].endsWith("M") || r[2].endsWith("-")) {
-                        lang.id = r[4];
-                        lang.name = r[3];
-                        if(r[2].endsWith("F")) {
-                            lang.gender = FEMALE;
-                        } else if(r[2].endsWith("M")) {
-                            lang.gender = MALE;
-                        } else {
-                            lang.gender = UNKNOWN;
-                        }
-                    } else {
-                        lang.id = r[3];
-                        lang.name = r[2];
-                        lang.gender = UNKNOWN;
-                    }
-                    
-                    if(lang.id.startsWith("mb" + File.separator)) {
-                        lang.name += " (mbrola)";
-                    }
-                    
-                    voiceIDs.add(lang.id);
-                    voices.put(lang.id, lang);
+                getLanguages("--voices");
+                HashSet<String> langs = new HashSet<String>();
+                Iterator<Language> langIt = voices.values().iterator();
+                while(langIt.hasNext()) {
+                    langs.add(langIt.next().lang);
                 }
+                Iterator<String> langSIt = langs.iterator();
+                while(langSIt.hasNext()) {
+                    getLanguages("--voice=" + langSIt.next());
+                }
+                
+                
+                // collect mbrola voices (some espeak versions don't show embrola voices with '--voices')
+                
                 
                 // collect variants
                 String[] cmd2 = {ESPEAK.getCanonicalPath(), "--voices=variant"};
-                process = new ProcessBuilder(cmd2).start();
-                in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                Process process = new ProcessBuilder(cmd2).start();
+                BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 in.readLine(); // remove heading
+                String row;
                 while((row = in.readLine()) != null) {
                     String[] r = row.trim().split("[ ]+");
                     Language lang = new Language();
@@ -372,5 +394,6 @@ class MyComparator implements Comparator<Language> {
 class Language {
     String id;
     String name;
+    String lang;
     int gender;
 }
