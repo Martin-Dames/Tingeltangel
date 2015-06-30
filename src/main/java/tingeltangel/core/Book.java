@@ -55,6 +55,7 @@ import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
+import tingeltangel.tools.OS;
 import tingeltangel.tools.ProgressDialog;
 
 public class Book {
@@ -73,6 +74,7 @@ public class Book {
     private String author;
     private int version;
     private String url;
+    private LinkedList<Page> pages = new LinkedList<Page>();
     
     private long date = new Date().getTime() / 1000;
     private long magicValue = DEFAULT_MAGIC_VALUE;
@@ -93,6 +95,10 @@ public class Book {
         date = new Date().getTime() / 1000;
         
         magicValue = DEFAULT_MAGIC_VALUE;
+    }
+    
+    public LinkedList<Page> getPages() {
+        return(pages);
     }
         
     public void generateTestBooklet(PrintWriter out) {
@@ -331,6 +337,26 @@ public class Book {
             }
         }
         xml.println("\t</entries>");
+        xml.println("\t<pages>");
+        Iterator<Page> pageIterator = pages.iterator();
+        while(pageIterator.hasNext()) {
+            Page page = pageIterator.next();
+            xml.println("\t\t<page image=\"" + page.image + "\">" + encodeValue(page.description) + "</page>");
+            if((page.raster != null) && (page.raster.length > 0)) {
+                // write raster file
+                File raster = new File(FileEnvironment.getPagesDirectory(id), page.image.substring(0, page.image.lastIndexOf('.')) + ".raster");
+                DataOutputStream rasterOut = new DataOutputStream(new FileOutputStream(raster));
+                rasterOut.writeShort(page.raster.length); // width
+                rasterOut.writeShort(page.raster[0].length); // height
+                for(int x = 0; x < page.raster.length; x++) {
+                    for(int y = 0; y < page.raster[0].length; y++) {
+                        rasterOut.writeShort(page.raster[x][y]);
+                    }
+                }
+                rasterOut.close();
+            }
+        }
+        xml.println("\t</pages>");
         xml.println("\t<registers>");
         for(int i = 0; i <= emulator.getMaxRegister(); i++) {
             if(!emulator.getHint(i).trim().isEmpty()) {
@@ -437,11 +463,17 @@ public class Book {
                         String ttsText = getTagContent(ttsElement);
                         
                         TTSEntry ttsEntry = new TTSEntry(ttsText);
-                        ttsEntry.voice = ttsElement.getAttribute("voice");
+                        ttsEntry.voice = ttsElement.getAttribute("voice");                        
                         ttsEntry.variant = ttsElement.getAttribute("variant");
                         ttsEntry.amplitude = Integer.parseInt(ttsElement.getAttribute("amplitude"));
                         ttsEntry.speed = Integer.parseInt(ttsElement.getAttribute("speed"));
                         ttsEntry.pitch = Integer.parseInt(ttsElement.getAttribute("pitch"));
+                        
+                        if(OS.isWindows()) {
+                            ttsEntry.voice = ttsEntry.voice.replace('/', '\\');
+                        } else {
+                            ttsEntry.voice = ttsEntry.voice.replace('\\', '/');
+                        }
                         
                         entry.setTTS(ttsEntry);
                     } else {
@@ -466,8 +498,19 @@ public class Book {
                     String hint = getTagContent(registerElement.getElementsByTagName("hint").item(0));
                     book.emulator.setHint(rID, hint);
                 }
-            }  
-                    
+            }
+            
+            NodeList pages = doc.getElementsByTagName("page");
+            for(int i = 0; i < pages.getLength(); i++) {
+                Node pageNode = pages.item(i);
+                if(pageNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element pageElement = (Element)pageNode;
+                    Page p = new Page();
+                    p.image = pageElement.getAttribute("image");
+                    p.description = getTagContent(pageElement);
+                    book.getPages().add(p);
+                }
+            }
         } catch (SAXException ex) {
             throw new IOException(ex);
         } catch (ParserConfigurationException ex) {

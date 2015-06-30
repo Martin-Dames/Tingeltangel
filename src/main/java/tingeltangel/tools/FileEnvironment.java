@@ -92,6 +92,10 @@ public class FileEnvironment {
         return(getBookSubDirectory(id, "codes"));
     }
     
+    public static File getPagesDirectory(int id) {
+        return(getBookSubDirectory(id, "pages"));
+    }
+    
     public static File getBinObjectFile(int mid, int oid) {
         return(new File(getBinDirectory(mid), Integer.toString(oid) + ".bin"));
     }

@@ -133,13 +133,12 @@ public class TTS {
                 while(langIt.hasNext()) {
                     langs.add(langIt.next().lang);
                 }
+                
+                // collect mbrola voices (some espeak versions don't show embrola voices with '--voices' !?)
                 Iterator<String> langSIt = langs.iterator();
                 while(langSIt.hasNext()) {
                     getLanguages("--voice=" + langSIt.next());
                 }
-                
-                
-                // collect mbrola voices (some espeak versions don't show embrola voices with '--voices')
                 
                 
                 // collect variants

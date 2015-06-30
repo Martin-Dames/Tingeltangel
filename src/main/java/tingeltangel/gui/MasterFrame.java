@@ -19,8 +19,6 @@
 
 package tingeltangel.gui;
 
-import tingeltangel.tools.ProgressDialog;
-import tingeltangel.tools.Callback;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
@@ -46,8 +44,10 @@ import tingeltangel.core.ReadYamlFile;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
+import tingeltangel.tools.Callback;
 import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.Progress;
+import tingeltangel.tools.ProgressDialog;
 
 public class MasterFrame extends JFrame implements Callback<String> {
 
@@ -63,6 +63,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
     private ReferenceFrame referenceFrame;
     private TranslatorFrame translatorFrame;
     private RepositoryManager repositoryFrame;
+    private GfxEditFrame gfxEditFrame;
     
     private InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
     private InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
@@ -81,7 +82,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
         stickFrame = new StickFrame(this);
         referenceFrame = new ReferenceFrame(this);
         translatorFrame = new TranslatorFrame(this);
-        repositoryFrame = new RepositoryManager();
+        repositoryFrame = new RepositoryManager(this);
+        gfxEditFrame = new GfxEditFrame(this);
         
         book.addRegisterListener(registerFrame);
         
@@ -119,6 +121,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
         desktop.add(contactFrame);
         desktop.add(licenseFrame);
         desktop.add(translatorFrame);
+        desktop.add(gfxEditFrame);
         
         
         
@@ -379,13 +382,14 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         try {
                             book.clear();
                             book.setID(_id);
-                            //Book.load(FileEnvironment.getTBU(_id), book);
+                            
                             Book.loadXML(FileEnvironment.getXML(_id), book);
                         } catch (IOException ex) {
                             ex.printStackTrace(System.err);
                         }
                         propertyFrame.refresh();
                         indexFrame.update();
+                        gfxEditFrame.update();
                     }
                 });
                 
@@ -404,7 +408,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
             }
             
         } else if(id.equals("buch.generate")) {
-            new Progress(MasterFrame.this, "erzeuge Codes") {
+            new Progress(MasterFrame.this, "erzeuge Buch") {
                 @Override
                 public void action(ProgressDialog progressDialog) {
                     try {
@@ -497,6 +501,9 @@ public class MasterFrame extends JFrame implements Callback<String> {
             translatorFrame.setVisible(true);
         } else if(id.equals("windows.repository")) {
             repositoryFrame.setVisible(true);
+        } else if(id.equals("windows.gfx")) {
+            gfxEditFrame.setVisible(true);
+            gfxEditFrame.update();
         } else if(id.startsWith("codes.raw.")) {
             id = id.substring("codes.raw.".length());
             int start = Integer.parseInt(id.substring(0, 1)) * 10000 + Integer.parseInt(id.substring(2)) * 1000;
