@@ -180,8 +180,9 @@ public class TTSDialog extends javax.swing.JDialog {
 
         pitchSlider.setMaximum(99);
 
-        amplitudeSlider.setMaximum(20);
-        amplitudeSlider.setValue(10);
+        amplitudeSlider.setMaximum(200);
+        amplitudeSlider.setToolTipText("");
+        amplitudeSlider.setValue(200);
 
         textArea.setColumns(20);
         textArea.setRows(5);
@@ -198,7 +199,7 @@ public class TTSDialog extends javax.swing.JDialog {
 
         pitchLabel.setText("50");
 
-        amplitudeLabel.setText("10");
+        amplitudeLabel.setText("200");
 
         playButton.setText("play");
         playButton.addActionListener(new java.awt.event.ActionListener() {
