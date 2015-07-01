@@ -65,7 +65,7 @@ public class TTS {
     }
     
     public static String getVoiceName(String id) {
-        return(voices.get(id).name);
+        return(voices.get(id).name + " (" + id + ")");
     }
     
     public static String getVariantName(String id) {
@@ -106,10 +106,6 @@ public class TTS {
                 lang.id = r[3];
                 lang.name = r[2];
                 lang.gender = UNKNOWN;
-            }
-
-            if(lang.id.startsWith("mb" + File.separator)) {
-                lang.name += " (mbrola)";
             }
 
             voiceIDs.add(lang.id);
