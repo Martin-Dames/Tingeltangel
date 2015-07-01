@@ -60,7 +60,9 @@ public class ChooseBook extends javax.swing.JDialog {
             if(books[i].isDirectory()) {
                 try {
                     int id = Integer.parseInt(books[i].getName());
-                    idList.add(new Tupel(id, getLabel(id)));
+                    if(id != 15000) {
+                        idList.add(new Tupel(id, getLabel(id)));
+                    }
                 } catch(NumberFormatException nfe) {
                 } catch(IOException ioe) {
                     ioe.printStackTrace(System.err);
