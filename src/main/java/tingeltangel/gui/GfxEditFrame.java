@@ -104,6 +104,9 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
                 super.paintComponent(g);
                 if(img != null) {
                     int[][] raster = masterFrame.getBook().getPages().get(pagesComboBox.getSelectedIndex()).raster;
+                    if(raster == null) {
+                        return;
+                    }
                     g.drawImage(img, dx, dy, w, h, null);
                     // draw raster
                     for(int x = 0; x < raster.length; x++) {
@@ -242,8 +245,8 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
                     
                     page.raster = new int[_w][_h];
                     
-                    for(int x = 0; x < w; x++) {
-                        for(int y = 0; y < h; y++) {
+                    for(int x = 0; x < _w; x++) {
+                        for(int y = 0; y < _h; y++) {
                             page.raster[x][y] = in.readShort();
                         }
                     }
@@ -307,10 +310,13 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
         loadImageButton = new javax.swing.JButton();
         erasorToggleButton = new javax.swing.JToggleButton();
         panel = new javax.swing.JPanel();
-        descriptionTextField = new javax.swing.JTextField();
+        removePageButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1000, 960));
+        setClosable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        setResizable(true);
+        setTitle("GFX Editor");
+        setPreferredSize(new java.awt.Dimension(920, 520));
 
         pagesComboBox.setModel(new DefaultComboBoxModel());
         pagesComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -356,20 +362,23 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
 
         erasorToggleButton.setText("Radieren");
 
+        panel.setPreferredSize(new java.awt.Dimension(570, 320));
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 816, Short.MAX_VALUE)
+            .addGap(0, 748, Short.MAX_VALUE)
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        descriptionTextField.addActionListener(new java.awt.event.ActionListener() {
+        removePageButton.setText("Seite entfernen");
+        removePageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                descriptionTextFieldActionPerformed(evt);
+                removePageButtonActionPerformed(evt);
             }
         });
 
@@ -378,36 +387,30 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(removePageButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(12, 12, 12)
                             .addComponent(jLabel2)
                             .addGap(12, 12, 12)
                             .addComponent(addPageButton)
                             .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(pagesComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(pagesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel1)
+                            .addGap(28, 28, 28)
+                            .addComponent(brushSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(descriptionTextField)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addGap(28, 28, 28)
-                                    .addComponent(brushSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(erasorToggleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(loadImageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(erasorToggleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loadImageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -415,30 +418,30 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(jLabel2))
-                            .addComponent(addPageButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pagesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(descriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(brushSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(erasorToggleButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(loadImageButton)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel2))
+                    .addComponent(addPageButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pagesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(removePageButton)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(brushSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(erasorToggleButton)
+                .addGap(18, 18, 18)
+                .addComponent(loadImageButton)
+                .addContainerGap(258, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -452,20 +455,23 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
     }//GEN-LAST:event_addPageButtonActionPerformed
 
     private void pagesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagesComboBoxActionPerformed
-        System.out.println(evt.getActionCommand());
-        Page p = masterFrame.getBook().getPages().get(pagesComboBox.getSelectedIndex());
-        try {
-            showPage(p);
-            repaintCanvas();
-        } catch(IOException e) {
-            JOptionPane.showMessageDialog(this, "Das Bild konnte nicht geladen werden");
-            e.printStackTrace(System.out);
+        
+        int index = pagesComboBox.getSelectedIndex();
+        if(index >= 0) {
+            Page p = masterFrame.getBook().getPages().get(index);
+            try {
+                showPage(p);
+                repaintCanvas();
+            } catch(IOException e) {
+                JOptionPane.showMessageDialog(this, "Das Bild konnte nicht geladen werden");
+                e.printStackTrace(System.out);
+            }
         }
     }//GEN-LAST:event_pagesComboBoxActionPerformed
 
     private void loadImageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadImageButtonActionPerformed
         JFileChooser fc = new JFileChooser();
-        fc.setFileFilter(new FileNameExtensionFilter("Code Tabelle (*.png)", "png"));
+        fc.setFileFilter(new FileNameExtensionFilter("Bild (*.png)", "png"));
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 System.out.println("loading " + fc.getSelectedFile().getCanonicalPath());
@@ -479,16 +485,20 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
         }
     }//GEN-LAST:event_loadImageButtonActionPerformed
 
-    private void descriptionTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descriptionTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_descriptionTextFieldActionPerformed
+    private void removePageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePageButtonActionPerformed
+        
+        int index = pagesComboBox.getSelectedIndex();
+        if(index >= 0) {
+            masterFrame.getBook().getPages().remove(index);
+        }
+        update();
+    }//GEN-LAST:event_removePageButtonActionPerformed
 
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPageButton;
     private javax.swing.JSpinner brushSizeSpinner;
     private javax.swing.JPanel colorPanel;
-    private javax.swing.JTextField descriptionTextField;
     private javax.swing.JToggleButton erasorToggleButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -496,6 +506,7 @@ public class GfxEditFrame extends javax.swing.JInternalFrame implements EntryLis
     private javax.swing.JButton loadImageButton;
     private javax.swing.JComboBox pagesComboBox;
     private javax.swing.JPanel panel;
+    private javax.swing.JButton removePageButton;
     // End of variables declaration//GEN-END:variables
 
     @Override

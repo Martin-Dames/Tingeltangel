@@ -910,5 +910,18 @@ public class Book {
             line = in.readLine();
         }
     }
+
+    public void renderPages(ProgressDialog progressDialog) {
+        
+        progressDialog.setMax(getPages().size());
+        
+        int i = 0;
+        Iterator<Page> pagesIterator = getPages().iterator();
+        while(pagesIterator.hasNext()) {
+            progressDialog.setVal(i++);
+            Page p = pagesIterator.next();
+            PageRenderer.render(this, p);
+        }
+    }
    
 }

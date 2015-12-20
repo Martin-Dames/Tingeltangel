@@ -397,6 +397,13 @@ public class MasterFrame extends JFrame implements Callback<String> {
             }
             
             
+        } else if(id.equals("buch.generatePages")) {
+            new Progress(MasterFrame.this, "rendere Buchseiten") {
+                @Override
+                public void action(ProgressDialog progressDialog) {
+                    book.renderPages(progressDialog);
+                }
+            };
         } else if(id.equals("buch.save")) {
             
             
