@@ -23,6 +23,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -40,13 +41,56 @@ public class Codes {
         
         private final static int[] PNG_DOT_SIZE = {1, 2};
         private final static int[] PNG_DELTA_SIZE = {1, 2};
+        private final static int[] PNG_DELTA_X_SIZE = {1, 2};
         private final static int[] PNG_BLOCK_SIZE = {6, 12};
+        
         private final static float[] PNG_PIXEL_PER_MM = {23.62205f, 47.24409f};
         
         public final static int DPI600 = 0;
         public final static int DPI1200 = 1;
         
         private static int resolution = DPI1200;
+        
+        public static void main(String[] args) throws IOException {
+            setResolution(DPI1200);
+            BufferedImage image = new BufferedImage(5000, 5000, BufferedImage.TYPE_INT_ARGB);
+            
+            Graphics2D graphics = image.createGraphics();
+            graphics.setComposite(AlphaComposite.Clear);
+            graphics.fillRect(0, 0, 5000, 5000);
+            graphics.setComposite(AlphaComposite.Src);
+            graphics.setColor(Color.black);
+            
+            
+            for(int _PNG_DOT_SIZE = 1; _PNG_DOT_SIZE <= 3; _PNG_DOT_SIZE++) {
+                PNG_DOT_SIZE[DPI1200] = _PNG_DOT_SIZE;
+                for(int _PNG_DELTA_SIZE = 1; _PNG_DELTA_SIZE <= 3; _PNG_DELTA_SIZE++) {
+                    PNG_DELTA_SIZE[DPI1200] = _PNG_DELTA_SIZE;
+                    for(int _PNG_DELTA_X_SIZE = 1; _PNG_DELTA_X_SIZE <= 3; _PNG_DELTA_X_SIZE++) {
+                        PNG_DELTA_X_SIZE[DPI1200] = _PNG_DELTA_X_SIZE;
+                        for(int _PNG_BLOCK_SIZE = 10; _PNG_BLOCK_SIZE <= 14; _PNG_BLOCK_SIZE++) {
+                            PNG_BLOCK_SIZE[DPI1200] = _PNG_BLOCK_SIZE;
+                            
+
+            
+            drawPattern(15001,
+                    (_PNG_BLOCK_SIZE - 10) * 250 + (_PNG_DELTA_SIZE - 1) * 1400,
+                    (_PNG_DELTA_X_SIZE - 1) * 250 + (_PNG_DOT_SIZE - 1) * 1400,
+                    4, 4, graphics);
+            
+            
+                            
+                            
+                            
+                            
+                            
+                            
+                        }
+                    }
+                }
+            }
+            ImageIO.write(image, "PNG", new FileOutputStream("/home/martin/test.png"));
+        }
         
         public static void setResolution(int resolution) {
             Codes.resolution = resolution;
@@ -147,6 +191,34 @@ public class Codes {
             drawCarpet(code, 0, 0, width, height, null, out);
         }
         
+        private static void drawPattern(int code, int x, int y, int width, int height, Graphics2D graphics) {
+            int[][][] pattern = getPatternFromInt(code);
+            for(int ix = 0; ix < width; ix++) {
+                for(int iy = 0; iy < height; iy++) {
+                    for(int dx = 0; dx < 4; dx++) {
+                            int mx = ix * 4 * PNG_BLOCK_SIZE[resolution] + dx * PNG_BLOCK_SIZE[resolution] + PNG_BLOCK_SIZE[resolution] / 2;
+                            for(int dy = 0; dy < 4; dy++) {
+                                    int my = iy * 4 * PNG_BLOCK_SIZE[resolution] + dy * PNG_BLOCK_SIZE[resolution] + PNG_BLOCK_SIZE[resolution] / 2;
+                                    
+                                    int px;
+                                    int py;
+                                    
+                                    if((pattern[dy][dx][1] == 0) && (pattern[dy][dx][0] > 0)) {
+                                        px = mx + pattern[dy][dx][0] * PNG_DELTA_X_SIZE[resolution];
+                                        py = my;
+                                    } else {
+                                        px = mx + pattern[dy][dx][0] * PNG_DELTA_SIZE[resolution];
+                                        py = my - pattern[dy][dx][1] * PNG_DELTA_SIZE[resolution];
+                                    }
+                                    
+                                    graphics.fillRect(px + x, py + y, PNG_DOT_SIZE[resolution], PNG_DOT_SIZE[resolution]);
+                                    
+                            }
+                    }
+                }
+            }
+        }
+        
         /**
          * 
          * @param code code-id (not ting-id)
@@ -176,24 +248,7 @@ public class Codes {
             graphics.setComposite(AlphaComposite.Src);
             graphics.setColor(Color.black);
             
-            
-            for(int ix = 0; ix < width; ix++) {
-                for(int iy = 0; iy < height; iy++) {
-                    int[][][] pattern = getPatternFromInt(code);
-                    for(int dx = 0; dx < 4; dx++) {
-                            int mx = ix * 4 * PNG_BLOCK_SIZE[resolution] + dx * PNG_BLOCK_SIZE[resolution] + PNG_BLOCK_SIZE[resolution] / 2;
-                            for(int dy = 0; dy < 4; dy++) {
-                                    int my = iy * 4 * PNG_BLOCK_SIZE[resolution] + dy * PNG_BLOCK_SIZE[resolution] + PNG_BLOCK_SIZE[resolution] / 2;
-                                    
-                                    int px = mx + pattern[dy][dx][0] * PNG_DELTA_SIZE[resolution];
-                                    int py = my - pattern[dy][dx][1] * PNG_DELTA_SIZE[resolution];
-                                    
-                                    graphics.fillRect(px, py, PNG_DOT_SIZE[resolution], PNG_DOT_SIZE[resolution]);
-                                    // graphics.drawLine(px, py, px, py); // fix me
-                            }
-                    }
-                }
-            }
+            drawPattern(code, 0, 0, width, height, graphics);
             
             
             ImageIO.write(image, "PNG", out);
