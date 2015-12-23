@@ -786,7 +786,7 @@ public class Book {
         File src = new File(dir, idS + ScriptFile._EN_SRC);
         
         // TODO use proper png file
-        InputStream fci = new FileInputStream("sample.png");
+        InputStream fci = getClass().getResourceAsStream("/sample.png");
         OutputStream fco = new FileOutputStream(png);
         int b;
         byte[] buffer = new byte[4096];
