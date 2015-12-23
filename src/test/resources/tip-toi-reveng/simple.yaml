@@ -1,0 +1,8 @@
+product-id:  95
+scripts:
+  a:
+    - P(x)
+  b:
+    - P(y)
+  c:
+    - P(z)
