@@ -19,6 +19,7 @@
 
 package tingeltangel.tiptoireveng;
 
+import tingeltangel.core.ReadYamlFile;
 import tiptoi_reveng.analysis.DepthFirstAdapter;
 import tiptoi_reveng.node.*;
 
@@ -29,7 +30,6 @@ import java.util.*;
  * names, registers, identifiers and file names  are collected. Second, the script code is generated.
  */
 public class Interpreter extends DepthFirstAdapter {
-
     private Map<String, Integer> variable2register = new HashMap<String, Integer>();
     private Map<String, Integer> identifier2oid = new HashMap<String, Integer>();
     private Map<String, Integer> filename2oid = new HashMap<String, Integer>();
@@ -72,7 +72,7 @@ public class Interpreter extends DepthFirstAdapter {
         }
 
         // assign OIDs to identifiers
-        int oid = 15000;
+        int oid = ReadYamlFile.MINIMAL_OID;
         for (String identifier : identifiers) {
             if (!identifier2oid.containsKey(identifier)) {
                 while (oids.contains(oid)) {
@@ -118,7 +118,7 @@ public class Interpreter extends DepthFirstAdapter {
     @Override
     public void outAOidFileName(AOidFileName node) {
         int oid = Integer.parseInt(node.getInteger().getText())    ;
-        if( oid < 15000) {
+        if( oid <= ReadYamlFile.MINIMAL_OID) {
             oid += 7000;
         }
         oids.add(oid);
@@ -209,7 +209,7 @@ public class Interpreter extends DepthFirstAdapter {
             result = filename2oid.get(identifier);
         } else if (fileName instanceof AOidFileName) {
             result = Integer.parseInt(((AOidFileName) fileName).getInteger().getText());
-            if( result < 15000) {
+            if( result <= ReadYamlFile.MINIMAL_OID) {
                 result += 7000;
             }
         } else {

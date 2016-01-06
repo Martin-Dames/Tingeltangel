@@ -23,6 +23,7 @@ import tingeltangel.cli.CliCommand;
 import tingeltangel.cli.CliSwitch;
 import tingeltangel.core.Book;
 import tingeltangel.core.Codes;
+import tingeltangel.core.Translator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -112,12 +113,14 @@ public class OidCode extends CliCommand {
         }
     }
 
-    private void generateImage(int oid, Book book, String name) throws IOException {
+    private void generateImage(final int oid, final  Book book, final String name) throws IOException {
+        final int codeID = Translator.ting2code(oid);
+
         String filename = "oid-" + book.getID() + "-" + name + ".png";
         System.out.println("Writing " + filename + "...");
 
         OutputStream out = new FileOutputStream(filename);
-        Codes.drawPng(oid, 102, 102, out);
+        Codes.drawPng(codeID, 102, 102, out);
         out.close();
     }
 }
