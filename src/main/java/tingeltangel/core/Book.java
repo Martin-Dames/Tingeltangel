@@ -79,6 +79,7 @@ public class Book {
     private long date = new Date().getTime() / 1000;
     private long magicValue = DEFAULT_MAGIC_VALUE;
     
+    private final static int PNG_SIZE = 12;
     
     private Emulator emulator;
     
@@ -448,7 +449,12 @@ public class Book {
                     String mp3 = eElement.getAttribute("mp3");
                     Entry entry = new Entry(book, tingID);
                     if(type.equals("mp3")) {
-                        entry.setMP3(new File(FileEnvironment.getAudioDirectory(book.getID()), mp3));
+                        File f = new File(FileEnvironment.getAudioDirectory(book.getID()), mp3);
+                        if(f.exists() && f.isFile()) {
+                            entry.setMP3(f);
+                        } else {
+                            entry.setMP3();
+                        }
                     } else if(type.equals("script") || type.equals("sub")) {
                         // get code
                         String code = getTagContent(eElement.getElementsByTagName("code").item(0));
@@ -707,7 +713,7 @@ public class Book {
         
         
         OutputStream out = new FileOutputStream(new File(dir, "activation.png"));
-        Codes.drawPng(Translator.ting2code(id), 100, 100, out);
+        Codes.drawPng(Translator.ting2code(id), PNG_SIZE, PNG_SIZE, out);
         out.close();
         
         if(progress != null) {
@@ -720,7 +726,7 @@ public class Book {
             }
             if(getEntryFromTingID(i + 15001).hasCode()) {
                 out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
-                Codes.drawPng(Translator.ting2code(i + 15001), 100, 100, out);
+                Codes.drawPng(Translator.ting2code(i + 15001), PNG_SIZE, PNG_SIZE, out);
                 out.close();
             }
         }
