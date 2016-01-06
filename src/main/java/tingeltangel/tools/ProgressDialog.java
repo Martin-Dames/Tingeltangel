@@ -29,7 +29,7 @@ public class ProgressDialog extends javax.swing.JDialog {
 
     private Frame parent;
     
-    ProgressDialog(java.awt.Frame parent, String label) {
+    public ProgressDialog(java.awt.Frame parent, String label) {
         super(parent, false);
         initComponents();
         setVisible(true);
@@ -95,7 +95,7 @@ public class ProgressDialog extends javax.swing.JDialog {
         bar.setValue(val);
     }
     
-    void done() {
+    public void done() {
         setVisible(false);
         parent.setEnabled(true);
     }

@@ -24,10 +24,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
@@ -260,6 +262,7 @@ public class Repository {
                 }
             }
         }
+        progress.done();
     }
     
     public static void search(ProgressDialog progress) {
@@ -308,6 +311,7 @@ public class Repository {
             }
         }
         init();
+        progress.done();
     }
 
     public static void initialUpdate(final Thread done) throws IOException {
@@ -414,21 +418,31 @@ public class Repository {
     
     public static void main(String[] args) throws Exception {
         Integer[] ids = getIDs();
-        System.out.println("^ Buch ID ^ Name ^ Herausgeber ^ Autor ^ Version ^ URL ^ Ländercode ^ Downloads ^^^^");
+        
+        File f = new File("bookList.txt");
+        PrintWriter out = new PrintWriter(new FileWriter(f));
+        
+        out.println("^ Buch ID ^ Name ^ Herausgeber ^ Autor ^ Version ^ URL ^ Ländercode ^ Downloads ^^^^");
         for(int i = 0; i < ids.length; i++) {
             HashMap<String, String> book = Repository.getBookTxt(ids[i]);
             String id = Integer.toString(ids[i]);
             while(id.length() < 5) {
                 id = "0" + id;
             }
-            System.out.print("| " + id + " | " + book.get("Name") + " | ");
-            System.out.print(book.get("Publisher") + " | " + book.get("Author") + " | ");
-            System.out.print(book.get("Version") + " | " + book.get("URL") + " | " + book.get("Area Code") + " | ");
-            System.out.print("[[http://system.ting.eu/book-files/get-description/id/" + id + "/area/en|txt-Datei]]" + " | ");
-            System.out.print("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/thumb|png-Datei]]" + " | ");
-            System.out.print("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/archive|ouf-Datei]]" + " | ");
-            System.out.println("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/script|src-Datei]]" + " |");
+            out.print("| " + id + " | " + book.get("Name") + " | ");
+            out.print(book.get("Publisher") + " | " + book.get("Author") + " | ");
+            out.print(book.get("Book Version") + " | " + book.get("URL") + " | " + book.get("Book Area Code") + " | ");
+            out.print("[[http://system.ting.eu/book-files/get-description/id/" + id + "/area/en|txt-Datei]]" + " | ");
+            out.print("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/thumb|png-Datei]]" + " | ");
+            out.print("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/archive|ouf-Datei]]" + " | ");
+            
+            if(book.get("ScriptMD5") != null) {
+                out.println("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/script|src-Datei]]" + " |");
+            } else {
+                out.println("- |");
+            }
         }
+        out.close();
     }
 
     public static HashMap<String, String> getBook(File file) throws IOException {
