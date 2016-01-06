@@ -264,12 +264,16 @@ public class Repository {
     
     public static void search(ProgressDialog progress) {
         
-        progress.setMax(10000);
+        if(progress != null) {
+            progress.setMax(10000);
+        }
         
         byte[] buffer = new byte[4096];
         
         for(int id = 0; id <= 10000; id++) {
-            progress.setVal(id);
+            if(progress != null) {
+                progress.setVal(id);
+            }
             InputStream in = null;
             OutputStream out = null;
             try {

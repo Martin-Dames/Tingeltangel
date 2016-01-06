@@ -18,8 +18,12 @@
 */
 package tingeltangel;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import tingeltangel.cli.CLI;
+import tingeltangel.core.Repository;
 import tingeltangel.gui.MasterFrame;
 
 public class Tingeltangel {
@@ -45,7 +49,21 @@ public class Tingeltangel {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    new MasterFrame();
+                    if(Repository.getIDs().length == 0) {
+                        try {
+                            Repository.initialUpdate(new Thread() {
+                                @Override
+                                public void run() {
+                                    new MasterFrame();
+                                }
+                            });
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            new MasterFrame();
+                        }
+                    } else {
+                        new MasterFrame();
+                    }
                 }
             });
         }

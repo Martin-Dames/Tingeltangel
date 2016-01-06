@@ -121,6 +121,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
         desktop.add(contactFrame);
         desktop.add(licenseFrame);
         desktop.add(translatorFrame);
+        desktop.add(repositoryFrame);
         desktop.add(gfxEditFrame);
         
         
