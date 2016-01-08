@@ -52,39 +52,6 @@ public class Codes {
 
     private static int resolution = DPI1200;
 
-    public static void main(String[] args) throws IOException {
-        setResolution(DPI1200);
-        BufferedImage image = new BufferedImage(5000, 5000, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D graphics = image.createGraphics();
-        graphics.setComposite(AlphaComposite.Clear);
-        graphics.fillRect(0, 0, 5000, 5000);
-        graphics.setComposite(AlphaComposite.Src);
-        graphics.setColor(Color.black);
-
-
-        for (int _PNG_DOT_SIZE = 1; _PNG_DOT_SIZE <= 3; _PNG_DOT_SIZE++) {
-            PNG_DOT_SIZE[DPI1200] = _PNG_DOT_SIZE;
-            for (int _PNG_DELTA_SIZE = 1; _PNG_DELTA_SIZE <= 3; _PNG_DELTA_SIZE++) {
-                PNG_DELTA_SIZE[DPI1200] = _PNG_DELTA_SIZE;
-                for (int _PNG_DELTA_X_SIZE = 1; _PNG_DELTA_X_SIZE <= 3; _PNG_DELTA_X_SIZE++) {
-                    PNG_DELTA_X_SIZE[DPI1200] = _PNG_DELTA_X_SIZE;
-                    for (int _PNG_BLOCK_SIZE = 10; _PNG_BLOCK_SIZE <= 14; _PNG_BLOCK_SIZE++) {
-                        PNG_BLOCK_SIZE[DPI1200] = _PNG_BLOCK_SIZE;
-
-
-                        drawPattern(15001,
-                                (_PNG_BLOCK_SIZE - 10) * 250 + (_PNG_DELTA_SIZE - 1) * 1400,
-                                (_PNG_DELTA_X_SIZE - 1) * 250 + (_PNG_DOT_SIZE - 1) * 1400,
-                                4, 4, graphics);
-
-
-                    }
-                }
-            }
-        }
-        ImageIO.write(image, "PNG", new FileOutputStream("/home/martin/test.png"));
-    }
 
     public static void setResolution(int resolution) {
         Codes.resolution = resolution;
