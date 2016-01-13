@@ -38,6 +38,7 @@ import java.util.Map;
  * Jede Variable bekommt einen Register zugewiesen. Dabei muss man aufpassen, welche Register manuell verwendet wurden.
  */
 public class ReadYamlFile {
+    public static final int MINIMAL_OID = 15001;
 
     boolean ignoreAudioFiles = false;
 
@@ -70,7 +71,7 @@ public class ReadYamlFile {
         if (scriptcodes != null) {
             for (Object identifier : scriptcodes.keySet()) {
                 int oid = (Integer) scriptcodes.get(identifier);
-                if(oid <= 15000) {
+                if(oid <= MINIMAL_OID) {
                     oid += 8000;
                 }
                 interpreter.getIdentifier2oid().put(identifier.toString(), oid);
@@ -127,10 +128,11 @@ public class ReadYamlFile {
 
 
         for (Object identifier : scripts.keySet()) {
+            interpreter.getScript().setLength(0);
             int oid;
             if (identifier instanceof Integer) {
                 oid = (Integer) identifier;
-                if (oid < 15000) {
+                if (oid < MINIMAL_OID) {
                     oid += 7000;
                 }
 

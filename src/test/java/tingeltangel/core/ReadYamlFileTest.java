@@ -18,7 +18,6 @@
 */
 package tingeltangel.core;
 
-import tingeltangel.core.ReadYamlFile;
 import org.junit.Before;
 import org.junit.Test;
 import tiptoi_reveng.lexer.LexerException;
@@ -26,9 +25,10 @@ import tiptoi_reveng.parser.ParserException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class ReadYamlFileTest {
 
@@ -41,7 +41,7 @@ public class ReadYamlFileTest {
 
     @Test
     public void testParser() throws ParserException, IOException, LexerException {
-        reader.read(new File(getClass().getResource("/tip-toi-reveng/example.yaml").getFile()))   ;
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/example.yaml").getFile()));
     }
 
     @Test
@@ -78,5 +78,48 @@ public class ReadYamlFileTest {
         assertEquals(6, result.size());
     }
 
+    /**
+     * Read a simple YAML file with only three MP3 actions and check the resulting book.
+     * @throws LexerException
+     * @throws ParserException
+     * @throws IOException
+     */
+    @Test
+    public void testParser_Simple() throws LexerException, ParserException, IOException {
+        Book book = reader.read(new File(getClass().getResource("/tip-toi-reveng/simple.yaml").getFile()));
+
+        Map<Integer, String> oid2label = reader.getUsedOidAndIdentifiers();
+        Map<String,Integer> label2oid = new HashMap<String, Integer>();
+        for (Integer key : oid2label.keySet()) {
+            label2oid.put(oid2label.get(key),key);
+        }
+
+        assertEquals(3, oid2label.size());
+        for (Integer oid : oid2label.keySet()) {
+            assertTrue(oid > 15000);
+        }
+        assertNotNull("OID for label a", label2oid.get("a"));
+        assertNotNull("OID for label b", label2oid.get("b"));
+        assertNotNull("OID for label c", label2oid.get("c"));
+
+        Entry entryA = book.getEntryFromTingID(label2oid.get("a"));
+        assertNotNull("entry for label a", entryA);
+        Entry entryB = book.getEntryFromTingID(label2oid.get("b"));
+        assertNotNull("entry for label b", entryB);
+        Entry entryC = book.getEntryFromTingID(label2oid.get("c"));
+        assertNotNull("entry for label c", entryC);
+
+        // Change these tests if you optimize the result for MP3 files that are only used once.
+        assertFalse("no direct MP3 file for label a", entryA.isMP3());
+        assertNotNull("a script for label", entryA.getScript());
+        String scriptA = entryA.getScript().toString();
+        assertTrue("script plays one file and ends" ,scriptA.matches("playoid [0-9]+\nend\n"));
+
+        String scriptB = entryB.getScript().toString();
+        assertTrue("script plays one file and ends" ,scriptB.matches("playoid [0-9]+\nend\n"));
+
+        String scriptC = entryC.getScript().toString();
+        assertTrue("script plays one file and ends" ,scriptC.matches("playoid [0-9]+\nend\n"));
+    }
 
 }

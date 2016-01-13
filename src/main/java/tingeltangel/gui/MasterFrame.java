@@ -514,15 +514,26 @@ public class MasterFrame extends JFrame implements Callback<String> {
         } else if(id.equals("codes.tabular.code2ting")) {
             generateTabular(false);
         } else if(id.equals("books.search")) {
-            Repository.search(null);
+            new Progress(this, "Buchliste aktualisieren") {
+                @Override
+                public void action(ProgressDialog progressDialog) {
+                    Repository.search(progressDialog);
+                }
+            };
         } else if(id.equals("books.update")) {
-            try {
-                Repository.update(null);
-            } catch(IOException ioe) {
-                ioe.printStackTrace(System.out);
-                JOptionPane.showMessageDialog(this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());
-            }
-    /*    } else if(id.equals("about.contact")) {
+            new Progress(this, "Bücher aktualisieren") {
+                @Override
+                public void action(ProgressDialog progressDialog) {
+                    try {
+                        Repository.update(progressDialog);
+                    } catch(IOException ioe) {
+                        ioe.printStackTrace(System.out);
+                        JOptionPane.showMessageDialog(MasterFrame.this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());
+                    }
+                }
+            };
+            
+        } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {
             licenseFrame.setVisible(true); */
