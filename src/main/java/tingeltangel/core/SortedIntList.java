@@ -63,6 +63,10 @@ public class SortedIntList {
     boolean containsKey(int tingID) {
         return(list.contains(tingID));
     }
+
+    void removeByTingID(int tingID) {
+        list.remove(Integer.valueOf(tingID));
+    }
     
     
 }

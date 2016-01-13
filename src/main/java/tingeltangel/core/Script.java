@@ -35,7 +35,7 @@ import tingeltangel.core.scripting.Disassembler;
 
 public class Script {
 
-    private Entry entry;
+    private final Entry entry;
     private String code;
     
     public Script(String code, Entry entry) {
@@ -106,7 +106,7 @@ public class Script {
             se.setTingID(entry.getTingID());
             throw se;
         }
-        return(size + 1); // +1 for the leading 0x00
+        return(size + 1); // +1 for the tail (0x00)
     }
     
     public boolean isSub() {
@@ -126,10 +126,17 @@ public class Script {
         return(false);
     }
     
+    private boolean kill = false;
+    
+    public void kill() {
+        kill = true;
+    }
+    
     public void execute() throws SyntaxError {
         compile();
         int p = 0;
-        while(true) {
+        kill = false;
+        while(!kill) {
             if(p >= script.size()) {
                 SyntaxError error = new SyntaxError("missing 'end' command");
                 error.setTingID(entry.getTingID());

@@ -233,11 +233,7 @@ public class Book {
     }
     
     public Entry getEntryFromTingID(int tingID) {
-        Entry e = indexEntries.get(tingID);
-        if(e == null) {
-            e = new Entry(this, tingID);
-        }
-        return(e);
+        return(indexEntries.get(tingID));
     }
     
     public int getID() {
@@ -255,11 +251,8 @@ public class Book {
         int lastFound = -1;
         Iterator<Integer> i = indexIDs.iterator();
         while(i.hasNext()) {
-            int _id = i.next();
-            Entry e = indexEntries.get(_id);
-            if(!e.isEmpty()) {
-                lastFound = _id;
-            }
+            lastFound = i.next();
+            Entry e = indexEntries.get(lastFound);
         }
         if(lastFound == -1) {
             return(15000);
@@ -301,40 +294,37 @@ public class Book {
         Iterator<Integer> iterator = indexIDs.iterator();
         while(iterator.hasNext()) {
             Entry entry = indexEntries.get(iterator.next());
-            if(!entry.isEmpty()) {
-                
-                String type = "script";
-                if(entry.isSub()) {
-                    type = "sub";
-                } else if(entry.isMP3()) {
-                    type = "mp3";
-                } else if(entry.isTTS()) {
-                    type = "tts";
-                }
-                xml.print("\t\t<entry id=\"" + entry.getTingID() + "\" type=\"" + type + "\"");
-                if(entry.isMP3()) {
-                    String mp3name = "";
-                    if(entry.getMP3() != null) {
-                        mp3name = entry.getMP3().getName();
-                    }
-                    xml.print(" mp3=\"" + encodeAttribute(mp3name) + "\"");
-                }
-                xml.println(">");
-                if(entry.isCode() || entry.isSub()) {
-                    xml.println("\t\t\t<code>" + encodeValue(entry.getScript().toString()) + "</code>");
-                } else if(entry.isTTS()) {
-                    TTSEntry tts = entry.getTTS();
-                    String arguments = " voice=\"" + tts.voice + "\"";
-                    arguments += " variant=\"" + tts.variant + "\"";
-                    arguments += " amplitude=\"" + tts.amplitude + "\"";
-                    arguments += " pitch=\"" + tts.pitch + "\"";
-                    arguments += " speed=\"" + tts.speed + "\"";
-                    
-                    xml.println("\t\t\t<tts" + arguments + ">" + encodeValue(tts.text) + "</tts>");
-                }
-                xml.println("\t\t\t<hint>" + encodeValue(entry.getHint()) + "</hint>");
-                xml.println("\t\t</entry>");
+            String type = "script";
+            if(entry.isSub()) {
+                type = "sub";
+            } else if(entry.isMP3()) {
+                type = "mp3";
+            } else if(entry.isTTS()) {
+                type = "tts";
             }
+            xml.print("\t\t<entry id=\"" + entry.getTingID() + "\" type=\"" + type + "\"");
+            if(entry.isMP3()) {
+                String mp3name = "";
+                if(entry.getMP3() != null) {
+                    mp3name = entry.getMP3().getName();
+                }
+                xml.print(" mp3=\"" + encodeAttribute(mp3name) + "\"");
+            }
+            xml.println(">");
+            if(entry.isCode() || entry.isSub()) {
+                xml.println("\t\t\t<code>" + encodeValue(entry.getScript().toString()) + "</code>");
+            } else if(entry.isTTS()) {
+                TTSEntry tts = entry.getTTS();
+                String arguments = " voice=\"" + tts.voice + "\"";
+                arguments += " variant=\"" + tts.variant + "\"";
+                arguments += " amplitude=\"" + tts.amplitude + "\"";
+                arguments += " pitch=\"" + tts.pitch + "\"";
+                arguments += " speed=\"" + tts.speed + "\"";
+
+                xml.println("\t\t\t<tts" + arguments + ">" + encodeValue(tts.text) + "</tts>");
+            }
+            xml.println("\t\t\t<hint>" + encodeValue(entry.getHint()) + "</hint>");
+            xml.println("\t\t</entry>");
         }
         xml.println("\t</entries>");
         xml.println("\t<pages>");
@@ -579,7 +569,7 @@ public class Book {
         int pos = startOfIndexTable + 12 * size;
         for(int i = 0; i < size; i++) {
             Entry entry = getEntryFromTingID(i + 15001);
-            if(entry.isEmpty()) {
+            if(entry == null) {
                 out.writeInt(0x0000);
                 out.writeInt(0x0000);
                 out.writeInt(0x0000);
@@ -620,27 +610,24 @@ public class Book {
             }
             Entry e = getEntryFromTingID(t + 15001);
             
-            if(!e.isEmpty()) {
-                
-                int pad = getNextAddress(pos) - pos;
-                pos += pad;
-                
-                for(int i = 0; i < pad; i++) {
-                    out.write(0x0);
+            int pad = getNextAddress(pos) - pos;
+            pos += pad;
+
+            for(int i = 0; i < pad; i++) {
+                out.write(0x0);
+            }
+            if(e.isMP3() || e.isTTS()) {
+                InputStream in = new FileInputStream(e.getMP3());
+                int b;
+                while((b = in.read(buffer)) >= 0) {
+                    out.write(buffer, 0, b);
+                    pos += b;
                 }
-                if(e.isMP3() || e.isTTS()) {
-                    InputStream in = new FileInputStream(e.getMP3());
-                    int b;
-                    while((b = in.read(buffer)) >= 0) {
-                        out.write(buffer, 0, b);
-                        pos += b;
-                    }
-                    in.close();
-                } else {
-                    byte[] bin = e.getScript().compile();
-                    out.write(bin);
-                    pos += bin.length;
-                }
+                in.close();
+            } else {
+                byte[] bin = e.getScript().compile();
+                out.write(bin);
+                pos += bin.length;
             }
             
            
@@ -680,11 +667,9 @@ public class Book {
             if(progress != null) {
                 progress.setVal(i);
             }
-            if(getEntryFromTingID(i + 15001).hasCode()) {
-                out = new PrintWriter(new FileWriter(new File(dir, (i + 15001) + ".eps")));
-                Codes.drawEps(Translator.ting2code(i + 15001), 100, 100, out);
-                out.close();
-            }
+            out = new PrintWriter(new FileWriter(new File(dir, (i + 15001) + ".eps")));
+            Codes.drawEps(Translator.ting2code(i + 15001), 100, 100, out);
+            out.close();
         }
     }
     
@@ -718,11 +703,9 @@ public class Book {
             if(progress != null) {
                 progress.setVal(i);
             }
-            if(getEntryFromTingID(i + 15001).hasCode()) {
-                out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
-                Codes.drawPng(Translator.ting2code(i + 15001), 100, 100, out);
-                out.close();
-            }
+            out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
+            Codes.drawPng(Translator.ting2code(i + 15001), 100, 100, out);
+            out.close();
         }
     }
     
@@ -922,6 +905,10 @@ public class Book {
             Page p = pagesIterator.next();
             PageRenderer.render(this, p);
         }
+    }
+
+    public void removeEntryByOID(int tingID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
    
 }

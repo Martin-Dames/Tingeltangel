@@ -101,12 +101,12 @@ public class Emulator {
             if(!indexHint.isEmpty()) {
                 hint += " (" + indexHint + ")";
             }
-            MP3Player.getPlayer().add(entry.getMP3(), hint, entry.getLength());
+            MP3Player.getPlayer().play(entry.getMP3());
         }
     }
     
     public void pause(int ms) {
-        MP3Player.getPlayer().addPause(ms);
+        MP3Player.getPlayer().pause(ms);
     }
 
     public void addRegisterListener(RegisterListener listener) {

@@ -48,44 +48,39 @@ import tingeltangel.tools.Callback;
 import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.Progress;
 import tingeltangel.tools.ProgressDialog;
+import tiptoi_reveng.lexer.LexerException;
+import tiptoi_reveng.parser.ParserException;
 
 public class MasterFrame extends JFrame implements Callback<String> {
 
     private Book book = new Book(15000);
     
-    private JDesktopPane desktop;
-    private IndexFrame indexFrame;
-    private PlayerFrame playerFrame;
-    private RegisterFrame registerFrame;
-    private CodeFrame codeFrame;
-    private PropertyFrame propertyFrame;
-    private StickFrame stickFrame;
-    private ReferenceFrame referenceFrame;
-    private TranslatorFrame translatorFrame;
-    private RepositoryManager repositoryFrame;
-    private GfxEditFrame gfxEditFrame;
+    private final IndexPanel indexPanel;
+    /*
+    private final JDesktopPane desktop;
+    private final StickFrame stickFrame;
+    private final ReferenceFrame referenceFrame;
+    private final TranslatorFrame translatorFrame;
+    private final RepositoryManager repositoryFrame;
+    private final GfxEditFrame gfxEditFrame;
     
-    private InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
-    private InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
-
+    private final InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
+    private final InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
+    */
     
     
     public MasterFrame() {
         super(Tingeltangel.MAIN_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
         
         
-        indexFrame = new IndexFrame(this);
-        playerFrame = new PlayerFrame(this);
-        registerFrame = new RegisterFrame(this);
-        codeFrame = new CodeFrame(this);
-        propertyFrame = new PropertyFrame(this);
-        stickFrame = new StickFrame(this);
-        referenceFrame = new ReferenceFrame(this);
-        translatorFrame = new TranslatorFrame(this);
-        repositoryFrame = new RepositoryManager(this);
-        gfxEditFrame = new GfxEditFrame(this);
+        //indexFrame = new IndexFrame(this);
+        indexPanel = new IndexPanel(this);
+        //stickFrame = new StickFrame(this);
+        //referenceFrame = new ReferenceFrame(this);
+        //translatorFrame = new TranslatorFrame(this);
+        //repositoryFrame = new RepositoryManager(this);
+        //gfxEditFrame = new GfxEditFrame(this);
         
-        book.addRegisterListener(registerFrame);
         
         JFrame.setDefaultLookAndFeelDecorated(true);
 
@@ -96,11 +91,9 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     Tingeltangel.MAIN_FRAME_HEIGHT + getInsets().top + getInsets().bottom
         );
 
-        desktop = new JDesktopPane();
         MasterFrameMenu.setMenuCallback(this);
         setMenuBar(MasterFrameMenu.getMenuBar());
         
-        desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
         
         
         addWindowListener(new WindowAdapter() {
@@ -111,33 +104,20 @@ public class MasterFrame extends JFrame implements Callback<String> {
         });
         setVisible(true);
         
-        desktop.add(indexFrame);
-        desktop.add(playerFrame);
-        desktop.add(registerFrame);
-        desktop.add(codeFrame);
-        desktop.add(propertyFrame);
-        desktop.add(stickFrame);
-        desktop.add(referenceFrame);
-        desktop.add(contactFrame);
-        desktop.add(licenseFrame);
-        desktop.add(translatorFrame);
-        desktop.add(gfxEditFrame);
+        setContentPane(indexPanel);
         
-        
-        
-        setContentPane(desktop);
 
     }
-    
+    /*
     public void showReferenceFrame() {
         referenceFrame.setVisible(true);
-    }
+    }*/
     
     public Book getBook() {
         return(book);
     }
     
-    private LinkedList<EntryListener> listeners = new LinkedList<EntryListener>();
+    private final LinkedList<EntryListener> listeners = new LinkedList<EntryListener>();
     
     void addEntryListener(EntryListener listener) {
         listeners.add(listener);
@@ -195,8 +175,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         
                         book.clear();
                         book.setID(id);
-                        propertyFrame.refresh();
-                        indexFrame.update();
+                        indexPanel.updateList();
                         
                     }
                 });
@@ -234,8 +213,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                                     Map<String, String> txt = Repository.getBookTxt(id);
                                                     File src = Repository.getBookSrc(id);
                                                     Importer.importBook(ouf, txt, src, book, progressDialog);
-                                                    propertyFrame.refresh();
-                                                    indexFrame.update();
+                                                    indexPanel.updateList();
                                                 } catch (SyntaxError ex) {
                                                     JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
                                                     ex.printStackTrace(System.out);
@@ -261,8 +239,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                         Map<String, String> txt = Repository.getBookTxt(id);
                                         File src = Repository.getBookSrc(id);
                                         Importer.importBook(ouf, txt, src, book, progressDialog);
-                                        propertyFrame.refresh();
-                                        indexFrame.update();
+                                        indexPanel.updateList();
                                     } catch (SyntaxError ex) {
                                         JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
                                         ex.printStackTrace(System.out);
@@ -293,9 +270,14 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     try {
                         new ReadYamlFile().read(fc.getSelectedFile()).save();
-                        propertyFrame.refresh();
-                        indexFrame.update();
-                    } catch(Exception e) {
+                        indexPanel.updateList();
+                    } catch(ParserException e) {
+                        JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
+                        e.printStackTrace(System.out);
+                    } catch (IOException e) {
+                        JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
+                        e.printStackTrace(System.out);
+                    } catch (LexerException e) {
                         JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
                         e.printStackTrace(System.out);
                     }
@@ -353,8 +335,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                     JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
                                     se.printStackTrace(System.out);
                                 }
-                                propertyFrame.refresh();
-                                indexFrame.update();
+                                indexPanel.updateList();
                             }
                         };
                         
@@ -387,9 +368,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         } catch (IOException ex) {
                             ex.printStackTrace(System.err);
                         }
-                        propertyFrame.refresh();
-                        indexFrame.update();
-                        gfxEditFrame.update();
+                        indexPanel.updateList();
+                        // gfxEditFrame.update();
                     }
                 });
                 
@@ -421,18 +401,21 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     try {
                         book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
                     } catch(IOException e) {
-                        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen");
                         e.printStackTrace(System.out);
+                        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen");
                     } catch(IllegalArgumentException e) {
+                        e.printStackTrace(System.out);
                         JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
                     } catch(SyntaxError e) {
                         e.printStackTrace(System.out);
                         JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
+                //    } catch(Exception e) {
+                //        e.printStackTrace(System.out);
+                //        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
                     }
                 }
+            
             };
-            
-            
             
         } else if(id.startsWith("buch.generateEpsCodes.")) {
             if(id.endsWith(".600")) {
@@ -490,19 +473,11 @@ public class MasterFrame extends JFrame implements Callback<String> {
             new BinaryLocationsDialog(this, true).setVisible(true);
         } else if(id.equals("about.tts_prefs")) {
             new TTSPreferences().setVisible(true);
-        } else if(id.equals("windows.stick")) {
-            stickFrame.setVisible(true);
-        } else if(id.equals("windows.player")) {
-            playerFrame.setVisible(true);
-        } else if(id.equals("windows.properties")) {
-            propertyFrame.setVisible(true);
-        } else if(id.equals("windows.code")) {
-            codeFrame.setVisible(true);
-        } else if(id.equals("windows.register")) {
-            registerFrame.setVisible(true);
+    /*    } else if(id.equals("windows.stick")) {
+            stickFrame.setVisible(true); */
         } else if(id.equals("windows.index")) {
-            indexFrame.setVisible(true);
-        } else if(id.equals("windows.reference")) {
+            indexPanel.setVisible(true);
+    /*    } else if(id.equals("windows.reference")) {
             referenceFrame.setVisible(true);
         } else if(id.equals("windows.translator")) {
             translatorFrame.setVisible(true);
@@ -510,7 +485,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
             repositoryFrame.setVisible(true);
         } else if(id.equals("windows.gfx")) {
             gfxEditFrame.setVisible(true);
-            gfxEditFrame.update();
+            gfxEditFrame.update(); */
         } else if(id.startsWith("codes.raw.")) {
             id = id.substring("codes.raw.".length());
             int start = Integer.parseInt(id.substring(0, 1)) * 10000 + Integer.parseInt(id.substring(2)) * 1000;
@@ -547,10 +522,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 ioe.printStackTrace(System.out);
                 JOptionPane.showMessageDialog(this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());
             }
-        } else if(id.equals("about.contact")) {
+    /*    } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {
-            licenseFrame.setVisible(true);
+            licenseFrame.setVisible(true); */
         }
     }
     

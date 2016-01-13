@@ -19,9 +19,11 @@
 
 package tingeltangel.gui;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -32,23 +34,25 @@ import tingeltangel.core.SortedIntList;
 import tingeltangel.core.scripting.RegisterListener;
 
 
-public class RegisterFrame extends JInternalFrame implements RegisterListener {
+public class RegisterPanel extends JPanel implements RegisterListener {
     
-    private SortedIntList registers = new SortedIntList();
+    private final SortedIntList registers = new SortedIntList();
     
-    private JTable table;
-    private RegisterTableModel model;
+    private final RegisterTableModel model = new RegisterTableModel();
+    private final JTable table = new JTable(model);
     private final MasterFrame frame;
     
-    public RegisterFrame(MasterFrame frame) {
-        super("Register", true, true, true, true);
-        setVisible(true);
-        setBounds(610, 345, 300, 250);
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
+    public RegisterPanel(MasterFrame frame) {
+        super();
         this.frame = frame;
-        model = new RegisterTableModel();
-        table = new JTable(model);
-        setContentPane(new JScrollPane(table));
+        setLayout(new GridLayout(1, 1));
+        
+        table.getColumnModel().getColumn(0).setPreferredWidth(0);
+        table.getColumnModel().getColumn(1).setMinWidth(20);
+        table.getColumnModel().getColumn(2).setPreferredWidth(0);
+        JScrollPane jScrollPane = new JScrollPane(table);
+        jScrollPane.setPreferredSize(new Dimension(0, 300));
+        add(jScrollPane);
     }
 
     @Override
@@ -59,7 +63,7 @@ public class RegisterFrame extends JInternalFrame implements RegisterListener {
 
     class RegisterTableModel implements TableModel {
 
-        private HashSet<TableModelListener> listeners = new HashSet<TableModelListener>();
+        private final HashSet<TableModelListener> listeners = new HashSet<TableModelListener>();
         
         @Override
         public int getRowCount() {

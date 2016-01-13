@@ -189,8 +189,6 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                                     entry.setCode();
                                 } else if(s.equals(SUB)) {
                                     entry.setSub();
-                                } else if(s.equals(EMPTY)) {
-                                    entry.setEmpty();
                                 } else if(s.equals(T2S)) {
                                     entry.setTTS();
                                 }
@@ -208,8 +206,6 @@ public class IndexFrame extends JInternalFrame implements ActionListener {
                             preselection = 2;
                         } else if(entry.isTTS()) {
                             preselection = 3;
-                        } else if(entry.isEmpty()) {
-                            preselection = 4;
                         } else {
                             throw new Error();
                         }

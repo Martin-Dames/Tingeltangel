@@ -251,6 +251,8 @@ public class TTS {
      */
     public static void generate(final String text, int amplitude, int pitch, int speed, String voice, String variant, final File mp3) throws IOException {
         
+        final boolean PADDING = false;
+        
         if(ENABLED == false) {
             System.out.println("unable to execute tts request: tts not enabled");
             return;
@@ -284,21 +286,48 @@ public class TTS {
         };
         
         String[] cmd2 = {
+            "sox",
+            "-",
+            "-t",
+            "wav",
+            "-",
+            "pad",
+            "0",
+            "1"
+        };
+        
+        /*
+        System.out.print("echo \"" + text + "\" | ");
+        for(int i = 0; i < cmd1.length; i++) {
+            System.out.print(cmd1[i] + " ");
+        }
+        System.out.println();
+        
+        */
+        String[] cmd3 = {
             LAME.getCanonicalPath(),
             "-",
             "-"
         };
         
         final Process p1 = new ProcessBuilder(cmd1).start();
-        final Process p2 = new ProcessBuilder(cmd2).start();
+        
+        Process _p2 = null;
+        if(PADDING) {
+            _p2 = new ProcessBuilder(cmd2).start();
+        }
+        final Process p2 = _p2;
+        
+        
+        final Process p3 = new ProcessBuilder(cmd3).start();
         
         // write mp3
         new Thread() {
             @Override
             public void run() {
                 try {
-                    InputStream in = p2.getInputStream();
-                    InputStream err = p2.getErrorStream();
+                    InputStream in = p3.getInputStream();
+                    InputStream err = p3.getErrorStream();
                     OutputStream out = new FileOutputStream(mp3);
                     copyStream(in, err, out);
                 } catch(IOException ioe) {
@@ -307,20 +336,51 @@ public class TTS {
             }
         }.start();
         
-        // copy data from p1 to p2
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    InputStream in = p1.getInputStream();    
-                    InputStream err = p1.getErrorStream();                
-                    OutputStream out = p2.getOutputStream();
-                    copyStream(in, err, out);
-                } catch(IOException ioe) {
-                    ioe.printStackTrace();
+        if(PADDING) {
+            // copy data from p2 to p3
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        InputStream in = p2.getInputStream();    
+                        InputStream err = p2.getErrorStream();                
+                        OutputStream out = p3.getOutputStream();
+                        copyStream(in, err, out);
+                    } catch(IOException ioe) {
+                        ioe.printStackTrace();
+                    }
                 }
-            }
-        }.start();
+            }.start();
+            // copy data from p1 to p2
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        InputStream in = p1.getInputStream();    
+                        InputStream err = p1.getErrorStream();                
+                        OutputStream out = p2.getOutputStream();
+                        copyStream(in, err, out);
+                    } catch(IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                }
+            }.start();
+        } else {
+            // copy data from p1 to p3
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        InputStream in = p1.getInputStream();    
+                        InputStream err = p1.getErrorStream();                
+                        OutputStream out = p3.getOutputStream();
+                        copyStream(in, err, out);
+                    } catch(IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                }
+            }.start();
+        }
         
         // copy text to p1
         new Thread() {
@@ -337,7 +397,7 @@ public class TTS {
         }.start();
         
         try {
-            p2.waitFor();
+            p3.waitFor();
         } catch (InterruptedException ex) {
         }
     }

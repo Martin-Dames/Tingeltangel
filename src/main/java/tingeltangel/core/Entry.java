@@ -28,7 +28,6 @@ import tingeltangel.tools.TTS;
 
 public class Entry {
 
-    private final static int EMPTY = 0;
     private final static int MP3 = 1;
     private final static int CODE = 2;
     private final static int SUB = 3;
@@ -41,7 +40,7 @@ public class Entry {
     private int size = -1;
     private Book book;
     private String hint = "";
-    private int type = EMPTY;
+    private int type = MP3;
     private int tingID = -1;
     
     public Entry(Book book, int tingID) {
@@ -123,17 +122,8 @@ public class Entry {
         return(type == CODE);
     }
     
-    public boolean isEmpty() {
-        return(type == EMPTY);
-    }
-    
     public boolean isSub() {
         return(type == SUB);
-    }
-    
-    public void setEmpty() {
-        type = EMPTY;
-        changeMade();
     }
     
     public void setMP3() {
@@ -143,25 +133,28 @@ public class Entry {
     
     public void setTTS() {
         type = T2S;
+        tts = new TTSEntry("");
         changeMade();
     }
     
     public void setCode() {
         type = CODE;
+        if(script == null) {
+            script = new Script("", this);
+        }
         changeMade();
     }
     
     public void setSub() {
         type = SUB;
+        if(script == null) {
+            script = new Script("", this);
+        }
         changeMade();
     }
     
     public float getLength() {
         return(mp3length);
-    }
-    
-    public boolean hasCode() {
-        return(!isEmpty());
     }
     
     public void setScript(Script script) {
