@@ -533,10 +533,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 }
             };
             
-        } else if(id.equals("about.contact")) {
+    /*    } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {
-            licenseFrame.setVisible(true); */
+            licenseFrame.setVisible(true);*/
         }
     }
     
