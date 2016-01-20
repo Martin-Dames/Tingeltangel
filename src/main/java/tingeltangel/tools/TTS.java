@@ -248,6 +248,7 @@ public class TTS {
      * @param voice The voice
      * @param variant The variant (use null or empty string for no variant)
      * @param mp3 The MP§ to generate
+     * @throws java.io.IOException
      */
     public static void generate(final String text, int amplitude, int pitch, int speed, String voice, String variant, final File mp3) throws IOException {
         
@@ -296,14 +297,7 @@ public class TTS {
             "1"
         };
         
-        /*
-        System.out.print("echo \"" + text + "\" | ");
-        for(int i = 0; i < cmd1.length; i++) {
-            System.out.print(cmd1[i] + " ");
-        }
-        System.out.println();
         
-        */
         String[] cmd3 = {
             LAME.getCanonicalPath(),
             "-",

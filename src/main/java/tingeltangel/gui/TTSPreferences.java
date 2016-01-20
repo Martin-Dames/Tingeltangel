@@ -32,7 +32,7 @@ import tingeltangel.tools.TTS;
  *
  * @author mdames
  */
-public class TTSPreferences extends javax.swing.JFrame {
+public class TTSPreferences extends javax.swing.JDialog {
 
     public final static String PROPERTY_DEFAULT_VOICE = "default_voice";
     public final static String PROPERTY_DEFAULT_VARIANT = "default_variant";
@@ -42,6 +42,8 @@ public class TTSPreferences extends javax.swing.JFrame {
      */
     public TTSPreferences() {
         initComponents();
+        
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         String voiceID = Properties.getStringProperty(PROPERTY_DEFAULT_VOICE);
         Iterator<String> voices = TTS.getVoiceIDs().iterator();
@@ -99,7 +101,7 @@ public class TTSPreferences extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         defaultVariant = new javax.swing.JComboBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         defaultLanguage.setModel(new DefaultComboBoxModel());
 

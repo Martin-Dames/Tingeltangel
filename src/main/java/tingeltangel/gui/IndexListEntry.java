@@ -7,12 +7,27 @@ package tingeltangel.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -26,11 +41,14 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import tingeltangel.core.Codes;
 import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
+import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.Callback;
 import tingeltangel.tools.Lang;
+import tingeltangel.tools.OS;
 
 /**
  *
@@ -48,6 +66,7 @@ public class IndexListEntry extends JPanel {
     private final int ICON_DELETE = 7;
     private final int ICON_SAVE_PATTERN = 8;
     private final int ICON_COPY_PATTERN = 9;
+    private final int ICON_SAVE_MP3 = 10;
     
     private final String[] ICONS = {
         "mp3.png",
@@ -59,7 +78,8 @@ public class IndexListEntry extends JPanel {
         "compile.png",
         "delete.png",
         "save-code.png",
-        "copy-code.png"
+        "copy-code.png",
+        "save-mp3.png"
     };
     
     private final static String MP3 = "mp3";
@@ -132,14 +152,28 @@ public class IndexListEntry extends JPanel {
                 Callback<String> callback = new Callback<String>() {
                     @Override
                     public void callback(String s) {
+                        
+                        String oldVal = "";
+                        if(entry.isCode() || entry.isSub()) {
+                            oldVal = entry.getScript().toString();
+                        } else if(entry.isMP3()) {
+                            oldVal = entry.getHint();
+                        } else if(entry.isTTS()) {
+                            oldVal = entry.getTTS().text;
+                        }
+                        
                         if(s.equals(MP3)) {
                             entry.setMP3();
+                            entry.setHint(oldVal);
                         } else if(s.equals(SCRIPT)) {
                             entry.setCode();
+                            entry.getScript().setCode(oldVal);
                         } else if(s.equals(SUB)) {
                             entry.setSub();
+                            entry.getScript().setCode(oldVal);
                         } else if(s.equals(TTS)) {
                             entry.setTTS();
+                            entry.getTTS().text = oldVal;
                         }
 
                         // reinsert from gui
@@ -184,7 +218,11 @@ public class IndexListEntry extends JPanel {
         });
         row.add(icon);
         
-        
+        JPanel space = new JPanel();
+        Dimension spaceDim = new Dimension(20, 1);
+        space.setMinimumSize(spaceDim);
+        space.setMaximumSize(spaceDim);
+        row.add(space);
         
         JButton delete = new JButton(getIcon(ICON_DELETE));
         delete.setMargin(new Insets(0, 0, 0, 0));
@@ -192,7 +230,8 @@ public class IndexListEntry extends JPanel {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 // remove from book
-                entry.getBook().removeEntryByOID(entry.getTingID());
+                entry.getBook().removeEntryByTingID(entry.getTingID());
+                frame.stopTrack();
                 // remove from gui
                 new Thread() {
                     @Override
@@ -220,7 +259,16 @@ public class IndexListEntry extends JPanel {
                     @Override
                     public void run() {
                         if(entry.isMP3() && (entry.getMP3() != null)) {
-                            MP3Player.getPlayer().play(entry.getMP3());
+                            try {
+                                MP3Player.getPlayer().play(entry.getMP3(), new Callback<Exception>() {
+                                    @Override
+                                    public void callback(Exception t) {
+                                        JOptionPane.showMessageDialog(frame, "Fehler bein Abspielen des MP3 (" + entry.getMP3().getAbsolutePath() + "): " + t.getMessage());
+                                    }
+                                });
+                            } catch (FileNotFoundException ex) {
+                                JOptionPane.showMessageDialog(frame, "Fehler bein Abspielen des MP3: Die Datei " + entry.getMP3().getAbsolutePath() + " wurde nicht gefunden");
+                            }
                         } else if(entry.isCode()) {
                             try {
                                 entry.getScript().execute();
@@ -230,12 +278,18 @@ public class IndexListEntry extends JPanel {
                         } else if(entry.isTTS()) {
                             try {
                                 File tts = entry.getTTS().generateTTS(entry);
-                                MP3Player.getPlayer().play(tts);
+                                frame.setCurrentTrack(entry);
+                                MP3Player.getPlayer().play(tts, new Callback<Exception>() {
+                                    @Override
+                                    public void callback(Exception t) {
+                                        JOptionPane.showMessageDialog(frame, "Es ist ein Fehelr aufgetreten: " + t.getMessage());
+                                    }
+                                });
+                                frame.setCurrentTrack(null);
                             } catch(IOException ioe) {
                                 JOptionPane.showMessageDialog(frame, "Es ist ein Fehelr aufgetreten: " + ioe.getMessage());
                             }
                         }
-                        System.out.println("track done");
                         frame.setCurrentTrack(null);
                     }
                 }.start();
@@ -245,13 +299,14 @@ public class IndexListEntry extends JPanel {
         row.add(play);
         
         
+        // add eject icon
+        JButton eject = new JButton(getIcon(ICON_EJECT));
+        eject.setMargin(new Insets(0, 0, 0, 0));
         if(entry.isMP3()) {
-            // add eject icon
-            JButton eject = new JButton(getIcon(ICON_EJECT));
-            eject.setMargin(new Insets(0, 0, 0, 0));
             eject.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
+                    MP3Player.getPlayer().stop();
                     JFileChooser fc = new JFileChooser(lastChooseMp3DialogPath);
                     fc.setFileFilter(new FileNameExtensionFilter("mp3", "mp3"));
                     if(fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
@@ -272,53 +327,138 @@ public class IndexListEntry extends JPanel {
                             ex.printStackTrace(System.out);
                         }
                     }
-                    
-                    
                 }
             });
-            row.add(eject);
-        } else if(entry.isCode() || entry.isSub()) {
-            // add compile icon
-            JButton compile = new JButton(getIcon(ICON_TEST));
-            compile.setMargin(new Insets(0, 0, 0, 0));
+        } else {
+            eject.setEnabled(false);
+        }
+        row.add(eject);
+        
+        
+        
+        // add compile icon
+        JButton compile = new JButton(getIcon(ICON_TEST));
+        compile.setMargin(new Insets(0, 0, 0, 0));
+        if(entry.isCode() || entry.isSub()) {
             compile.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     try {
                         entry.getScript().compile();
+                        JOptionPane.showMessageDialog(frame, "Alles OK");
                     } catch(SyntaxError se) {
                         JOptionPane.showMessageDialog(frame, "Syntax Fehler (OID " + se.getTingID() + " Zeile " + se.getRow() + "): " + se.getMessage());
                     }
                 }
             });
-            row.add(compile);
+        } else {
+            compile.setEnabled(false);
         }
+        row.add(compile);
         
+        // save pattern icon
+        JButton savePattern = new JButton(getIcon(ICON_SAVE_PATTERN));
+        savePattern.setMargin(new Insets(0, 0, 0, 0));
         if(entry.isCode() || entry.isMP3() || entry.isTTS()) {
-            // add save pattern icon
-            JButton savePattern = new JButton(getIcon(ICON_SAVE_PATTERN));
-            savePattern.setMargin(new Insets(0, 0, 0, 0));
             savePattern.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     
-                    
+                    JFileChooser fc = new JFileChooser();
+                    fc.setFileFilter(new FileNameExtensionFilter("Ting Pattern (*.png)", "png"));
+                    if(fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+                        try {
+                            String file = fc.getSelectedFile().getCanonicalPath();
+                            if(!file.toLowerCase().endsWith(".png")) {
+                                file = file + ".png";
+                            }
+                            FileOutputStream out = new FileOutputStream(file);
+                            int w = 30;
+                            int h = 30;
+                            Codes.drawPng(Translator.ting2code(entry.getTingID()), w, h, out);
+                            out.close();
+                        } catch(Exception e) {
+                            JOptionPane.showMessageDialog(frame, "Das Ting Pattern konnte nicht gespeichert werden");
+                            e.printStackTrace(System.out);
+                        }
+                    }
                     
                 }
             });
-            row.add(savePattern);
-            JButton copyPattern = new JButton(getIcon(ICON_COPY_PATTERN));
-            copyPattern.setMargin(new Insets(0, 0, 0, 0));
+        } else {
+            savePattern.setEnabled(false);
+        }
+        row.add(savePattern);
+        
+        // copy pattern
+        JButton copyPattern = new JButton(getIcon(ICON_COPY_PATTERN));
+        copyPattern.setMargin(new Insets(0, 0, 0, 0));
+        if(entry.isCode() || entry.isMP3() || entry.isTTS()) {
             copyPattern.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    
-                    
-                    
+                    BufferedImage image = Codes.generateCodeImage(Translator.ting2code(entry.getTingID()), 30, 30);
+                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new ImageSelection(image), null);
                 }
             });
-            row.add(copyPattern);
+        } else {
+            copyPattern.setEnabled(false);
         }
+        row.add(copyPattern);
+        
+        // save mp3
+        JButton saveMP3 = new JButton(getIcon(ICON_SAVE_MP3));
+        saveMP3.setMargin(new Insets(0, 0, 0, 0));
+        if(entry.isMP3() || entry.isTTS()) {
+            saveMP3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    JFileChooser fc = new JFileChooser();
+                    fc.setFileFilter(new FileNameExtensionFilter("MP3 (*.mp3)", "mp3"));
+                    if(fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+                        InputStream is = null;
+                        OutputStream os = null;
+                        try {
+                            String file = fc.getSelectedFile().getCanonicalPath();
+                            if(!file.toLowerCase().endsWith(".mp3")) {
+                                file = file + ".mp3";
+                            }
+                            
+                            
+                            is = new FileInputStream(entry.getMP3());
+                            os = new FileOutputStream(file);
+                            byte[] buffer = new byte[1024];
+                            int length;
+                            while ((length = is.read(buffer)) > 0) {
+                                os.write(buffer, 0, length);
+                            }
+                            
+                        } catch(Exception e) {
+                            JOptionPane.showMessageDialog(frame, "MP3 konnte nicht gespeichert werden");
+                            e.printStackTrace(System.out);
+                        } finally {
+                            try {
+                                if(is != null) {
+                                    is.close();
+                                }
+                            } catch (IOException ex) {
+                            }
+                            try {
+                                if(os != null) {
+                                    os.close();
+                                }
+                            } catch (IOException ex) {
+                            }
+                        }
+                    }
+
+
+                }
+            });
+        } else {
+            saveMP3.setEnabled(false);
+        }
+        row.add(saveMP3);
         
         // track info
         trackInfo.setText(getTrackInfo(entry));
@@ -361,6 +501,7 @@ public class IndexListEntry extends JPanel {
                     entry.getScript().setCode(hint.getText());
                 } else if(entry.isTTS()) {
                     entry.getTTS().text = hint.getText();
+                    entry.getTTS().invalidate(entry);
                 } else if(entry.isMP3()) {
                     entry.setHint(hint.getText());
                 }
@@ -390,10 +531,39 @@ public class IndexListEntry extends JPanel {
             String trackName = "null";
             if(entry.getMP3() != null) {
                 trackName = entry.getMP3().getName();
+            } else {
+                formatedTime = "-";
             }
             
             return(trackName + " (" + formatedTime + ")");
         }
         return(" ");
+    }
+    
+    // This class is used to hold an image while on the clipboard.
+    static class ImageSelection implements Transferable {
+        private final Image image;
+
+        public ImageSelection(Image image) {
+          this.image = image;
+        }
+
+        @Override
+        public DataFlavor[] getTransferDataFlavors() {
+          return(new DataFlavor[] {DataFlavor.imageFlavor});
+        }
+
+        @Override
+        public boolean isDataFlavorSupported(DataFlavor flavor) {
+          return DataFlavor.imageFlavor.equals(flavor);
+        }
+
+        @Override
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+            if(!DataFlavor.imageFlavor.equals(flavor)) {
+                throw new UnsupportedFlavorException(flavor);
+            }
+            return image;
+        }
     }
 }

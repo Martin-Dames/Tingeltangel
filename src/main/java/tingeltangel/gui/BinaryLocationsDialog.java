@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.tools.Binary;
 
 /**
@@ -19,6 +18,8 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form BinaryLocationsDialog
+     * @param parent
+     * @param modal
      */
     public BinaryLocationsDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -28,14 +29,6 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
     
     private void init() {
         try {
-            File mpg123 = Binary.getBinary(Binary.MPG123);
-            if(mpg123 != null && mpg123.canExecute()) {
-                mpg123Label.setText(mpg123.getCanonicalPath());
-                mpg123Label.setBackground(new Color(240, 240, 240));
-            } else {
-                mpg123Label.setText(" ");
-                mpg123Label.setBackground(new Color(255, 100, 100));
-            }
             File espeak = Binary.getBinary(Binary.ESPEAK);
             if(espeak != null && espeak.canExecute()) {
                 espeakLabel.setText(espeak.getCanonicalPath());
@@ -75,15 +68,11 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        mpg123Label = new javax.swing.JLabel();
-        editMpg123Button = new javax.swing.JButton();
         espeakLabel = new javax.swing.JLabel();
         editEspeakButton = new javax.swing.JButton();
         lameLabel = new javax.swing.JLabel();
@@ -95,10 +84,6 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Konfiguration externer Binärdateien");
 
-        jLabel1.setText("mpg123:");
-
-        jLabel2.setText("Audiowiedergabe:");
-
         jLabel3.setText("Text To Speech:");
 
         jLabel4.setText("eSpeak:");
@@ -108,16 +93,6 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
         jLabel6.setText("yaml-Import:");
 
         jLabel7.setText("avconv");
-
-        mpg123Label.setText("jLabel8");
-        mpg123Label.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        editMpg123Button.setText("...");
-        editMpg123Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editMpg123ButtonActionPerformed(evt);
-            }
-        });
 
         espeakLabel.setText("jLabel9");
         espeakLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -166,18 +141,16 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel6))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 280, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(jLabel7))
-                        .addGap(18, 18, 18)
+                        .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(avconvLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
@@ -190,11 +163,7 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(editLameButton))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(mpg123Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(editMpg123Button))))
+                                .addComponent(editLameButton))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(okButton)))
@@ -203,14 +172,7 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(mpg123Label)
-                    .addComponent(editMpg123Button))
-                .addGap(18, 18, 18)
+                .addGap(76, 76, 76)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -252,17 +214,6 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
-    private void editMpg123ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMpg123ButtonActionPerformed
-        JFileChooser fc = new JFileChooser();
-        if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File f = fc.getSelectedFile();
-            if(f.canExecute()) {
-                Binary.setBinary(Binary.MPG123, f);
-                init();
-            }
-        }
-    }//GEN-LAST:event_editMpg123ButtonActionPerformed
-
     private void editEspeakButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEspeakButtonActionPerformed
         JFileChooser fc = new JFileChooser();
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -291,17 +242,13 @@ public class BinaryLocationsDialog extends javax.swing.JDialog {
     private javax.swing.JButton editAvconvButton;
     private javax.swing.JButton editEspeakButton;
     private javax.swing.JButton editLameButton;
-    private javax.swing.JButton editMpg123Button;
     private javax.swing.JLabel espeakLabel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel lameLabel;
-    private javax.swing.JLabel mpg123Label;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
 }

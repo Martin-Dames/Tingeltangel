@@ -25,7 +25,6 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -184,36 +183,8 @@ public class Codes {
         }
     }
 
-    /**
-     * @param code   code-id (not ting-id)
-     * @param width  width in mm
-     * @param height height in mm
-     * @param out    stream to which the image will be written
-     * @throws IOException
-     */
-    public static void drawPng(int code, int width, int height, OutputStream out) throws IOException {
-
-        // convert width and height from mm to pixel
-        width *= PNG_PIXEL_PER_MM[resolution];
-        height *= PNG_PIXEL_PER_MM[resolution];
-
-
-        width = (int) (width / (4 * PNG_BLOCK_SIZE[resolution]));
-        height = (int) (height / (4 * PNG_BLOCK_SIZE[resolution]));
-
-        int imageWidth = width * 4 * PNG_BLOCK_SIZE[resolution];
-        int imageHeight = height * 4 * PNG_BLOCK_SIZE[resolution];
-
-        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D graphics = image.createGraphics();
-        graphics.setComposite(AlphaComposite.Clear);
-        graphics.fillRect(0, 0, imageWidth, imageHeight);
-        graphics.setComposite(AlphaComposite.Src);
-        graphics.setColor(Color.black);
-
-        drawPattern(code, 0, 0, width, height, graphics);
-
+    private static void writePng(BufferedImage image, OutputStream out) throws IOException {
+        
         // find an image writer for PNG
         for (Iterator<ImageWriter> iw = ImageIO.getImageWritersByFormatName("PNG"); iw.hasNext(); ) {
             ImageWriter writer = iw.next();
@@ -247,6 +218,44 @@ public class Codes {
             break;
         }
     }
+    
+    public static BufferedImage generateCodeImage(int code, int width, int height) {
+        // convert width and height from mm to pixel
+        width *= PNG_PIXEL_PER_MM[resolution];
+        height *= PNG_PIXEL_PER_MM[resolution];
+
+
+        width = (int) (width / (4 * PNG_BLOCK_SIZE[resolution]));
+        height = (int) (height / (4 * PNG_BLOCK_SIZE[resolution]));
+
+        int imageWidth = width * 4 * PNG_BLOCK_SIZE[resolution];
+        int imageHeight = height * 4 * PNG_BLOCK_SIZE[resolution];
+
+        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D graphics = image.createGraphics();
+        graphics.setComposite(AlphaComposite.Clear);
+        graphics.fillRect(0, 0, imageWidth, imageHeight);
+        graphics.setComposite(AlphaComposite.Src);
+        graphics.setColor(Color.black);
+
+        drawPattern(code, 0, 0, width, height, graphics);
+        
+        return(image);
+    }
+    
+    /**
+     * @param code   code-id (not ting-id)
+     * @param width  width in mm
+     * @param height height in mm
+     * @param out    stream to which the image will be written
+     * @throws IOException
+     */
+    public static void drawPng(int code, int width, int height, OutputStream out) throws IOException {
+        writePng(generateCodeImage(code, width, height), out);
+    }
+    
+    
 
 
     public static void drawBooklet(String title, int mid, List<Tupel<Integer, String>> booklet, PrintWriter out) {

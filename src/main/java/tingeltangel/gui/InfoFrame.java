@@ -23,15 +23,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JEditorPane;
-import javax.swing.JInternalFrame;
+import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
-public class InfoFrame extends JInternalFrame {
+public class InfoFrame extends JFrame {
     
     private JEditorPane text = new JEditorPane();
     
     public InfoFrame(String title, String file) {
-        super("", true, true, true, true);
+        super(title);
         setTitle(title);
         setVisible(false);
         setBounds(315, 5, 600, 400);

@@ -30,12 +30,11 @@ import tingeltangel.core.Properties;
  */
 public class Binary {
     
-    public final static String MPG123 = "mpg123";
     public final static String ESPEAK = "espeak";
     public final static String LAME = "lame";
     public final static String AVCONV = "avconv";
     
-    private final static String[] BINARIES = {MPG123, ESPEAK, LAME, AVCONV};
+    private final static String[] BINARIES = {ESPEAK, LAME, AVCONV};
     
     private final static Map<String, File> binMap = new HashMap<String, File>();
     

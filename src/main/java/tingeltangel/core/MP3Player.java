@@ -20,70 +20,57 @@
 package tingeltangel.core;
 
 import java.io.File;
-import java.io.IOException;
-import tingeltangel.tools.Binary;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import javax.swing.JOptionPane;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+import tingeltangel.tools.Callback;
+
 
 public class MP3Player {
 
-    private Process process = null;
-    private static MP3Player player = new MP3Player();
-    private Thread pauseThread = null;
+    private static final MP3Player mp3Player = new MP3Player();
+    
+    private Player player = null;
+    private final Object pause;
     
     private MP3Player() {
-        
+        this.pause = new Object();
     }
     
     public static MP3Player getPlayer() {
-        return(player);
+        return(mp3Player);
     }
     
-
-    public void stop() {
-        if(process != null) {
-            boolean kill = false;
-            try {
-                process.exitValue();
-            } catch(IllegalThreadStateException e) {
-                // still running
-                kill = true;
-            } catch(IllegalStateException e) {
-                // still running
-                kill = true;
-            }
-            if(kill) {
-                process.destroy();
-                process = null;
-            }
-        } else if(pauseThread != null) {
-            pauseThread.interrupt();
-        }
-    }
-    
-    public void play(File file) {
-        stop();
-        File mpg123 = Binary.getBinary(Binary.MPG123);
-        
+    public void play(File file, Callback<Exception> onError) throws FileNotFoundException {
         try {
-            if(mpg123 != null) {
-                process = new ProcessBuilder(mpg123.getCanonicalPath(), file.getAbsolutePath()).start();
-                try {
-                    process.waitFor();
-                } catch (InterruptedException ex) {
-                }
-            }
-        } catch(IOException ioe) {
-            ioe.printStackTrace(System.out);
+            stop();
+            player = new Player(new FileInputStream(file));
+            player.play();
+        } catch(JavaLayerException e) {
+            onError.callback(e);
         }
     }
     
     public void pause(int ms) {
         stop();
         try {
-            pauseThread = Thread.currentThread();
-            pauseThread.wait(ms);
-        } catch (InterruptedException ex) {
+            synchronized(pause) {
+                pause.wait(ms);
+            }
+        } catch(InterruptedException ex) {
         }
-        pauseThread = null;
+    }
+    
+    public void stop() {
+        if((player != null) && !player.isComplete()) {
+            player.close();
+        } else {
+            synchronized(pause) {
+                pause.notify();
+            }
+        }
     }
     
 }

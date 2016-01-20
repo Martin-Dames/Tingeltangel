@@ -19,6 +19,9 @@
 
 package tingeltangel.gui;
 
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
@@ -30,7 +33,6 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -64,9 +66,9 @@ public class MasterFrame extends JFrame implements Callback<String> {
     private final RepositoryManager repositoryFrame;
     private final GfxEditFrame gfxEditFrame;
     
+    */
     private final InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
     private final InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
-    */
     
     
     public MasterFrame() {
@@ -106,12 +108,33 @@ public class MasterFrame extends JFrame implements Callback<String> {
         
         setContentPane(indexPanel);
         
-
+        book.resetChangeMade();
+        indexPanel.setVisible(false);
     }
     /*
     public void showReferenceFrame() {
         referenceFrame.setVisible(true);
     }*/
+    
+    public void setBookOpened() {
+        indexPanel.setVisible(true);
+        MenuBar bar = getMenuBar();
+        for(int i = 0; i < bar.getMenuCount(); i++) {
+            enableMenu(bar.getMenu(i));
+        }
+    }
+    
+    private void enableMenu(Menu menu) {
+        menu.setEnabled(true);
+        for(int i = 0; i < menu.getItemCount(); i++) {
+            MenuItem item = menu.getItem(i);
+            if(item instanceof Menu) {
+                enableMenu((Menu)item);
+            } else {
+                item.setEnabled(true);
+            }
+        }
+    }
     
     public Book getBook() {
         return(book);
@@ -176,7 +199,8 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         book.clear();
                         book.setID(id);
                         indexPanel.updateList();
-                        
+                        indexPanel.refresh();
+                        setBookOpened();
                     }
                 });
                 
@@ -240,6 +264,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                         File src = Repository.getBookSrc(id);
                                         Importer.importBook(ouf, txt, src, book, progressDialog);
                                         indexPanel.updateList();
+                                        setBookOpened();
                                     } catch (SyntaxError ex) {
                                         JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
                                         ex.printStackTrace(System.out);
@@ -271,6 +296,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     try {
                         new ReadYamlFile().read(fc.getSelectedFile()).save();
                         indexPanel.updateList();
+                        setBookOpened();
                     } catch(ParserException e) {
                         JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
                         e.printStackTrace(System.out);
@@ -336,6 +362,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                     se.printStackTrace(System.out);
                                 }
                                 indexPanel.updateList();
+                                setBookOpened();
                             }
                         };
                         
@@ -363,8 +390,9 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         try {
                             book.clear();
                             book.setID(_id);
-                            
                             Book.loadXML(FileEnvironment.getXML(_id), book);
+                            indexPanel.refresh();
+                            setBookOpened();
                         } catch (IOException ex) {
                             ex.printStackTrace(System.err);
                         }
@@ -469,9 +497,9 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 }
                 
             };
-        } else if(id.equals("about.binary")) {
+        } else if(id.equals("prefs.binary")) {
             new BinaryLocationsDialog(this, true).setVisible(true);
-        } else if(id.equals("about.tts_prefs")) {
+        } else if(id.equals("prefs.tts")) {
             new TTSPreferences().setVisible(true);
     /*    } else if(id.equals("windows.stick")) {
             stickFrame.setVisible(true); */
@@ -533,10 +561,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 }
             };
             
-    /*    } else if(id.equals("about.contact")) {
+        } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {
-            licenseFrame.setVisible(true);*/
+            licenseFrame.setVisible(true);
         }
     }
     

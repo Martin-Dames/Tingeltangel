@@ -19,11 +19,13 @@
 
 package tingeltangel.core.scripting;
 
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
+import tingeltangel.tools.Callback;
 
 
 public class Emulator {
@@ -96,12 +98,16 @@ public class Emulator {
     public void play(int oid) {
         Entry entry = book.getEntryFromTingID(oid);
         if(entry.isMP3() && (entry.getMP3() != null)) {
-            String hint = Integer.toString(oid);
-            String indexHint = entry.getHint();
-            if(!indexHint.isEmpty()) {
-                hint += " (" + indexHint + ")";
+            try {
+                MP3Player.getPlayer().play(entry.getMP3(), new Callback<Exception>() {
+                    @Override
+                    public void callback(Exception t) {
+                        t.printStackTrace();
+                    }
+                });
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
             }
-            MP3Player.getPlayer().play(entry.getMP3());
         }
     }
     

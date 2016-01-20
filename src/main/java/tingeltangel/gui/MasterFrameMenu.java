@@ -30,12 +30,13 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import tingeltangel.core.Tupel;
 
 
 public class MasterFrameMenu implements ActionListener {
     
     private final static LinkedList<String> keys = new LinkedList<String>();
-    private final static HashMap<String, String> values = new HashMap<String, String>();
+    private final static HashMap<String, Tupel<String, Boolean>> values = new HashMap<String, Tupel<String, Boolean>>();
     private final static HashMap<String, MenuItem> items = new HashMap<String, MenuItem>();
     private static Callback<String> callback = null;
     private String id;
@@ -54,8 +55,15 @@ public class MasterFrameMenu implements ActionListener {
                     int p = row.indexOf("=");
                     String key = row.substring(0, p).trim();
                     String value = row.substring(p + 1).trim();
+                    
+                    boolean enabled = true;
+                    if(key.startsWith("*")) {
+                        enabled = false;
+                        key = key.substring(1);
+                    }
+                    
                     keys.add(key);
-                    values.put(key, value);
+                    values.put(key, new Tupel(value, enabled));
                 }
             }
         } catch(Exception e) {
@@ -76,6 +84,8 @@ public class MasterFrameMenu implements ActionListener {
             MenuItem item = new MenuItem(element.getCaption());
             item.addActionListener(new MasterFrameMenu(element.getFullID()));
             if(element.isHidden()) {
+                item.setEnabled(false);
+            } else if(!element.getEnabled()) {
                 item.setEnabled(false);
             }
             items.put(element.getFullID(), item);
@@ -101,7 +111,9 @@ public class MasterFrameMenu implements ActionListener {
         while(keyIterator.hasNext()) {
             String rawKey = keyIterator.next().trim();
             TreeElement element = root.get(rawKey.split("\\."));
-            element.setCaption(values.get(rawKey));
+            Tupel<String, Boolean> t = values.get(rawKey);
+            element.setCaption(t.a);
+            element.setEnabled(t.b);
         }
         
         MenuBar menuBar = new MenuBar();
@@ -128,6 +140,7 @@ class TreeElement {
     private String id;
     private LinkedList<TreeElement> childs = new LinkedList<TreeElement>();
     private TreeElement parent = null;
+    private boolean enabled = false;
     
     public TreeElement(String id) {
         this.id = id;
@@ -140,6 +153,14 @@ class TreeElement {
     
     public Iterator<TreeElement> getChilds() {
         return(childs.iterator());
+    }
+    
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
+    public boolean getEnabled() {
+        return(enabled);
     }
     
     private TreeElement get(String childID) {

@@ -41,12 +41,19 @@ public class TTSEntry {
     public int pitch = 50;
     public int speed = 160;
     
-
+    private static File getMP3(Entry entry) {
+        return(new File(FileEnvironment.getAudioDirectory(entry.getBook().getID()), "tts_" + entry.getTingID() + ".mp3"));
+    }
+    
     public File generateTTS(Entry entry) throws IOException {
-        File mp3 = new File(FileEnvironment.getAudioDirectory(entry.getBook().getID()), "tts_" + entry.getTingID() + ".mp3");
+        File mp3 = getMP3(entry);
         TTS.generate(text, amplitude, pitch, speed, voice, variant, mp3);
         entry.setSize((int)mp3.length());
         return(mp3);
+    }
+
+    public void invalidate(Entry entry) {
+        getMP3(entry).delete();
     }
 
 }

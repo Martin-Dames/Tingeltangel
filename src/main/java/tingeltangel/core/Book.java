@@ -74,14 +74,14 @@ public class Book {
     private String author;
     private int version;
     private String url;
-    private LinkedList<Page> pages = new LinkedList<Page>();
+    private final LinkedList<Page> pages = new LinkedList<Page>();
     
     private long date = new Date().getTime() / 1000;
     private long magicValue = DEFAULT_MAGIC_VALUE;
     
     private final static int PNG_SIZE = 12;
     
-    private Emulator emulator;
+    private final Emulator emulator;
     
     
     public final void clear() {
@@ -153,6 +153,10 @@ public class Book {
     
     void changeMade() {
         changed = true;
+    }
+    
+    public void resetChangeMade() {
+        changed = false;
     }
     
     public String getName() {
@@ -575,7 +579,10 @@ public class Book {
         int pos = startOfIndexTable + 12 * size;
         for(int i = 0; i < size; i++) {
             Entry entry = getEntryFromTingID(i + 15001);
+            
+            
             if(entry == null) {
+                
                 out.writeInt(0x0000);
                 out.writeInt(0x0000);
                 out.writeInt(0x0000);
@@ -606,7 +613,6 @@ public class Book {
             progress.setMax(size);
         }
         
-        
         pos = startOfIndexTable + 12 * size;
         // write data
         byte[] buffer = new byte[4096];
@@ -615,27 +621,27 @@ public class Book {
                 progress.setVal(t);
             }
             Entry e = getEntryFromTingID(t + 15001);
-            
-            int pad = getNextAddress(pos) - pos;
-            pos += pad;
+            if(e != null) {
+                int pad = getNextAddress(pos) - pos;
+                pos += pad;
 
-            for(int i = 0; i < pad; i++) {
-                out.write(0x0);
-            }
-            if(e.isMP3() || e.isTTS()) {
-                InputStream in = new FileInputStream(e.getMP3());
-                int b;
-                while((b = in.read(buffer)) >= 0) {
-                    out.write(buffer, 0, b);
-                    pos += b;
+                for(int i = 0; i < pad; i++) {
+                    out.write(0x0);
                 }
-                in.close();
-            } else {
-                byte[] bin = e.getScript().compile();
-                out.write(bin);
-                pos += bin.length;
+                if(e.isMP3() || e.isTTS()) {
+                    InputStream in = new FileInputStream(e.getMP3());
+                    int b;
+                    while((b = in.read(buffer)) >= 0) {
+                        out.write(buffer, 0, b);
+                        pos += b;
+                    }
+                    in.close();
+                } else {
+                    byte[] bin = e.getScript().compile();
+                    out.write(bin);
+                    pos += bin.length;
+                }
             }
-            
            
         }
         
@@ -758,7 +764,7 @@ public class Book {
         // test if index table is valid
         for(int i = 0; i < size; i++) {
             Entry entry = getEntryFromTingID(i + 15001);
-            if(entry.isMP3() && (entry.getMP3() != null)) {
+            if((entry != null) && entry.isMP3() && (entry.getMP3() != null)) {
                 if(!entry.getMP3().canRead()) {
                     throw new IllegalArgumentException("Die Datei '" + entry.getMP3().getAbsolutePath() + "' konnte nicht gelesen werden.");
                 }
@@ -788,6 +794,7 @@ public class Book {
         PrintWriter srcOut = new PrintWriter(new FileWriter(src));
         generateScriptFile(srcOut);
         srcOut.close();
+        
         
         DataOutputStream out = new DataOutputStream(new FileOutputStream(ouf));
         generateOufFile(out, progress);
@@ -913,8 +920,13 @@ public class Book {
         }
     }
 
-    public void removeEntryByOID(int tingID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void removeEntryByTingID(int tingID) {
+                
+        // remove from indexEntries
+        indexEntries.remove(tingID);
+        indexIDs.removeByTingID(tingID);
+        changeMade();
+        
     }
    
 }

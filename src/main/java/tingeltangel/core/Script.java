@@ -280,7 +280,11 @@ public class Script {
                     
                     Instance instance = new Instance(command);
                     if(command.firstArgumentIsLabel()) {
-                        instance.setLabel(labels.get(arg1));
+                        Integer label = labels.get(arg1);
+                        if(label == null) {
+                            throw new SyntaxError("unknown label: " + arg1);
+                        }
+                        instance.setLabel(label);
                         instanceLabelsII.put(instance.getLabel(), instanceLabelsSI.get(arg1));
                     } else {
                         if(Commands.getArguments(cmd) > 0) {

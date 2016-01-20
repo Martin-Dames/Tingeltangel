@@ -182,6 +182,7 @@ public final class IndexPanel extends JPanel {
         skip.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
+                    //MP3Player.getPlayer().stop();
                     MP3Player.getPlayer().stop();
                 }
             });
@@ -195,17 +196,7 @@ public final class IndexPanel extends JPanel {
         stop.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    String tid = currentTrack.getText();
-                    if(tid != null) {
-                        Entry entry = mainFrame.getBook().getEntryFromTingID(Integer.parseInt(tid));
-                        if(entry.isCode()) {
-                            entry.getScript().kill();
-                        }
-                        if(entry.isMP3() || entry.isTTS() || entry.isCode()) {
-                            MP3Player.getPlayer().stop();
-                        }
-                            
-                    }
+                    stopTrack();
                 }
             });
         row.add(stop, PushBorderLayout.LINE_START);
@@ -389,6 +380,20 @@ public final class IndexPanel extends JPanel {
         */
     }
 
+    public void stopTrack() {
+        String tid = currentTrack.getText();
+        if(!tid.isEmpty()) {
+            Entry entry = mainFrame.getBook().getEntryFromTingID(Integer.parseInt(tid));
+            if(entry.isCode()) {
+                entry.getScript().kill();
+            }
+            if(entry.isMP3() || entry.isTTS() || entry.isCode()) {
+                MP3Player.getPlayer().stop();
+            }
+
+        }
+    }
+    
     private ImageIcon getIcon(int res) {
         try {
             return(new ImageIcon(ImageIO.read(getClass().getResource("/icons/" + ICONS[res]))));
@@ -407,7 +412,7 @@ public final class IndexPanel extends JPanel {
             }
         }
         if(rowNr < 0) {
-            return(0);
+            return(list.getComponentCount());
         }
         return(rowNr);
     }
@@ -454,6 +459,7 @@ public final class IndexPanel extends JPanel {
         date.setText(Long.toString(book.getDate()));
         enableListeners(true);
     }
+    
     
     public void update() {
         Book book = mainFrame.getBook();
