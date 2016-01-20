@@ -53,7 +53,7 @@ public class Importer {
      * @param book
      * @throws Exception 
      */
-    public static void importBook(File oufFile, Map<String, String> txt, File scriptFile, Book book, ProgressDialog progress) throws IOException, SyntaxError {
+    public static void importBook(File oufFile, Map<String, String> txt, File scriptFile, File pngFile, Book book, ProgressDialog progress) throws IOException, SyntaxError {
 
         if(txt != null) {
             book.setAuthor(txt.get(TxtFile.KEY_AUTHOR));
@@ -67,6 +67,28 @@ public class Importer {
             book.setPublisher("unknown");
             book.setURL("unknown");
             book.setVersion(1);
+        }
+        
+        if(pngFile != null) {
+            // copy file from "pngFile" to "book.getCover()"
+            InputStream input = null;
+            OutputStream output = null;
+            try {
+                input = new FileInputStream(pngFile);
+                output = new FileOutputStream(book.getCover());
+                byte[] buf = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = input.read(buf)) > 0) {
+                    output.write(buf, 0, bytesRead);
+                }
+            } finally {
+                if(input != null) {
+                    input.close();
+                }
+                if(output != null) {
+                    output.close();
+                }
+            }
         }
         
         // load script file

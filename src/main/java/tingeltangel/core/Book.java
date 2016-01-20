@@ -61,6 +61,7 @@ import tingeltangel.tools.ProgressDialog;
 public class Book {
 
     private final static long DEFAULT_MAGIC_VALUE = 0x0000000b;
+
     
     
     private SortedIntList indexIDs = new SortedIntList();
@@ -96,6 +97,10 @@ public class Book {
         date = new Date().getTime() / 1000;
         
         magicValue = DEFAULT_MAGIC_VALUE;
+    }
+    
+    public File getCover() {
+        return(new File(FileEnvironment.getBookDirectory(id), "cover.png"));
     }
     
     public LinkedList<Page> getPages() {
@@ -780,16 +785,30 @@ public class Book {
         File png = new File(dir, idS + PngFile._EN_PNG);
         File src = new File(dir, idS + ScriptFile._EN_SRC);
         
-        // TODO use proper png file
-        InputStream fci = getClass().getResourceAsStream("/sample.png");
-        OutputStream fco = new FileOutputStream(png);
-        int b;
-        byte[] buffer = new byte[4096];
-        while((b = fci.read(buffer)) != -1) {
-            fco.write(buffer, 0, b);
+        // copy png
+        InputStream input = null;
+        OutputStream output = null;
+        try {
+            if(getCover().exists()) {
+                input = new FileInputStream(getCover());
+            } else {
+                input = getClass().getResourceAsStream("/noCover.png");
+            }
+            output = new FileOutputStream(getCover());
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
+            }
+        } finally {
+            if(input != null) {
+                input.close();
+            }
+            if(output != null) {
+                output.close();
+            }
         }
-        fco.close();
-        fci.close();
+        
         
         PrintWriter srcOut = new PrintWriter(new FileWriter(src));
         generateScriptFile(srcOut);
@@ -929,4 +948,30 @@ public class Book {
         
     }
    
+    public boolean deleteBook(int id) {
+        if(id == this.id) {
+            return(false);
+        }
+        String _id = Integer.toString(id);
+        while(_id.length() < 5) {
+            _id = "0" + _id;
+        }
+        File f = new File(FileEnvironment.getBooksDirectory(), _id);
+        return(deleteFile(f));
+    }
+    
+    private boolean deleteFile(File f) {
+        if(f.isDirectory()) {
+            File[] childs = f.listFiles();
+            for(int i = 0; i < childs.length; i++) {
+                if(!deleteFile(childs[i])) {
+                    return(false);
+                }
+            }
+            return(f.delete());
+        } else if(f.isFile()) {
+            return(f.delete());
+        }
+        return(false);
+    }
 }

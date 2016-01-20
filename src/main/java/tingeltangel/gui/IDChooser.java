@@ -21,7 +21,9 @@ package tingeltangel.gui;
 
 import tingeltangel.tools.Callback;
 import java.awt.Dialog;
+import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.ListModel;
@@ -29,6 +31,7 @@ import javax.swing.event.ListDataListener;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Translator;
 import tingeltangel.core.Tupel;
+import tingeltangel.tools.FileEnvironment;
 
 /**
  *
@@ -191,9 +194,23 @@ public class IDChooser extends javax.swing.JDialog {
     
     private void niceIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_niceIDActionPerformed
         idList.clear();
+        
+        File[] books = FileEnvironment.getBooksDirectory().listFiles();
+        HashSet<Integer> _books = new HashSet<Integer>();
+        for(int i = 0; i < books.length; i++) {
+            try {
+                _books.add(Integer.parseInt(books[i].getName()));
+            } catch(NumberFormatException nfe) {
+                ;
+            }
+        }
+        
         for(int i = 0; i < 10000; i++) {
             if((Translator.ting2code(i) >= 0) && isNiceID(i)) {
-                idList.add(new Tupel(i, renderName(i)));
+                // check if book with mid i already exists
+                if(!_books.contains(i)) {
+                    idList.add(new Tupel(i, renderName(i)));
+                }
             }
         }
         model.refresh();

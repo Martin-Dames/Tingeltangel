@@ -158,6 +158,42 @@ public class Import extends CliCommand {
                     return(new File(value).exists());
                 }
             },
+            new CliSwitch() {
+                @Override
+                public String getName() {
+                    return("p");
+                }
+
+                @Override
+                public String getDescription() {
+                    return("die zu importierende png-Datei");
+                }
+
+                @Override
+                public boolean hasArgument() {
+                    return(true);
+                }
+
+                @Override
+                public boolean isOptional() {
+                    return(true);
+                }
+
+                @Override
+                public String getLabel() {
+                    return("png-Datei");
+                }
+
+                @Override
+                public String getDefault() {
+                    return(null);
+                }
+
+                @Override
+                public boolean acceptValue(String value) {
+                    return(new File(value).exists());
+                }
+            },
         };
         
         Map<String, CliSwitch> switches = new HashMap<String, CliSwitch>();
@@ -176,6 +212,7 @@ public class Import extends CliCommand {
         
         String _txt = args.get("t");
         String _src = args.get("s");
+        String _png = args.get("p");
         File src = null;
         if(_src != null) {
             src = new File(_src);
@@ -184,6 +221,10 @@ public class Import extends CliCommand {
         if(_txt != null) {
             txt = Repository.getBook(new File(_txt));
         }
+        File png = null;
+        if(_png != null) {
+            png = new File(_png);
+        }
         
         // preread mid
         DataInputStream in = new DataInputStream(new FileInputStream(ouf));
@@ -191,7 +232,7 @@ public class Import extends CliCommand {
         int id = in.readInt();
         in.close();
         
-        Importer.importBook(ouf, txt, src, new Book(id), null);
+        Importer.importBook(ouf, txt, src, png, new Book(id), null);
         
     }
     

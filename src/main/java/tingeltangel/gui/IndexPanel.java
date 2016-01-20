@@ -25,11 +25,21 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,6 +48,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
@@ -55,6 +66,7 @@ public final class IndexPanel extends JPanel {
     private JTextField url = new JTextField();
     private JTextField magicValue = new JTextField();
     private JTextField date = new JTextField();
+    private JLabel cover = null;
         
     private final int ICON_SKIP = 0;
     private final int ICON_STOP = 1;
@@ -95,7 +107,7 @@ public final class IndexPanel extends JPanel {
         
         this.mainFrame = mainFrame;
         
-        
+        Book book = mainFrame.getBook();
  
         JPanel right = new JPanel();
         right.setLayout(new PushBorderLayout());
@@ -180,12 +192,11 @@ public final class IndexPanel extends JPanel {
         JButton skip = new JButton(getIcon(ICON_SKIP));
         skip.setMargin(new Insets(0, 0, 0, 0));
         skip.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    //MP3Player.getPlayer().stop();
-                    MP3Player.getPlayer().stop();
-                }
-            });
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                MP3Player.getPlayer().stop();
+            }
+        });
         row.add(skip, PushBorderLayout.LINE_START);
         
         
@@ -230,6 +241,39 @@ public final class IndexPanel extends JPanel {
         row.add(new JLabel("Bucheigenschaften"), BorderLayout.NORTH);
         right.add(row, PushBorderLayout.PAGE_START);
         
+        // cover
+        right.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
+        cover = new JLabel("Cover kann nicht geladen werden");
+        
+        try {
+            File coverImage = book.getCover();
+            if(coverImage.exists()) {
+                cover = new JLabel(new ImageIcon(ImageIO.read(coverImage)));
+            } else {
+                cover = new JLabel(new ImageIcon(ImageIO.read(getClass().getResource("/noCover.png"))));
+            }
+        } catch(IOException ioe) {
+        }
+        cover.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadCover();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        right.add(cover, PushBorderLayout.PAGE_START);
         
         // add register panel
         right.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
@@ -247,12 +291,9 @@ public final class IndexPanel extends JPanel {
         add(right, BorderLayout.EAST);
         
         
-        //setSize(new Dimension(500, 500));
-        
-        
         updateList();
         
-        Book book = mainFrame.getBook();
+        
         
         id.setText(Integer.toString(book.getID()));
         name.setText(book.getName());
@@ -262,9 +303,10 @@ public final class IndexPanel extends JPanel {
         url.setText(book.getUrl());
         
         magicValue.setText(Long.toString(book.getMagicValue()));
-        date.setText(Long.toString(book.getDate()));
+        date.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date(book.getDate() * 1000)));
         
         id.setEditable(false);
+        date.setEditable(false);
         dl = new DocumentListener() {
 
             @Override
@@ -286,98 +328,6 @@ public final class IndexPanel extends JPanel {
         
         
         enableListeners(true);
-        /*
-        
-        list.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                
-                Book book = mainFrame.getBook();
-                JTable target = (JTable)e.getSource();
-                int row = target.getSelectedRow();
-                int column = target.getSelectedColumn();
-                
-                mainFrame.entrySelected(row);
-                
-                if (e.getClickCount() == 2) {
-                    
-                    if(column == 0) {
-                        
-                        // click on oid
-                        String _id = Integer.toString(book.getEntry(row).getTingID());
-                        while(_id.length() < 5) {
-                            _id = "0" + _id;
-                        }
-                        JFileChooser fc = new JFileChooser();
-                        fc.setFileFilter(new FileNameExtensionFilter("Tabelle (*.eps)", "eps"));
-                        fc.setSelectedFile(new File(_id + ".eps"));
-                        
-                        if(fc.showSaveDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
-                            try {
-                                String file = fc.getSelectedFile().getCanonicalPath();
-                                if(!file.toLowerCase().endsWith(".eps")) {
-                                    file += ".eps";
-                                }
-                                book.epsSingleExport(new File(file), book.getEntry(row).getTingID());
-                            } catch(IOException ex) {
-                                JOptionPane.showMessageDialog(mainFrame, "eps-Generierung fehlgeschlagen");
-                                ex.printStackTrace(System.out);
-                            } catch(IllegalArgumentException ex) {
-                                JOptionPane.showMessageDialog(mainFrame, "eps-Generierung fehlgeschlagen: " + ex.getMessage());
-                            }
-                        }
-                        
-                    } else if(column == 1) {
-                        
-                        
-                    } else if(column == 3) {
-                        if(book.getEntry(row).isMP3()) {
-                            JFileChooser fc = new JFileChooser(lastChooseMp3DialogPath);
-                            fc.setFileFilter(new FileNameExtensionFilter("mp3", "mp3"));
-                            if(fc.showOpenDialog(IndexFrame2.this) == JFileChooser.APPROVE_OPTION) {
-                                try {
-                                    File file = fc.getSelectedFile();
-                                    if(file.getParent() != null) {
-                                        lastChooseMp3DialogPath = file.getParent();
-                                    }
-                                    book.getEntry(row).setMP3(file);
-                                    update();
-                                } catch(FileNotFoundException ex) {
-                                    JOptionPane.showMessageDialog(IndexFrame2.this, "Die Datei '" + fc.getSelectedFile() + "' konnte nicht gefunden werden.");
-                                    ex.printStackTrace(System.out);
-                                } catch(IOException ex) {
-                                    JOptionPane.showMessageDialog(IndexFrame2.this, "Die Datei '" + fc.getSelectedFile() + "' konnte nicht gelesen werden.");
-                                    ex.printStackTrace(System.out);
-                                }
-                            }
-                        } else if(book.getEntry(row).isTTS()) {
-                            
-                            TTSEntry entry = book.getEntry(row).getTTS();
-                            if(entry == null) {
-                                entry = new TTSEntry("");
-                                book.getEntry(row).setTTS(entry);
-                            }
-                            final TTSEntry _entry = entry;
-                            final Book _book = book;
-                            final int _row = row;
-                            new TTSDialog(mainFrame, true, entry, new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        _entry.generateTTS(_book.getEntry(_row));
-                                    } catch(IOException ioe) {
-                                        ioe.printStackTrace();
-                                    }
-                                }
-                            }).setVisible(true);
-                            
-                            
-                        }
-                    }
-                }
-            }
-        });
-        */
     }
 
     public void stopTrack() {
@@ -456,7 +406,19 @@ public final class IndexPanel extends JPanel {
         version.setText(Integer.toString(book.getVersion()));
         url.setText(book.getUrl());
         magicValue.setText(Long.toString(book.getMagicValue()));
-        date.setText(Long.toString(book.getDate()));
+        date.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date(book.getDate() * 1000)));
+        
+        try {
+            File coverImage = book.getCover();
+            if(coverImage.exists()) {
+                cover.setIcon(new ImageIcon(ImageIO.read(coverImage)));
+            } else {
+                cover.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/noCover.png"))));
+            }
+        } catch(IOException ioe) {
+            cover.setText("Cover kann nicht geladen werden");
+        }
+        
         enableListeners(true);
     }
     
@@ -473,10 +435,6 @@ public final class IndexPanel extends JPanel {
         book.setURL(url.getText());
         try {
             book.setMagicValue(Long.parseLong(magicValue.getText()));
-        } catch(NumberFormatException nfe) {
-        }
-        try {
-            book.setDate(Long.parseLong(date.getText()));
         } catch(NumberFormatException nfe) {
         }
     }
@@ -507,5 +465,43 @@ public final class IndexPanel extends JPanel {
         }
     }
     
-    
+    void loadCover() {
+        
+        JFileChooser fc = new JFileChooser();
+        fc.setFileFilter(new FileNameExtensionFilter("PNG Coverbild (140px × 193px) (*.png)", "png"));
+        if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                File file = fc.getSelectedFile();
+                if(file.exists()) {
+                    
+                    InputStream input = null;
+                    OutputStream output = null;
+                    try {
+                        input = new FileInputStream(file);
+                        output = new FileOutputStream(mainFrame.getBook().getCover());
+                        byte[] buf = new byte[1024];
+                        int bytesRead;
+                        while ((bytesRead = input.read(buf)) > 0) {
+                            output.write(buf, 0, bytesRead);
+                        }
+                    } finally {
+                        if(input != null) {
+                            input.close();
+                        }
+                        if(output != null) {
+                            output.close();
+                        }
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(this, "Das Cover konnte nicht gefunden werden");
+                }
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(this, "Das Cover konnte nicht geladen werden");
+                e.printStackTrace(System.out);
+            }
+        }
+        
+        refresh();
+    }
 }

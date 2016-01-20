@@ -53,7 +53,7 @@ public class ImportTest {
                 if(ouf != null) {
                     System.out.println("\nImporting " + id + " ...");
                     try {
-                        Importer.importBook(ouf, null, null, new Book(id), null);
+                        Importer.importBook(ouf, null, null, null, new Book(id), null);
 			success.add(id);
                     } catch(Exception e) {
                         System.out.println("********** ERROR: " + e.getMessage() + " ****************");

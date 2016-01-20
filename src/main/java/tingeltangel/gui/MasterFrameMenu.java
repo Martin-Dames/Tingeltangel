@@ -47,7 +47,7 @@ public class MasterFrameMenu implements ActionListener {
     
     static {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(MasterFrameMenu.class.getResourceAsStream("/menu.properties")));
+            BufferedReader in = new BufferedReader(new InputStreamReader(MasterFrameMenu.class.getResourceAsStream("/menu.properties"), "UTF8"));
             String row;
             while((row = in.readLine()) != null) {
                 row = row.trim();

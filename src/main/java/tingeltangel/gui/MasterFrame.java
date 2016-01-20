@@ -236,8 +236,11 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                                     File ouf = Repository.getBookOuf(id);
                                                     Map<String, String> txt = Repository.getBookTxt(id);
                                                     File src = Repository.getBookSrc(id);
-                                                    Importer.importBook(ouf, txt, src, book, progressDialog);
+                                                    File png = Repository.getBookPng(id);
+                                                    Importer.importBook(ouf, txt, src, png, book, progressDialog);
                                                     indexPanel.updateList();
+                                                    indexPanel.refresh();
+                                                    setBookOpened();
                                                 } catch (SyntaxError ex) {
                                                     JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
                                                     ex.printStackTrace(System.out);
@@ -262,8 +265,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                         File ouf = Repository.getBookOuf(id);
                                         Map<String, String> txt = Repository.getBookTxt(id);
                                         File src = Repository.getBookSrc(id);
-                                        Importer.importBook(ouf, txt, src, book, progressDialog);
+                                        File png = Repository.getBookPng(id);
+                                        Importer.importBook(ouf, txt, src, png, book, progressDialog);
                                         indexPanel.updateList();
+                                        indexPanel.refresh();
                                         setBookOpened();
                                     } catch (SyntaxError ex) {
                                         JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
@@ -296,6 +301,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     try {
                         new ReadYamlFile().read(fc.getSelectedFile()).save();
                         indexPanel.updateList();
+                        indexPanel.refresh();
                         setBookOpened();
                     } catch(ParserException e) {
                         JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
@@ -352,8 +358,9 @@ public class MasterFrame extends JFrame implements Callback<String> {
                             public void action(ProgressDialog progressDialog) {
                                 try {
                                     book = new Book(_id);
-                                    Importer.importBook((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), book, progressDialog);
+                                    Importer.importBook((File)data.get("ouf"), Repository.getBook((File)data.get("txt")), (File)data.get("src"), (File)data.get("png"), book, progressDialog);
                                     
+                                    setBookOpened();
                                 } catch(IOException e) {
                                     JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
                                     e.printStackTrace(System.out);
@@ -362,7 +369,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                     se.printStackTrace(System.out);
                                 }
                                 indexPanel.updateList();
-                                setBookOpened();
+                                indexPanel.refresh();
                             }
                         };
                         
@@ -392,11 +399,11 @@ public class MasterFrame extends JFrame implements Callback<String> {
                             book.setID(_id);
                             Book.loadXML(FileEnvironment.getXML(_id), book);
                             indexPanel.refresh();
+                            indexPanel.updateList();
                             setBookOpened();
                         } catch (IOException ex) {
                             ex.printStackTrace(System.err);
                         }
-                        indexPanel.updateList();
                         // gfxEditFrame.update();
                     }
                 });
@@ -541,14 +548,14 @@ public class MasterFrame extends JFrame implements Callback<String> {
             generateTabular(true);
         } else if(id.equals("codes.tabular.code2ting")) {
             generateTabular(false);
-        } else if(id.equals("books.search")) {
+        } else if(id.equals("actions.searchForNewBooks")) {
             new Progress(this, "Buchliste aktualisieren") {
                 @Override
                 public void action(ProgressDialog progressDialog) {
                     Repository.search(progressDialog);
                 }
             };
-        } else if(id.equals("books.update")) {
+        } else if(id.equals("actions.updateBooks")) {
             new Progress(this, "Bücher aktualisieren") {
                 @Override
                 public void action(ProgressDialog progressDialog) {
@@ -560,7 +567,19 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     }
                 }
             };
-            
+        } else if(id.equals("actions.deleteBook")) {
+            ChooseBook cb = new ChooseBook(this, new Callback<Integer>() {
+                @Override
+                public void callback(Integer _id) {
+                    if(_id == book.getID()) {
+                        JOptionPane.showMessageDialog(MasterFrame.this, "Das Buch wird gerade bearbeitet und kann nicht gelöscht werden.");
+                    } else if(!book.deleteBook(_id)) {
+                        JOptionPane.showMessageDialog(MasterFrame.this, "Das Buch konnte nicht gelöscht werden.");
+                    } else {
+                        JOptionPane.showMessageDialog(MasterFrame.this, "Das Buch wurde gelöscht.");
+                    }
+                }
+            });
         } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {

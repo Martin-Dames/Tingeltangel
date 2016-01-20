@@ -21,13 +21,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -48,7 +44,6 @@ import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.Callback;
 import tingeltangel.tools.Lang;
-import tingeltangel.tools.OS;
 
 /**
  *
@@ -105,6 +100,10 @@ public class IndexListEntry extends JPanel {
         super();
         this.entry = entry;
         
+        
+        boolean unknownID = Translator.ting2code(entry.getTingID()) < 0;
+        
+        
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.black));
         
@@ -112,6 +111,10 @@ public class IndexListEntry extends JPanel {
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
         
         JPanel row = new JPanel();
+        
+        if(unknownID) {
+            row.setBackground(Color.red);
+        }
         
         
         JButton jboid = new JButton(Integer.toString(entry.getTingID()));
@@ -359,7 +362,7 @@ public class IndexListEntry extends JPanel {
         // save pattern icon
         JButton savePattern = new JButton(getIcon(ICON_SAVE_PATTERN));
         savePattern.setMargin(new Insets(0, 0, 0, 0));
-        if(entry.isCode() || entry.isMP3() || entry.isTTS()) {
+        if((entry.isCode() || entry.isMP3() || entry.isTTS()) && !unknownID) {
             savePattern.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -393,7 +396,7 @@ public class IndexListEntry extends JPanel {
         // copy pattern
         JButton copyPattern = new JButton(getIcon(ICON_COPY_PATTERN));
         copyPattern.setMargin(new Insets(0, 0, 0, 0));
-        if(entry.isCode() || entry.isMP3() || entry.isTTS()) {
+        if((entry.isCode() || entry.isMP3() || entry.isTTS()) && !unknownID) {
             copyPattern.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
