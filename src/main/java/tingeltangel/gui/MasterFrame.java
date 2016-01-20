@@ -58,30 +58,16 @@ public class MasterFrame extends JFrame implements Callback<String> {
     private Book book = new Book(15000);
     
     private final IndexPanel indexPanel;
-    /*
-    private final JDesktopPane desktop;
-    private final StickFrame stickFrame;
-    private final ReferenceFrame referenceFrame;
-    private final TranslatorFrame translatorFrame;
-    private final RepositoryManager repositoryFrame;
-    private final GfxEditFrame gfxEditFrame;
-    
-    */
     private final InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
     private final InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
     
+    private final LinkedList<EntryListener> listeners = new LinkedList<EntryListener>();
     
     public MasterFrame() {
         super(Tingeltangel.MAIN_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
         
         
-        //indexFrame = new IndexFrame(this);
         indexPanel = new IndexPanel(this);
-        //stickFrame = new StickFrame(this);
-        //referenceFrame = new ReferenceFrame(this);
-        //translatorFrame = new TranslatorFrame(this);
-        //repositoryFrame = new RepositoryManager(this);
-        //gfxEditFrame = new GfxEditFrame(this);
         
         
         JFrame.setDefaultLookAndFeelDecorated(true);
@@ -111,10 +97,6 @@ public class MasterFrame extends JFrame implements Callback<String> {
         book.resetChangeMade();
         indexPanel.setVisible(false);
     }
-    /*
-    public void showReferenceFrame() {
-        referenceFrame.setVisible(true);
-    }*/
     
     public void setBookOpened() {
         indexPanel.setVisible(true);
@@ -140,7 +122,6 @@ public class MasterFrame extends JFrame implements Callback<String> {
         return(book);
     }
     
-    private final LinkedList<EntryListener> listeners = new LinkedList<EntryListener>();
     
     void addEntryListener(EntryListener listener) {
         listeners.add(listener);
@@ -400,11 +381,11 @@ public class MasterFrame extends JFrame implements Callback<String> {
                             Book.loadXML(FileEnvironment.getXML(_id), book);
                             indexPanel.refresh();
                             indexPanel.updateList();
+                            book.resetChangeMade();
                             setBookOpened();
                         } catch (IOException ex) {
                             ex.printStackTrace(System.err);
                         }
-                        // gfxEditFrame.update();
                     }
                 });
                 

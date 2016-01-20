@@ -22,7 +22,6 @@ package tingeltangel.core;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import javax.swing.JOptionPane;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import tingeltangel.tools.Callback;

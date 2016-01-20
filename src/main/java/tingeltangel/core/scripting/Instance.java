@@ -88,6 +88,17 @@ public class Instance {
         secondArgument = removeRegister(argument);
     }
     
+    public String toString() {
+        String s = command.getAsm();
+        if(command.getNumberOfArguments() > 0) {
+            s += " " + getFirstArgument();
+        }
+        if(command.getNumberOfArguments() > 1) {
+            s += " " + getSecondArgument();
+        }
+        return(s);
+    }
+    
     public Command getCommand() {
         return(command);
     }

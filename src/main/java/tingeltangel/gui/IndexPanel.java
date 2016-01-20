@@ -332,7 +332,7 @@ public final class IndexPanel extends JPanel {
 
     public void stopTrack() {
         String tid = currentTrack.getText();
-        if(!tid.isEmpty()) {
+        if((tid != null) && !tid.isEmpty()) {
             Entry entry = mainFrame.getBook().getEntryFromTingID(Integer.parseInt(tid));
             if(entry.isCode()) {
                 entry.getScript().kill();

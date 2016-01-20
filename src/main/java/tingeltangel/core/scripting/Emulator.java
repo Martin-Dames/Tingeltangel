@@ -97,14 +97,16 @@ public class Emulator {
     
     public void play(int oid) {
         Entry entry = book.getEntryFromTingID(oid);
-        if(entry.isMP3() && (entry.getMP3() != null)) {
+        if((entry.isMP3() || entry.isTTS()) && (entry.getMP3() != null)) {
             try {
+                System.out.println("playing " + entry.getMP3().getAbsolutePath());
                 MP3Player.getPlayer().play(entry.getMP3(), new Callback<Exception>() {
                     @Override
                     public void callback(Exception t) {
                         t.printStackTrace();
                     }
                 });
+                System.out.println("done");
             } catch (FileNotFoundException ex) {
                 ex.printStackTrace();
             }

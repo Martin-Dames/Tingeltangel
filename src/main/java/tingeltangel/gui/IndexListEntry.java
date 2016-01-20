@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -85,6 +86,7 @@ public class IndexListEntry extends JPanel {
     
     private String lastChooseMp3DialogPath = null;
     private JLabel trackInfo = new JLabel(" ");
+    private final Entry entry;
     
     private ImageIcon getIcon(int res) {
         try {
@@ -94,7 +96,6 @@ public class IndexListEntry extends JPanel {
         return(null);
     }
     
-    private final Entry entry;
     
     public IndexListEntry(final Entry entry, final IndexPanel frame) {
         super();
@@ -145,6 +146,12 @@ public class IndexListEntry extends JPanel {
         icon.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                
+                JComponent source = (JComponent)ae.getSource();
+                
+                int px = source.getX() + getX() + frame.getMainFrame().getX();
+                int py = source.getY() + getY() + frame.getMainFrame().getY();
+                
                 String[] options = {
                     Lang.get("indexFrame.dialog.mp3"),
                     Lang.get("indexFrame.dialog.script"),
@@ -216,7 +223,7 @@ public class IndexListEntry extends JPanel {
                 } else {
                     throw new Error();
                 }
-                MultipleChoiceDialog.show(frame.getMainFrame(), "Frage...", "Typ ändern", "OK", options, actions, preselection, callback, 300, 300);
+                MultipleChoiceDialog.show(frame.getMainFrame(), "Frage...", "Typ ändern", "OK", options, actions, preselection, callback, px, py);
             }
         });
         row.add(icon);
@@ -255,9 +262,7 @@ public class IndexListEntry extends JPanel {
         play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if(!entry.isSub()) {
-                    frame.setCurrentTrack(entry);
-                }
+                frame.setCurrentTrack(entry);
                 new Thread() {
                     @Override
                     public void run() {
