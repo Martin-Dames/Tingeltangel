@@ -48,7 +48,7 @@ public class Preferences {
         if(type.equals("integer")) {
             return(INTEGER);
         }
-        throw new Error();
+        throw new Error("unknown type '" + type + "'");
     }
     
     static {
@@ -65,8 +65,10 @@ public class Preferences {
                     if(p < 0) {
                         throw new Error("missing '=' on line: " + row);
                     }
+                    
                     String key = row.substring(0, p).trim();
-                    String[] val = row.substring(p + 1).split("|");
+                    String[] val = row.substring(p + 1).split("\\|");
+                    
                     
                     PrefEntry e = new PrefEntry();
                     e.type = str2type(val[0].trim());
