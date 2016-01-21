@@ -36,6 +36,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
@@ -75,7 +76,7 @@ public class Book {
     private String author;
     private int version;
     private String url;
-    private final LinkedList<Page> pages = new LinkedList<Page>();
+    //private final LinkedList<Page> pages = new LinkedList<Page>();
     
     private long date = new Date().getTime() / 1000;
     private long magicValue = DEFAULT_MAGIC_VALUE;
@@ -102,11 +103,11 @@ public class Book {
     public File getCover() {
         return(new File(FileEnvironment.getBookDirectory(id), "cover.png"));
     }
-    
+    /*
     public LinkedList<Page> getPages() {
         return(pages);
     }
-        
+      */  
     public void generateTestBooklet(PrintWriter out) {
         LinkedList<Tupel<Integer, String>> booklet = new LinkedList<Tupel<Integer, String>>();
         Iterator<Integer> ids = indexIDs.iterator();
@@ -287,6 +288,7 @@ public class Book {
     
     public void save() throws IOException {
         
+        
         PrintWriter xml = new PrintWriter(new OutputStreamWriter(new FileOutputStream(FileEnvironment.getXML(id)), "UTF-8"));
         xml.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         xml.println("<book");
@@ -337,6 +339,8 @@ public class Book {
             xml.println("\t\t</entry>");
         }
         xml.println("\t</entries>");
+        
+        /*
         xml.println("\t<pages>");
         Iterator<Page> pageIterator = pages.iterator();
         while(pageIterator.hasNext()) {
@@ -357,6 +361,7 @@ public class Book {
             }
         }
         xml.println("\t</pages>");
+        */
         xml.println("\t<registers>");
         for(int i = 0; i <= emulator.getMaxRegister(); i++) {
             if(!emulator.getHint(i).trim().isEmpty()) {
@@ -368,6 +373,25 @@ public class Book {
         xml.println("\t</registers>");
         xml.println("</book>");
         xml.close();
+        
+        // delete unused mp3s
+        HashSet<String> filenames = new HashSet<String>();
+        File audioDir = FileEnvironment.getAudioDirectory(id);
+        File[] files = audioDir.listFiles();
+        for(int i = 0; i < files.length; i++) {
+            filenames.add(files[i].getName());
+        }
+        iterator = indexIDs.iterator();
+        while(iterator.hasNext()) {
+            Entry entry = indexEntries.get(iterator.next());
+            if((entry.isMP3() || entry.isTTS()) && (entry.getMP3() != null) && (entry.getMP3().exists())) {
+                filenames.remove(entry.getMP3().getName());
+            }
+        }
+        Iterator<String> toDelete = filenames.iterator();
+        while(toDelete.hasNext()) {
+            new File(audioDir, toDelete.next()).delete();
+        }
         
         changed = false;
         
@@ -505,6 +529,7 @@ public class Book {
                 }
             }
             
+            /*
             NodeList pages = doc.getElementsByTagName("page");
             for(int i = 0; i < pages.getLength(); i++) {
                 Node pageNode = pages.item(i);
@@ -516,6 +541,7 @@ public class Book {
                     book.getPages().add(p);
                 }
             }
+            */
         } catch (SAXException ex) {
             throw new IOException(ex);
         } catch (ParserConfigurationException ex) {
@@ -651,6 +677,25 @@ public class Book {
         }
         
         out.close();
+    }
+    
+    public void generateTTS(ProgressDialog progress) throws IOException {
+        Iterator<Integer> ids = indexIDs.iterator();
+        progress.setMax(indexIDs.size());
+        int c = 0;
+        try {
+            while(ids.hasNext()) {
+                Entry entry = indexEntries.get(ids.next());
+                if(entry.isTTS()) {
+                    entry.getTTS().generateTTS(entry);
+                }
+                progress.setVal(c++);
+            }
+        } catch(IOException ioe) {
+            progress.done();
+            throw ioe;
+        }
+        progress.done();
     }
     
     public void epsExport(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException {
@@ -794,7 +839,7 @@ public class Book {
             } else {
                 input = getClass().getResourceAsStream("/noCover.png");
             }
-            output = new FileOutputStream(getCover());
+            output = new FileOutputStream(png);
             byte[] buf = new byte[1024];
             int bytesRead;
             while ((bytesRead = input.read(buf)) > 0) {
@@ -925,7 +970,7 @@ public class Book {
             line = in.readLine();
         }
     }
-
+/*
     public void renderPages(ProgressDialog progressDialog) {
         
         progressDialog.setMax(getPages().size());
@@ -938,7 +983,7 @@ public class Book {
             PageRenderer.render(this, p);
         }
     }
-
+*/
     public void removeEntryByTingID(int tingID) {
                 
         // remove from indexEntries

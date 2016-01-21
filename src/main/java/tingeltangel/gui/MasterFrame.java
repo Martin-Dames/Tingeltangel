@@ -27,12 +27,18 @@ import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -50,6 +56,7 @@ import tingeltangel.tools.Callback;
 import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.Progress;
 import tingeltangel.tools.ProgressDialog;
+import tingeltangel.tools.ZipHelper;
 import tiptoi_reveng.lexer.LexerException;
 import tiptoi_reveng.parser.ParserException;
 
@@ -392,14 +399,6 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 
             }
             
-            
-        } else if(id.equals("buch.generatePages")) {
-            new Progress(MasterFrame.this, "rendere Buchseiten") {
-                @Override
-                public void action(ProgressDialog progressDialog) {
-                    book.renderPages(progressDialog);
-                }
-            };
         } else if(id.equals("buch.save")) {
             
             
@@ -411,45 +410,217 @@ public class MasterFrame extends JFrame implements Callback<String> {
             }
             
         } else if(id.equals("buch.generate")) {
-            new Progress(MasterFrame.this, "erzeuge Buch") {
-                @Override
-                public void action(ProgressDialog progressDialog) {
-                    try {
-                        book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
-                    } catch(IOException e) {
-                        e.printStackTrace(System.out);
-                        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen");
-                    } catch(IllegalArgumentException e) {
-                        e.printStackTrace(System.out);
-                        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
-                    } catch(SyntaxError e) {
-                        e.printStackTrace(System.out);
-                        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
-                //    } catch(Exception e) {
-                //        e.printStackTrace(System.out);
-                //        JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
+            
+            
+            JFileChooser fc = new JFileChooser();
+            fc.setFileFilter(new FileNameExtensionFilter("Ting Archiv (*.zip)", "zip"));
+            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    String file = fc.getSelectedFile().getCanonicalPath();
+                    if(!file.toLowerCase().endsWith(".zip")) {
+                        file = file + ".zip";
                     }
+                    final File output = new File(file);
+                    new Progress(MasterFrame.this, "erzeuge Buch") {
+                        @Override
+                        public void action(ProgressDialog progressDialog) {
+                            try {
+                                book.generateTTS(progressDialog);
+
+                                new Progress(MasterFrame.this, "erzeuge Buch") {
+                                    @Override
+                                    public void action(ProgressDialog progressDialog) {
+                                        try {
+                                            book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
+
+                                            // create zip to output
+                                            final FileOutputStream fos = new FileOutputStream(output);
+                                            final ZipOutputStream out = new ZipOutputStream(fos);
+
+                                            new Progress(MasterFrame.this, "erzeuge zip") {
+                                                @Override
+                                                public void action(ProgressDialog progressDialog) {
+                                                    File[] entries = FileEnvironment.getDistDirectory(book.getID()).listFiles(new FilenameFilter() {
+                                                        @Override
+                                                        public boolean accept(File dir, String name) {
+                                                            return(
+                                                                    name.toLowerCase().endsWith(".ouf") ||
+                                                                    name.toLowerCase().endsWith(".png") ||
+                                                                    name.toLowerCase().endsWith(".txt") ||
+                                                                    name.toLowerCase().endsWith(".src")
+                                                            );
+                                                        }
+                                                    });
+                                                    byte[] buffer = new byte[4096];
+                                                    progressDialog.setMax(entries.length);
+                                                    try {
+                                                        for(int i = 0; i < entries.length; i++) {
+
+                                                            FileInputStream in = new FileInputStream(entries[i]);
+                                                            ZipEntry zipEntry = new ZipEntry(entries[i].getName());
+                                                            out.putNextEntry(zipEntry);
+
+                                                            int length;
+                                                            while((length = in.read(buffer)) >= 0) {
+                                                                out.write(buffer, 0, length);
+                                                            }
+
+                                                            out.closeEntry();
+                                                            in.close();
+
+                                                            progressDialog.setVal(i);
+                                                        }
+                                                        out.close();
+                                                        fos.close();
+                                                    } catch(IOException ioe) {
+                                                        JOptionPane.showMessageDialog(MasterFrame.this, "Ting Archiv konnte nicht erstellt werden: " + ioe.getMessage());
+                                                    }
+                                                    progressDialog.done();
+                                                }
+
+                                            };
+                                        } catch(IOException e) {
+                                            e.printStackTrace(System.out);
+                                            JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen");
+                                        } catch(IllegalArgumentException e) {
+                                            e.printStackTrace(System.out);
+                                            JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
+                                        } catch(SyntaxError e) {
+                                            e.printStackTrace(System.out);
+                                            JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
+                                        }
+                                    }
+
+                                };
+                            } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(MasterFrame.this, "TTS Generierung fehlgeschlagen");
+                            }
+                        }
+                    };
+                } catch(IOException ioe) {
+                    JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + ioe.getMessage());
                 }
-            
-            };
-            
-        } else if(id.startsWith("buch.generateEpsCodes.")) {
+            }
+        } else if(id.equals("buch.generateMp3")) {
+            JFileChooser fc = new JFileChooser();
+            fc.setFileFilter(new FileNameExtensionFilter("MP3 archiv (*.zip)", "zip"));
+            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    String file = fc.getSelectedFile().getCanonicalPath();
+                    if(!file.toLowerCase().endsWith(".zip")) {
+                        file = file + ".zip";
+                    }
+                    final String _file = file;
+                    new Progress(MasterFrame.this, "erzeuge Buch") {
+                        @Override
+                        public void action(ProgressDialog progressDialog) {
+                            try {
+                                book.generateTTS(progressDialog);
+                    
+                                final FileOutputStream fos = new FileOutputStream(_file);
+                                final ZipOutputStream out = new ZipOutputStream(fos);
+
+                                new Progress(MasterFrame.this, "erzeuge Buch") {
+                                    @Override
+                                    public void action(ProgressDialog progressDialog) {
+                                        File[] entries = FileEnvironment.getAudioDirectory(book.getID()).listFiles(new FilenameFilter() {
+                                            @Override
+                                            public boolean accept(File dir, String name) {
+                                                return(name.toLowerCase().endsWith(".mp3"));
+                                            }
+                                        });
+                                        byte[] buffer = new byte[4096];
+                                        progressDialog.setMax(entries.length);
+                                        try {
+                                            for(int i = 0; i < entries.length; i++) {
+
+                                                FileInputStream in = new FileInputStream(entries[i]);
+                                                ZipEntry zipEntry = new ZipEntry(entries[i].getName());
+                                                out.putNextEntry(zipEntry);
+
+                                                int length;
+                                                while((length = in.read(buffer)) >= 0) {
+                                                    out.write(buffer, 0, length);
+                                                }
+
+                                                out.closeEntry();
+                                                in.close();
+
+                                                progressDialog.setVal(i);
+                                            }
+                                            out.close();
+                                            fos.close();
+                                        } catch(IOException ioe) {
+                                            JOptionPane.showMessageDialog(MasterFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + ioe.getMessage());
+                                        }
+                                        progressDialog.done();
+                                    }
+
+                                };
+                            } catch(IOException e) {
+                                JOptionPane.showMessageDialog(MasterFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + e.getMessage());
+                            }
+                        }
+                    };
+                } catch(Exception e) {
+                    JOptionPane.showMessageDialog(this, "MP3 Archiv konnte nicht gespeichert werden");
+                    e.printStackTrace(System.out);
+                }
+            }
+        } else if(id.startsWith("buch.generateEpsCodes.") || id.startsWith("buch.generatePngCodes.")) {
             if(id.endsWith(".600")) {
                 Codes.setResolution(Codes.DPI600);
             } else {
                 Codes.setResolution(Codes.DPI1200);
             }
-            new Progress(MasterFrame.this, "erzeuge Codes") {
-                @Override
-                public void action(ProgressDialog progressDialog) {
-                    try {
-                        book.epsExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
-                    } catch(IOException e) {
-                        JOptionPane.showMessageDialog(MasterFrame.this, "eps-Generierung fehlgeschlagen");
-                        e.printStackTrace(System.out);
+            final boolean png = id.startsWith("buch.generatePngCodes.");
+            JFileChooser fc = new JFileChooser();
+            if(png) {
+                fc.setFileFilter(new FileNameExtensionFilter("PNG Codes (*.zip)", "zip"));
+            } else {
+                fc.setFileFilter(new FileNameExtensionFilter("EPS Codes (*.zip)", "zip"));
+            }
+            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    String file = fc.getSelectedFile().getCanonicalPath();
+                    if(!file.toLowerCase().endsWith(".zip")) {
+                        file = file + ".zip";
                     }
+                    final File output = new File(file);
+
+
+                    new Progress(MasterFrame.this, "erzeuge Codes") {
+                        @Override
+                        public void action(ProgressDialog progressDialog) {
+                            try {
+                                if(png) {
+                                    book.pngExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
+                                } else {
+                                    book.epsExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
+                                }
+                                File[] input = FileEnvironment.getCodesDirectory(book.getID()).listFiles(new FilenameFilter() {
+                                    @Override
+                                    public boolean accept(File dir, String name) {
+                                        if(png) {
+                                            return(name.toLowerCase().endsWith(".png"));
+                                        } else {
+                                            return(name.toLowerCase().endsWith(".eps"));
+                                        }
+                                    }
+                                });
+                                ZipHelper.zip(output, input, progressDialog, MasterFrame.this, book, "erzeuge ZIP", "ZIP konnte nicht erstellt werden");
+                            } catch(IOException e) {
+                                JOptionPane.showMessageDialog(MasterFrame.this, "Code-Generierung fehlgeschlagen");
+                                e.printStackTrace(System.out);
+                            }
+                        }
+                    };
+                } catch(IOException ioe) {
+                    JOptionPane.showMessageDialog(MasterFrame.this, "Code-Generierung fehlgeschlagen");
+                    ioe.printStackTrace(System.out);
                 }
-            };
+            }
+        
         } else if(id.startsWith("buch.booklet")) {
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new FileNameExtensionFilter("Code Tabelle (*.ps)", "ps"));
@@ -467,24 +638,6 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     e.printStackTrace(System.out);
                 }
             }
-        } else if(id.startsWith("buch.generatePngCodes.")) {
-            if(id.endsWith(".600")) {
-                Codes.setResolution(Codes.DPI600);
-            } else {
-                Codes.setResolution(Codes.DPI1200);
-            }
-            new Progress(MasterFrame.this, "erzeuge Codes") {
-                @Override
-                public void action(ProgressDialog progressDialog) {
-                    try {
-                        book.pngExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
-                    } catch(IOException e) {
-                        JOptionPane.showMessageDialog(MasterFrame.this, "eps-Generierung fehlgeschlagen");
-                        e.printStackTrace(System.out);
-                    }
-                }
-                
-            };
         } else if(id.equals("prefs.binary")) {
             new BinaryLocationsDialog(this, true).setVisible(true);
         } else if(id.equals("prefs.tts")) {
@@ -561,6 +714,9 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     }
                 }
             });
+        } else if(id.equals("actions.cleanupRepository")) {
+            Repository.cleanup();
+            JOptionPane.showMessageDialog(MasterFrame.this, "Die Inhalte der Bücherliste wurde gelöscht.");
         } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {

@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -413,6 +414,18 @@ public class Repository {
                 progress.setVal(r);
             }
             update(_ids.get(r), null);
+        }
+    }
+    
+    public static void cleanup() {
+        File[] toDelete = FileEnvironment.getRepositoryDirectory().listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return(name.toLowerCase().endsWith(".ouf"));
+            }
+        });
+        for(int i = 0; i < toDelete.length; i++) {
+            toDelete[i].delete();
         }
     }
     
