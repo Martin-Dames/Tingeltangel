@@ -25,6 +25,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -52,6 +53,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
+import tingeltangel.tools.Callback;
+import tingeltangel.tools.FileEnvironment;
 
 
 public final class IndexPanel extends JPanel {
@@ -307,6 +310,57 @@ public final class IndexPanel extends JPanel {
         
         id.setEditable(false);
         date.setEditable(false);
+        
+        id.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // change mid
+                
+                IDChooser ic = new IDChooser(mainFrame, new Callback<Integer>() {
+
+                    @Override
+                    public void callback(Integer id) {
+                        String _id = Integer.toString(id);
+                        while(_id.length() < 5) {
+                            _id = "0" + _id;
+                        }
+                        
+                        // check if there is already a book with this id
+                        if(new File(FileEnvironment.getBooksDirectory(), _id).exists()) {
+                            JOptionPane.showMessageDialog(mainFrame, "Dieses Buch existiert schon");
+                            return;
+                        }
+                        
+                        Book book = mainFrame.getBook();
+                        
+                        try {
+                        
+                            int oldID = book.getID();
+                            book.setID(id);
+                            book.save();
+                            book.clear();
+                            book.setID(id);
+                            Book.loadXML(FileEnvironment.getXML(id), book);
+
+                            refresh();
+                            updateList();
+                            book.resetChangeMade();
+                            mainFrame.setBookOpened();
+                            book.deleteBook(oldID);
+                        } catch(Exception ioe) {
+                            ioe.printStackTrace();
+                            JOptionPane.showMessageDialog(mainFrame, "Es ist ein Fehler aufgetreten: " + ioe.getMessage());
+                        }
+                    }
+                });
+                
+                
+                
+                
+                
+            }
+        });
+        
         dl = new DocumentListener() {
 
             @Override

@@ -86,7 +86,7 @@ public class IDChooser extends javax.swing.JDialog {
 
         buttonGroup1.add(niceID);
         niceID.setSelected(true);
-        niceID.setText("empfolene & freie MID (empfolen)");
+        niceID.setText("empfohlene & freie MID (empfohlen)");
         niceID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 niceIDActionPerformed(evt);
@@ -145,7 +145,7 @@ public class IDChooser extends javax.swing.JDialog {
                                     .addComponent(freeID)
                                     .addComponent(niceID)
                                     .addComponent(anyID))))
-                        .addGap(0, 183, Short.MAX_VALUE))
+                        .addGap(0, 171, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
