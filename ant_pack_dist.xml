@@ -1,0 +1,42 @@
+<!--
+
+    creates a zip (Tingeltangel.zip) for distribution with ant
+    usage: ant -f ant_pack_dist.xml
+
+-->
+<project name="Tingeltangel (pack dist file)" default="zip" basedir=".">
+    <target name="zip" depends="clean">
+        <mkdir dir="dist/Tingeltangel"/>
+        <mkdir dir="dist/Tingeltangel/lib"/>
+        <mkdir dir="dist/Tingeltangel/html"/>
+        <mkdir dir="dist/Tingeltangel/sounds"/>
+        <mkdir dir="dist/Tingeltangel/target"/>
+        <mkdir dir="dist/Tingeltangel/src"/>
+        <copy todir="dist/Tingeltangel/lib" >  
+            <fileset dir="lib" includes="**"/>  
+        </copy>
+        <copy todir="dist/Tingeltangel/html" >  
+            <fileset dir="html" includes="**"/>  
+        </copy>
+        <copy todir="dist/Tingeltangel/sounds" >  
+            <fileset dir="sounds" includes="**"/>  
+        </copy>
+        <copy todir="dist/Tingeltangel/target" >  
+            <fileset dir="target" includes="**"/>  
+        </copy>
+        <copy todir="dist/Tingeltangel/src" >  
+            <fileset dir="src" includes="**"/>  
+        </copy>
+        <copy file="logo.png" todir="dist/Tingeltangel"/>
+        <copy file="LICENSE" todir="dist/Tingeltangel"/>
+        <copy file="Tingeltangel.bat" todir="dist/Tingeltangel"/>
+        <copy file="Tingeltangel.sh" todir="dist/Tingeltangel"/>
+        <zip destfile="Tingeltangel.zip" basedir="dist"/>
+        <delete dir="dist"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="dist"/>
+        <delete file="Tingeltangel.zip"/>
+    </target>
+</project>

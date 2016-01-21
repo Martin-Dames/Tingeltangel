@@ -32,7 +32,7 @@ import tingeltangel.core.scripting.Commands;
  */
 public class Preferences {
     
-    private static Map<String, PrefEntry> prefs = new HashMap<String, PrefEntry>();
+    private final static Map<String, PrefEntry> prefs = new HashMap<String, PrefEntry>();
     
     public final static int INTEGER = 1;
     public final static int STRING = 2;
