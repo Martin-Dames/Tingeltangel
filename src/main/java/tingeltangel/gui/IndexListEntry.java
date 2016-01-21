@@ -142,6 +142,7 @@ public class IndexListEntry extends JPanel {
             iconRes = ICON_TTS;
         }
         JButton icon = new JButton(getIcon(iconRes));
+        icon.setToolTipText("Type ändern (MP3, Script, TTS)");
         icon.setMargin(new Insets(0, 0, 0, 0));
         icon.addActionListener(new ActionListener() {
             @Override
@@ -235,6 +236,7 @@ public class IndexListEntry extends JPanel {
         row.add(space);
         
         JButton delete = new JButton(getIcon(ICON_DELETE));
+        delete.setToolTipText("löschen");
         delete.setMargin(new Insets(0, 0, 0, 0));
         delete.addActionListener(new ActionListener() {
             @Override
@@ -258,6 +260,7 @@ public class IndexListEntry extends JPanel {
 
         
         JButton play = new JButton(getIcon(ICON_PLAY));
+        play.setToolTipText("abspielen");
         play.setMargin(new Insets(0, 0, 0, 0));
         play.addActionListener(new ActionListener() {
             @Override
@@ -309,6 +312,7 @@ public class IndexListEntry extends JPanel {
         
         // add eject icon
         JButton eject = new JButton(getIcon(ICON_EJECT));
+        eject.setToolTipText("mp3 ändern");
         eject.setMargin(new Insets(0, 0, 0, 0));
         if(entry.isMP3()) {
             eject.addActionListener(new ActionListener() {
@@ -346,6 +350,7 @@ public class IndexListEntry extends JPanel {
         
         // add compile icon
         JButton compile = new JButton(getIcon(ICON_TEST));
+        compile.setToolTipText("compilieren");
         compile.setMargin(new Insets(0, 0, 0, 0));
         if(entry.isCode() || entry.isSub()) {
             compile.addActionListener(new ActionListener() {
@@ -366,6 +371,7 @@ public class IndexListEntry extends JPanel {
         
         // save pattern icon
         JButton savePattern = new JButton(getIcon(ICON_SAVE_PATTERN));
+        savePattern.setToolTipText("Code in Datei speichern");
         savePattern.setMargin(new Insets(0, 0, 0, 0));
         if((entry.isCode() || entry.isMP3() || entry.isTTS()) && !unknownID) {
             savePattern.addActionListener(new ActionListener() {
@@ -400,6 +406,7 @@ public class IndexListEntry extends JPanel {
         
         // copy pattern
         JButton copyPattern = new JButton(getIcon(ICON_COPY_PATTERN));
+        copyPattern.setToolTipText("Code in die Zwischenablage kopieren");
         copyPattern.setMargin(new Insets(0, 0, 0, 0));
         if((entry.isCode() || entry.isMP3() || entry.isTTS()) && !unknownID) {
             copyPattern.addActionListener(new ActionListener() {
@@ -416,6 +423,7 @@ public class IndexListEntry extends JPanel {
         
         // save mp3
         JButton saveMP3 = new JButton(getIcon(ICON_SAVE_MP3));
+        saveMP3.setToolTipText("MP3 speichern");
         saveMP3.setMargin(new Insets(0, 0, 0, 0));
         if(entry.isMP3() || entry.isTTS()) {
             saveMP3.addActionListener(new ActionListener() {

@@ -193,6 +193,7 @@ public final class IndexPanel extends JPanel {
         row.setLayout(new PushBorderLayout());
         
         JButton skip = new JButton(getIcon(ICON_SKIP));
+        skip.setToolTipText("MP3 überspringen");
         skip.setMargin(new Insets(0, 0, 0, 0));
         skip.addActionListener(new ActionListener() {
             @Override
@@ -206,6 +207,7 @@ public final class IndexPanel extends JPanel {
         row.add(PushBorderLayout.pad(5), PushBorderLayout.LINE_START);
         
         JButton stop = new JButton(getIcon(ICON_STOP));
+        stop.setToolTipText("Ausgabe abbrechen");
         stop.setMargin(new Insets(0, 0, 0, 0));
         stop.addActionListener(new ActionListener() {
                 @Override
