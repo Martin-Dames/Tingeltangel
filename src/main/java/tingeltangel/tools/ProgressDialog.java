@@ -27,7 +27,7 @@ import java.awt.Frame;
  */
 public class ProgressDialog extends javax.swing.JDialog {
 
-    private Frame parent;
+    private final Frame parent;
     
     public ProgressDialog(java.awt.Frame parent, String label) {
         super(parent, false);

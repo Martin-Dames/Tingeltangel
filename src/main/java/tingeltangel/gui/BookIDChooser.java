@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 import tingeltangel.core.Repository;
-import tingeltangel.core.Translator;
 import tingeltangel.core.Tupel;
 
 /**
@@ -37,11 +36,13 @@ import tingeltangel.core.Tupel;
 public class BookIDChooser extends javax.swing.JDialog {
 
     private final LinkedList<Tupel<Integer, String>> idList = new LinkedList<Tupel<Integer, String>>();
-    private MyListModel model = new MyListModel();
-    private Callback<Integer> callback;
+    private final MyListModel model = new MyListModel();
+    private final Callback<Integer> callback;
     
     /**
      * Creates new form IDChooser
+     * @param parent
+     * @param callback
      */
     public BookIDChooser(java.awt.Frame parent, Callback<Integer> callback) {
         super(parent, false);
