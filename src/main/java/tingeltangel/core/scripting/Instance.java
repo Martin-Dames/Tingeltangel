@@ -31,18 +31,25 @@ public class Instance {
     private int firstArgument = 0;
     private int secondArgument = 0;
     
+    public final static int NO_ACTION = 0;
+    public final static int JUMP = 1;
+    
     public Instance(Command command) {
         this.command = command;
     }
     
-    public boolean execute(Emulator emulator) {
+    public int execute(Emulator emulator) {
         Method method = command.getMethod();
         try {
             if(command.firstArgumentIsLabel()) {
-                return((Boolean)method.invoke(null, emulator, firstArgument, secondArgument));
+                if((Boolean)method.invoke(null, emulator, firstArgument, secondArgument)) {
+                    return(JUMP);
+                } else {
+                    return(NO_ACTION);
+                }
             } else {
                 method.invoke(null, emulator, firstArgument, secondArgument);
-                return(false);
+                return(NO_ACTION);
             }
         } catch (IllegalAccessException ex) {
             throw new Error(ex);

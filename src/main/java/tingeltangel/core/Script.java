@@ -79,7 +79,7 @@ public class Script {
                         row = row.substring(0, p);
                     }
                     if(!row.startsWith(ScriptFile.COLON)) {
-                        if(row.startsWith(ScriptFile.CALL)) {
+                        if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                             // extract argument
                             System.out.println(args);
                             try {
@@ -134,29 +134,29 @@ public class Script {
     
     public void execute() throws SyntaxError {
         compile();
-        int p = 0;
+        int pc = 0;
         kill = false;
         while(!kill) {
-            if(p >= script.size()) {
+            if(pc >= script.size()) {
                 SyntaxError error = new SyntaxError("missing 'end' command");
                 error.setTingID(entry.getTingID());
                 error.setRow(-1);
                 throw error;
             }
-            Instance instance = script.get(p);
+            Instance instance = script.get(pc);
             if(instance.getCommand().getAsm().equals(ScriptFile.END)) {
                 return;
-            } else if(instance.getCommand().getAsm().equals(ScriptFile.CALL)) {
+            } else if(instance.getCommand().getAsm().equals(ScriptFile.CALL) || instance.getCommand().getAsm().equals(ScriptFile.CALLID)) {
                 int oid = instance.getFirstArgument();
                 entry.getBook().getEntryByID(oid).getScript().execute();
             } else if(instance.getCommand().getAsm().equals(ScriptFile.RETURN)) {
                 return;
             } else {
-                boolean doJump = instance.execute(entry.getBook().getEmulator());
-                if(doJump) {
-                    p = instanceLabelsII.get(instance.getLabel());
+                int action = instance.execute(entry.getBook().getEmulator());
+                if(action == Instance.JUMP) {
+                    pc = instanceLabelsII.get(instance.getLabel());
                 } else {
-                    p++;
+                    pc++;
                 }
             }
         }
@@ -178,9 +178,9 @@ public class Script {
             rc++;
             row = row.trim();
             if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
-                if(row.startsWith(ScriptFile.CALL)) {
+                if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                     try {
-                        int oid = Integer.parseInt(row.substring(ScriptFile.CODE.length()).trim());
+                        int oid = Integer.parseInt(row.substring(ScriptFile.CALL.length()).trim());
                         String subCode = entry.getBook().getEntryByID(oid).getScript().mergeCodeOnCalls();
                         mergedCode.append(subCode);
                     } catch(NumberFormatException nfe) {
@@ -242,7 +242,7 @@ public class Script {
             
             
             // generate binary
-            in = new BufferedReader(new StringReader(mergedCode.toString()));
+            in = new BufferedReader(new StringReader(mergedCode));
             rc = 0;
             while((row = in.readLine()) != null) {
                 rc++;

@@ -22,6 +22,9 @@ package tingeltangel.core.scripting;
 
 public class Methods {
 
+    public static void callid(Emulator emulator, Integer arg1, Integer arg2) {
+        //throw new Error("this one is just for testing");
+    }
     
     public static void setV(Emulator emulator, Integer arg1, Integer arg2) {
         emulator.setRegister(arg1, arg2);

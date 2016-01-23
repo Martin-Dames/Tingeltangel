@@ -43,6 +43,7 @@ public interface ScriptFile {
 	
 	static final String COMMENT = "//";
 	static final String CALL = "call";
+	static final String CALLID = "callid";
 	static final String CODE = "code";
 	static final String RETURN = "return";
 	static final String END = "end";

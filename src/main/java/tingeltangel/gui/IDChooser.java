@@ -174,10 +174,7 @@ public class IDChooser extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private boolean isNiceID(int id) {
-        if(id < 100) return(false);
-        if((id >= 5000) && (id < 6000)) return(false);
-        if((id >= 8500) && (id < 9000)) return(false);
-        return(true);
+        return((id >= 8000) && (id <= 8500)) || ((id >= 9500) && (id <= 9999));
     }
     
     private String renderName(int id) {

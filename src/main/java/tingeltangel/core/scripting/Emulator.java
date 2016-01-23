@@ -51,14 +51,27 @@ public class Emulator {
         this.book = book;
     }
     
+    /**
+     * 
+     * @return left value from last comparison
+     */
     public int getLeftValue() {
         return(leftValue);
     }
     
+    /**
+     * 
+     * @return right value from last comparison
+     */
     public int getRightValue() {
         return(rightValue);
     }
     
+    /**
+     * set hint of register i
+     * @param i the register
+     * @param hint some text
+     */
     public void setHint(int i, String hint) {
         hints[i] = hint;
     }
@@ -75,6 +88,10 @@ public class Emulator {
         rightValue = value;
     }
     
+    /**
+     *
+     * @return highest usable register
+     */
     public int getMaxRegister() {
         return(REGISTERS - 1);
     }
