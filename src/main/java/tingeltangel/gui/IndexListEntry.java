@@ -150,8 +150,8 @@ public class IndexListEntry extends JPanel {
                 
                 JComponent source = (JComponent)ae.getSource();
                 
-                int px = source.getX() + getX() + frame.getMainFrame().getX();
-                int py = source.getY() + getY() + frame.getMainFrame().getY();
+                int px = source.getX() + getX() + frame.getMainFrame().getX() - frame.getScrollX();
+                int py = source.getY() + getY() + frame.getMainFrame().getY() - frame.getScrollY();
                 
                 String[] options = {
                     Lang.get("indexFrame.dialog.mp3"),

@@ -70,6 +70,7 @@ public final class IndexPanel extends JPanel {
     private JTextField magicValue = new JTextField();
     private JTextField date = new JTextField();
     private JLabel cover = null;
+    private JScrollPane jScrollPane;
         
     private final int ICON_SKIP = 0;
     private final int ICON_STOP = 1;
@@ -292,7 +293,8 @@ public final class IndexPanel extends JPanel {
         list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
         
         setLayout(new BorderLayout());
-        add(new JScrollPane(list), BorderLayout.CENTER);
+        jScrollPane = new JScrollPane(list);
+        add(jScrollPane, BorderLayout.CENTER);
         add(right, BorderLayout.EAST);
         
         
@@ -398,6 +400,14 @@ public final class IndexPanel extends JPanel {
             }
 
         }
+    }
+    
+    public int getScrollX() {
+        return(jScrollPane.getViewport().getViewPosition().x);
+    }
+    
+    public int getScrollY() {
+        return(jScrollPane.getViewport().getViewPosition().y);
     }
     
     private ImageIcon getIcon(int res) {
