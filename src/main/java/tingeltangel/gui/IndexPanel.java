@@ -70,6 +70,7 @@ public final class IndexPanel extends JPanel {
     private JTextField magicValue = new JTextField();
     private JTextField date = new JTextField();
     private JLabel cover = null;
+    private JScrollPane jScrollPane;
         
     private final int ICON_SKIP = 0;
     private final int ICON_STOP = 1;
@@ -280,10 +281,17 @@ public final class IndexPanel extends JPanel {
         });
         right.add(cover, PushBorderLayout.PAGE_START);
         
-        // add register panel
+        
+        right.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
+        right.add(new JLabel("Stift"), PushBorderLayout.PAGE_START);
+        right.add(new StickPanel(mainFrame), PushBorderLayout.PAGE_START);
+        
+        
+        // add stick panel
         right.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
         right.add(new JLabel("Register"), PushBorderLayout.PAGE_START);
                 
+        // add register panel
         RegisterPanel registerPanel = new RegisterPanel(mainFrame);
         getBook().addRegisterListener(registerPanel);
         right.add(registerPanel, PushBorderLayout.CENTER);
@@ -292,7 +300,8 @@ public final class IndexPanel extends JPanel {
         list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
         
         setLayout(new BorderLayout());
-        add(new JScrollPane(list), BorderLayout.CENTER);
+        jScrollPane = new JScrollPane(list);
+        add(jScrollPane, BorderLayout.CENTER);
         add(right, BorderLayout.EAST);
         
         
@@ -400,6 +409,14 @@ public final class IndexPanel extends JPanel {
         }
     }
     
+    public int getScrollX() {
+        return(jScrollPane.getViewport().getViewPosition().x);
+    }
+    
+    public int getScrollY() {
+        return(jScrollPane.getViewport().getViewPosition().y);
+    }
+    
     private ImageIcon getIcon(int res) {
         try {
             return(new ImageIcon(ImageIO.read(getClass().getResource("/icons/" + ICONS[res]))));
@@ -456,7 +473,6 @@ public final class IndexPanel extends JPanel {
         enableListeners(false);
         Book book = mainFrame.getBook();
         id.setText(Integer.toString(book.getID()));
-        System.out.println("setting book name to " + book.getName());
         name.setText(book.getName());
         publisher.setText(book.getPublisher());
         author.setText(book.getAuthor());

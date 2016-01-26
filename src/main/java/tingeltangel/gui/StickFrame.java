@@ -17,6 +17,8 @@
   
 */
 
+/*
+
 package tingeltangel.gui;
 
 import tingeltangel.tools.Callback;
@@ -155,35 +157,11 @@ public class StickFrame extends JInternalFrame implements ActionListener {
         refresh();
     }
     
-    private static File[] getMountPoints() throws IOException {
-                
-        if(System.getProperty("os.name").startsWith("Windows")) {
-            return(File.listRoots());
-        } else {
-            LinkedList<File> mounts = new LinkedList<File>();
-            Process process = new ProcessBuilder("/bin/mount").start();
-            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String row;
-            while((row = in.readLine()) != null) {
-                row = row.trim();
-                if(row.startsWith("/dev/")) {
-                    int p = row.indexOf(" on ");
-                    row = row.substring(p + " on ".length());
-                    p = row.indexOf(" ");
-                    row = row.substring(0, p);
-                    mounts.add(new File(row));
-                }
-            }
-            return(mounts.toArray(new File[0]));
-        }
-        
-    }
-    
     private void refresh() {
         stick = null;
         File[] mounts = new File[0];
         try {
-            mounts = getMountPoints();
+            mounts = Stick.getMountPoints();
         } catch(IOException ioe) {
             ioe.printStackTrace(System.out);
         }
@@ -439,3 +417,6 @@ public class StickFrame extends JInternalFrame implements ActionListener {
 
     
 }
+* 
+* 
+*/

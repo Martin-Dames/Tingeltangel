@@ -461,4 +461,34 @@ public class Stick {
         }
         zipFile.close();
     }
+
+    public static File getStickPath() throws IOException {
+        File[] mounts;
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            mounts = File.listRoots();
+        } else {
+            LinkedList<File> mountList = new LinkedList<File>();
+            Process process = new ProcessBuilder("/bin/mount").start();
+            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String row;
+            while ((row = in.readLine()) != null) {
+                row = row.trim();
+                if (row.startsWith("/dev/")) {
+                    int p = row.indexOf(" on ");
+                    row = row.substring(p + " on ".length());
+                    p = row.indexOf(" ");
+                    row = row.substring(0, p);
+                    mountList.add(new File(row));
+                }
+            }
+            mounts = mountList.toArray(new File[0]);
+        }
+        for(int i = 0; i < mounts.length; i++) {
+            if(Stick.checkForStick(mounts[i])) {
+                return(new File(mounts[i], STICK_DIR));
+            }
+        }
+        return(null);
+    }
+    
 }
