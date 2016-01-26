@@ -79,7 +79,7 @@ public class Script {
                         row = row.substring(0, p);
                     }
                     if(!row.startsWith(ScriptFile.COLON)) {
-                        if(row.startsWith(ScriptFile.CALL)) {
+                        if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                             // extract argument
                             System.out.println(args);
                             try {
@@ -178,7 +178,7 @@ public class Script {
             rc++;
             row = row.trim();
             if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
-                if(row.startsWith(ScriptFile.CALL)) {
+                if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                     try {
                         int oid = Integer.parseInt(row.substring(ScriptFile.CODE.length()).trim());
                         String subCode = entry.getBook().getEntryByID(oid).getScript().mergeCodeOnCalls();

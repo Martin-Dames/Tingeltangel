@@ -466,7 +466,6 @@ public final class IndexPanel extends JPanel {
         enableListeners(false);
         Book book = mainFrame.getBook();
         id.setText(Integer.toString(book.getID()));
-        System.out.println("setting book name to " + book.getName());
         name.setText(book.getName());
         publisher.setText(book.getPublisher());
         author.setText(book.getAuthor());
