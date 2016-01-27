@@ -68,6 +68,7 @@ public class StickPanel extends JPanel {
                                             // now copy book to stick
                                             File dest = Stick.getStickPath();
                                             if(dest != null) {
+                                                dest = new File(dest, "$ting");
                                                 File[] files = FileEnvironment.getDistDirectory(book.getID()).listFiles(new FilenameFilter() {
                                                     @Override
                                                     public boolean accept(File dir, String name) {
@@ -132,7 +133,6 @@ public class StickPanel extends JPanel {
     
     
     private static void fileCopy(File source, File target) throws IOException {
-        System.out.println("copy file from: " + source.getAbsolutePath() + " to " + target.getAbsolutePath());
         InputStream in = new FileInputStream(source);
         OutputStream out = new FileOutputStream(target);
         byte[] buffer = new byte[4096];

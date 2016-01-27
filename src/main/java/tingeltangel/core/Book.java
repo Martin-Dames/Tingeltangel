@@ -625,18 +625,18 @@ public class Book {
                 int code = IndexTableCalculator.getCodeFromPositionInFile(pos, i);
                 int _size = entry.getSize();
                 out.writeInt(code);
-                out.writeInt(_size);
-                
+                out.writeInt(Math.max(_size, 0));
+                                
                 // System.out.println((i + 15001) + " @0x" + Integer.toHexString(pos)); // + " code=0x" + Integer.toHexString(code) + " size=" + _size);
                 
                 if(entry.isMP3() || entry.isTTS()) {
                     out.writeInt(0x0001);
                     // pre calculate size
-                    entry.getMP3();
+                    // entry.getMP3();
                 } else {
                     out.writeInt(0x0002);
                 }
-                pos += entry.getSize();
+                pos += Math.max(entry.getSize(), 0);
             }
         }
         
@@ -660,13 +660,15 @@ public class Book {
                     out.write(0x0);
                 }
                 if(e.isMP3() || e.isTTS()) {
-                    InputStream in = new FileInputStream(e.getMP3());
-                    int b;
-                    while((b = in.read(buffer)) >= 0) {
-                        out.write(buffer, 0, b);
-                        pos += b;
+                    if(e.getMP3() != null) {
+                        InputStream in = new FileInputStream(e.getMP3());
+                        int b;
+                        while((b = in.read(buffer)) >= 0) {
+                            out.write(buffer, 0, b);
+                            pos += b;
+                        }
+                        in.close();
                     }
-                    in.close();
                 } else {
                     byte[] bin = e.getScript().compile();
                     out.write(bin);
@@ -853,7 +855,6 @@ public class Book {
                 output.close();
             }
         }
-        
         
         
         PrintWriter srcOut = new PrintWriter(new FileWriter(src));
