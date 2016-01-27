@@ -71,6 +71,7 @@ public class UpdateStick extends CliCommand {
             if((mid > 0) && (mid <= 10000)) {
                 
                 // update txt in repository
+                System.out.println("repository: update mid " + mid);
                 Repository.update(mid, null);
                 
                 // get repository version
@@ -86,18 +87,20 @@ public class UpdateStick extends CliCommand {
                     int stickVersion = Stick.getBookVersion(stick, mid);
                     if(stickVersion >= 0) {
                         if(repositoryVersion > stickVersion) {
-                            // Stick.downloadOfficial(stick, mid);sd
+                            System.err.println("auf den stift kopieren...");
+                            Stick.copyFromRepositoryToStick(stick, mid);
                         }              
                     } else {
                         System.err.println("zugriff auf den stift " + mid + " fehlgeschlagen");
                     }
                     
                 }
-                
+                System.out.println("repository: update mid " + mid + " fertig");
             }
             
         }
-        
+        System.out.println("stick update ist fertig");
+        System.exit(0);
         
     }
     
