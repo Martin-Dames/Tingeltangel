@@ -190,6 +190,10 @@ public class Repository {
     public static File getBookSrc(int id) {
         return(getBookFile(id, ScriptFile._EN_SRC));
     }
+    
+    public static File getBookTxtFile(int id) {
+        return(getBookFile(id, TxtFile._EN_TXT));
+    }
 
     private static void download(String url, File dest, ProgressDialog progress) throws FileNotFoundException, IOException {
         byte[] buffer = new byte[4096];

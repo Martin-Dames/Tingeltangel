@@ -57,7 +57,7 @@ import tingeltangel.tools.Callback;
 import tingeltangel.tools.FileEnvironment;
 
 
-public final class IndexPanel extends JPanel {
+public final class EditorPanel extends JPanel {
     
     
      
@@ -69,8 +69,8 @@ public final class IndexPanel extends JPanel {
     private JTextField url = new JTextField();
     private JTextField magicValue = new JTextField();
     private JTextField date = new JTextField();
+    private final JScrollPane jScrollPane;
     private JLabel cover = null;
-    private JScrollPane jScrollPane;
         
     private final int ICON_SKIP = 0;
     private final int ICON_STOP = 1;
@@ -91,7 +91,7 @@ public final class IndexPanel extends JPanel {
     
     private final JTextField addEntriesCount;
     private final JTextField addEntriesStart;
-    private final MasterFrame mainFrame;
+    private final EditorFrame mainFrame;
     
     private final JLabel currentTrack = new JLabel();
     
@@ -106,7 +106,7 @@ public final class IndexPanel extends JPanel {
         return(mainFrame);
     }
     
-    public IndexPanel(final MasterFrame mainFrame) {
+    public EditorPanel(final EditorFrame mainFrame) {
         super();
         
         this.mainFrame = mainFrame;
@@ -172,7 +172,7 @@ public final class IndexPanel extends JPanel {
                 for(int i = oid; i <= lastOid; i++) {
                     mainFrame.getBook().addEntry(i);
                     int rowNr = getPositionInIndex(i);
-                    list.add(new IndexListEntry(mainFrame.getBook().getEntryFromTingID(i), IndexPanel.this), rowNr);
+                    list.add(new IndexListEntry(mainFrame.getBook().getEntryFromTingID(i), EditorPanel.this), rowNr);
                 }
                 new Thread() {
                     @Override

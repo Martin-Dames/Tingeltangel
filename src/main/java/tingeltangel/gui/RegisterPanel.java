@@ -40,9 +40,9 @@ public class RegisterPanel extends JPanel implements RegisterListener {
     
     private final RegisterTableModel model = new RegisterTableModel();
     private final JTable table = new JTable(model);
-    private final MasterFrame frame;
+    private final EditorFrame frame;
     
-    public RegisterPanel(MasterFrame frame) {
+    public RegisterPanel(EditorFrame frame) {
         super();
         this.frame = frame;
         setLayout(new GridLayout(1, 1));

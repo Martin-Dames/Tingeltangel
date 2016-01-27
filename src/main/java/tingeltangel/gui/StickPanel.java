@@ -38,7 +38,7 @@ public class StickPanel extends JPanel {
     private JButton button;
     private boolean online = false;
     
-    public StickPanel(final MasterFrame frame) {
+    public StickPanel(final EditorFrame frame) {
         super();
     
         

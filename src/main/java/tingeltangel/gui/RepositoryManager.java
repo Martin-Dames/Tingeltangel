@@ -50,7 +50,7 @@ import tingeltangel.tools.ProgressDialog;
 public class RepositoryManager extends javax.swing.JInternalFrame {
 
     private final MyListModel model = new MyListModel();
-    private final MasterFrame masterFrame;
+    private final EditorFrame masterFrame;
     
     private final JScrollPane jScrollPane1 = new JScrollPane();
     private final JMenuBar jMenuBar1 = new JMenuBar();
@@ -63,7 +63,7 @@ public class RepositoryManager extends javax.swing.JInternalFrame {
     /**
      * Creates new form RepositoryManager
      */
-    public RepositoryManager(MasterFrame frame) {
+    public RepositoryManager(EditorFrame frame) {
         // initComponents();
         super("", true, true, true, true);
         

@@ -298,61 +298,24 @@ public class Stick {
         in.close();
     }
     
-    private static void downloadBookLocally(String url, File target) throws IOException {
-        System.out.println("opening url: " + Tingeltangel.BASE_URL + url);
+    public static void copyFromRepositoryToStick(File path, int mid) throws IOException {
         
-        URLConnection connection = new URL(Tingeltangel.BASE_URL + url).openConnection();
-        
-        InputStream in = connection.getInputStream();
-        OutputStream out = new FileOutputStream(target);
-        byte[] buffer = new byte[4096];
-        int k;
-        int s = 0;
-        while((k = in.read(buffer)) != -1) {
-            out.write(buffer, 0, k);
-            s += k;
-        }
-        out.close();
-        in.close();
-    }
-    
-    public static void downloadOfficial(File path, int id) throws IOException {
-        
-        String _id = Integer.toString(id);
+        String _id = Integer.toString(mid);
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
+        File txt = new File(Stick.getBookDir(path), _id + TxtFile._EN_TXT);
+        File png = new File(Stick.getBookDir(path), _id + PngFile._EN_PNG);
+        File ouf = new File(Stick.getBookDir(path), _id + OufFile._EN_OUF);
+        File src = new File(Stick.getBookDir(path), _id + ScriptFile._EN_SRC);
         
-        File txtOut = File.createTempFile("ting_txt_", null);
-        downloadBookLocally("/get-description/id/" + _id + "/area/en", txtOut);
-        
-        File pngOut = File.createTempFile("ting_png_", null);
-        downloadBookLocally("/get/id/" + _id + "/area/en/type/thumb", pngOut);
-        
-        File oufOut = File.createTempFile("ting_ouf_", null);
-        downloadBookLocally("/get/id/" + _id + "/area/en/type/archive", oufOut);
-        
-        File srcOut = null;
-        if(Repository.getBookTxt(id).containsKey("ScriptMD5")) {
-            srcOut = File.createTempFile("ting_src_", null);
-            downloadBookLocally("/get/id/" + _id + "/area/en/type/script", srcOut);
+        fileCopy(Repository.getBookOuf(mid), ouf);
+        fileCopy(Repository.getBookPng(mid), png);
+        File rSrc = Repository.getBookSrc(mid);
+        if((rSrc != null) && (rSrc.exists())) {
+            fileCopy(rSrc, src);
         }
-        
-        getBookDir(path).mkdir();
-        
-        fileCopy(txtOut, new File(path, _id + TxtFile._EN_TXT));
-        fileCopy(pngOut, new File(path, _id + PngFile._EN_PNG));
-        fileCopy(oufOut, new File(path, _id + OufFile._EN_OUF));
-        if(srcOut != null) {
-            fileCopy(srcOut, new File(path, _id + ScriptFile._EN_SRC));
-        }
-        
-        txtOut.delete();
-        pngOut.delete();
-        oufOut.delete();
-        if(srcOut != null) {
-            srcOut.delete();
-        }
+        fileCopy(Repository.getBookTxtFile(mid), txt);
     }
 
     public static void setTBD(File path, LinkedList<Integer> newTbd) throws IOException {

@@ -58,21 +58,21 @@ import tingeltangel.tools.ZipHelper;
 import tiptoi_reveng.lexer.LexerException;
 import tiptoi_reveng.parser.ParserException;
 
-public class MasterFrame extends JFrame implements Callback<String> {
+public class EditorFrame extends JFrame implements Callback<String> {
 
     private Book book = new Book(15000);
     
-    private final IndexPanel indexPanel;
+    private final EditorPanel indexPanel;
     private final InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
     private final InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
     
     private final LinkedList<EntryListener> listeners = new LinkedList<EntryListener>();
     
-    public MasterFrame() {
+    public EditorFrame() {
         super(Tingeltangel.MAIN_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
         
         
-        indexPanel = new IndexPanel(this);
+        indexPanel = new EditorPanel(this);
         
         
         JFrame.setDefaultLookAndFeelDecorated(true);
@@ -178,7 +178,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         
                         // check if there is already a book with this id
                         if(new File(FileEnvironment.getBooksDirectory(), _id).exists()) {
-                            JOptionPane.showMessageDialog(MasterFrame.this, "Dieses Buch existiert schon");
+                            JOptionPane.showMessageDialog(EditorFrame.this, "Dieses Buch existiert schon");
                             return;
                         }
                         
@@ -209,12 +209,12 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     public void callback(final Integer id) {
                         // check repository
                         if(!Repository.exists(id)) {
-                            new Progress(MasterFrame.this, "Buch wird heruntergeladen") {
+                            new Progress(EditorFrame.this, "Buch wird heruntergeladen") {
                                 @Override
                                 public void action(ProgressDialog progressDialog) {
                                     try {
                                         Repository.download(id, progressDialog);
-                                        new Progress(MasterFrame.this, "Buch wird importiert") {
+                                        new Progress(EditorFrame.this, "Buch wird importiert") {
                                             @Override
                                             public void action(ProgressDialog progressDialog) {
                                                 try {
@@ -228,22 +228,22 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                                     indexPanel.refresh();
                                                     setBookOpened();
                                                 } catch (SyntaxError ex) {
-                                                    JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
+                                                    JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
                                                     ex.printStackTrace(System.out);
                                                 } catch (IOException ex) {
-                                                    JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
+                                                    JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
                                                     ex.printStackTrace(System.out);
                                                 }
                                             }
                                         };
                                     } catch (IOException ex) {
-                                        JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Herunterladen des Buches");
+                                        JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Herunterladen des Buches");
                                         ex.printStackTrace(System.out);
                                     }
                                 }
                             };
                         } else {
-                            new Progress(MasterFrame.this, "Buch wird importiert") {
+                            new Progress(EditorFrame.this, "Buch wird importiert") {
                                 @Override
                                 public void action(ProgressDialog progressDialog) {
                                     try {
@@ -257,10 +257,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                         indexPanel.refresh();
                                         setBookOpened();
                                     } catch (SyntaxError ex) {
-                                        JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
+                                        JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
                                         ex.printStackTrace(System.out);
                                     } catch (IOException ex) {
-                                        JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim Importieren des Buches");
+                                        JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
                                         ex.printStackTrace(System.out);
                                     }
                                 }
@@ -329,17 +329,17 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                 id = in.readInt();
                                 in.close();
                             } catch(IOException e) {
-                                JOptionPane.showMessageDialog(MasterFrame.this, "Fehler beim lesen der ouf Datei");
+                                JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim lesen der ouf Datei");
                                 e.printStackTrace(System.out);
                                 return;
                             }
                         }
                         
                         final int _id = id;
-                        MasterFrame.this.setEnabled(false);
+                        EditorFrame.this.setEnabled(false);
                         
                         
-                        Progress pr = new Progress(MasterFrame.this, "importiere Buch") {
+                        Progress pr = new Progress(EditorFrame.this, "importiere Buch") {
                             @Override
                             public void action(ProgressDialog progressDialog) {
                                 try {
@@ -348,10 +348,10 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                     
                                     setBookOpened();
                                 } catch(IOException e) {
-                                    JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
+                                    JOptionPane.showMessageDialog(EditorFrame.this, "Import ist fehlgeschlagen");
                                     e.printStackTrace(System.out);
                                 } catch(SyntaxError se) {
-                                    JOptionPane.showMessageDialog(MasterFrame.this, "Import ist fehlgeschlagen");
+                                    JOptionPane.showMessageDialog(EditorFrame.this, "Import ist fehlgeschlagen");
                                     se.printStackTrace(System.out);
                                 }
                                 indexPanel.updateList();
@@ -361,7 +361,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         
                     }
                 };
-                new ImportDialog(MasterFrame.this, true, callback).setVisible(true);
+                new ImportDialog(EditorFrame.this, true, callback).setVisible(true);
                 
                 
             }
@@ -419,13 +419,13 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         file = file + ".zip";
                     }
                     final File output = new File(file);
-                    new Progress(MasterFrame.this, "erzeuge Buch") {
+                    new Progress(EditorFrame.this, "erzeuge Buch") {
                         @Override
                         public void action(ProgressDialog progressDialog) {
                             try {
                                 book.generateTTS(progressDialog);
 
-                                new Progress(MasterFrame.this, "erzeuge Buch") {
+                                new Progress(EditorFrame.this, "erzeuge Buch") {
                                     @Override
                                     public void action(ProgressDialog progressDialog) {
                                         try {
@@ -435,7 +435,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                             final FileOutputStream fos = new FileOutputStream(output);
                                             final ZipOutputStream out = new ZipOutputStream(fos);
 
-                                            new Progress(MasterFrame.this, "erzeuge zip") {
+                                            new Progress(EditorFrame.this, "erzeuge zip") {
                                                 @Override
                                                 public void action(ProgressDialog progressDialog) {
                                                     File[] entries = FileEnvironment.getDistDirectory(book.getID()).listFiles(new FilenameFilter() {
@@ -471,7 +471,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                                         out.close();
                                                         fos.close();
                                                     } catch(IOException ioe) {
-                                                        JOptionPane.showMessageDialog(MasterFrame.this, "Ting Archiv konnte nicht erstellt werden: " + ioe.getMessage());
+                                                        JOptionPane.showMessageDialog(EditorFrame.this, "Ting Archiv konnte nicht erstellt werden: " + ioe.getMessage());
                                                     }
                                                     progressDialog.done();
                                                 }
@@ -479,24 +479,24 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                             };
                                         } catch(IOException e) {
                                             e.printStackTrace(System.out);
-                                            JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen");
+                                            JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen");
                                         } catch(IllegalArgumentException e) {
                                             e.printStackTrace(System.out);
-                                            JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
+                                            JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
                                         } catch(SyntaxError e) {
                                             e.printStackTrace(System.out);
-                                            JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
+                                            JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
                                         }
                                     }
 
                                 };
                             } catch (IOException ex) {
-                                JOptionPane.showMessageDialog(MasterFrame.this, "TTS Generierung fehlgeschlagen");
+                                JOptionPane.showMessageDialog(EditorFrame.this, "TTS Generierung fehlgeschlagen");
                             }
                         }
                     };
                 } catch(IOException ioe) {
-                    JOptionPane.showMessageDialog(MasterFrame.this, "Buchgenerierung fehlgeschlagen: " + ioe.getMessage());
+                    JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen: " + ioe.getMessage());
                 }
             }
         } else if(id.equals("buch.generateMp3")) {
@@ -509,7 +509,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         file = file + ".zip";
                     }
                     final String _file = file;
-                    new Progress(MasterFrame.this, "erzeuge Buch") {
+                    new Progress(EditorFrame.this, "erzeuge Buch") {
                         @Override
                         public void action(ProgressDialog progressDialog) {
                             try {
@@ -518,7 +518,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                 final FileOutputStream fos = new FileOutputStream(_file);
                                 final ZipOutputStream out = new ZipOutputStream(fos);
 
-                                new Progress(MasterFrame.this, "erzeuge Buch") {
+                                new Progress(EditorFrame.this, "erzeuge Buch") {
                                     @Override
                                     public void action(ProgressDialog progressDialog) {
                                         File[] entries = FileEnvironment.getAudioDirectory(book.getID()).listFiles(new FilenameFilter() {
@@ -549,14 +549,14 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                             out.close();
                                             fos.close();
                                         } catch(IOException ioe) {
-                                            JOptionPane.showMessageDialog(MasterFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + ioe.getMessage());
+                                            JOptionPane.showMessageDialog(EditorFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + ioe.getMessage());
                                         }
                                         progressDialog.done();
                                     }
 
                                 };
                             } catch(IOException e) {
-                                JOptionPane.showMessageDialog(MasterFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + e.getMessage());
+                                JOptionPane.showMessageDialog(EditorFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + e.getMessage());
                             }
                         }
                     };
@@ -587,7 +587,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                     final File output = new File(file);
 
 
-                    new Progress(MasterFrame.this, "erzeuge Codes") {
+                    new Progress(EditorFrame.this, "erzeuge Codes") {
                         @Override
                         public void action(ProgressDialog progressDialog) {
                             try {
@@ -606,15 +606,15 @@ public class MasterFrame extends JFrame implements Callback<String> {
                                         }
                                     }
                                 });
-                                ZipHelper.zip(output, input, progressDialog, MasterFrame.this, book, "erzeuge ZIP", "ZIP konnte nicht erstellt werden");
+                                ZipHelper.zip(output, input, progressDialog, EditorFrame.this, book, "erzeuge ZIP", "ZIP konnte nicht erstellt werden");
                             } catch(IOException e) {
-                                JOptionPane.showMessageDialog(MasterFrame.this, "Code-Generierung fehlgeschlagen");
+                                JOptionPane.showMessageDialog(EditorFrame.this, "Code-Generierung fehlgeschlagen");
                                 e.printStackTrace(System.out);
                             }
                         }
                     };
                 } catch(IOException ioe) {
-                    JOptionPane.showMessageDialog(MasterFrame.this, "Code-Generierung fehlgeschlagen");
+                    JOptionPane.showMessageDialog(EditorFrame.this, "Code-Generierung fehlgeschlagen");
                     ioe.printStackTrace(System.out);
                 }
             }
@@ -695,7 +695,7 @@ public class MasterFrame extends JFrame implements Callback<String> {
                         Repository.update(progressDialog);
                     } catch(IOException ioe) {
                         ioe.printStackTrace(System.out);
-                        JOptionPane.showMessageDialog(MasterFrame.this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());
+                        JOptionPane.showMessageDialog(EditorFrame.this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());
                     }
                 }
             };
@@ -704,17 +704,17 @@ public class MasterFrame extends JFrame implements Callback<String> {
                 @Override
                 public void callback(Integer _id) {
                     if(_id == book.getID()) {
-                        JOptionPane.showMessageDialog(MasterFrame.this, "Das Buch wird gerade bearbeitet und kann nicht gelöscht werden.");
+                        JOptionPane.showMessageDialog(EditorFrame.this, "Das Buch wird gerade bearbeitet und kann nicht gelöscht werden.");
                     } else if(!book.deleteBook(_id)) {
-                        JOptionPane.showMessageDialog(MasterFrame.this, "Das Buch konnte nicht gelöscht werden.");
+                        JOptionPane.showMessageDialog(EditorFrame.this, "Das Buch konnte nicht gelöscht werden.");
                     } else {
-                        JOptionPane.showMessageDialog(MasterFrame.this, "Das Buch wurde gelöscht.");
+                        JOptionPane.showMessageDialog(EditorFrame.this, "Das Buch wurde gelöscht.");
                     }
                 }
             });
         } else if(id.equals("actions.cleanupRepository")) {
             Repository.cleanup();
-            JOptionPane.showMessageDialog(MasterFrame.this, "Die Inhalte der Bücherliste wurde gelöscht.");
+            JOptionPane.showMessageDialog(EditorFrame.this, "Die Inhalte der Bücherliste wurde gelöscht.");
         } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {

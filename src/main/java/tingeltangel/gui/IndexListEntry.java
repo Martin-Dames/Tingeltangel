@@ -97,7 +97,7 @@ public class IndexListEntry extends JPanel {
     }
     
     
-    public IndexListEntry(final Entry entry, final IndexPanel frame) {
+    public IndexListEntry(final Entry entry, final EditorPanel frame) {
         super();
         this.entry = entry;
         

@@ -33,7 +33,7 @@ public class ReferenceFrame extends JInternalFrame {
     
     private JEditorPane text = new JEditorPane();
     
-    public ReferenceFrame(MasterFrame frame) {
+    public ReferenceFrame(EditorFrame frame) {
         super("Code Referenz", true, true, true, true);
         setVisible(false);
         setBounds(315, 5, 600, 400);

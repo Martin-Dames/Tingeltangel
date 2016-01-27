@@ -37,9 +37,9 @@ public class TranslatorFrame extends JInternalFrame implements ActionListener {
     private JTextField codeID = new JTextField();
     private JButton code2ting = new JButton("Ting ID berechnen");
     private JButton ting2code = new JButton("Code ID berechnen");
-    private final MasterFrame frame;
+    private final EditorFrame frame;
     
-    public TranslatorFrame(MasterFrame frame) {
+    public TranslatorFrame(EditorFrame frame) {
         super("", true, true, true, true);
         this.frame = frame;
         setTitle("ID Rechner");

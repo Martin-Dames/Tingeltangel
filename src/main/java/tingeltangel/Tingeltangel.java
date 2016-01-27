@@ -22,7 +22,7 @@ import java.io.IOException;
 import javax.swing.SwingUtilities;
 import tingeltangel.cli.CLI;
 import tingeltangel.core.Repository;
-import tingeltangel.gui.MasterFrame;
+import tingeltangel.gui.EditorFrame;
 
 public class Tingeltangel {
     
@@ -52,15 +52,15 @@ public class Tingeltangel {
                             Repository.initialUpdate(new Thread() {
                                 @Override
                                 public void run() {
-                                    new MasterFrame();
+                                    new EditorFrame();
                                 }
                             });
                         } catch (IOException ex) {
                             ex.printStackTrace();
-                            new MasterFrame();
+                            new EditorFrame();
                         }
                     } else {
-                        new MasterFrame();
+                        new EditorFrame();
                     }
                 }
             });
