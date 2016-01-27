@@ -38,6 +38,7 @@ import java.nio.charset.Charset;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -92,12 +93,12 @@ public class Stick {
         return(path.getUsableSpace());
     }
     
-    public static LinkedList<Integer> getTBD(File path) throws IOException {
+    public static HashSet<Integer> getTBD(File path) throws IOException {
         File file = new File(new File(path, STICK_DIR), TBD_FILE);
         if(!file.canRead()) {
             throw new FileNotFoundException(file.getAbsolutePath());
         }
-        LinkedList<Integer> tbd = new LinkedList<Integer>();
+        HashSet<Integer> tbd = new HashSet<Integer>();
         BufferedReader in = new BufferedReader(new FileReader(file));
         String row;
         while((row = in.readLine()) != null) {
@@ -448,7 +449,7 @@ public class Stick {
         }
         for(int i = 0; i < mounts.length; i++) {
             if(Stick.checkForStick(mounts[i])) {
-                return(new File(mounts[i], STICK_DIR));
+                return(mounts[i]);
             }
         }
         return(null);

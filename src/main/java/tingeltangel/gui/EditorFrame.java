@@ -424,13 +424,13 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         public void action(ProgressDialog progressDialog) {
                             try {
                                 book.generateTTS(progressDialog);
-
+                                
                                 new Progress(EditorFrame.this, "erzeuge Buch") {
                                     @Override
                                     public void action(ProgressDialog progressDialog) {
                                         try {
                                             book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
-
+                                            
                                             // create zip to output
                                             final FileOutputStream fos = new FileOutputStream(output);
                                             final ZipOutputStream out = new ZipOutputStream(fos);

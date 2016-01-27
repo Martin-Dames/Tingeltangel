@@ -19,20 +19,19 @@
 package tingeltangel.cli.cmds;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tingeltangel.cli.CliCommand;
 import tingeltangel.cli.CliSwitch;
-import tingeltangel.core.Book;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Stick;
 import tingeltangel.core.constants.TxtFile;
-import tingeltangel.tools.FileEnvironment;
 
 public class UpdateStick extends CliCommand {
 
@@ -63,45 +62,68 @@ public class UpdateStick extends CliCommand {
             System.exit(1);
         }
         
-        Iterator<Integer> mids = Stick.getBooks(stick).iterator();
+        HashSet<Integer> _tbds = Stick.getTBD(stick);
+        LinkedList<Integer> _books = Stick.getBooks(stick);
+        
+        _tbds.addAll(_books);
+        
+        Iterator<Integer> mids = _tbds.iterator();
         while(mids.hasNext()) {
             
             int mid = mids.next();
             
-            if((mid > 0) && (mid <= 10000)) {
+            if((mid > 0) && (mid < 10000)) {
                 
                 // update txt in repository
                 System.out.println("repository: update mid " + mid);
-                Repository.update(mid, null);
                 
-                // get repository version
-                int repositoryVersion = -1;
                 try {
-                    repositoryVersion = Integer.parseInt(Repository.getBookTxt(mid).get(TxtFile.KEY_VERSION));
-                } catch(Exception e) {
-                    System.err.println("update von " + mid + " fehlgeschlagen:");
-                    e.printStackTrace(System.err);
-                }
-                if(repositoryVersion >= 0) {
-                    // get stick version
-                    int stickVersion = Stick.getBookVersion(stick, mid);
-                    if(stickVersion >= 0) {
-                        if(repositoryVersion > stickVersion) {
-                            System.err.println("auf den stift kopieren...");
-                            Stick.copyFromRepositoryToStick(stick, mid);
-                        }              
-                    } else {
-                        System.err.println("zugriff auf den stift " + mid + " fehlgeschlagen");
+                    if(!Repository.txtExists(mid)) {
+                        Repository.search(mid);
                     }
-                    
+                    Repository.update(mid, null);
+
+                    // get repository version
+                    int repositoryVersion = -1;
+                    try {
+                        repositoryVersion = Integer.parseInt(Repository.getBookTxt(mid).get(TxtFile.KEY_VERSION));
+                    } catch(Exception e) {
+                        System.err.println("update von " + mid + " fehlgeschlagen:");
+                        e.printStackTrace(System.err);
+                    }
+                    if(repositoryVersion >= 0) {
+                        // get stick version
+                        int stickVersion = Stick.getBookVersion(stick, mid);
+                        if(stickVersion >= 0) {
+                            if(repositoryVersion > stickVersion) {
+                                System.err.println("auf den stift kopieren...");
+                                Stick.copyFromRepositoryToStick(stick, mid);
+                            }              
+                        } else {
+                            System.err.println("zugriff auf den stift " + mid + " fehlgeschlagen");
+                        }
+
+                    }
+                    System.out.println("repository: update mid " + mid + " fertig");
+                } catch(FileNotFoundException fnfe) {
+                    System.err.println("ignoriere buch " + mid);
                 }
-                System.out.println("repository: update mid " + mid + " fertig");
             }
             
         }
+        
         System.out.println("stick update ist fertig");
         System.exit(0);
         
+    }
+    
+    public static void main(String[] args) {
+        
+        try {
+            new UpdateStick().execute(null);
+        } catch (Exception ex) {
+            Logger.getLogger(UpdateStick.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

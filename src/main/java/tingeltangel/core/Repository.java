@@ -241,19 +241,23 @@ public class Repository {
         }
     }
     
-    public static void update(int id, ProgressDialog progress) throws IOException {
+    public static void update(int id, ProgressDialog progress) throws FileNotFoundException, IOException {
         // update txt file
         String _id = Integer.toString(id);
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
         
+        HashMap<String, String> bookTxt = getBookTxt(id);
+        if(bookTxt == null) {
+            throw new FileNotFoundException();
+        }
         int version = Integer.parseInt(getBookTxt(id).get(TxtFile.KEY_VERSION));
         File txtFile = new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT);
         download(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en", txtFile, null);
         BOOKS.put(id, readTxt(txtFile));
         int version2 = Integer.parseInt(getBookTxt(id).get(TxtFile.KEY_VERSION));
-        if(version2 > version) {
+        if((version2 > version) || !exists(id)) {
             File pngFile = new File(FileEnvironment.getRepositoryDirectory(), _id + PngFile._EN_PNG);
             download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/thumb", pngFile, null);
             File oufFile = new File(FileEnvironment.getRepositoryDirectory(), _id + OufFile._EN_OUF);
@@ -267,7 +271,45 @@ public class Repository {
                 }
             }
         }
-        progress.done();
+        if(progress != null) {
+            progress.done();
+        }
+    }
+    
+    public static void search(int id) {
+        byte[] buffer = new byte[4096];
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            String _id = Integer.toString(id);
+            while(_id.length() < 5) {
+                _id = "0" + _id;
+            }
+            in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
+            out = new FileOutputStream(new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT));
+
+            int k;
+            while((k = in.read(buffer)) != -1) {
+                out.write(buffer, 0, k);
+            }
+
+            in.close();
+            out.close();
+        } catch(IOException ioe) {
+            if(in != null) {
+                try {
+                    in.close();
+                } catch(Exception e) {
+                }
+            }
+            if(out != null) {
+                try {
+                    out.close();
+                } catch(Exception e) {
+                }
+            }
+            System.out.println("id=" + id + ": " + ioe.getMessage());
+        }
     }
     
     public static void search(ProgressDialog progress) {
@@ -276,44 +318,12 @@ public class Repository {
             progress.setMax(10000);
         }
         
-        byte[] buffer = new byte[4096];
         
         for(int id = 0; id <= 10000; id++) {
             if(progress != null) {
                 progress.setVal(id);
             }
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                String _id = Integer.toString(id);
-                while(_id.length() < 5) {
-                    _id = "0" + _id;
-                }
-                in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
-                out = new FileOutputStream(new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT));
-                
-                int k;
-                while((k = in.read(buffer)) != -1) {
-                    out.write(buffer, 0, k);
-                }
-                
-                in.close();
-                out.close();
-            } catch(IOException ioe) {
-                if(in != null) {
-                    try {
-                        in.close();
-                    } catch(Exception e) {
-                    }
-                }
-                if(out != null) {
-                    try {
-                        out.close();
-                    } catch(Exception e) {
-                    }
-                }
-                System.out.println("id=" + id + ": " + ioe.getMessage());
-            }
+            search(id);
         }
         init();
         progress.done();

@@ -855,6 +855,7 @@ public class Book {
         }
         
         
+        
         PrintWriter srcOut = new PrintWriter(new FileWriter(src));
         generateScriptFile(srcOut);
         srcOut.close();
@@ -893,22 +894,26 @@ public class Book {
         int pathLength = FileEnvironment.getBookDirectory(id).getCanonicalPath().length() +1 ;
         while(ids.hasNext()) {
             Entry entry = indexEntries.get(ids.next());
-            if(entry.isMP3()) {
-                out.print("Precode=" + entry.getTingID() + "\r\n");
-                out.print("TYPE=1\r\n");
-                out.print("[Note]\r\n");
-                out.print(entry.getHint() + "\r\n");
-                out.print("[Content]\r\n");
-                out.print(entry.getMP3().getAbsolutePath().substring(pathLength).replace('\\', '/') + "\r\n");
-                out.print("\r\n");
-            } else if(entry.isCode() || entry.isSub()) {
-                out.print("Precode=" + entry.getTingID() + "\r\n");
-                out.print("TYPE=0\r\n");
-                out.print("[Note]\r\n");
-                out.print(entry.getHint() + "\r\n");
-                out.print("[Content]\r\n");
-                out.print(entry.getScript().toString().replaceAll("\n", "\r\n"));
-                out.print("\r\n");
+            if(entry != null) {
+                if(entry.isMP3()) {
+                    out.print("Precode=" + entry.getTingID() + "\r\n");
+                    out.print("TYPE=1\r\n");
+                    out.print("[Note]\r\n");
+                    out.print(entry.getHint() + "\r\n");
+                    out.print("[Content]\r\n");
+                    if(entry.getMP3() != null) {
+                        out.print(entry.getMP3().getAbsolutePath().substring(pathLength).replace('\\', '/') + "\r\n");
+                    }
+                    out.print("\r\n");
+                } else if(entry.isCode() || entry.isSub()) {
+                    out.print("Precode=" + entry.getTingID() + "\r\n");
+                    out.print("TYPE=0\r\n");
+                    out.print("[Note]\r\n");
+                    out.print(entry.getHint() + "\r\n");
+                    out.print("[Content]\r\n");
+                    out.print(entry.getScript().toString().replaceAll("\n", "\r\n"));
+                    out.print("\r\n");
+                }
             }
         }
 

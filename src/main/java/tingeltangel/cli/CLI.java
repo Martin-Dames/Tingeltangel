@@ -41,7 +41,8 @@ public class CLI {
         Import.class,
         Assemble.class,
         OidCode.class,
-        Booklet.class
+        Booklet.class,
+        UpdateStick.class,
     };
     
     private final static Map<String, CliCommand> COMMANDS = new HashMap<String, CliCommand>();
