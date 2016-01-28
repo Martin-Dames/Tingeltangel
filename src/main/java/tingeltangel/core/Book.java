@@ -632,7 +632,7 @@ public class Book {
                 if(entry.isMP3() || entry.isTTS()) {
                     out.writeInt(0x0001);
                     // pre calculate size
-                    // entry.getMP3();
+                    entry.getMP3();
                 } else {
                     out.writeInt(0x0002);
                 }

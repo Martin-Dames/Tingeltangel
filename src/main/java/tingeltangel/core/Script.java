@@ -81,7 +81,7 @@ public class Script {
                     if(!row.startsWith(ScriptFile.COLON)) {
                         if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                             // extract argument
-                            System.out.println(args);
+                            //System.out.println(args);
                             try {
                                 Script sub = entry.getBook().getEntryByID(Integer.parseInt(args)).getScript();
                                 if(sub == null) {
