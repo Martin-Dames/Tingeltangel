@@ -20,6 +20,8 @@ package tingeltangel.cli.cmds;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -67,6 +69,9 @@ public class UpdateStick extends CliCommand {
         
         _tbds.addAll(_books);
         
+        HashSet<Integer> remove = new HashSet<Integer>();
+        remove.addAll(_tbds);
+        
         Iterator<Integer> mids = _tbds.iterator();
         while(mids.hasNext()) {
             
@@ -98,6 +103,7 @@ public class UpdateStick extends CliCommand {
                             if(repositoryVersion > stickVersion) {
                                 System.err.println("auf den stift kopieren...");
                                 Stick.copyFromRepositoryToStick(stick, mid);
+                                remove.remove(mid);
                             }              
                         } else {
                             System.err.println("zugriff auf den stift " + mid + " fehlgeschlagen");
@@ -111,6 +117,22 @@ public class UpdateStick extends CliCommand {
             }
             
         }
+        
+        mids = remove.iterator();
+        String tbd = "";
+        while(mids.hasNext()) {    
+            String mid = Integer.toString(mids.next());
+            while(mid.length() < 5) {
+                mid = "0" + mid;
+            }
+            mid += "\r\n";
+            tbd += mid;
+        }
+        // write tbd to TBD.TXT
+        OutputStream out = new FileOutputStream(Stick.getTBDFile(stick));
+        out.write(tbd.getBytes());
+        out.flush();
+        out.close();
         
         System.out.println("stick update ist fertig");
         System.exit(0);

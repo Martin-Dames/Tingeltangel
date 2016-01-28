@@ -93,6 +93,10 @@ public class Stick {
         return(path.getUsableSpace());
     }
     
+    public static File getTBDFile(File path) {
+        return(new File(new File(path, STICK_DIR), TBD_FILE));
+    }
+    
     public static HashSet<Integer> getTBD(File path) throws IOException {
         File file = new File(new File(path, STICK_DIR), TBD_FILE);
         if(!file.canRead()) {

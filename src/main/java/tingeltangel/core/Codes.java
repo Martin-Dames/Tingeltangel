@@ -25,6 +25,8 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -234,9 +236,10 @@ public class Codes {
         BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D graphics = image.createGraphics();
-        graphics.setComposite(AlphaComposite.Clear);
+        graphics.setColor(Color.white);
+        //graphics.setComposite(AlphaComposite.Clear);
         graphics.fillRect(0, 0, imageWidth, imageHeight);
-        graphics.setComposite(AlphaComposite.Src);
+        //graphics.setComposite(AlphaComposite.Src);
         graphics.setColor(Color.black);
 
         drawPattern(code, 0, 0, width, height, graphics);
