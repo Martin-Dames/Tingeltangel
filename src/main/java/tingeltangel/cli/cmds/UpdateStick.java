@@ -57,15 +57,15 @@ public class UpdateStick extends CliCommand {
     public void execute(Map<String, String> args) throws Exception {
         
         
-        File stick = Stick.getStickPath();
+        Stick stick = Stick.getStick();
         
         if(stick == null) {
             System.err.println("no stick found");
             System.exit(1);
         }
         
-        HashSet<Integer> _tbds = Stick.getTBD(stick);
-        LinkedList<Integer> _books = Stick.getBooks(stick);
+        HashSet<Integer> _tbds = stick.getTBD();
+        LinkedList<Integer> _books = stick.getBooks();
         
         _tbds.addAll(_books);
         
@@ -98,11 +98,11 @@ public class UpdateStick extends CliCommand {
                     }
                     if(repositoryVersion >= 0) {
                         // get stick version
-                        int stickVersion = Stick.getBookVersion(stick, mid);
+                        int stickVersion = stick.getBookVersion(mid);
                         if(stickVersion >= 0) {
                             if(repositoryVersion > stickVersion) {
                                 System.err.println("auf den stift kopieren...");
-                                Stick.copyFromRepositoryToStick(stick, mid);
+                                stick.copyFromRepositoryToStick(mid);
                                 remove.remove(mid);
                             }              
                         } else {
@@ -129,7 +129,7 @@ public class UpdateStick extends CliCommand {
             tbd += mid;
         }
         // write tbd to TBD.TXT
-        OutputStream out = new FileOutputStream(Stick.getTBDFile(stick));
+        OutputStream out = new FileOutputStream(stick.getTBDFile());
         out.write(tbd.getBytes());
         out.flush();
         out.close();

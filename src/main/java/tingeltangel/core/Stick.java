@@ -32,8 +32,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -46,13 +44,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import tingeltangel.Tingeltangel;
 import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
 
 
+/**
+ * the central class for managing a ting stick
+ * @author martin dames
+ */
 public class Stick {
 
     private final static String STICK_DIR = "$ting";
@@ -63,7 +64,13 @@ public class Stick {
         "TBD.TXT", "SETTINGS.INI", "SETTING.DAT", "BOOK.SYS"
     };
     
-    public static boolean checkForStick(File path) {
+    private final File path;
+    
+    private Stick(File path) {
+        this.path = path;
+    }
+    
+    private static boolean checkForStick(File path) {
         File[] content = path.listFiles();
         if(content != null) {
             for(int i = 0; i < content.length; i++) {
@@ -73,7 +80,7 @@ public class Stick {
                     for(int f = 0; f < STICK_FILES.length; f++) {
                         boolean found = false;
                         for(int j = 0; j < content.length; j++) {
-                            if(content[j].getName().equals(STICK_FILES[f])) {
+                            if(content[j].getName().equals(STICK_FILES[f]) && content[j].canWrite()) {
                                 found = true;
                                 break;
                             }
@@ -89,15 +96,28 @@ public class Stick {
         return(false);
     }
     
-    public static long getFreeSpace(File path) {
+    /**
+     * retrieves size of free space on stick
+     * @return free space in bytes
+     */
+    public long getFreeSpace() {
         return(path.getUsableSpace());
     }
     
-    public static File getTBDFile(File path) {
+    /**
+     * retrieves the file TBD.TXT from stick
+     * @return the tbd file
+     */
+    public File getTBDFile() {
         return(new File(new File(path, STICK_DIR), TBD_FILE));
     }
     
-    public static HashSet<Integer> getTBD(File path) throws IOException {
+    /**
+     * retrieves the content of TBD.TXT from stick
+     * @return content from TBD.TXT as HashSet&lt;Integer&gt;
+     * @throws IOException
+     */
+    public HashSet<Integer> getTBD() throws IOException {
         File file = new File(new File(path, STICK_DIR), TBD_FILE);
         if(!file.canRead()) {
             throw new FileNotFoundException(file.getAbsolutePath());
@@ -119,7 +139,12 @@ public class Stick {
         return(tbd);
     }
     
-    public static LinkedList<Integer> getBooks(File path) throws IOException {
+    /**
+     * retrieves the books on stick
+     * @return list of books on the stick as LinkedList&lt;Integer&gt;
+     * @throws IOException
+     */
+    public LinkedList<Integer> getBooks() throws IOException {
         File file = new File(path, STICK_DIR);
         if(!file.canRead()) {
             throw new FileNotFoundException(file.getAbsolutePath());
@@ -133,54 +158,22 @@ public class Stick {
         }
         return(books);
     }
-    
-    public static String getBookContent(File path) throws IOException {
-        StringBuilder buffer = new StringBuilder();
-        
-        Iterator<Integer> i = getBooks(path).iterator();
-        while(i.hasNext()) {
-            int id = i.next();
-            String bookID = Integer.toString(id);
-            while(bookID.length() < 5) {
-                bookID = "0" + bookID;
-            }
-            HashMap<String, String> book = Repository.getBookTxt(id);
-            if(book == null) {
-                buffer.append(bookID).append("\n");
-            } else {
-                buffer.append(bookID).append(" (").append(book.get("Name")).append(")\n");
-            }
-        }
-        
-        return(buffer.toString());
-    }    
-    
-    public static String getTBDContent(File path) throws IOException {
-        StringBuilder buffer = new StringBuilder();
-
-        Iterator<Integer> i = getTBD(path).iterator();
-        while(i.hasNext()) {
-            int id = i.next();
-            String bookID = Integer.toString(id);
-            while(bookID.length() < 5) {
-                bookID = "0" + bookID;
-            }
-            HashMap<String, String> book = Repository.getBookTxt(id);
-            if(book == null) {
-                buffer.append(bookID).append("\n");
-            } else {
-                buffer.append(bookID).append(" (").append(book.get("Name")).append(")\n");
-            }
-        }
-        
-        return(buffer.toString());
-    }
-    
-    public static File getBookDir(File path) {
+ 
+ 
+    /**
+     * gets the directory on stick where most data resists
+     * @return the $ting directory
+     */
+    public File getBookDir() {
         return(new File(path, STICK_DIR));
     }
     
-    public static void setSettings(File path, HashMap<String, String> settings) throws IOException {
+    /**
+     * sets the stick settings
+     * @param settings
+     * @throws IOException
+     */
+    public void setSettings(HashMap<String, String> settings) throws IOException {
         File file = new File(new File(path, STICK_DIR), SETTINGS_FILE);
         if(!file.canWrite()) {
             throw new FileNotFoundException(file.getAbsolutePath());
@@ -201,7 +194,12 @@ public class Stick {
         
     }
     
-    public static HashMap<String, String> getSettings(File path) throws IOException {
+    /**
+     * gets the stick settings
+     * @return the stick settings
+     * @throws IOException
+     */
+    public HashMap<String, String> getSettings() throws IOException {
         File file = new File(new File(path, STICK_DIR), SETTINGS_FILE);
         if(!file.canRead()) {
             throw new FileNotFoundException(file.getAbsolutePath());
@@ -229,12 +227,18 @@ public class Stick {
         return(settings);
     }
 
-    public static int getBookVersion(File path, int id) throws IOException {
+    /**
+     * gets book version on stick
+     * @param id the book id
+     * @return the book version or -1 if book not found
+     * @throws IOException
+     */
+    public int getBookVersion(int id) throws IOException {
         String _id = Integer.toString(id);
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        File txt = new File(Stick.getBookDir(path), _id + TxtFile._EN_TXT);
+        File txt = new File(getBookDir(), _id + TxtFile._EN_TXT);
         BufferedReader in = new BufferedReader(new FileReader(txt));
         String row;
         while((row = in.readLine()) != null) {
@@ -249,15 +253,19 @@ public class Stick {
         return(-1);
     }
     
-    public static void delete(File path, int id) {
+    /**
+     * deletes a book from the stick
+     * @param id the book to delete
+     */
+    public void delete(int id) {
         String _id = Integer.toString(id);
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        File txt = new File(Stick.getBookDir(path), _id + TxtFile._EN_TXT);
-        File png = new File(Stick.getBookDir(path), _id + PngFile._EN_PNG);
-        File ouf = new File(Stick.getBookDir(path), _id + OufFile._EN_OUF);
-        File src = new File(Stick.getBookDir(path), _id + ScriptFile._EN_SRC);
+        File txt = new File(getBookDir(), _id + TxtFile._EN_TXT);
+        File png = new File(getBookDir(), _id + PngFile._EN_PNG);
+        File ouf = new File(getBookDir(), _id + OufFile._EN_OUF);
+        File src = new File(getBookDir(), _id + ScriptFile._EN_SRC);
         
         txt.delete();
         png.delete();
@@ -268,6 +276,7 @@ public class Stick {
         
     }
     
+    /*
     public static int getOnlineBookVersion(int id) throws IOException {
         if(Repository.getBookTxt(id) == null) {
             return(-1);
@@ -289,9 +298,9 @@ public class Stick {
         in.close();
         return(-1);
     }
+    */
     
     private static void fileCopy(File source, File target) throws IOException {
-        System.out.println("copy file from: " + source.getAbsolutePath() + " to " + target.getAbsolutePath());
         InputStream in = new FileInputStream(source);
         OutputStream out = new FileOutputStream(target);
         byte[] buffer = new byte[4096];
@@ -303,16 +312,21 @@ public class Stick {
         in.close();
     }
     
-    public static void copyFromRepositoryToStick(File path, int mid) throws IOException {
+    /**
+     * copies a book from the repository to the stick
+     * @param mid the book id
+     * @throws IOException
+     */
+    public void copyFromRepositoryToStick(int mid) throws IOException {
         
         String _id = Integer.toString(mid);
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
-        File txt = new File(Stick.getBookDir(path), _id + TxtFile._EN_TXT);
-        File png = new File(Stick.getBookDir(path), _id + PngFile._EN_PNG);
-        File ouf = new File(Stick.getBookDir(path), _id + OufFile._EN_OUF);
-        File src = new File(Stick.getBookDir(path), _id + ScriptFile._EN_SRC);
+        File txt = new File(getBookDir(), _id + TxtFile._EN_TXT);
+        File png = new File(getBookDir(), _id + PngFile._EN_PNG);
+        File ouf = new File(getBookDir(), _id + OufFile._EN_OUF);
+        File src = new File(getBookDir(), _id + ScriptFile._EN_SRC);
         
         fileCopy(Repository.getBookOuf(mid), ouf);
         fileCopy(Repository.getBookPng(mid), png);
@@ -323,7 +337,12 @@ public class Stick {
         fileCopy(Repository.getBookTxtFile(mid), txt);
     }
 
-    public static void setTBD(File path, LinkedList<Integer> newTbd) throws IOException {
+    /**
+     * sets the TBD.TXT
+     * @param newTbd the new list of books in TBD.TXT
+     * @throws IOException
+     */
+    public void setTBD(LinkedList<Integer> newTbd) throws IOException {
         File file = new File(new File(path, STICK_DIR), TBD_FILE);
         if(!file.canWrite()) {
             throw new FileNotFoundException(file.getAbsolutePath());
@@ -374,12 +393,17 @@ public class Stick {
         }
     }
     
-    public static void saveStick(File stick, File target) throws IOException {
+    /**
+     * saves the whole stick to zip file
+     * @param target the zip file to write to
+     * @throws IOException
+     */
+    public void saveStick(File target) throws IOException {
         ZipOutputStream zos = null;
         try {
             zos = new ZipOutputStream(new FileOutputStream(target));
             LinkedList<String> stack = new LinkedList<String>();
-            zip(zos, stick, stack);
+            zip(zos, path, stack);
         } finally {
             if(zos != null){
                 try {
@@ -390,7 +414,12 @@ public class Stick {
         } 
     }
 
-    public static void restoreStick(File stick, File source) throws IOException {
+    /**
+     * restores the whole stick from a zip file
+     * @param source the zip file to read from
+     * @throws IOException
+     */
+    public void restoreStick(File source) throws IOException {
         ZipFile zipFile = new ZipFile(source);
         Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
         TreeSet<String> files = new TreeSet<String>(new Comparator<String>() {
@@ -414,9 +443,9 @@ public class Stick {
             String fileName = i.next();
             int p = fileName.lastIndexOf("/");
             if(p != -1) {
-                new File(stick, fileName.substring(0, p)).mkdirs();
+                new File(path, fileName.substring(0, p)).mkdirs();
             }
-            OutputStream out = new FileOutputStream(new File(stick, fileName));
+            OutputStream out = new FileOutputStream(new File(path, fileName));
             InputStream in = zipFile.getInputStream(zipFile.getEntry(fileName));
             // copy in to out
             int len;
@@ -430,7 +459,12 @@ public class Stick {
         zipFile.close();
     }
 
-    public static File getStickPath() throws IOException {
+    /**
+     * get the stick
+     * @return the stick object or null if no stick found
+     * @throws IOException
+     */
+    public static Stick getStick() throws IOException {
         File[] mounts;
         if (System.getProperty("os.name").startsWith("Windows")) {
             mounts = File.listRoots();
@@ -453,7 +487,7 @@ public class Stick {
         }
         for(int i = 0; i < mounts.length; i++) {
             if(Stick.checkForStick(mounts[i])) {
-                return(mounts[i]);
+                return(new Stick(mounts[i]));
             }
         }
         return(null);

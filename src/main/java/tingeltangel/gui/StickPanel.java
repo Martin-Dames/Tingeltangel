@@ -66,9 +66,9 @@ public class StickPanel extends JPanel {
                                         try {
                                             book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
                                             // now copy book to stick
-                                            File dest = Stick.getStickPath();
-                                            if(dest != null) {
-                                                dest = new File(dest, "$ting");
+                                            Stick stick = Stick.getStick();
+                                            if(stick != null) {
+                                                File dest = new File(stick.getBookDir(), "$ting");
                                                 File[] files = FileEnvironment.getDistDirectory(book.getID()).listFiles(new FilenameFilter() {
                                                     @Override
                                                     public boolean accept(File dir, String name) {
@@ -110,7 +110,7 @@ public class StickPanel extends JPanel {
             @Override
             public void run() {
                 try {
-                    File stick = Stick.getStickPath();
+                    Stick stick = Stick.getStick();
                     if(online && (stick == null)) {
                         // go offline
                         online = false;
