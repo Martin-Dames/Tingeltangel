@@ -70,7 +70,7 @@ public class Script {
             String row;
             while((row = in.readLine()) != null) {
                 rc++;
-                row = row.trim();
+                row = row.trim().toLowerCase();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT)) && (!row.startsWith(ScriptFile.COLON))) {
                     int p = row.indexOf(ScriptFile.SINGLE_SPACE);
                     String args = "";
@@ -221,7 +221,7 @@ public class Script {
             String row;
             while((row = in.readLine()) != null) {
                 rc++;
-                row = row.trim();
+                row = row.trim().toLowerCase();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
                     row = row.trim();
                     if(row.startsWith(ScriptFile.COLON)) {
@@ -246,11 +246,15 @@ public class Script {
             rc = 0;
             while((row = in.readLine()) != null) {
                 rc++;
-                row = row.trim();
+                row = row.trim().toLowerCase();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT)) && (!row.startsWith(ScriptFile.COLON))) {
                     
+                    int p = row.indexOf("//");
+                    if(p != -1) {
+                        row = row.substring(0, p).trim();
+                    }
                     
-                    int p = row.indexOf(ScriptFile.SINGLE_SPACE);
+                    p = row.indexOf(ScriptFile.SINGLE_SPACE);
                     String cmd = row;
                     String args = null;
                     if(p != -1) {
