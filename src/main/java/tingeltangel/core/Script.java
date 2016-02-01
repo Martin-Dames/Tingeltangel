@@ -212,7 +212,7 @@ public class Script {
         int rc = 0;
         while((row = in.readLine()) != null) {
             rc++;
-            row = row.trim();
+            row = row.trim().toLowerCase();
             if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
                 if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                     try {

@@ -43,6 +43,7 @@ public class CLI {
         OidCode.class,
         Booklet.class,
         UpdateStick.class,
+        ExportTrack.class,
     };
     
     private final static Map<String, CliCommand> COMMANDS = new HashMap<String, CliCommand>();

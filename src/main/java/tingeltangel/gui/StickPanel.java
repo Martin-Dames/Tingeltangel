@@ -78,7 +78,10 @@ public class StickPanel extends JPanel {
                                             // now copy book to stick
                                             Stick stick = Stick.getStick();
                                             if(stick != null) {
-                                                File dest = new File(stick.getBookDir(), "$ting");
+                                                File dest = stick.getBookDir();
+                                                if(!dest.getAbsolutePath().contains("$ting")) {
+                                                    dest = new File(stick.getBookDir(), "$ting");
+                                                }
                                                 File[] files = FileEnvironment.getDistDirectory(book.getID()).listFiles(new FilenameFilter() {
                                                     @Override
                                                     public boolean accept(File dir, String name) {

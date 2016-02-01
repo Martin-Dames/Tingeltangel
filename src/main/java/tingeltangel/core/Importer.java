@@ -461,6 +461,180 @@ public class Importer {
         book.save();
     }
     
+    public static void extractTrack(File oufFile, int oid, File output) throws IOException {
+        
+        DataInputStream ouf = new DataInputStream(new FileInputStream(oufFile));
+        
+        int startOfIndex = ouf.readInt();
+        if(startOfIndex != 0x66) { // why ?
+            ouf.readInt(); // 2
+        } 
+        int firstTingID = ouf.readInt();
+        int lastTingID = ouf.readInt();
+        int tingIDCount = ouf.readInt();
+        ouf.readInt(); // book id
+        
+        ouf.readInt();
+        ouf.readInt();
+        ouf.readInt(); // 0
+        ouf.readInt(); // 0xffff
+        
+        
+        
+        boolean firstTingIdCorrected = false;
+        
+        // read till startOfIndex
+        ouf.skipBytes(startOfIndex - 40);
+        
+        if(firstTingID != 15001) {
+            
+            if(firstTingID == 15000) {
+                System.out.println("WARNING: first ting id is 15000. Trying auto correction...");
+                
+                ouf.readInt();
+                ouf.readInt();
+                int type15000 = ouf.readInt();
+                if(type15000 == 0) {
+                    System.out.println("Auto correction successfull");
+                    firstTingIdCorrected = true;
+                    firstTingID = 15001;
+                    tingIDCount--;
+                } else {
+                    System.out.println("Auto correction failed. The import is expected to fail.");
+                }
+            } else {
+                System.out.println("WARNING: first ting id is neither 15001 nor 15000. The import is expected to fail.");
+            }
+        }
+        if(tingIDCount != lastTingID - firstTingID + 1) {
+            System.out.println("WARNING: index count missmatch (first=" + firstTingID + ", last=" + lastTingID + ", count=" + tingIDCount + ")");
+        }
+        
+        LinkedList<int[]> index = new LinkedList<int[]>();
+        int firstEntryCode = 0;
+        int firstEntryN = 0;
+        int firstEntryLength = 0;
+        boolean firstEntryTypeIsScript = false;
+        boolean foundFirstEntryCode = false;
+        
+        // read index table
+        for(int i = firstTingID; i <= lastTingID; i++) {
+            int[] e = new int[4];
+            for(int k = 0; k < 3; k++) {
+                e[k] = ouf.readInt();
+            }
+            System.out.println(e[0] + " " + e[1] + " " + e[2]);
+            if(e[2] != 0) {
+                e[3] = i;
+                if(!foundFirstEntryCode) {
+                    if(e[1] > 0) { // entry must not be empty
+                        firstEntryCode = e[0];
+                        firstEntryN = i - 15001;
+                        if(e[2] == 2) {
+                            firstEntryTypeIsScript = true;
+                        }
+                        firstEntryLength = e[1];
+                        foundFirstEntryCode = true;
+                    }
+                }
+                index.add(e);
+            }
+        }
+        
+        
+        // find first entry
+        int pos = 12 * (lastTingID - firstTingID + 1) + startOfIndex;
+        System.out.println("end of index table: 0x" + Integer.toHexString(pos));
+        int diff = (0x100 - (pos % 0x100)) % 0x100;
+        pos += diff;
+        if(firstTingIdCorrected) {
+            diff -= 12;
+        }
+        ouf.skipBytes(diff);
+        
+        System.out.println("possible start of first entry: 0x" + Integer.toHexString(pos));
+        System.out.println("firstEntryCode: " + firstEntryCode);
+        System.out.println("firstEntryLength: " + firstEntryLength);
+        
+        
+        
+        byte[] buffer = new byte[Math.min(firstEntryLength, 50)];
+        
+        int k = 0;
+        while(k != buffer.length) {
+            k += ouf.read(buffer, k, buffer.length - k);
+        }
+        
+        
+        if(firstEntryTypeIsScript) {
+            System.out.println("searching for script...");
+            while(!isScriptData(buffer)) {
+                pos += 0x100;
+                ouf.skipBytes(0x100 - buffer.length);
+                k = 0;
+                while(k != buffer.length) {
+                    k += ouf.read(buffer, k, buffer.length - k);
+                }
+            }
+        } else {
+            System.out.println("searching for mp3...");
+            while(!isMp3Data(buffer)) {
+                pos += 0x100;
+                ouf.skipBytes(0x100 - buffer.length);
+                k = 0;
+                while(k != buffer.length) {
+                    k += ouf.read(buffer, k, buffer.length - k);
+                }
+            }
+        }
+        System.out.println("start of first entry: 0x" + Integer.toHexString(pos));
+
+        int entryOffset = pos - IndexTableCalculator.getPositionInFileFromCode(firstEntryCode, firstEntryN);
+        
+        
+        System.out.println("offset: " + entryOffset);
+        
+        ouf.close();
+        
+        Iterator<int[]> indexIterator = index.iterator();
+        buffer = new byte[4096];
+        while(indexIterator.hasNext()) {
+            int[] e = indexIterator.next();
+            
+            if(e[3] == oid) {
+                
+                int epos = IndexTableCalculator.getPositionInFileFromCode(e[0], e[3] - 15001) + entryOffset;
+
+                ouf = new DataInputStream(new FileInputStream(oufFile));
+                ouf.skipBytes(epos);
+
+                OutputStream out;
+
+                String _eid = Integer.toString(e[3]);
+                while(_eid.length() < 5) {
+                    _eid = "0" + _eid;
+                }
+
+                out = new FileOutputStream(output);
+
+                int len = e[1];
+                while(len > 0) {
+                    k = ouf.read(buffer, 0, Math.min(buffer.length, len));
+                    if(k > 0) {
+                        out.write(buffer, 0, k);
+                        len -= k;
+                    } else {
+                        // TODO analyze why this error occurs at some books
+                        System.err.println("error reading track with id="+_eid);
+                        len = -1;
+                        throw new IOException("error reading track with id=" + _eid);
+                    }
+                }
+                out.close();
+            }
+        }
+    }
+    
     private static boolean isMp3Data(byte[] data) {
         if(data.length <= 3) {
             return(false);
