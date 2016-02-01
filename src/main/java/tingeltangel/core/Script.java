@@ -77,7 +77,7 @@ public class Script {
             String row;
             while((row = in.readLine()) != null) {
                 rc++;
-                row = row.trim();
+                row = row.trim().toLowerCase();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT)) && (!row.startsWith(ScriptFile.COLON))) {
                     int p = row.indexOf(ScriptFile.SINGLE_SPACE);
                     String args = "";
@@ -139,7 +139,14 @@ public class Script {
     }
     
     public void execute() throws SyntaxError {
+        execute(false);
+    }
+    
+    private void execute(boolean subCall) throws SyntaxError {
         compile();
+        if(!subCall) {
+            entry.getBook().getEmulator().setLastOID(entry.getTingID());
+        }
         int pc = 0;
         kill = false;
         while(!kill) {
@@ -150,11 +157,15 @@ public class Script {
                 throw error;
             }
             Instance instance = script.get(pc);
+            
+            System.out.println(entry.getTingID() + ":" + pc + " " + instance.toString(entry.getBook().getEmulator()));
+            
             if(instance.getCommand().getAsm().equals(ScriptFile.END)) {
                 return;
             } else if(instance.getCommand().getAsm().equals(ScriptFile.CALL) || instance.getCommand().getAsm().equals(ScriptFile.CALLID)) {
                 int oid = instance.getFirstArgument();
-                entry.getBook().getEntryByID(oid).getScript().execute();
+                entry.getBook().getEntryByID(oid).getScript().execute(true);
+                pc++;
             } else if(instance.getCommand().getAsm().equals(ScriptFile.RETURN)) {
                 return;
             } else {
@@ -246,7 +257,7 @@ public class Script {
             String row;
             while((row = in.readLine()) != null) {
                 rc++;
-                row = row.trim();
+                row = row.trim().toLowerCase();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
                     if(row.startsWith(ScriptFile.COLON)) {
                         labels.put(row.substring(1).trim(), position);
@@ -270,11 +281,15 @@ public class Script {
             rc = 0;
             while((row = in.readLine()) != null) {
                 rc++;
-                row = row.trim();
+                row = row.trim().toLowerCase();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT)) && (!row.startsWith(ScriptFile.COLON))) {
                     
+                    int p = row.indexOf("//");
+                    if(p != -1) {
+                        row = row.substring(0, p).trim();
+                    }
                     
-                    int p = row.indexOf(ScriptFile.SINGLE_SPACE);
+                    p = row.indexOf(ScriptFile.SINGLE_SPACE);
                     String cmd = row;
                     String args = null;
                     if(p != -1) {

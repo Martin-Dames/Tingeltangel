@@ -179,7 +179,7 @@ public class Commands {
     public static int getArguments(String cmd) throws SyntaxError {
         HashSet<Command> set = commands.get(cmd);
         if(set == null) {
-            throw new SyntaxError("unknown command");
+            throw new SyntaxError("unknown command (" + cmd + ")");
         }
         return(set.iterator().next().getNumberOfArguments());
     }

@@ -442,6 +442,10 @@ public class IndexListEntry extends JPanel {
             saveMP3.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
+                    if(entry.getMP3() == null) {
+                        JOptionPane.showMessageDialog(frame, "kein MP3 zum speichern vorhanden");
+                        return;
+                    }
                     JFileChooser fc = new JFileChooser();
                     fc.setFileFilter(new FileNameExtensionFilter("MP3 (*.mp3)", "mp3"));
                     if(fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
@@ -452,7 +456,6 @@ public class IndexListEntry extends JPanel {
                             if(!file.toLowerCase().endsWith(".mp3")) {
                                 file = file + ".mp3";
                             }
-                            
                             
                             is = new FileInputStream(entry.getMP3());
                             os = new FileOutputStream(file);

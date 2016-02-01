@@ -114,19 +114,20 @@ public class Book {
         while(ids.hasNext()) {
             int tid = ids.next();
             Entry entry = indexEntries.get(tid);
-            if(entry.isMP3() || entry.isCode()) {
-                String txt = entry.getHint();
-                if(entry.isMP3() && (entry.getMP3() != null)) {
-                    txt += " (" + entry.getMP3().getName() + ")";
-                } else if(entry.isTTS() && (entry.getTTS() != null)) {
-                    String text = entry.getTTS().text;
-                    if(text.length() > 100) {
-                        text = text.substring(0, 100) + " ...";
-                    }
-                    txt += " (" + text + ")";
-                }
+            
+            String txt = null;
+            if(entry.isMP3()) {
+                txt = "MP3: " + entry.getHint();
+            } else if(entry.isCode()) {
+                txt = "Skript: " + entry.getScript().toString();
+            } else if(entry.isTTS()) {
+                txt = entry.getTTS().text;
+            }
+            if(txt != null) {
+                txt = txt.substring(0, 100) + " ...";
                 booklet.add(new Tupel<Integer, String>(tid, txt));
             }
+            
         }
         // generate booklet
         Codes.setResolution(Codes.DPI600);
