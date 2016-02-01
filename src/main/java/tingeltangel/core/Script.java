@@ -133,7 +133,14 @@ public class Script {
     }
     
     public void execute() throws SyntaxError {
+        execute(false);
+    }
+    
+    private void execute(boolean subCall) throws SyntaxError {
         compile();
+        if(!subCall) {
+            entry.getBook().getEmulator().setLastOID(entry.getTingID());
+        }
         int pc = 0;
         kill = false;
         while(!kill) {
@@ -144,11 +151,15 @@ public class Script {
                 throw error;
             }
             Instance instance = script.get(pc);
+            
+            System.out.println(entry.getTingID() + ":" + pc + " " + instance.toString(entry.getBook().getEmulator()));
+            
             if(instance.getCommand().getAsm().equals(ScriptFile.END)) {
                 return;
             } else if(instance.getCommand().getAsm().equals(ScriptFile.CALL) || instance.getCommand().getAsm().equals(ScriptFile.CALLID)) {
                 int oid = instance.getFirstArgument();
-                entry.getBook().getEntryByID(oid).getScript().execute();
+                entry.getBook().getEntryByID(oid).getScript().execute(true);
+                pc++;
             } else if(instance.getCommand().getAsm().equals(ScriptFile.RETURN)) {
                 return;
             } else {

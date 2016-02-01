@@ -95,13 +95,23 @@ public class Instance {
         secondArgument = removeRegister(argument);
     }
     
-    public String toString() {
+    public String toString(Emulator emulator) {
         String s = command.getAsm();
         if(command.getNumberOfArguments() > 0) {
-            s += " " + getFirstArgument();
+            if(command.firstArgumentIsRegister()) {
+                s += " v" + getFirstArgument() + "(" + emulator.getRegister(getFirstArgument()) + ")";
+            } else if(command.firstArgumentIsLabel()) {
+                s += " " + getLabel();
+            } else {
+                s += " " + getFirstArgument();
+            }
         }
         if(command.getNumberOfArguments() > 1) {
-            s += " " + getSecondArgument();
+            if(command.secondArgumentIsRegister()) {
+                s += " v" + getSecondArgument() + "(" + emulator.getRegister(getSecondArgument()) + ")";
+            } else {
+                s += " " + getSecondArgument();
+            }
         }
         return(s);
     }

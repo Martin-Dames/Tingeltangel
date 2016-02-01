@@ -22,6 +22,7 @@ package tingeltangel.core.scripting;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
@@ -32,7 +33,11 @@ public class Emulator {
     
     private final LinkedList<RegisterListener> listeners = new LinkedList<RegisterListener>();
     
+    private int lastOID = 0;
+    
     public final static int REGISTERS = 99;
+    
+    private final Random rnd = new Random();
     
     private final static int[] register = new int[REGISTERS];
     private final static String[] hints = new String[REGISTERS];
@@ -97,6 +102,16 @@ public class Emulator {
     }
     
     public int getRegister(int i) {
+        if(i == 93) {
+            // language code
+            return(20); // always "en"
+        } else if(i == 95) {
+            // last oid
+            return(lastOID);
+        } else if(i == 98) {
+            // random (0-23767)
+            return(rnd.nextInt(23768));
+        }
         return(register[i]);
     }
     
@@ -136,5 +151,9 @@ public class Emulator {
 
     public void addRegisterListener(RegisterListener listener) {
         listeners.add(listener);
+    }
+
+    public void setLastOID(int tingID) {
+        lastOID = tingID;
     }
 }
