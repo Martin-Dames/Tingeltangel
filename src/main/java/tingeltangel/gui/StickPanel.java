@@ -1,18 +1,28 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+    Copyright (C) 2016   Martin Dames <martin@bastionbytes.de>
+  
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  
+*/
 package tingeltangel.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -77,7 +87,7 @@ public class StickPanel extends JPanel {
                                                     }
                                                 });
                                                 for(int i = 0; i < files.length; i++) {
-                                                    fileCopy(files[i], new File(dest, files[i].getName()));
+                                                    FileEnvironment.copy(files[i], new File(dest, files[i].getName()));
                                                 }
                                                 JOptionPane.showMessageDialog(frame, "Buch auf den Stift kopiert");
                                             }
@@ -131,17 +141,5 @@ public class StickPanel extends JPanel {
         scheduler.scheduleAtFixedRate(task, 3, 3, TimeUnit.SECONDS);
     }
     
-    
-    private static void fileCopy(File source, File target) throws IOException {
-        InputStream in = new FileInputStream(source);
-        OutputStream out = new FileOutputStream(target);
-        byte[] buffer = new byte[4096];
-        int k;
-        while((k = in.read(buffer)) != -1) {
-            out.write(buffer, 0, k);
-        }
-        out.close();
-        in.close();
-    }
     
 }

@@ -24,6 +24,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import tingeltangel.core.constants.ScriptFile;
@@ -37,6 +38,12 @@ public class Script {
 
     private final Entry entry;
     private String code;
+    private boolean kill = false;
+    private LinkedList<Instance> script = null;
+    private HashMap<String, Integer> instanceLabelsSI = null;
+    private HashMap<Integer, Integer> instanceLabelsII = null;
+    
+    private int labelCounter = 0;
     
     public Script(String code, Entry entry) {
         this.entry = entry;
@@ -126,7 +133,6 @@ public class Script {
         return(false);
     }
     
-    private boolean kill = false;
     
     public void kill() {
         kill = true;
@@ -162,11 +168,30 @@ public class Script {
         }
     }
     
-    private LinkedList<Instance> script = null;
-    private HashMap<String, Integer> instanceLabelsSI = null;
-    private HashMap<Integer, Integer> instanceLabelsII = null;
-    
-    private int labelCounter = 0;
+    public HashSet<Integer> getAllUsedRegisters() throws IOException, SyntaxError {
+        BufferedReader in = new BufferedReader(new StringReader(mergeCodeOnCalls().toString()));
+        HashSet<Integer> registers = new HashSet<Integer>();
+        String row;
+        while((row = in.readLine()) != null) {
+            row = row.trim();
+            if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
+                int p = row.indexOf(" ");
+                if(p != -1) {
+                    row = row.substring(p).trim();
+                    String[] vals = row.split(",");
+                    for(int i = 0; i < vals.length; i++) {
+                        String val = vals[i].trim().toLowerCase();
+                        if(val.startsWith("v")) {
+                            val = val.substring(1);
+                            registers.add(Integer.parseInt(val));
+                        }
+                    }
+                }
+            }
+        }
+        
+        return(registers);
+    }
     
     private String mergeCodeOnCalls() throws IOException, SyntaxError {
         String returnLabel = "return_" + (labelCounter++);
@@ -223,7 +248,6 @@ public class Script {
                 rc++;
                 row = row.trim();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
-                    row = row.trim();
                     if(row.startsWith(ScriptFile.COLON)) {
                         labels.put(row.substring(1).trim(), position);
                         instanceLabelsSI.put(row.substring(1).trim(), instancePos);

@@ -681,6 +681,18 @@ public class Book {
         out.close();
     }
     
+    public HashSet<Integer> getAllUsedRegisters() throws IOException, SyntaxError {
+        Iterator<Integer> ids = indexIDs.iterator();
+        HashSet<Integer> registers = new HashSet<Integer>();
+        while(ids.hasNext()) {
+            Entry entry = indexEntries.get(ids.next());
+            if(entry.isCode() || entry.isSub()) {
+                registers.addAll(entry.getScript().getAllUsedRegisters());
+            }
+        }
+        return(registers);
+    }
+    
     public void generateTTS(ProgressDialog progress) throws IOException {
         Iterator<Integer> ids = indexIDs.iterator();
         progress.setMax(indexIDs.size());
