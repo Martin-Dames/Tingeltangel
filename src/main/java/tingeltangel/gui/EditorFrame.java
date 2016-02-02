@@ -184,7 +184,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         
                         book.clear();
                         book.setID(id);
-                        indexPanel.updateList();
+                        indexPanel.updateList(null);
                         indexPanel.refresh();
                         setBookOpened();
                     }
@@ -224,7 +224,8 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                                     File src = Repository.getBookSrc(id);
                                                     File png = Repository.getBookPng(id);
                                                     Importer.importBook(ouf, txt, src, png, book, progressDialog);
-                                                    indexPanel.updateList();
+                                                    progressDialog.restart("aktualisiere Liste");
+                                                    indexPanel.updateList(progressDialog);
                                                     indexPanel.refresh();
                                                     setBookOpened();
                                                 } catch (SyntaxError ex) {
@@ -253,7 +254,8 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                         File src = Repository.getBookSrc(id);
                                         File png = Repository.getBookPng(id);
                                         Importer.importBook(ouf, txt, src, png, book, progressDialog);
-                                        indexPanel.updateList();
+                                        progressDialog.restart("aktualisiere Liste");
+                                        indexPanel.updateList(progressDialog);
                                         indexPanel.refresh();
                                         setBookOpened();
                                     } catch (SyntaxError ex) {
@@ -281,24 +283,31 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 loadBook = true;
             }
             if(loadBook) {
-                JFileChooser fc = new JFileChooser();
+                final JFileChooser fc = new JFileChooser();
                 fc.setFileFilter(new FileNameExtensionFilter("tiptoi Buch (*.yaml)", "yaml"));
                 if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        new ReadYamlFile().read(fc.getSelectedFile()).save();
-                        indexPanel.updateList();
-                        indexPanel.refresh();
-                        setBookOpened();
-                    } catch(ParserException e) {
-                        JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
-                        e.printStackTrace(System.out);
-                    } catch (IOException e) {
-                        JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
-                        e.printStackTrace(System.out);
-                    } catch (LexerException e) {
-                        JOptionPane.showMessageDialog(this, "Die yaml Datei konnte nicht importiert werden");
-                        e.printStackTrace(System.out);
-                    }
+                    
+                    Progress pr = new Progress(EditorFrame.this, "importiere Buch") {
+                        @Override
+                        public void action(ProgressDialog progressDialog) {
+
+                            try {
+                                new ReadYamlFile().read(fc.getSelectedFile(), progressDialog).save();
+                                indexPanel.updateList(progressDialog);
+                                indexPanel.refresh();
+                                setBookOpened();
+                            } catch(ParserException e) {
+                                JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
+                                e.printStackTrace(System.out);
+                            } catch (IOException e) {
+                                JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
+                                e.printStackTrace(System.out);
+                            } catch (LexerException e) {
+                                JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
+                                e.printStackTrace(System.out);
+                            }
+                        }
+                    };
                 }
             }
         } else if(id.equals("buch.import.ouf")) {
@@ -354,7 +363,8 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                     JOptionPane.showMessageDialog(EditorFrame.this, "Import ist fehlgeschlagen");
                                     se.printStackTrace(System.out);
                                 }
-                                indexPanel.updateList();
+                                progressDialog.restart("aktualisiere Liste");
+                                indexPanel.updateList(progressDialog);
                                 indexPanel.refresh();
                             }
                         };
@@ -379,24 +389,27 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 
                 ChooseBook cb = new ChooseBook(this, new Callback<Integer>() {
                     @Override
-                    public void callback(Integer _id) {
-                        try {
-                            book.clear();
-                            book.setID(_id);
-                            Book.loadXML(FileEnvironment.getXML(_id), book);
-                            indexPanel.refresh();
-                            indexPanel.updateList();
-                            book.resetChangeMade();
-                            setBookOpened();
-                        } catch (IOException ex) {
-                            ex.printStackTrace(System.err);
-                        }
+                    public void callback(final Integer _id) {
+                        Progress pr = new Progress(EditorFrame.this, "lade Buch") {
+                            @Override
+                            public void action(ProgressDialog progressDialog) {
+                                try {
+                                    book.clear();
+                                    book.setID(_id);
+                                    Book.loadXML(FileEnvironment.getXML(_id), book, progressDialog);
+                                    indexPanel.refresh();
+                                    progressDialog.restart("aktualisiere Liste");
+                                    indexPanel.updateList(progressDialog);
+                                    book.resetChangeMade();
+                                    setBookOpened();
+                                } catch (IOException ex) {
+                                    ex.printStackTrace(System.err);
+                                }
+                            }
+                        };
                     }
                 });
-                
-                
             }
-            
         } else if(id.equals("buch.save")) {
             
             

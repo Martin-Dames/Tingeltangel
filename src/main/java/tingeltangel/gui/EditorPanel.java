@@ -55,6 +55,8 @@ import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
 import tingeltangel.tools.Callback;
 import tingeltangel.tools.FileEnvironment;
+import tingeltangel.tools.Progress;
+import tingeltangel.tools.ProgressDialog;
 
 
 public final class EditorPanel extends JPanel {
@@ -305,7 +307,7 @@ public final class EditorPanel extends JPanel {
         add(right, BorderLayout.EAST);
         
         
-        updateList();
+        updateList(null);
         
         
         
@@ -330,7 +332,7 @@ public final class EditorPanel extends JPanel {
                 IDChooser ic = new IDChooser(mainFrame, new Callback<Integer>() {
 
                     @Override
-                    public void callback(Integer id) {
+                    public void callback(final Integer id) {
                         String _id = Integer.toString(id);
                         while(_id.length() < 5) {
                             _id = "0" + _id;
@@ -342,26 +344,32 @@ public final class EditorPanel extends JPanel {
                             return;
                         }
                         
-                        Book book = mainFrame.getBook();
                         
-                        try {
+                        Progress pr = new Progress(mainFrame, "ändere mid") {
+                            @Override
+                            public void action(ProgressDialog progressDialog) {
                         
-                            int oldID = book.getID();
-                            book.setID(id);
-                            book.save();
-                            book.clear();
-                            book.setID(id);
-                            Book.loadXML(FileEnvironment.getXML(id), book);
-
-                            refresh();
-                            updateList();
-                            book.resetChangeMade();
-                            mainFrame.setBookOpened();
-                            book.deleteBook(oldID);
-                        } catch(Exception ioe) {
-                            ioe.printStackTrace();
-                            JOptionPane.showMessageDialog(mainFrame, "Es ist ein Fehler aufgetreten: " + ioe.getMessage());
-                        }
+                                try {
+                                    Book book = mainFrame.getBook();
+                                    int oldID = book.getID();
+                                    book.setID(id);
+                                    book.save();
+                                    book.clear();
+                                    book.setID(id);
+                                    Book.loadXML(FileEnvironment.getXML(id), book, progressDialog);
+                                    progressDialog.restart("aktualisiere Liste");
+                                    refresh();
+                                    updateList(progressDialog);
+                                    book.resetChangeMade();
+                                    mainFrame.setBookOpened();
+                                    book.deleteBook(oldID);
+                                } catch(Exception ioe) {
+                                    ioe.printStackTrace();
+                                    JOptionPane.showMessageDialog(mainFrame, "Es ist ein Fehler aufgetreten: " + ioe.getMessage());
+                                }
+                            }
+                        };
+                        
                     }
                 });
                 
@@ -511,17 +519,26 @@ public final class EditorPanel extends JPanel {
         } catch(NumberFormatException nfe) {
         }
     }
-    
-    protected void updateList() {
-        // update();
+    protected void updateList(ProgressDialog progress) {
         
         
         Book book = mainFrame.getBook();
                 
         list.removeAll();
         
+        if(progress != null) {
+            progress.setMax(book.getSize());
+        }
+        
         for(int i = 0; i < book.getSize(); i++) {
+            if(progress != null) {
+                progress.setVal(i);
+            }
             list.add(new IndexListEntry(book.getEntry(i), this));
+        }
+        
+        if(progress != null) {
+            progress.done();
         }
         
         Dimension size = mainFrame.getSize();

@@ -41,17 +41,17 @@ public class ReadYamlFileTest {
 
     @Test
     public void testParser() throws ParserException, IOException, LexerException {
-        reader.read(new File(getClass().getResource("/tip-toi-reveng/example.yaml").getFile()));
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/example.yaml").getFile()), null);
     }
 
     @Test
     public void testParser2() throws ParserException, IOException, LexerException {
-        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()));
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()), null);
     }
 
     @Test
     public void testParser5() throws ParserException, IOException, LexerException {
-        reader.read(new File(getClass().getResource("/tip-toi-reveng/WWW_Weltatlas.yaml").getFile()));
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/WWW_Weltatlas.yaml").getFile()), null);
     }
 
     /**
@@ -59,7 +59,7 @@ public class ReadYamlFileTest {
      */
     @Test
     public void testParser_FixedCodes() throws ParserException, IOException, LexerException {
-        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer-codes.yaml").getFile()));
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer-codes.yaml").getFile()), null);
 
         assertEquals("teddy", reader.getUsedOidAndIdentifiers().get(16001));
         assertEquals("wichtel", reader.getUsedOidAndIdentifiers().get(16002));
@@ -71,7 +71,7 @@ public class ReadYamlFileTest {
 
     @Test
     public void testGetUsedOidAndIdentifiers() throws LexerException, ParserException, IOException {
-        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()));
+        reader.read(new File(getClass().getResource("/tip-toi-reveng/vokabeltrainer.yaml").getFile()), null);
 
         Map<Integer, String> result = reader.getUsedOidAndIdentifiers();
 
@@ -86,7 +86,7 @@ public class ReadYamlFileTest {
      */
     @Test
     public void testParser_Simple() throws LexerException, ParserException, IOException {
-        Book book = reader.read(new File(getClass().getResource("/tip-toi-reveng/simple.yaml").getFile()));
+        Book book = reader.read(new File(getClass().getResource("/tip-toi-reveng/simple.yaml").getFile()), null);
 
         Map<Integer, String> oid2label = reader.getUsedOidAndIdentifiers();
         Map<String,Integer> label2oid = new HashMap<String, Integer>();

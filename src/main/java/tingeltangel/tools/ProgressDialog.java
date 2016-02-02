@@ -100,6 +100,12 @@ public class ProgressDialog extends javax.swing.JDialog {
         parent.setEnabled(true);
     }
     
+    public void restart(String title) {
+        setVisible(true);
+        parent.setEnabled(false);
+        text.setText(title);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar bar;
     private javax.swing.JLabel jLabel1;

@@ -85,7 +85,7 @@ public class Booklet extends CliCommand {
                             return(false);
                         }
                         book = new Book(id);
-                        Book.loadXML(FileEnvironment.getXML(id), book);
+                        Book.loadXML(FileEnvironment.getXML(id), book, null);
                     } catch (IOException ex) {
                         return(false);
                     } catch(NumberFormatException e) {

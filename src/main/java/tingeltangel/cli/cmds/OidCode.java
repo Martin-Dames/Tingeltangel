@@ -96,7 +96,7 @@ public class OidCode extends CliCommand {
             Codes.setResolution(Codes.DPI1200);
 
             ReadYamlFile ryf = new ReadYamlFile();
-            Book book = ryf.read(inputFile);
+            Book book = ryf.read(inputFile, null);
 
             // Write files for the used OIDs.
             generateImage(book.getID(), book, "START");

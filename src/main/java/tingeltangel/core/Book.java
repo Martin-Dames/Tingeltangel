@@ -436,7 +436,7 @@ public class Book {
         return(content);
     }
     
-    public static void loadXML(File file, Book book) throws IOException {
+    public static void loadXML(File file, Book book, ProgressDialog progress) throws IOException {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -464,8 +464,16 @@ public class Book {
                         
             
             NodeList entries = doc.getElementsByTagName("entry");
+            
+            if(progress != null) {
+                progress.setMax(entries.getLength());
+            }
+            
             for(int i = 0; i < entries.getLength(); i++) {
                 Node entryNode = entries.item(i);
+                if(progress != null) {
+                    progress.setVal(i);
+                }
                 if(entryNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element)entryNode;
                     int tingID = Integer.parseInt(eElement.getAttribute("id"));
@@ -518,6 +526,9 @@ public class Book {
                 }
             }
             
+            if(progress != null) {
+                progress.done();
+            }
             
             NodeList registers = doc.getElementsByTagName("register");
             for(int i = 0; i < registers.getLength(); i++) {

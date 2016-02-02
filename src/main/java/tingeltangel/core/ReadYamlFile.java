@@ -31,6 +31,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import tingeltangel.tools.ProgressDialog;
 
 /**
  * Jeder Identifikator (YAML-Datei) muss eine OID bekommen.  Dabei aufpassen, welche OIDs manuell über ein zusätzliches Mapping vorgegeben wurde.
@@ -58,7 +59,7 @@ public class ReadYamlFile {
         return usedOidAndIdentifiers;
     }
 
-    public Book read(File yamlFile) throws ParserException, IOException, LexerException {
+    public Book read(File yamlFile, ProgressDialog progress) throws ParserException, IOException, LexerException {
         Yaml yaml = new Yaml();
         Map data = (Map) yaml.load(new FileInputStream(yamlFile));
 
@@ -174,7 +175,7 @@ public class ReadYamlFile {
 
     public static void main(String[] args) throws Exception {
         File yaml = new File("C:\\Users\\mdames\\Desktop\\Das-verlorene-Schaf-Rallye-master\\Das-verlorene-Schaf-Rallye-master\\gme\\verlorenes_schaf.yaml");
-        Book book = new ReadYamlFile().read(yaml);
+        Book book = new ReadYamlFile().read(yaml, null);
         System.out.println("Imported yaml book (mid=" + book.getID() + ")");
         book.save();
     }
