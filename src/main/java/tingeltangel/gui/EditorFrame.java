@@ -142,12 +142,15 @@ public class EditorFrame extends JFrame implements Callback<String> {
     
     private void closeMasterFrame() {
         if(book.unsaved()) {
-            int value =  JOptionPane.showConfirmDialog(this, "Das aktuelle Buch ist nicht gespeichert. wollen sie trotzdem das Programm beenden?", "Frage...", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            int value =  JOptionPane.showConfirmDialog(this, "Das aktuelle Buch ist nicht gespeichert. wollen sie das aktuelle buch speichern?", "Frage...", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (value == JOptionPane.YES_OPTION) {
-                System.exit(0);
+                try {
+                    book.save();
+                } catch(Exception e) {
+                    JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gespeichert werden");
+                    e.printStackTrace(System.out);
+                }
             }
-        } else {
-            System.exit(0);
         }
     }
 
