@@ -86,7 +86,7 @@ public class Script {
                         row = row.substring(0, p);
                     }
                     if(!row.startsWith(ScriptFile.COLON)) {
-                        if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
+                        if(row.equals(ScriptFile.CALL)) {
                             // extract argument
                             //System.out.println(args);
                             try {
@@ -246,6 +246,7 @@ public class Script {
         try {
             
             String mergedCode = mergeCodeOnCalls();
+            
             
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(bout);
