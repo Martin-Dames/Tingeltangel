@@ -101,6 +101,10 @@ public class Emulator {
         return(REGISTERS - 1);
     }
     
+    public static int getMaxBasicRegister() {
+        return(92);
+    }
+    
     public int getRegister(int i) {
         if(i == 93) {
             // language code

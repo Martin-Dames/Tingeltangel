@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import tingeltangel.core.constants.ScriptFile;
@@ -33,6 +34,8 @@ import tingeltangel.core.scripting.Commands;
 import tingeltangel.core.scripting.Instance;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.core.scripting.Disassembler;
+import tingeltangel.core.scripting.Emulator;
+import tingeltangel.core.scripting.Template;
 
 public class Script {
 
@@ -206,13 +209,15 @@ public class Script {
         int rc = 0;
         try {
             
-            String mergedCode = mergeCodeOnCalls(false);
-                        
+            String mergedCode = replaceTemplates(mergeCodeOnCalls(false));
+            
+            System.out.println(mergedCode);
+                   
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(bout);
         
             // generate label map
-            BufferedReader in = new BufferedReader(new StringReader(mergedCode.toString()));
+            BufferedReader in = new BufferedReader(new StringReader(mergedCode));
             int position = 0;
             int instancePos = 0;
             String row;
@@ -235,6 +240,7 @@ public class Script {
                 }
             }
             in.close();
+            
             
             
             // generate binary
@@ -303,9 +309,8 @@ public class Script {
             }    
             in.close();
             
-            if(!isSub()) {
-                out.write(0x00);
-            }
+            out.write(0x00);
+            
             
             out.flush();
             byte[] result = bout.toByteArray();
@@ -322,5 +327,45 @@ public class Script {
             }
             throw se;
         }
+    }
+
+    private String replaceTemplates(String code) throws IOException, SyntaxError {
+        BufferedReader in = new BufferedReader(new StringReader(code));
+        StringBuilder out = new StringBuilder();
+        
+        String row;
+        while((row = in.readLine()) != null) {
+            row = row.trim().toLowerCase();
+            int p = row.indexOf(" ");
+            String args = "";
+            if(p != -1) {
+                args = row.substring(p + 1).trim();
+                row = row.substring(0, p);
+            }
+            Template t = Template.getTemplate(row);
+            if(t != null) {
+                LinkedList<String> as = new LinkedList<String>();
+                String[] _as = args.split(",");
+                for(int i = 0; i < _as.length; i++) {
+                    as.add(_as[i].toLowerCase().trim());
+                }
+                LinkedList<Integer> ur = new LinkedList<Integer>();
+                HashSet<Integer> usedRegs = getAllUsedRegisters();
+                for(int r = 0; r <= Emulator.getMaxBasicRegister(); r++) {
+                    if(!usedRegs.contains(r)) {
+                        ur.add(r);
+                    }
+                }
+                out.append(t.getCode(as, ur));
+            } else {
+                out.append(row);
+                if(!args.isEmpty()) {
+                    out.append(" ").append(args);
+                }
+                out.append("\n");
+            }
+        }
+        
+        return(out.toString());
     }
 }
