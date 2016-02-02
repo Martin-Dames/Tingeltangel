@@ -43,7 +43,7 @@ public class Script {
     private HashMap<String, Integer> instanceLabelsSI = null;
     private HashMap<Integer, Integer> instanceLabelsII = null;
     
-    private int labelCounter = 0;
+    private static int labelCounter = 0;
     
     public Script(String code, Entry entry) {
         this.entry = entry;
@@ -70,6 +70,9 @@ public class Script {
     }
     
     public int getSize(boolean calledFromScript) throws SyntaxError {
+        
+        return(compile().length);
+        /*
         int rc = 0;
         int size = 0;
         try {
@@ -114,6 +117,7 @@ public class Script {
             throw se;
         }
         return(size + 1); // +1 for the tail (0x00)
+                */
     }
     
     public boolean isSub() {
@@ -180,7 +184,7 @@ public class Script {
     }
     
     public HashSet<Integer> getAllUsedRegisters() throws IOException, SyntaxError {
-        BufferedReader in = new BufferedReader(new StringReader(mergeCodeOnCalls().toString()));
+        BufferedReader in = new BufferedReader(new StringReader(mergeCodeOnCalls(false).toString()));
         HashSet<Integer> registers = new HashSet<Integer>();
         String row;
         while((row = in.readLine()) != null) {
@@ -204,7 +208,7 @@ public class Script {
         return(registers);
     }
     
-    private String mergeCodeOnCalls() throws IOException, SyntaxError {
+    private String mergeCodeOnCalls(boolean subCall) throws IOException, SyntaxError {
         String returnLabel = "return_" + (labelCounter++);
         StringBuilder mergedCode = new StringBuilder();
         BufferedReader in = new BufferedReader(new StringReader(code));
@@ -217,7 +221,7 @@ public class Script {
                 if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                     try {
                         int oid = Integer.parseInt(row.substring(ScriptFile.CALL.length()).trim());
-                        String subCode = entry.getBook().getEntryByID(oid).getScript().mergeCodeOnCalls();
+                        String subCode = entry.getBook().getEntryByID(oid).getScript().mergeCodeOnCalls(true);
                         mergedCode.append(subCode);
                     } catch(NumberFormatException nfe) {
                         SyntaxError error = new SyntaxError("call needs a value as argument");
@@ -226,7 +230,11 @@ public class Script {
                         throw error;
                     }
                 } else if(row.equals(ScriptFile.RETURN)) {
-                    mergedCode.append("jmp ").append(returnLabel).append(ScriptFile.LB);
+                    if(subCall) {
+                        mergedCode.append("jmp ").append(returnLabel).append(ScriptFile.LB);
+                    } else {
+                        mergedCode.append("return").append(ScriptFile.LB);
+                    }
                 } else {
                     mergedCode.append(row).append(ScriptFile.LB);
                 }
@@ -245,9 +253,8 @@ public class Script {
         int rc = 0;
         try {
             
-            String mergedCode = mergeCodeOnCalls();
-            
-            
+            String mergedCode = mergeCodeOnCalls(false);
+                        
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(bout);
         
@@ -343,7 +350,9 @@ public class Script {
             }    
             in.close();
             
-            out.write(0x00);
+            if(!isSub()) {
+                out.write(0x00);
+            }
             
             out.flush();
             byte[] result = bout.toByteArray();
