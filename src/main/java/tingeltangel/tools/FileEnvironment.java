@@ -167,15 +167,20 @@ public class FileEnvironment {
     public static void copy(File source, File destination) throws IOException {
         FileChannel sourceChannel = null;
         FileChannel destChannel;
+        FileOutputStream fout = null;
         try {
             sourceChannel = new FileInputStream(source).getChannel();
-            destChannel = new FileOutputStream(destination).getChannel();
+            fout = new FileOutputStream(destination);
+            destChannel = fout.getChannel();
             destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
         } catch (Exception e) {
             throw new IOException(e);
         } finally {
-            if (sourceChannel != null) {
+            if(sourceChannel != null) {
                 sourceChannel.close();
+            }
+            if(fout != null) {
+                fout.close();
             }
         }
     }

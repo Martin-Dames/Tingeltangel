@@ -70,54 +70,7 @@ public class Script {
     }
     
     public int getSize(boolean calledFromScript) throws SyntaxError {
-        
         return(compile().length);
-        /*
-        int rc = 0;
-        int size = 0;
-        try {
-            BufferedReader in = new BufferedReader(new StringReader(code));
-            String row;
-            while((row = in.readLine()) != null) {
-                rc++;
-                row = row.trim().toLowerCase();
-                if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT)) && (!row.startsWith(ScriptFile.COLON))) {
-                    int p = row.indexOf(ScriptFile.SINGLE_SPACE);
-                    String args = "";
-                    if(p != -1) {
-                        args = row.substring(p + 1).trim();
-                        row = row.substring(0, p);
-                    }
-                    if(!row.startsWith(ScriptFile.COLON)) {
-                        if(row.equals(ScriptFile.CALL)) {
-                            // extract argument
-                            //System.out.println(args);
-                            try {
-                                Script sub = entry.getBook().getEntryByID(Integer.parseInt(args)).getScript();
-                                if(sub == null) {
-                                    throw new SyntaxError("methode nicht gefunden (oid=" + args + ")");
-                                }
-                                size += sub.getSize(true);
-                            } catch(NumberFormatException nfe) {
-                                throw new SyntaxError("call benötigt als Argument eine OID");
-                            }
-                        } else if(row.equals(ScriptFile.RETURN) && calledFromScript) {
-                            size += 4; // because return gets replaced by jmp command
-                        } else {
-                            size += Commands.getSize(row);
-                        }
-                    }
-                }
-            }
-        } catch(IOException ioe) {
-            throw new Error(ioe);
-        } catch(SyntaxError se) {
-            se.setRow(rc);
-            se.setTingID(entry.getTingID());
-            throw se;
-        }
-        return(size + 1); // +1 for the tail (0x00)
-                */
     }
     
     public boolean isSub() {
