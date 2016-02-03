@@ -133,6 +133,10 @@ public class Emulator {
     
     public void play(int oid) {
         Entry entry = book.getEntryFromTingID(oid);
+        if(entry == null) {
+            System.out.println("NOT playing " + entry.getMP3().getAbsolutePath() + ". Track not Found.");
+            return;
+        }
         if((entry.isMP3() || entry.isTTS()) && (entry.getMP3() != null)) {
             try {
                 System.out.println("playing " + entry.getMP3().getAbsolutePath());
