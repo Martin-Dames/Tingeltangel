@@ -97,7 +97,7 @@ public class IndexListEntry extends JPanel {
     private final static String TTS = "tts";
     
     
-    private String lastChooseMp3DialogPath = null;
+    private static String lastChooseMp3DialogPath = null;
     private JLabel trackInfo = new JLabel(" ");
     private final Entry entry;
     
