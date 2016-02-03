@@ -84,6 +84,14 @@ public class Commands {
         return(set.iterator().next());
     }
     
+    public static boolean isJump(String cmd) {
+        HashSet<Command> set = commands.get(cmd);
+        if(set.isEmpty()) {
+            return(false);
+        }
+        return(set.iterator().next().firstArgumentIsLabel());
+    }
+    
     private static boolean isValue(String s) {
         try {
             Integer.parseInt(s);

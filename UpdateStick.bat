@@ -1,1 +1,1 @@
-java -jar target\tingeltangel-0.1-beta2-jar-with-dependencies.jar update-stick
+java -jar tingeltangel-0.2-beta2-jar-with-dependencies.jar update-stick

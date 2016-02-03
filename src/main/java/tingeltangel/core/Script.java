@@ -118,7 +118,7 @@ public class Script {
             }
             Instance instance = script.get(pc);
             
-            System.out.println(entry.getTingID() + ":" + pc + " " + instance.toString(entry.getBook().getEmulator()));
+            //System.out.println(entry.getTingID() + ":" + pc + " " + instance.toString(entry.getBook().getEmulator()));
             
             if(instance.getCommand().getAsm().equals(ScriptFile.END)) {
                 return;
@@ -211,7 +211,7 @@ public class Script {
             
             String mergedCode = replaceTemplates(mergeCodeOnCalls(false));
             
-            System.out.println(mergedCode);
+            //System.out.println(mergedCode);
                    
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(bout);
