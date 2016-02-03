@@ -188,7 +188,7 @@ public class ExportTrack extends CliCommand {
         File out2 = new File("C:\\Users\\mdames\\Desktop\\05100_15001_dist.bin");
         
         Book book = new Book(5100);
-        Book.loadXML(FileEnvironment.getXML(5100), book);
+        Book.loadXML(FileEnvironment.getXML(5100), book, null);
         book.export(ouf2.getParentFile(), null);
         
         Importer.extractTrack(ouf1, 15001, out1);

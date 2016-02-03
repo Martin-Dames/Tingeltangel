@@ -152,6 +152,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 }
             }
         }
+        System.exit(0);
     }
 
     @Override

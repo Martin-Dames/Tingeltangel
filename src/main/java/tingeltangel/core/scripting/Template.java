@@ -21,6 +21,7 @@ package tingeltangel.core.scripting;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,6 +33,7 @@ public class Template {
     private final LinkedList<String> work = new LinkedList<String>();
     private final String code;
     private String name = "";
+    private int labelCounter = 0;
     
     private final static String[] TEMPLATES = {"div", "mod", "divmod"};
     private final static HashMap<String, Template> templates = new HashMap<String, Template>();
@@ -136,7 +138,41 @@ public class Template {
             _code = _code.replaceAll("\\" + p.name, a);
         }
         
-        return(_code);
+        // fix labels
+        labelCounter++;
+        BufferedReader in = new BufferedReader(new StringReader(_code));
+        StringBuilder out = new StringBuilder();
+        String row;
+        try {
+            while((row = in.readLine()) != null) {
+                row = row.trim().toLowerCase();
+                boolean rowAdded = false;
+                if(row.startsWith(":")) {
+                    rowAdded = true;
+                    // fix label
+                    out.append(":").append("templatelabel_").append(name);
+                    out.append("_").append(labelCounter).append("_").append(row.substring(1));
+                } else {
+                    int p = row.indexOf(" ");
+                    if(p != -1) {
+                        if(Commands.isJump(row.substring(0, p))) {
+                            rowAdded = true;
+                            // fix jump
+                            out.append(row.substring(0, p)).append(" templatelabel_").append(name);
+                            out.append("_").append(labelCounter).append("_").append(row.substring(p).trim());
+                        }
+                    }
+                }
+                if(!rowAdded) {
+                    out.append(row);
+                }
+                out.append("\n");
+            }
+        } catch (IOException ex) {
+            throw new Error(ex);
+        }
+        
+        return(out.toString());
     }
     
 }
