@@ -20,6 +20,8 @@ package tingeltangel;
 
 import java.io.IOException;
 import javax.swing.SwingUtilities;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.cli.CLI;
 import tingeltangel.core.Repository;
 import tingeltangel.gui.EditorFrame;
@@ -40,8 +42,13 @@ public class Tingeltangel {
      * default area code
      */
     public static final String DEFAULT_AREA_CODE="en";
-        
+ 
+    private final static Logger log = LogManager.getLogger(Tingeltangel.class);
+    
     public static void main(String[] args) throws Exception {
+        
+        log.warn("Starting Tingeltangel" + MAIN_FRAME_VERSION);
+        
         if(!CLI.cli(args)) {
 
             SwingUtilities.invokeLater(new Runnable() {
