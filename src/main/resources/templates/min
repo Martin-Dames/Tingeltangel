@@ -15,7 +15,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 params=r:$a,rv:$b
-work $h
+work=$h
 ---
 cmp $a,$b
 jb fertig
