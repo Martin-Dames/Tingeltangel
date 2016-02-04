@@ -14,40 +14,28 @@
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
-params=r:$zaehler,rv:$nenner
-work=$counter,$oldcounter,$mult,$oldmult,$i
+params=rv:$a,rv:$b
+work=$x,$y,$c,$d
 ---
-cmp $nenner,1
-jne normal
-set $zaehler,0
-jmp fertig
-:normal
-set $oldcounter,0
-set $oldmult,0
-set $mult,$nenner
-set $counter,1
-set $i,0
-:loop
-add $i,1
-cmp $i,16
-jg endloop
-cmp $mult,$zaehler
-jb weiter
-sub $zaehler,$oldmult
-jmp endloop
+cmp $a,$b
+jb noswap
+set $x,$b
+set $y,$a
+jmp weiter
+:noswap
+set $x,$a
+set $y,$b
 :weiter
-set $oldmult,$mult
-add $mult,$mult
-set $oldcounter,$counter
-add $counter,$counter
+set $c,$x
+set $d,$y
+set $y,0
+:loop
+cmp $c,0
+je fertig
+sub $c,1
+add $y,$d
 jmp loop
-:endloop
-set $counter,$oldcounter
-:while
-cmp $zaehler,$nenner
-jb done
-sub $zaehler,$nenner
-add $counter,1
-jmp while
-:done
 :fertig
+set $a,$y
+
+

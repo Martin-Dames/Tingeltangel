@@ -15,14 +15,39 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 params=r:$zaehler,rv:$nenner
-work=$counter
+work=$counter,$oldcounter,$mult,$oldmult,$i
 ---
-set $counter,0
+cmp $nenner,1
+jne normal
+jmp fertig
+:normal
+set $oldcounter,0
+set $oldmult,0
+set $mult,$nenner
+set $counter,1
+set $i,0
 :loop
-cmp $zaehler,$nenner
-jb fertig
-add $counter,1
-sub $zaehler,$nenner
+add $i,1
+cmp $i,16
+jg endloop
+cmp $mult,$zaehler
+jb weiter
+sub $zaehler,$oldmult
+jmp endloop
+:weiter
+set $oldmult,$mult
+add $mult,$mult
+set $oldcounter,$counter
+add $counter,$counter
 jmp loop
-:fertig
+:endloop
+set $counter,$oldcounter
+:while
+cmp $zaehler,$nenner
+jb done
+sub $zaehler,$nenner
+add $counter,1
+jmp while
+:done
 set $zaehler,$counter
+:fertig
