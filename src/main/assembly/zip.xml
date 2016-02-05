@@ -39,6 +39,7 @@
         <include>sample.png</include>
         <include>logo.png</include>
         <include>Tingeltangel.*</include>
+        <include>UpdateStick.*</include>
       </includes>
     </fileSet>
     
