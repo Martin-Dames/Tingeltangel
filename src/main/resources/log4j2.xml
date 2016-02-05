@@ -19,7 +19,7 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="CoreFile"/>
         </Root>
-        <Logger name="tingeltangel.Tingeltangel" level="trace">
+        <Logger name="tingeltangel.Tingeltangel" level="trace" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="CoreFile"/>
         </Logger>
