@@ -35,6 +35,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -55,6 +57,7 @@ public class TTS {
     private final static SortedSet<String> voiceIDs = new TreeSet<String>();
     private final static SortedSet<String> variantIDs = new TreeSet<String>();
     
+    private final static Logger log = LogManager.getLogger(TTS.class);
     
     public static SortedSet<String> getVoiceIDs() {
         return(voiceIDs);
@@ -173,12 +176,12 @@ public class TTS {
                     variants.put(lang.id, lang);
                 }
             } else {
-                System.out.println("WARNING: tts not enabled");
+                log.warn("tts is not enabled");
                 if(LAME == null) {
-                    System.out.println("'lame' not found");
+                    log.warn("'lame' is not found");
                 }
                 if(ESPEAK == null) {
-                    System.out.println("'espeak' not found");
+                    log.warn("'eSpeak' is not found");
                 }
             }
         } catch(IOException ioe) {
@@ -189,7 +192,7 @@ public class TTS {
     public static void play(final String text, int amplitude, int pitch, int speed, String voice, String variant) throws IOException {
         
         if(ENABLED == false) {
-            System.out.println("unable to execute tts request: tts not enabled");
+            log.error("tts is not enabled");
             return;
         }
         
@@ -255,7 +258,7 @@ public class TTS {
         final boolean PADDING = false;
         
         if(ENABLED == false) {
-            System.out.println("unable to execute tts request: tts not enabled");
+            log.error("tts is not enabled");
             return;
         }
         

@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <File name="File" fileName="tt.log">
+        <File name="CoreFile" fileName="tt.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        <File name="CompilerFile" fileName="compiler.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        <File name="EmulatorFile" fileName="emulator.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
         <Console name="Console" target="SYSTEM_OUT">
@@ -9,9 +15,19 @@
         </Console>
     </Appenders>
     <Loggers>
-    <Root level="debug">
-        <AppenderRef ref="Console"/>
-        <AppenderRef ref="File"/>
-    </Root>
+        <Root level="warn">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CoreFile"/>
+        </Root>
+        <Logger name="tingeltangel.Tingeltangel" level="trace">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CoreFile"/>
+        </Logger>
+        <Logger name="compiler" level="trace">
+            <AppenderRef ref="CompilerFile"/>
+        </Logger>
+        <Logger name="emulator" level="trace">
+            <AppenderRef ref="EmulatorFile"/>
+        </Logger>
     </Loggers>
 </Configuration>

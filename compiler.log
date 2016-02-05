@@ -1,0 +1,346 @@
+12:07:23.536 [Thread-4] INFO  compiler - ID=15001
+set v1,12
+set v2,19
+set v11,v1
+set v12,v2
+cmp v11,v12
+jb templatelabel_mul_1_noswap
+set v0,v12
+set v3,v11
+jmp templatelabel_mul_1_weiter
+:templatelabel_mul_1_noswap
+set v0,v11
+set v3,v12
+:templatelabel_mul_1_weiter
+set v4,v0
+set v5,v3
+set v3,0
+:templatelabel_mul_1_loop
+cmp v4,0
+je templatelabel_mul_1_fertig
+sub v4,1
+add v3,v5
+jmp templatelabel_mul_1_loop
+:templatelabel_mul_1_fertig
+set v11,v3
+set v21,v1
+set v22,v2
+cmp v22,v21
+jb templatelabel_mul_2_noswap
+set v0,v21
+set v3,v22
+jmp templatelabel_mul_2_weiter
+:templatelabel_mul_2_noswap
+set v0,v22
+set v3,v21
+:templatelabel_mul_2_weiter
+set v4,v0
+set v5,v3
+set v3,0
+:templatelabel_mul_2_loop
+cmp v4,0
+je templatelabel_mul_2_fertig
+sub v4,1
+add v3,v5
+jmp templatelabel_mul_2_loop
+:templatelabel_mul_2_fertig
+set v22,v3
+end
+:return_0
+
+12:08:31.676 [Thread-4] INFO  compiler - ID=15001
+12:08:31.676 [Thread-4] INFO  compiler - 	set v1,12
+12:08:31.676 [Thread-4] INFO  compiler - 	set v2,19
+12:08:31.676 [Thread-4] INFO  compiler - 	set v11,v1
+12:08:31.676 [Thread-4] INFO  compiler - 	set v12,v2
+12:08:31.676 [Thread-4] INFO  compiler - 	cmp v11,v12
+12:08:31.677 [Thread-4] INFO  compiler - 	jb templatelabel_mul_1_noswap
+12:08:31.677 [Thread-4] INFO  compiler - 	set v0,v12
+12:08:31.677 [Thread-4] INFO  compiler - 	set v3,v11
+12:08:31.677 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_1_weiter
+12:08:31.677 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_noswap
+12:08:31.677 [Thread-4] INFO  compiler - 	set v0,v11
+12:08:31.677 [Thread-4] INFO  compiler - 	set v3,v12
+12:08:31.677 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_weiter
+12:08:31.677 [Thread-4] INFO  compiler - 	set v4,v0
+12:08:31.677 [Thread-4] INFO  compiler - 	set v5,v3
+12:08:31.677 [Thread-4] INFO  compiler - 	set v3,0
+12:08:31.677 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_loop
+12:08:31.677 [Thread-4] INFO  compiler - 	cmp v4,0
+12:08:31.677 [Thread-4] INFO  compiler - 	je templatelabel_mul_1_fertig
+12:08:31.677 [Thread-4] INFO  compiler - 	sub v4,1
+12:08:31.677 [Thread-4] INFO  compiler - 	add v3,v5
+12:08:31.677 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_1_loop
+12:08:31.677 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_fertig
+12:08:31.677 [Thread-4] INFO  compiler - 	set v11,v3
+12:08:31.677 [Thread-4] INFO  compiler - 	set v21,v1
+12:08:31.677 [Thread-4] INFO  compiler - 	set v22,v2
+12:08:31.677 [Thread-4] INFO  compiler - 	cmp v22,v21
+12:08:31.677 [Thread-4] INFO  compiler - 	jb templatelabel_mul_2_noswap
+12:08:31.677 [Thread-4] INFO  compiler - 	set v0,v21
+12:08:31.677 [Thread-4] INFO  compiler - 	set v3,v22
+12:08:31.677 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_2_weiter
+12:08:31.677 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_noswap
+12:08:31.677 [Thread-4] INFO  compiler - 	set v0,v22
+12:08:31.677 [Thread-4] INFO  compiler - 	set v3,v21
+12:08:31.677 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_weiter
+12:08:31.677 [Thread-4] INFO  compiler - 	set v4,v0
+12:08:31.677 [Thread-4] INFO  compiler - 	set v5,v3
+12:08:31.677 [Thread-4] INFO  compiler - 	set v3,0
+12:08:31.677 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_loop
+12:08:31.677 [Thread-4] INFO  compiler - 	cmp v4,0
+12:08:31.677 [Thread-4] INFO  compiler - 	je templatelabel_mul_2_fertig
+12:08:31.677 [Thread-4] INFO  compiler - 	sub v4,1
+12:08:31.677 [Thread-4] INFO  compiler - 	add v3,v5
+12:08:31.677 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_2_loop
+12:08:31.677 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_fertig
+12:08:31.677 [Thread-4] INFO  compiler - 	set v22,v3
+12:08:31.677 [Thread-4] INFO  compiler - 	end
+12:08:31.677 [Thread-4] INFO  compiler - 	:return_0
+12:10:34.997 [Thread-4] INFO  compiler - ID=15001
+12:10:34.997 [Thread-4] INFO  compiler - 	set v1,12
+12:10:34.997 [Thread-4] INFO  compiler - 	set v2,19
+12:10:34.997 [Thread-4] INFO  compiler - 	set v11,v1
+12:10:34.997 [Thread-4] INFO  compiler - 	set v12,v2
+12:10:34.997 [Thread-4] INFO  compiler - 	cmp v11,v12
+12:10:34.997 [Thread-4] INFO  compiler - 	jb templatelabel_mul_1_noswap
+12:10:34.997 [Thread-4] INFO  compiler - 	set v0,v12
+12:10:34.997 [Thread-4] INFO  compiler - 	set v3,v11
+12:10:34.997 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_1_weiter
+12:10:34.997 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_noswap
+12:10:34.997 [Thread-4] INFO  compiler - 	set v0,v11
+12:10:34.997 [Thread-4] INFO  compiler - 	set v3,v12
+12:10:34.997 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_weiter
+12:10:34.997 [Thread-4] INFO  compiler - 	set v4,v0
+12:10:34.997 [Thread-4] INFO  compiler - 	set v5,v3
+12:10:34.997 [Thread-4] INFO  compiler - 	set v3,0
+12:10:34.997 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_loop
+12:10:34.997 [Thread-4] INFO  compiler - 	cmp v4,0
+12:10:34.997 [Thread-4] INFO  compiler - 	je templatelabel_mul_1_fertig
+12:10:34.997 [Thread-4] INFO  compiler - 	sub v4,1
+12:10:34.997 [Thread-4] INFO  compiler - 	add v3,v5
+12:10:34.997 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_1_loop
+12:10:34.997 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_fertig
+12:10:34.997 [Thread-4] INFO  compiler - 	set v11,v3
+12:10:34.997 [Thread-4] INFO  compiler - 	set v21,v1
+12:10:34.997 [Thread-4] INFO  compiler - 	set v22,v2
+12:10:34.997 [Thread-4] INFO  compiler - 	cmp v22,v21
+12:10:34.997 [Thread-4] INFO  compiler - 	jb templatelabel_mul_2_noswap
+12:10:34.997 [Thread-4] INFO  compiler - 	set v0,v21
+12:10:34.997 [Thread-4] INFO  compiler - 	set v3,v22
+12:10:34.997 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_2_weiter
+12:10:34.997 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_noswap
+12:10:34.997 [Thread-4] INFO  compiler - 	set v0,v22
+12:10:34.997 [Thread-4] INFO  compiler - 	set v3,v21
+12:10:34.997 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_weiter
+12:10:34.997 [Thread-4] INFO  compiler - 	set v4,v0
+12:10:34.997 [Thread-4] INFO  compiler - 	set v5,v3
+12:10:34.997 [Thread-4] INFO  compiler - 	set v3,0
+12:10:34.997 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_loop
+12:10:34.997 [Thread-4] INFO  compiler - 	cmp v4,0
+12:10:34.997 [Thread-4] INFO  compiler - 	je templatelabel_mul_2_fertig
+12:10:34.997 [Thread-4] INFO  compiler - 	sub v4,1
+12:10:34.997 [Thread-4] INFO  compiler - 	add v3,v5
+12:10:34.997 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_2_loop
+12:10:34.997 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_fertig
+12:10:34.997 [Thread-4] INFO  compiler - 	set v22,v3
+12:10:34.997 [Thread-4] INFO  compiler - 	end
+12:10:34.997 [Thread-4] INFO  compiler - 	:return_0
+12:10:35.012 [Thread-4] INFO  compiler - ID=15001
+12:10:35.012 [Thread-4] INFO  compiler - 	0: set v1(0) 12
+12:10:35.012 [Thread-4] INFO  compiler - 	1: set v2(0) 19
+12:10:35.012 [Thread-4] INFO  compiler - 	2: set v11(0) v1(12)
+12:10:35.012 [Thread-4] INFO  compiler - 	3: set v12(0) v2(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	4: cmp v11(12) v12(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	5: jb 50
+12:10:35.012 [Thread-4] INFO  compiler - 	9: set v0(0) v11(12)
+12:10:35.012 [Thread-4] INFO  compiler - 	10: set v3(0) v12(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	11: set v4(0) v0(12)
+12:10:35.012 [Thread-4] INFO  compiler - 	12: set v5(0) v3(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	13: set v3(19) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(12) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(12) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(0) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(11) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(11) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(19) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(10) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(10) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(38) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(9) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(9) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(57) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(8) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(8) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(76) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(7) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(7) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(95) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(6) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(6) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(114) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(5) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(5) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(133) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(4) 0
+12:10:35.012 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.012 [Thread-4] INFO  compiler - 	16: sub v4(4) 1
+12:10:35.012 [Thread-4] INFO  compiler - 	17: add v3(152) v5(19)
+12:10:35.012 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.012 [Thread-4] INFO  compiler - 	14: cmp v4(3) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.028 [Thread-4] INFO  compiler - 	16: sub v4(3) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	17: add v3(171) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.028 [Thread-4] INFO  compiler - 	14: cmp v4(2) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.028 [Thread-4] INFO  compiler - 	16: sub v4(2) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	17: add v3(190) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.028 [Thread-4] INFO  compiler - 	14: cmp v4(1) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.028 [Thread-4] INFO  compiler - 	16: sub v4(1) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	17: add v3(209) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	18: jmp 80
+12:10:35.028 [Thread-4] INFO  compiler - 	14: cmp v4(0) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	15: je 106
+12:10:35.028 [Thread-4] INFO  compiler - 	19: set v11(12) v3(228)
+12:10:35.028 [Thread-4] INFO  compiler - 	20: set v21(0) v1(12)
+12:10:35.028 [Thread-4] INFO  compiler - 	21: set v22(0) v2(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	22: cmp v22(19) v21(12)
+12:10:35.028 [Thread-4] INFO  compiler - 	23: jb 150
+12:10:35.028 [Thread-4] INFO  compiler - 	24: set v0(12) v21(12)
+12:10:35.028 [Thread-4] INFO  compiler - 	25: set v3(228) v22(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	26: jmp 162
+12:10:35.028 [Thread-4] INFO  compiler - 	29: set v4(0) v0(12)
+12:10:35.028 [Thread-4] INFO  compiler - 	30: set v5(19) v3(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	31: set v3(19) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(12) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(12) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(0) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(11) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(11) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(19) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(10) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(10) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(38) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(9) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(9) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(57) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(8) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(8) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(76) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(7) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(7) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(95) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(6) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(6) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(114) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(5) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(5) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(133) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(4) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(4) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(152) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(3) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(3) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(171) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(2) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(2) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(190) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(1) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	34: sub v4(1) 1
+12:10:35.028 [Thread-4] INFO  compiler - 	35: add v3(209) v5(19)
+12:10:35.028 [Thread-4] INFO  compiler - 	36: jmp 180
+12:10:35.028 [Thread-4] INFO  compiler - 	32: cmp v4(0) 0
+12:10:35.028 [Thread-4] INFO  compiler - 	33: je 206
+12:10:35.028 [Thread-4] INFO  compiler - 	37: set v22(19) v3(228)
+12:10:35.028 [Thread-4] INFO  compiler - 	38: end
+12:11:29.209 [Thread-4] INFO  compiler - ID=15001
+12:11:29.209 [Thread-4] INFO  compiler - 	set v1,12
+12:11:29.209 [Thread-4] INFO  compiler - 	set v2,19
+12:11:29.209 [Thread-4] INFO  compiler - 	set v11,v1
+12:11:29.209 [Thread-4] INFO  compiler - 	set v12,v2
+12:11:29.209 [Thread-4] INFO  compiler - 	cmp v11,v12
+12:11:29.209 [Thread-4] INFO  compiler - 	jb templatelabel_mul_1_noswap
+12:11:29.209 [Thread-4] INFO  compiler - 	set v0,v12
+12:11:29.209 [Thread-4] INFO  compiler - 	set v3,v11
+12:11:29.209 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_1_weiter
+12:11:29.209 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_noswap
+12:11:29.209 [Thread-4] INFO  compiler - 	set v0,v11
+12:11:29.209 [Thread-4] INFO  compiler - 	set v3,v12
+12:11:29.209 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_weiter
+12:11:29.209 [Thread-4] INFO  compiler - 	set v4,v0
+12:11:29.209 [Thread-4] INFO  compiler - 	set v5,v3
+12:11:29.209 [Thread-4] INFO  compiler - 	set v3,0
+12:11:29.209 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_loop
+12:11:29.225 [Thread-4] INFO  compiler - 	cmp v4,0
+12:11:29.225 [Thread-4] INFO  compiler - 	je templatelabel_mul_1_fertig
+12:11:29.225 [Thread-4] INFO  compiler - 	sub v4,1
+12:11:29.225 [Thread-4] INFO  compiler - 	add v3,v5
+12:11:29.225 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_1_loop
+12:11:29.225 [Thread-4] INFO  compiler - 	:templatelabel_mul_1_fertig
+12:11:29.225 [Thread-4] INFO  compiler - 	set v11,v3
+12:11:29.225 [Thread-4] INFO  compiler - 	set v21,v1
+12:11:29.225 [Thread-4] INFO  compiler - 	set v22,v2
+12:11:29.225 [Thread-4] INFO  compiler - 	cmp v22,v21
+12:11:29.225 [Thread-4] INFO  compiler - 	jb templatelabel_mul_2_noswap
+12:11:29.225 [Thread-4] INFO  compiler - 	set v0,v21
+12:11:29.225 [Thread-4] INFO  compiler - 	set v3,v22
+12:11:29.225 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_2_weiter
+12:11:29.225 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_noswap
+12:11:29.225 [Thread-4] INFO  compiler - 	set v0,v22
+12:11:29.225 [Thread-4] INFO  compiler - 	set v3,v21
+12:11:29.225 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_weiter
+12:11:29.225 [Thread-4] INFO  compiler - 	set v4,v0
+12:11:29.225 [Thread-4] INFO  compiler - 	set v5,v3
+12:11:29.225 [Thread-4] INFO  compiler - 	set v3,0
+12:11:29.225 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_loop
+12:11:29.225 [Thread-4] INFO  compiler - 	cmp v4,0
+12:11:29.225 [Thread-4] INFO  compiler - 	je templatelabel_mul_2_fertig
+12:11:29.225 [Thread-4] INFO  compiler - 	sub v4,1
+12:11:29.225 [Thread-4] INFO  compiler - 	add v3,v5
+12:11:29.225 [Thread-4] INFO  compiler - 	jmp templatelabel_mul_2_loop
+12:11:29.225 [Thread-4] INFO  compiler - 	:templatelabel_mul_2_fertig
+12:11:29.225 [Thread-4] INFO  compiler - 	set v22,v3
+12:11:29.225 [Thread-4] INFO  compiler - 	end
+12:11:29.225 [Thread-4] INFO  compiler - 	:return_0

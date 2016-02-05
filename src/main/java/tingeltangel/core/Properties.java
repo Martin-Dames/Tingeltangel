@@ -27,11 +27,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.tools.Preferences;
 
 public class Properties {
     
     private final static String PROPERTY_FILE = "tt.properties";
+    private final static Logger log = LogManager.getLogger(Properties.class);
     
     private final static HashMap<String, String> PROPERTIES = new HashMap<String, String>();
     
@@ -61,7 +64,7 @@ public class Properties {
             }
             in.close();
         } catch(IOException ioe) {
-            ioe.printStackTrace(System.out);
+            log.error("unable to read property file", ioe);
             throw new Error(ioe);
         }
     }
@@ -77,8 +80,7 @@ public class Properties {
             }
             out.close();
         } catch(IOException ioe) {
-            System.err.println("property file can not be saved. Your changes will be lost on next start.");
-            ioe.printStackTrace(System.err);
+            log.warn("property file can not be saved. Your changes will be lost on next start.", ioe);
         }
     }
     

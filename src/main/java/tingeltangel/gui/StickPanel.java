@@ -31,6 +31,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.core.Book;
 import tingeltangel.core.Stick;
 import tingeltangel.core.scripting.SyntaxError;
@@ -47,6 +49,8 @@ public class StickPanel extends JPanel {
     private JLabel label;
     private JButton button;
     private boolean online = false;
+    
+    private final static Logger log = LogManager.getLogger(StickPanel.class);
     
     public StickPanel(final EditorFrame frame) {
         super();
@@ -95,13 +99,13 @@ public class StickPanel extends JPanel {
                                                 JOptionPane.showMessageDialog(frame, "Buch auf den Stift kopiert");
                                             }
                                         } catch(IOException e) {
-                                            e.printStackTrace(System.out);
+                                            log.error("failed to generate book", e);
                                             JOptionPane.showMessageDialog(frame, "Buchgenerierung fehlgeschlagen");
                                         } catch(IllegalArgumentException e) {
-                                            e.printStackTrace(System.out);
+                                            log.error("failed to generate book", e);
                                             JOptionPane.showMessageDialog(frame, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
                                         } catch(SyntaxError e) {
-                                            e.printStackTrace(System.out);
+                                            log.error("failed to generate book", e);
                                             JOptionPane.showMessageDialog(frame, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
                                         }
                                     }
@@ -113,7 +117,7 @@ public class StickPanel extends JPanel {
                     };
                 } catch(Exception ex) {
                     JOptionPane.showMessageDialog(frame, "Das Buch konnte nicht gespeichert werden");
-                    ex.printStackTrace(System.out);
+                    log.error("failed to save book", ex);
                 }
             }
         });

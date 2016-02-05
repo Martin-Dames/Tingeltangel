@@ -50,6 +50,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
@@ -89,7 +91,7 @@ public final class EditorPanel extends JPanel {
         "ID", "Name", "Verleger", "Autor", "Version", "URL", "?", "Datum"
     };
     
-    
+    private final static Logger log = LogManager.getLogger(EditorPanel.class);
     
     private final JTextField addEntriesCount;
     private final JTextField addEntriesStart;
@@ -588,7 +590,7 @@ public final class EditorPanel extends JPanel {
                 }
             } catch(Exception e) {
                 JOptionPane.showMessageDialog(this, "Das Cover konnte nicht geladen werden");
-                e.printStackTrace(System.out);
+                log.error("unable to load cover", e);
             }
         }
         

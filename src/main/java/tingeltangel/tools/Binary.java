@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.core.Properties;
 
 /**
@@ -38,6 +40,8 @@ public class Binary {
     
     private final static Map<String, File> binMap = new HashMap<String, File>();
     
+    private final static Logger log = LogManager.getLogger(Binary.class);
+    
     static {
         // try to autoconf binaries
         for(int i = 0; i < BINARIES.length; i++) {
@@ -50,7 +54,7 @@ public class Binary {
                     try {
                         Properties.setProperty(BINARIES[i], f.getCanonicalPath());
                     } catch(IOException ioe) {
-                        System.err.println("can't save properties: " + ioe.getMessage());
+                        log.error("unable to save preferences", ioe);
                     }
                     binMap.put(BINARIES[i], f);
                 }

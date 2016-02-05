@@ -47,8 +47,13 @@ public class Tingeltangel {
     
     public static void main(String[] args) throws Exception {
         
-        log.warn("Starting Tingeltangel" + MAIN_FRAME_VERSION);
-        
+        log.info("Starting Tingeltangel" + MAIN_FRAME_VERSION);
+        log.info("\tos.name     : " + System.getProperty("os.name"));
+        log.info("\tos.version  : " + System.getProperty("os.version"));
+        log.info("\tos.arch     : " + System.getProperty("os.arch"));
+        log.info("\tjava.version: " + System.getProperty("java.version"));
+        log.info("\tjava.vendor : " + System.getProperty("java.vendor"));
+                
         if(!CLI.cli(args)) {
 
             SwingUtilities.invokeLater(new Runnable() {

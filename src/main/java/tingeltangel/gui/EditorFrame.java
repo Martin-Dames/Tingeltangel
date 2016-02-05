@@ -41,6 +41,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.Tingeltangel;
 import tingeltangel.core.Book;
 import tingeltangel.core.Codes;
@@ -67,6 +69,8 @@ public class EditorFrame extends JFrame implements Callback<String> {
     private final InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
     
     private final LinkedList<EntryListener> listeners = new LinkedList<EntryListener>();
+    
+    private final static Logger log = LogManager.getLogger(EditorFrame.class);
     
     public EditorFrame() {
         super(Tingeltangel.MAIN_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
@@ -148,7 +152,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     book.save();
                 } catch(Exception e) {
                     JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gespeichert werden");
-                    e.printStackTrace(System.out);
+                    log.error("unable to save book (" + book.getID() + ")", e);
                 }
             }
         }
@@ -234,16 +238,16 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                                     setBookOpened();
                                                 } catch (SyntaxError ex) {
                                                     JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
-                                                    ex.printStackTrace(System.out);
+                                                    log.error("unable to import book", ex);
                                                 } catch (IOException ex) {
                                                     JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
-                                                    ex.printStackTrace(System.out);
+                                                    log.error("unable to import book", ex);
                                                 }
                                             }
                                         };
                                     } catch (IOException ex) {
                                         JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Herunterladen des Buches");
-                                        ex.printStackTrace(System.out);
+                                        log.error("unable to download book", ex);
                                     }
                                 }
                             };
@@ -264,10 +268,10 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                         setBookOpened();
                                     } catch (SyntaxError ex) {
                                         JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
-                                        ex.printStackTrace(System.out);
+                                        log.error("unable to import book", ex);
                                     } catch (IOException ex) {
                                         JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
-                                        ex.printStackTrace(System.out);
+                                        log.error("unable to import book", ex);
                                     }
                                 }
                             };
@@ -302,13 +306,13 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                 setBookOpened();
                             } catch(ParserException e) {
                                 JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
-                                e.printStackTrace(System.out);
+                                log.error("unable to import yaml file", e);
                             } catch (IOException e) {
                                 JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
-                                e.printStackTrace(System.out);
+                                log.error("unable to import yaml file", e);
                             } catch (LexerException e) {
                                 JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
-                                e.printStackTrace(System.out);
+                                log.error("unable to import yaml file", e);
                             }
                         }
                     };
@@ -343,7 +347,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                 in.close();
                             } catch(IOException e) {
                                 JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim lesen der ouf Datei");
-                                e.printStackTrace(System.out);
+                                log.error("unable to read ouf", e);
                                 return;
                             }
                         }
@@ -362,10 +366,10 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                     setBookOpened();
                                 } catch(IOException e) {
                                     JOptionPane.showMessageDialog(EditorFrame.this, "Import ist fehlgeschlagen");
-                                    e.printStackTrace(System.out);
+                                    log.error("unable to import book", e);
                                 } catch(SyntaxError se) {
                                     JOptionPane.showMessageDialog(EditorFrame.this, "Import ist fehlgeschlagen");
-                                    se.printStackTrace(System.out);
+                                    log.error("unable to import book", se);
                                 }
                                 progressDialog.restart("aktualisiere Liste");
                                 indexPanel.updateList(progressDialog);
@@ -407,7 +411,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                     book.resetChangeMade();
                                     setBookOpened();
                                 } catch (IOException ex) {
-                                    ex.printStackTrace(System.err);
+                                    log.error("unable to load book", ex);
                                 }
                             }
                         };
@@ -421,7 +425,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 book.save();
             } catch(Exception e) {
                 JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gespeichert werden");
-                e.printStackTrace(System.out);
+                log.error("unable to save book", e);
             }
             
         } else if(id.equals("buch.generate")) {
@@ -495,13 +499,13 @@ public class EditorFrame extends JFrame implements Callback<String> {
 
                                             };
                                         } catch(IOException e) {
-                                            e.printStackTrace(System.out);
+                                            log.error("unable to generate book", e);
                                             JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen");
                                         } catch(IllegalArgumentException e) {
-                                            e.printStackTrace(System.out);
+                                            log.error("unable to generate book", e);
                                             JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
                                         } catch(SyntaxError e) {
-                                            e.printStackTrace(System.out);
+                                            log.error("unable to generate book", e);
                                             JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
                                         }
                                     }
@@ -579,7 +583,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     };
                 } catch(Exception e) {
                     JOptionPane.showMessageDialog(this, "MP3 Archiv konnte nicht gespeichert werden");
-                    e.printStackTrace(System.out);
+                    log.error("unable to save mp3 archive", e);
                 }
             }
         } else if(id.startsWith("buch.generateEpsCodes.") || id.startsWith("buch.generatePngCodes.")) {
@@ -626,13 +630,13 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                 ZipHelper.zip(output, input, progressDialog, EditorFrame.this, book, "erzeuge ZIP", "ZIP konnte nicht erstellt werden");
                             } catch(IOException e) {
                                 JOptionPane.showMessageDialog(EditorFrame.this, "Code-Generierung fehlgeschlagen");
-                                e.printStackTrace(System.out);
+                                log.error("unable to generate codes", e);
                             }
                         }
                     };
                 } catch(IOException ioe) {
                     JOptionPane.showMessageDialog(EditorFrame.this, "Code-Generierung fehlgeschlagen");
-                    ioe.printStackTrace(System.out);
+                    log.error("unable to generate codes", ioe);
                 }
             }
         
@@ -650,7 +654,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     out.close();
                 } catch(Exception e) {
                     JOptionPane.showMessageDialog(this, "Die Codetabelle konnte nicht gespeichert werden");
-                    e.printStackTrace(System.out);
+                    log.error("unable to save code tabular", e);
                 }
             }
         } else if(id.equals("prefs.binary")) {
@@ -686,7 +690,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     out.close();
                 } catch(Exception e) {
                     JOptionPane.showMessageDialog(this, "Die Codetabelle konnte nicht gespeichert werden");
-                    e.printStackTrace(System.out);
+                    log.error("unable to save code tabular", e);
                 }
             }
         } else if(id.startsWith("codes.ting.")) {
@@ -711,7 +715,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     try {
                         Repository.update(progressDialog);
                     } catch(IOException ioe) {
-                        ioe.printStackTrace(System.out);
+                        log.error("unable to update books", ioe);
                         JOptionPane.showMessageDialog(EditorFrame.this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());
                     }
                 }
@@ -761,7 +765,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 out.close();
             } catch(Exception e) {
                 JOptionPane.showMessageDialog(this, "Die Tabelle konnte nicht gespeichert werden");
-                e.printStackTrace(System.out);
+                log.error("unable to save tabular", e);
             }
         }
     }
@@ -802,7 +806,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 out.close();
             } catch(IOException ioe) {
                 JOptionPane.showMessageDialog(this, "Codegenerierung fehlgeschlagen");
-                ioe.printStackTrace(System.out);
+                log.error("unable to generate codes", ioe);
             }
         }
         return(true);

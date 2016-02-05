@@ -23,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
@@ -41,6 +43,9 @@ public class Emulator {
     
     private final static int[] register = new int[REGISTERS];
     private final static String[] hints = new String[REGISTERS];
+    
+    
+    private final static Logger log = LogManager.getLogger(Emulator.class);
     
     static {
         for(int i = 0; i < hints.length; i++) {
@@ -134,19 +139,19 @@ public class Emulator {
     public void play(int oid) {
         Entry entry = book.getEntryFromTingID(oid);
         if(entry == null) {
-            System.out.println("NOT playing " + entry.getMP3().getAbsolutePath() + ". Track not Found.");
+            log.warn("NOT playing " + entry.getMP3().getAbsolutePath() + ". Track not Found.");
             return;
         }
         if((entry.isMP3() || entry.isTTS()) && (entry.getMP3() != null)) {
             try {
-                System.out.println("playing " + entry.getMP3().getAbsolutePath());
+                log.debug("playing " + entry.getMP3().getAbsolutePath());
                 MP3Player.getPlayer().play(entry.getMP3(), new Callback<Exception>() {
                     @Override
                     public void callback(Exception t) {
                         t.printStackTrace();
                     }
                 });
-                System.out.println("done");
+                log.debug("done");
             } catch (FileNotFoundException ex) {
                 ex.printStackTrace();
             }

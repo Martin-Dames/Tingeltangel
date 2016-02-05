@@ -43,6 +43,8 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
@@ -65,6 +67,9 @@ public class Stick {
     };
     
     private final File path;
+    
+    
+    private final static Logger log = LogManager.getLogger(Stick.class);
     
     private Stick(File path) {
         this.path = path;
@@ -131,7 +136,7 @@ public class Stick {
                 try {
                     tbd.add(Integer.parseInt(row));
                 } catch(NumberFormatException nfe) {
-                    System.out.println("invalid row in " + file.getAbsolutePath() + ": " + row);
+                    log.warn("invalid row in " + file.getAbsolutePath() + ": " + row);
                 }
             }
         }

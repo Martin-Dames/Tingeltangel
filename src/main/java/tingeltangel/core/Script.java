@@ -25,8 +25,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.scripting.Command;
@@ -47,6 +48,8 @@ public class Script {
     private HashMap<Integer, Integer> instanceLabelsII = null;
     
     private static int labelCounter = 0;
+    private final static Logger compilerLog = LogManager.getLogger("compiler");
+    private final static Logger emulatorLog = LogManager.getLogger("emulator");
     
     public Script(String code, Entry entry) {
         this.entry = entry;
@@ -104,6 +107,9 @@ public class Script {
     
     private void execute(boolean subCall) throws SyntaxError {
         compile();
+        
+        emulatorLog.info("ID=" + Integer.toString(entry.getTingID()));
+        
         if(!subCall) {
             entry.getBook().getEmulator().setLastOID(entry.getTingID());
         }
@@ -118,7 +124,7 @@ public class Script {
             }
             Instance instance = script.get(pc);
             
-            //System.out.println(entry.getTingID() + ":" + pc + " " + instance.toString(entry.getBook().getEmulator()));
+            emulatorLog.info("\t" + pc + ": " + instance.toString(entry.getBook().getEmulator()));
             
             if(instance.getCommand().getAsm().equals(ScriptFile.END)) {
                 return;
@@ -211,7 +217,8 @@ public class Script {
             
             String mergedCode = replaceTemplates(mergeCodeOnCalls(false));
             
-            //System.out.println(mergedCode);
+            compilerLog.info("ID=" + Integer.toString(entry.getTingID()));
+            
                    
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(bout);
@@ -222,6 +229,7 @@ public class Script {
             int instancePos = 0;
             String row;
             while((row = in.readLine()) != null) {
+                compilerLog.info("\t" + row);
                 rc++;
                 row = row.trim().toLowerCase();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
@@ -294,7 +302,6 @@ public class Script {
                         instanceLabelsII.put(instance.getLabel(), instanceLabelsSI.get(arg1));
                     } else {
                         if(Commands.getArguments(cmd) > 0) {
-                            
                             instance.setFirstArgument(arg1);
                         }
                         if(Commands.getArguments(cmd) > 1) {

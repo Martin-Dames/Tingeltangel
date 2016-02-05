@@ -77,6 +77,8 @@ public class Instance {
     private int removeRegister(String s) {
         if(s.startsWith("v") || s.startsWith("V")) {
             s = s.substring(1);
+        } else if(s.startsWith("0x")) {
+            return(Integer.parseInt(s.substring(2), 16));
         }
         return(Integer.parseInt(s));
     }

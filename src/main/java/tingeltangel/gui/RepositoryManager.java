@@ -38,6 +38,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.core.Repository;
 import tingeltangel.core.constants.TxtFile;
 import tingeltangel.tools.Progress;
@@ -59,6 +61,8 @@ public class RepositoryManager extends javax.swing.JInternalFrame {
     private final JMenuItem search = new JMenuItem();
     
     private final JList list = new JList();
+    
+    private final static Logger log = LogManager.getLogger(RepositoryManager.class);
     
     /**
      * Creates new form RepositoryManager
@@ -139,7 +143,7 @@ public class RepositoryManager extends javax.swing.JInternalFrame {
                                 }
                             } catch(IOException e) {
                                 JOptionPane.showMessageDialog(RepositoryManager.this, "Download fehlgeschlagen: " + e.toString());
-                                e.printStackTrace(System.out);
+                                log.error("download failed", e);
                             }
                             update();
                         }
@@ -174,9 +178,10 @@ public class RepositoryManager extends javax.swing.JInternalFrame {
                     Repository.update(progressDialog);
                 } catch(IOException e) {
                     JOptionPane.showMessageDialog(RepositoryManager.this, "Suche nach Aktualisierungen fehlgeschlagen");
-                    e.printStackTrace(System.out);
+                    log.error("unable to search for updates", e);
                 } catch(IllegalArgumentException e) {
                     JOptionPane.showMessageDialog(RepositoryManager.this, "Suche nach Aktualisierungen fehlgeschlagen: " + e.getMessage());
+                    log.error("unable to search for updates", e);
                 }
                 update();
             }

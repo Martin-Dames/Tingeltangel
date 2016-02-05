@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.core.Book;
 import tingeltangel.core.Tupel;
 import tingeltangel.tools.FileEnvironment;
@@ -39,6 +41,8 @@ public class ChooseBook extends javax.swing.JDialog {
     private final LinkedList<Tupel<Integer, String>> idList = new LinkedList<Tupel<Integer, String>>();
     private MyListModel model = new MyListModel();
     private final Callback<Integer> callback;
+    
+    private final static Logger log = LogManager.getLogger(ChooseBook.class);
     
     
     private String getLabel(int id) throws IOException {
@@ -64,8 +68,9 @@ public class ChooseBook extends javax.swing.JDialog {
                         idList.add(new Tupel(id, getLabel(id)));
                     }
                 } catch(NumberFormatException nfe) {
+                    log.warn("unable to parse book", nfe);
                 } catch(IOException ioe) {
-                    ioe.printStackTrace(System.err);
+                    log.warn("unable to parse book", ioe);
                 }
             }
         }

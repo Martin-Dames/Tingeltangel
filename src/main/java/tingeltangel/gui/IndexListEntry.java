@@ -51,6 +51,8 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.core.Codes;
 import tingeltangel.core.Entry;
 import tingeltangel.core.MP3Player;
@@ -100,6 +102,8 @@ public class IndexListEntry extends JPanel {
     private static String lastChooseMp3DialogPath = null;
     private JLabel trackInfo = new JLabel(" ");
     private final Entry entry;
+    
+    private final static Logger log = LogManager.getLogger(IndexListEntry.class);
     
     private ImageIcon getIcon(int res) {
         try {
@@ -346,10 +350,10 @@ public class IndexListEntry extends JPanel {
                             
                         } catch(FileNotFoundException ex) {
                             JOptionPane.showMessageDialog(frame, "Die Datei '" + fc.getSelectedFile() + "' konnte nicht gefunden werden.");
-                            ex.printStackTrace(System.out);
+                            log.error("unable to find mp3", ex);
                         } catch(IOException ex) {
                             JOptionPane.showMessageDialog(frame, "Die Datei '" + fc.getSelectedFile() + "' konnte nicht gelesen werden.");
-                            ex.printStackTrace(System.out);
+                            log.error("unable to read mp3", ex);
                         }
                     }
                 }
@@ -406,7 +410,7 @@ public class IndexListEntry extends JPanel {
                             out.close();
                         } catch(Exception e) {
                             JOptionPane.showMessageDialog(frame, "Das Ting Pattern konnte nicht gespeichert werden");
-                            e.printStackTrace(System.out);
+                            log.error("unable to save code", e);
                         }
                     }
                     
@@ -467,7 +471,7 @@ public class IndexListEntry extends JPanel {
                             
                         } catch(Exception e) {
                             JOptionPane.showMessageDialog(frame, "MP3 konnte nicht gespeichert werden");
-                            e.printStackTrace(System.out);
+                            log.error("unable to save mp3", e);
                         } finally {
                             try {
                                 if(is != null) {

@@ -43,6 +43,8 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -76,7 +78,6 @@ public class Book {
     private String author;
     private int version;
     private String url;
-    //private final LinkedList<Page> pages = new LinkedList<Page>();
     
     private long date = new Date().getTime() / 1000;
     private long magicValue = DEFAULT_MAGIC_VALUE;
@@ -85,6 +86,7 @@ public class Book {
     
     private final Emulator emulator;
     
+    private final static Logger log = LogManager.getLogger(Book.class);
     
     public final void clear() {
         name = "My Book";
@@ -639,7 +641,7 @@ public class Book {
                 out.writeInt(code);
                 out.writeInt(Math.max(_size, 0));
                                 
-                // System.out.println((i + 15001) + " @0x" + Integer.toHexString(pos)); // + " code=0x" + Integer.toHexString(code) + " size=" + _size);
+                log.debug((i + 15001) + " @0x" + Integer.toHexString(pos) + " code=0x" + Integer.toHexString(code) + " size=" + _size);
                 
                 if(entry.isMP3() || entry.isTTS()) {
                     out.writeInt(0x0001);

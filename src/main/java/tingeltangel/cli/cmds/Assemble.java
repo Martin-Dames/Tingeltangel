@@ -27,8 +27,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Map;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 public class Assemble extends CliCommand {
+    
+    
     @Override
     public String getName() {
         return "assemble";

@@ -24,6 +24,8 @@ import tiptoi_reveng.analysis.DepthFirstAdapter;
 import tiptoi_reveng.node.*;
 
 import java.util.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * The interpreter parses the AST and generates script code for the TING pen. It works in two phases: First, variable
@@ -43,6 +45,8 @@ public class Interpreter extends DepthFirstAdapter {
     private Stack<Integer> labelStack = new Stack<Integer>();
     private StringBuffer script = new StringBuffer();
 
+    private final static Logger log = LogManager.getLogger(Interpreter.class);
+    
     public Map<String, Integer> getFilename2oid() {
         return filename2oid;
     }
@@ -223,7 +227,7 @@ public class Interpreter extends DepthFirstAdapter {
         if (secondPhase) {
             script.append("playoid ").append(convertFilenameToOid(node.getFiles().getFirst())).append("\n");
             if (node.getFiles().size() > 1) {
-                System.err.println("More than two file names not supported, yet.");
+                log.error("More than two file names not supported, yet.");
             }
         }
     }

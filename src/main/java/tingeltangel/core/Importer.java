@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
 import tingeltangel.core.scripting.Command;
@@ -44,6 +46,7 @@ import tingeltangel.tools.ProgressDialog;
 
 public class Importer {
 
+    private final static Logger log = LogManager.getLogger(Importer.class);
     
     /**
      * 
@@ -105,7 +108,6 @@ public class Importer {
             String script = "";
             String note = "";
             while((row = in.readLine()) != null) {
-                //System.out.println(row);
                 if(inNote) {
                     if(row.startsWith(ScriptFile.CONTENT)) {
                         notes.put(precode, note);
@@ -197,11 +199,11 @@ public class Importer {
         int firstTingID = ouf.readInt();
         int lastTingID = ouf.readInt();
         int tingIDCount = ouf.readInt();
-        /*
-        System.out.println("first id = " + firstTingID);
-        System.out.println("last id  = " + lastTingID);
-        System.out.println("id count = " + tingIDCount);
-        */
+        
+        log.info("first id = " + firstTingID);
+        log.info("last id  = " + lastTingID);
+        log.info("id count = " + tingIDCount);
+        
         ouf.readInt(); // book id
         
         book.setMagicValue(ouf.readInt());
@@ -219,25 +221,26 @@ public class Importer {
         if(firstTingID != 15001) {
             
             if(firstTingID == 15000) {
-                System.out.println("WARNING: first ting id is 15000. Trying auto correction...");
+                
+                log.warn("WARNING: first ting id is 15000. Trying auto correction...");
                 
                 ouf.readInt();
                 ouf.readInt();
                 int type15000 = ouf.readInt();
                 if(type15000 == 0) {
-                    System.out.println("Auto correction successfull");
+                    log.info("Auto correction successfull");
                     firstTingIdCorrected = true;
                     firstTingID = 15001;
                     tingIDCount--;
                 } else {
-                    System.out.println("Auto correction failed. The import is expected to fail.");
+                    log.error("Auto correction failed. The import is expected to fail.");
                 }
             } else {
-                System.out.println("WARNING: first ting id is neither 15001 nor 15000. The import is expected to fail.");
+                log.warn("first ting id is neither 15001 nor 15000. The import is expected to fail.");
             }
         }
         if(tingIDCount != lastTingID - firstTingID + 1) {
-            System.out.println("WARNING: index count missmatch (first=" + firstTingID + ", last=" + lastTingID + ", count=" + tingIDCount + ")");
+            log.warn("index count missmatch (first=" + firstTingID + ", last=" + lastTingID + ", count=" + tingIDCount + ")");
         }
         
         LinkedList<int[]> index = new LinkedList<int[]>();
@@ -253,7 +256,7 @@ public class Importer {
             for(int k = 0; k < 3; k++) {
                 e[k] = ouf.readInt();
             }
-            //System.out.println(e[0] + " " + e[1] + " " + e[2]);
+            log.info(e[0] + " " + e[1] + " " + e[2]);
             if(e[2] != 0) {
                 e[3] = i;
                 if(!foundFirstEntryCode) {
@@ -278,7 +281,7 @@ public class Importer {
         
         // find first entry
         int pos = 12 * (lastTingID - firstTingID + 1) + startOfIndex;
-        System.out.println("end of index table: 0x" + Integer.toHexString(pos));
+        log.info("end of index table: 0x" + Integer.toHexString(pos));
         int diff = (0x100 - (pos % 0x100)) % 0x100;
         pos += diff;
         if(firstTingIdCorrected) {
@@ -286,9 +289,9 @@ public class Importer {
         }
         ouf.skipBytes(diff);
         
-        System.out.println("possible start of first entry: 0x" + Integer.toHexString(pos));
-        System.out.println("firstEntryCode: " + firstEntryCode);
-        System.out.println("firstEntryLength: " + firstEntryLength);
+        log.info("possible start of first entry: 0x" + Integer.toHexString(pos));
+        log.info("firstEntryCode: " + firstEntryCode);
+        log.info("firstEntryLength: " + firstEntryLength);
         
         
         // try to find first entry starting at pos
@@ -309,7 +312,7 @@ public class Importer {
         
         
         if(firstEntryTypeIsScript) {
-            System.out.println("searching for script...");
+            log.info("searching for script...");
             while(!isScriptData(buffer)) {
                 pos += 0x100;
                 ouf.skipBytes(0x100 - buffer.length);
@@ -319,7 +322,7 @@ public class Importer {
                 }
             }
         } else {
-            System.out.println("searching for mp3...");
+            log.info("searching for mp3...");
             while(!isMp3Data(buffer)) {
                 pos += 0x100;
                 ouf.skipBytes(0x100 - buffer.length);
@@ -329,12 +332,12 @@ public class Importer {
                 }
             }
         }
-        System.out.println("start of first entry: 0x" + Integer.toHexString(pos));
+        log.info("start of first entry: 0x" + Integer.toHexString(pos));
 
         int entryOffset = pos - IndexTableCalculator.getPositionInFileFromCode(firstEntryCode, firstEntryN);
         
         
-        System.out.println("offset: " + entryOffset);
+        log.info("offset: " + entryOffset);
         
         ouf.close();
         
@@ -365,7 +368,7 @@ public class Importer {
             Entry entry = book.getEntryByID(e[3]);
             
             if(e[2] == 1) {
-                //System.out.println("@0x" + Integer.toHexString(epos) + " importing oid " + e[3] + " (mp3 len=" + e[1] + ") ...");
+                log.debug("@0x" + Integer.toHexString(epos) + " importing oid " + e[3] + " (mp3 len=" + e[1] + ") ...");
                 // mp3
                 out = new FileOutputStream(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
                 
@@ -377,7 +380,7 @@ public class Importer {
                         len -= k;
                     } else {
                     	// TODO analyze why this error occurs at some books
-                    	System.err.println("error reading mp3 with id="+_eid);
+                    	log.error("error reading mp3 with id="+_eid);
                     	len=-1;
 			throw new IOException("error reading mp3 with id=" + _eid);
                     }
@@ -395,9 +398,9 @@ public class Importer {
 		in.close();
 		if(!isMp3Data(_buffer)) {
                     if(e[1] == 0) {
-                        System.err.println("extracted no data for oid=" + _eid + " (file is empty)");
+                        log.warn("extracted no data for oid=" + _eid + " (file is empty)");
                     } else {
-                        System.err.println("extracted data for oid=" + _eid + " seems to be not an mp3 or is corrupted");
+                        log.warn("extracted data for oid=" + _eid + " seems to be not an mp3 or is corrupted");
                     }
 		}
                 
@@ -405,7 +408,7 @@ public class Importer {
                 entry.setMP3(new File(FileEnvironment.getAudioDirectory(book.getID()), _eid + ".mp3"));
                 entry.setMP3();
             } else {
-                //System.out.println("@0x" + Integer.toHexString(epos) + " importing oid " + e[3] + " (script len=" + e[1] + ") ...");
+                log.info("@0x" + Integer.toHexString(epos) + " importing oid " + e[3] + " (script len=" + e[1] + ") ...");
                 // script
 
                 if(scriptFile != null) {
@@ -418,7 +421,7 @@ public class Importer {
                                 entry.setCode();
                             }
                     } else {
-                            System.err.println("\tid " + _eid + " not found in script");
+                            log.error("id " + _eid + " not found in script");
                             throw new IOException("id " + _eid + " not found in script");
                     }
                 } else {
@@ -435,7 +438,7 @@ public class Importer {
                             len -= k;
                         } else {
                             // TODO analyze why this error occurs at some books
-                            System.err.println("error reading bin with id="+_eid);
+                            log.error("error reading bin with id="+_eid);
                             len=-1;
                             throw new IOException("error reading bin with id="+_eid);
                         }
@@ -489,25 +492,25 @@ public class Importer {
         if(firstTingID != 15001) {
             
             if(firstTingID == 15000) {
-                System.out.println("WARNING: first ting id is 15000. Trying auto correction...");
+                log.warn("first ting id is 15000. Trying auto correction...");
                 
                 ouf.readInt();
                 ouf.readInt();
                 int type15000 = ouf.readInt();
                 if(type15000 == 0) {
-                    System.out.println("Auto correction successfull");
+                    log.info("Auto correction successfull");
                     firstTingIdCorrected = true;
                     firstTingID = 15001;
                     tingIDCount--;
                 } else {
-                    System.out.println("Auto correction failed. The import is expected to fail.");
+                    log.info("Auto correction failed. The import is expected to fail.");
                 }
             } else {
-                System.out.println("WARNING: first ting id is neither 15001 nor 15000. The import is expected to fail.");
+                log.warn("first ting id is neither 15001 nor 15000. The import is expected to fail.");
             }
         }
         if(tingIDCount != lastTingID - firstTingID + 1) {
-            System.out.println("WARNING: index count missmatch (first=" + firstTingID + ", last=" + lastTingID + ", count=" + tingIDCount + ")");
+            log.warn("index count missmatch (first=" + firstTingID + ", last=" + lastTingID + ", count=" + tingIDCount + ")");
         }
         
         LinkedList<int[]> index = new LinkedList<int[]>();
@@ -523,7 +526,7 @@ public class Importer {
             for(int k = 0; k < 3; k++) {
                 e[k] = ouf.readInt();
             }
-            //System.out.println(e[0] + " " + e[1] + " " + e[2]);
+            log.info(e[0] + " " + e[1] + " " + e[2]);
             if(e[2] != 0) {
                 e[3] = i;
                 if(!foundFirstEntryCode) {
@@ -544,7 +547,7 @@ public class Importer {
         
         // find first entry
         int pos = 12 * (lastTingID - firstTingID + 1) + startOfIndex;
-        System.out.println("end of index table: 0x" + Integer.toHexString(pos));
+        log.info("end of index table: 0x" + Integer.toHexString(pos));
         int diff = (0x100 - (pos % 0x100)) % 0x100;
         pos += diff;
         if(firstTingIdCorrected) {
@@ -552,9 +555,9 @@ public class Importer {
         }
         ouf.skipBytes(diff);
         
-        System.out.println("possible start of first entry: 0x" + Integer.toHexString(pos));
-        System.out.println("firstEntryCode: " + firstEntryCode);
-        System.out.println("firstEntryLength: " + firstEntryLength);
+        log.info("possible start of first entry: 0x" + Integer.toHexString(pos));
+        log.info("firstEntryCode: " + firstEntryCode);
+        log.info("firstEntryLength: " + firstEntryLength);
         
         
         
@@ -567,7 +570,7 @@ public class Importer {
         
         
         if(firstEntryTypeIsScript) {
-            System.out.println("searching for script...");
+            log.info("searching for script...");
             while(!isScriptData(buffer)) {
                 pos += 0x100;
                 ouf.skipBytes(0x100 - buffer.length);
@@ -577,7 +580,7 @@ public class Importer {
                 }
             }
         } else {
-            System.out.println("searching for mp3...");
+            log.info("searching for mp3...");
             while(!isMp3Data(buffer)) {
                 pos += 0x100;
                 ouf.skipBytes(0x100 - buffer.length);
@@ -587,12 +590,12 @@ public class Importer {
                 }
             }
         }
-        System.out.println("start of first entry: 0x" + Integer.toHexString(pos));
+        log.info("start of first entry: 0x" + Integer.toHexString(pos));
 
         int entryOffset = pos - IndexTableCalculator.getPositionInFileFromCode(firstEntryCode, firstEntryN);
         
         
-        System.out.println("offset: " + entryOffset);
+        log.info("offset: " + entryOffset);
         
         ouf.close();
         
@@ -625,7 +628,7 @@ public class Importer {
                         len -= k;
                     } else {
                         // TODO analyze why this error occurs at some books
-                        System.err.println("error reading track with id="+_eid);
+                        log.error("error reading track with id="+_eid);
                         len = -1;
                         throw new IOException("error reading track with id=" + _eid);
                     }
