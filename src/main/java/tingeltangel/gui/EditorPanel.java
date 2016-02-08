@@ -31,6 +31,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -356,9 +357,26 @@ public final class EditorPanel extends JPanel {
                                     int oldID = book.getID();
                                     book.setID(id);
                                     book.save();
+                                    
+                                    // copy audio
+                                    progressDialog.restart("kopiere mp3s");
+                                    File[] audios = FileEnvironment.getAudioDirectory(oldID).listFiles(new FilenameFilter() {
+                                        @Override
+                                        public boolean accept(File dir, String name) {
+                                            return(name.toLowerCase().endsWith(".mp3"));
+                                        }
+                                    });
+                                    progressDialog.setMax(audios.length);
+                                    File destAudioDir = FileEnvironment.getAudioDirectory(id);
+                                    for(int i = 0; i < audios.length; i++) {
+                                        progressDialog.setVal(i);
+                                        FileEnvironment.copy(audios[i], new File(destAudioDir, audios[i].getName()));
+                                    }
+                                    
                                     book.clear();
                                     book.setID(id);
                                     Book.loadXML(FileEnvironment.getXML(id), book, progressDialog);
+                                    
                                     progressDialog.restart("aktualisiere Liste");
                                     refresh();
                                     updateList(progressDialog);
