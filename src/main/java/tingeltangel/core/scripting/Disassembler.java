@@ -172,9 +172,9 @@ public class Disassembler {
             } else if (b[offset] == 0x0E && b[offset + 1] == 0x00) {
                 disassembleJump( "jbe");
             } else if (b[offset] == 0x0F && b[offset + 1] == 0x01) {
-                disassembleCommandRegisterValue( "and");
+                disassembleCommandRegisterValue( "add");
             } else if (b[offset] == 0x0F && b[offset + 1] == 0x02) {
-                disassembleCommandRegisterRegister( "and");
+                disassembleCommandRegisterRegister( "add");
             } else if (b[offset] == 0x10 && b[offset + 1] == 0x01) {
                 disassembleCommandRegisterValue( "sub");
             } else if (b[offset] == 0x10 && b[offset + 1] == 0x02) {
@@ -182,6 +182,12 @@ public class Disassembler {
             } else if (b[offset] == 0x14 && b[offset + 1] == 0x00) {
                 sb.append("return\n");
                 offset += 2;
+            } else if (b[offset] == 0x15 && b[offset + 1] == 0x01) {
+                sb.append("callid ");
+                int value = ((b[offset + 2] & 0xff) << 8) + (b[offset + 3] & 0xff);
+                sb.append(value);
+                sb.append('\n');
+                offset += 4;
             } else if (b[offset] == 0x16 && b[offset + 1] == 0x01) {
                 sb.append("playoid ");
                 int oid = ((b[offset + 2] & 0xff) << 8) + (b[offset + 3] & 0xff);

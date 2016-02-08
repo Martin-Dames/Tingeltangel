@@ -19,14 +19,20 @@
 package tingeltangel.cli.cmds;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Map;
 import tingeltangel.cli.CliCommand;
 import tingeltangel.cli.CliSwitch;
 import tingeltangel.core.Book;
+import tingeltangel.core.Entry;
 import tingeltangel.core.Importer;
+import tingeltangel.core.Script;
 import tingeltangel.core.scripting.SyntaxError;
-import tingeltangel.tools.FileEnvironment;
 
 /**
  *
@@ -177,24 +183,4 @@ public class ExportTrack extends CliCommand {
         Importer.extractTrack(ouf, oid, file);
         
     }
-    
-    /*
-    public static void main(String[] args) throws IOException, SyntaxError {
-        
-        File ouf1 = new File("C:\\Users\\mdames\\Documents\\tingeltangel\\repository\\05100_en.ouf");
-        File out1 = new File("C:\\Users\\mdames\\Desktop\\05100_15001_repository.bin");
-        
-        File ouf2 = new File("C:\\Users\\mdames\\Documents\\tingeltangel\\books\\05100\\dist\\05100_en.ouf");
-        File out2 = new File("C:\\Users\\mdames\\Desktop\\05100_15001_dist.bin");
-        
-        Book book = new Book(5100);
-        Book.loadXML(FileEnvironment.getXML(5100), book, null);
-        book.export(ouf2.getParentFile(), null);
-        
-        Importer.extractTrack(ouf1, 15001, out1);
-        Importer.extractTrack(ouf2, 15001, out2);
-        
-    }
-    */
-    
 }
