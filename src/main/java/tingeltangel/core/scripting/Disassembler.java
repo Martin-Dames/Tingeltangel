@@ -156,7 +156,12 @@ public class Disassembler {
             } else if (b[offset] == 0x05 && b[offset + 1] == 0x02) {
                 disassembleCommandRegisterRegister( "or");
             } else if (b[offset] == 0x06 && b[offset + 1] == 0x02) {
-                disassembleCommandRegister( "not");
+                // ignore last register!
+                sb.append("not v");
+                int register1 = ((b[offset + 2] & 0xff) << 8) + (b[offset + 3] & 0xff);
+                sb.append(register1);
+                sb.append('\n');
+                offset =  offset + 6;
             } else if (b[offset] == 0x08 && b[offset + 1] == 0x00) {
                 disassembleJump( "jmp");
             } else if (b[offset] == 0x09 && b[offset + 1] == 0x00) {

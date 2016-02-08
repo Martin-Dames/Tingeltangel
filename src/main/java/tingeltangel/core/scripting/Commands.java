@@ -121,6 +121,11 @@ public class Commands {
         if(cmd1.firstArgumentIsLabel()) {
             return(cmd1);
         }
+        // not cmd
+        if(cmd1.getAsm().toLowerCase().equals("not")) {
+            return(cmd1);
+        }
+        
         Iterator<Command> cmds = set.iterator();
         while(cmds.hasNext()) {
             cmd1 = cmds.next();
@@ -185,6 +190,11 @@ public class Commands {
     }
     
     public static int getArguments(String cmd) throws SyntaxError {
+        
+        if(cmd.toLowerCase().equals("not")) {
+            return(1);
+        }
+        
         HashSet<Command> set = commands.get(cmd);
         if(set == null) {
             throw new SyntaxError("unknown command (" + cmd + ")");
