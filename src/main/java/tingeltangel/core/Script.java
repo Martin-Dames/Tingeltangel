@@ -108,7 +108,7 @@ public class Script {
     private void execute(boolean subCall) throws SyntaxError {
         compile();
         
-        emulatorLog.info("ID=" + Integer.toString(entry.getTingID()));
+        emulatorLog.trace("ID=" + Integer.toString(entry.getTingID()));
         
         if(!subCall) {
             entry.getBook().getEmulator().setLastOID(entry.getTingID());
@@ -124,7 +124,7 @@ public class Script {
             }
             Instance instance = script.get(pc);
             
-            emulatorLog.info("\t" + pc + ": " + instance.toString(entry.getBook().getEmulator()));
+            emulatorLog.trace("\t" + pc + ": " + instance.toString(entry.getBook().getEmulator()));
             
             if(instance.getCommand().getAsm().equals(ScriptFile.END)) {
                 return;
@@ -217,7 +217,7 @@ public class Script {
             
             String mergedCode = replaceTemplates(mergeCodeOnCalls(false));
             
-            compilerLog.info("ID=" + Integer.toString(entry.getTingID()));
+            compilerLog.trace("ID=" + Integer.toString(entry.getTingID()));
             
                    
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -229,7 +229,7 @@ public class Script {
             int instancePos = 0;
             String row;
             while((row = in.readLine()) != null) {
-                compilerLog.info("\t" + row);
+                compilerLog.trace("\t" + row);
                 rc++;
                 row = row.trim().toLowerCase();
                 if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {

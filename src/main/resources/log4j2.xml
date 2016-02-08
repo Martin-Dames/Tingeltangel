@@ -38,10 +38,10 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="CoreFile"/>
         </Logger>
-        <Logger name="compiler" level="trace">
+        <Logger name="compiler" level="trace" additivity="false">
             <AppenderRef ref="CompilerFile"/>
         </Logger>
-        <Logger name="emulator" level="trace">
+        <Logger name="emulator" level="trace" additivity="false">
             <AppenderRef ref="EmulatorFile"/>
         </Logger>
     </Loggers>
