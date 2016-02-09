@@ -107,7 +107,7 @@ public class Emulator {
     }
     
     public static int getMaxBasicRegister() {
-        return(92);
+        return(91);
     }
     
     public int getRegister(int i) {
