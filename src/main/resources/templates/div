@@ -14,40 +14,63 @@
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
-params=r:$zaehler,rv:$nenner
-work=$counter,$oldcounter,$mult,$oldmult,$i
+// optimized division (using only "add" and "sub")
+//
+params=r:$a,rv:$b
+work=$f,$s,$xf,$h,$k
 ---
-cmp $nenner,1
-jne normal
-jmp fertig
-:normal
-set $oldcounter,0
-set $oldmult,0
-set $mult,$nenner
-set $counter,1
-set $i,0
-:loop
-add $i,1
-cmp $i,16
-jg endloop
-cmp $mult,$zaehler
-jb weiter
-sub $zaehler,$oldmult
-jmp endloop
-:weiter
-set $oldmult,$mult
-add $mult,$mult
-set $oldcounter,$counter
-add $counter,$counter
-jmp loop
-:endloop
-set $counter,$oldcounter
-:while
-cmp $zaehler,$nenner
-jb done
-sub $zaehler,$nenner
-add $counter,1
-jmp while
-:done
-set $zaehler,$counter
-:fertig
+
+// xf = 0;
+set $xf,0
+        
+// while(a >= b) {
+:loop1_start
+cmp $a,$b
+jb loop1_ende
+
+//     f = 1;
+set $f,1
+
+//     s = b;
+set $s,$b
+
+//     h = s;
+set $h,$s
+
+//     h += s;
+add $h,$s
+            
+//     while(h < a) {
+:loop2_start
+cmp $h,$a
+jge loop2_ende
+
+//         k = f;
+set $k,$f
+
+//         f += k;
+add $f,$k
+
+//         s = h;
+set $s,$h
+
+//         h += s;
+add $h,$s
+
+//     }
+jmp loop2_start
+:loop2_ende
+
+//     a -= s;
+sub $a,$s
+           
+//     xf += f;
+add $xf,$f
+
+// }
+jmp loop1_start
+:loop1_ende
+            
+// a = xf;
+set $a,$xf
+        
