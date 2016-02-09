@@ -93,12 +93,21 @@ public class Commands {
     }
     
     private static boolean isValue(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch(NumberFormatException e) {
-            return(false);
+        if(s.startsWith("0x")) {
+            try {
+                Integer.parseInt(s.substring(2), 16);
+            } catch(NumberFormatException e) {
+                return(false);
+            }
+            return(true);
+        } else {
+            try {
+                Integer.parseInt(s);
+            } catch(NumberFormatException e) {
+                return(false);
+            }
+            return(true);
         }
-        return(true);
     }
     
     private static boolean isRegister(String s) {

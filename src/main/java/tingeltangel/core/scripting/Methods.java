@@ -65,19 +65,27 @@ public class Methods {
     }
     
     public static void addV(Emulator emulator, Integer arg1, Integer arg2) {
-        emulator.setRegister(arg1, emulator.getRegister(arg1) + arg2);
+        emulator.setRegister(arg1, (emulator.getRegister(arg1) + arg2) % 0x10000);
     }
     
     public static void addR(Emulator emulator, Integer arg1, Integer arg2) {
-        emulator.setRegister(arg1, emulator.getRegister(arg1) + emulator.getRegister(arg2));
+        emulator.setRegister(arg1, (emulator.getRegister(arg1) + emulator.getRegister(arg2)) % 0x10000);
     }
     
     public static void subV(Emulator emulator, Integer arg1, Integer arg2) {
-        emulator.setRegister(arg1, emulator.getRegister(arg1) - arg2);
+        int r = emulator.getRegister(arg1) - arg2;
+        if(r < 0) {
+            r += 0x10000;
+        }
+        emulator.setRegister(arg1, r);
     }
     
     public static void subR(Emulator emulator, Integer arg1, Integer arg2) {
-        emulator.setRegister(arg1, emulator.getRegister(arg1) - emulator.getRegister(arg2));
+        int r = emulator.getRegister(arg1) - emulator.getRegister(arg2);
+        if(r < 0) {
+            r += 0x10000;
+        }
+        emulator.setRegister(arg1, r);
     }
     
     public static void pauseV(Emulator emulator, Integer arg1, Integer arg2) {

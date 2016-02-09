@@ -35,7 +35,7 @@ public class Template {
     private String name = "";
     private int labelCounter = 0;
     
-    private final static String[] TEMPLATES = {"mul", "div", "mod", "divmod", "min", "max", "exp2"};
+    private final static String[] TEMPLATES = {"mul", "div", "mod", "divmod", "min", "max", "exp2", "rnd"};
     private final static HashMap<String, Template> templates = new HashMap<String, Template>();
     
     static {
@@ -174,6 +174,7 @@ public class Template {
         
         return(out.toString());
     }
+    
     
 }
 
