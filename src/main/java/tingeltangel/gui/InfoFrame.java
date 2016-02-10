@@ -38,6 +38,7 @@ public class InfoFrame extends JFrame {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         text.setEditorKit(JEditorPane.createEditorKitForContentType("text/html"));
         text.setEditable(false);
+        
         setContentPane(new JScrollPane(text));
                 
         try {
@@ -45,14 +46,35 @@ public class InfoFrame extends JFrame {
             String row;
             StringBuilder s = new StringBuilder();
             while((row = in.readLine()) != null) {
-                s.append(row);
+                int p0 = row.indexOf("%%");
+                int p1 = row.lastIndexOf("%%");
+                if((p0 != -1) && (p1 != -1) && (p0 != p1)) {
+                    String x0 = row.substring(0, p0);
+                    String x1 = row.substring(p0 + 2, p1);
+                    String x2 = row.substring(p1 + 2);
+                    
+                    System.out.println(x0);
+                    System.out.println(x1);
+                    System.out.println(x2);
+                    
+                    s.append(x0);
+                    s.append(InfoFrame.class.getClassLoader().getSystemResource("icons/" + x1).toString());
+                    s.append(x2);
+                } else {
+                    s.append(row);
+                }
             }
             in.close();
+            
             text.setText(s.toString());
             text.setCaretPosition(0);
         } catch(IOException e) {
             throw new Error(e);
         }
+    }
+    
+    public static void main(String[] args) {
+    System.out.println(InfoFrame.class.getClassLoader().getSystemResource("icons/eject.png").toString());
     }
     
 }

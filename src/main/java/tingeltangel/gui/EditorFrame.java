@@ -67,6 +67,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
     private final EditorPanel indexPanel;
     private final InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
     private final InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
+    private final InfoFrame manualFrame = new InfoFrame("Handbuch", "html/manual.html");
     
     private final LinkedList<EntryListener> listeners = new LinkedList<EntryListener>();
     
@@ -736,6 +737,8 @@ public class EditorFrame extends JFrame implements Callback<String> {
         } else if(id.equals("actions.cleanupRepository")) {
             Repository.cleanup();
             JOptionPane.showMessageDialog(EditorFrame.this, "Die Inhalte der Bücherliste wurde gelöscht.");
+        } else if(id.equals("about.manual")) {
+            manualFrame.setVisible(true);
         } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {
