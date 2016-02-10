@@ -52,11 +52,6 @@ public class InfoFrame extends JFrame {
                     String x0 = row.substring(0, p0);
                     String x1 = row.substring(p0 + 2, p1);
                     String x2 = row.substring(p1 + 2);
-                    
-                    System.out.println(x0);
-                    System.out.println(x1);
-                    System.out.println(x2);
-                    
                     s.append(x0);
                     s.append(InfoFrame.class.getClassLoader().getSystemResource("icons/" + x1).toString());
                     s.append(x2);
