@@ -22,20 +22,10 @@ import java.io.IOException;
 import javax.swing.SwingUtilities;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import tingeltangel.cli.CLI;
 import tingeltangel.core.Repository;
-import tingeltangel.gui.EditorFrame;
+import tingeltangel.gui.ManagerFrame;
 
-public class Tingeltangel {
-    
-    public static int MAIN_FRAME_POS_X = 50;
-    public static int MAIN_FRAME_POS_Y = 50;
-    public static int MAIN_FRAME_WIDTH = 1200;
-    public static int MAIN_FRAME_HEIGHT = 700;
-    public static String MAIN_FRAME_TITLE = "Tingeltangel";
-    public static String MAIN_FRAME_VERSION = " v0.2-beta3";
-    
-    public final static String BASE_URL = "http://system.ting.eu/book-files";
+public class StickManager {
     
     
     /**
@@ -43,41 +33,37 @@ public class Tingeltangel {
      */
     public static final String DEFAULT_AREA_CODE="en";
  
-    private final static Logger log = LogManager.getLogger(Tingeltangel.class);
+    private final static Logger log = LogManager.getLogger(StickManager.class);
     
     public static void main(String[] args) throws Exception {
         
-        log.info("Starting Tingeltangel" + MAIN_FRAME_VERSION);
+        log.info("Starting Tingeltangel" + Tingeltangel.MAIN_FRAME_VERSION);
         log.info("\tos.name     : " + System.getProperty("os.name"));
         log.info("\tos.version  : " + System.getProperty("os.version"));
         log.info("\tos.arch     : " + System.getProperty("os.arch"));
         log.info("\tjava.version: " + System.getProperty("java.version"));
         log.info("\tjava.vendor : " + System.getProperty("java.vendor"));
         
-        
-        if(!CLI.cli(args)) {
-
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    if(Repository.getIDs().length == 0) {
-                        try {
-                            Repository.initialUpdate(new Thread() {
-                                @Override
-                                public void run() {
-                                    new EditorFrame();
-                                }
-                            });
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                            new EditorFrame();
-                        }
-                    } else {
-                        new EditorFrame();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if(Repository.getIDs().length == 0) {
+                    try {
+                        Repository.initialUpdate(new Thread() {
+                            @Override
+                            public void run() {
+                                new ManagerFrame();
+                            }
+                        });
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                        new ManagerFrame();
                     }
+                } else {
+                    new ManagerFrame();
                 }
-            });
-        }
+            }
+        });
     }
     
 }
