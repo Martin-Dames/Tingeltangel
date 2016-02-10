@@ -30,6 +30,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,6 +41,7 @@ import org.apache.log4j.Logger;
 import tingeltangel.Tingeltangel;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Stick;
+import tingeltangel.core.constants.TxtFile;
 import tingeltangel.tools.Callback;
 
 public class ManagerFrame extends JFrame {
@@ -105,6 +107,7 @@ public class ManagerFrame extends JFrame {
             Stick stick = Stick.getStick();
             Iterator<Integer> ids = stick.getBooks().iterator();
             
+            centerPanel.removeAll();
             while(ids.hasNext()) {
                 int id = ids.next();
                 centerPanel.add(getBookPanel(id), PushBorderLayout.PAGE_START);
@@ -118,8 +121,6 @@ public class ManagerFrame extends JFrame {
     
     private JPanel getBookPanel(int mid) throws IOException {
         JPanel panel = new JPanel();
-        panel.add(new JLabel(Integer.toString(mid)));
-        
         
         // get version from stick
         Stick stick = Stick.getStick();
@@ -127,6 +128,10 @@ public class ManagerFrame extends JFrame {
         
         // get version from repository
         int repositoryVersion = Integer.parseInt(Repository.getBookTxt(mid).get("Version"));
+        
+        
+        
+        panel.add(new JLabel("MID=" + mid + " StickVersion=" + stickVersion + " RepositoryVersion=" + repositoryVersion));
         
         
         return(panel);
@@ -145,16 +150,40 @@ public class ManagerFrame extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new PushBorderLayout());
         
-        addButton(panel, "test 1", new Callback<Object>() {
+        addButton(panel, "Stift aktualisieren", new Callback<Object>() {
             @Override
             public void callback(Object t) {
-                System.out.println("test 1");
-            }
-        });
-        addButton(panel, "test 2", new Callback<Object>() {
-            @Override
-            public void callback(Object t) {
-                System.out.println("test 2");
+                /*
+                
+                // update all books on stick
+                Stick stick = Stick.getStick();
+                Iterator<Integer> ids = stick.getBooks().iterator();
+                while(ids.hasNext()) {
+                    int id = ids.next();
+                    Repository.update(id, null);
+                    int repositoryVersion = Integer.parseInt(Repository.getBookTxt(id).get(TxtFile.KEY_VERSION));
+                    int stickVersion =stick.getBookVersion(id);
+                    if(stickVersion < repositoryVersion) {
+                        stick.copyFromRepositoryToStick(id);
+                    }
+                }
+                
+                // process tbd
+                Iterator<Integer> tbds = stick.getTBD().iterator();
+                while(tbds.hasNext()) {
+                    try {
+                        int id = tbds.next();
+                        if(!Repository.txtExists(id)) {
+                            Repository.search(id);
+                        }
+                        Repository.update(id, null);
+                        stick.copyFromRepositoryToStick(id);
+                    } catch(IOException ioe) {
+                        
+                    }
+                    
+                }
+                */
             }
         });
         addButton(panel, "test 3", new Callback<Object>() {
