@@ -68,8 +68,4 @@ public class InfoFrame extends JFrame {
         }
     }
     
-    public static void main(String[] args) {
-    System.out.println(InfoFrame.class.getClassLoader().getSystemResource("icons/eject.png").toString());
-    }
-    
 }
