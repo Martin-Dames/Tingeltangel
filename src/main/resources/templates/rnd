@@ -22,13 +22,14 @@ work=$mask,$h
 set $mask,1
 :loop_start
 cmp $mask,$max
-jge loop_end
+jg loop_end
 set $h,$mask
 add $mask,$h
 jmp loop_start
 :loop_end
+sub $mask,1
 :random
 set $rnd,v98
-and $rnd,$mask;
+and $rnd,$mask
 cmp $rnd,$max
 jg random

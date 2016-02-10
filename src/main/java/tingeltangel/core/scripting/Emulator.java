@@ -118,8 +118,8 @@ public class Emulator {
             // last oid
             return(lastOID);
         } else if(i == 98) {
-            // random (0-23767)
-            return(rnd.nextInt(23768));
+            // random
+            return(rnd.nextInt(0x8000));
         }
         return(register[i]);
     }
