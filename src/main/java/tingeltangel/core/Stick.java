@@ -82,12 +82,13 @@ public class Stick {
         if(content != null) {
             for(int i = 0; i < content.length; i++) {
                 if(content[i].isDirectory() && (content[i].getName().equals(STICK_DIR))) {
+                    
                     content = content[i].listFiles();
                     // check for basic files
                     for(int f = 0; f < STICK_FILES.length; f++) {
                         boolean found = false;
                         for(int j = 0; j < content.length; j++) {
-                            if(content[j].getName().equals(STICK_FILES[f]) && content[j].canWrite()) {
+                            if(content[j].getName().toUpperCase().equals(STICK_FILES[f]) && content[j].canWrite()) {
                                 found = true;
                                 break;
                             }

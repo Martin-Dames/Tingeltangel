@@ -26,16 +26,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -98,7 +95,7 @@ public class ManagerFrame extends JFrame {
                         // go online
                         online = true;
                         goOnline();
-                    }
+                    }             
                 } catch(IOException ioe) {
                     ioe.printStackTrace();
                 } catch(Exception e) {
