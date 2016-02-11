@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import tingeltangel.cli.CLI;
 import tingeltangel.core.Repository;
 import tingeltangel.gui.EditorFrame;
+import tingeltangel.gui.ManagerFrame;
 
 public class Tingeltangel {
     
@@ -54,9 +55,19 @@ public class Tingeltangel {
         log.info("\tjava.version: " + System.getProperty("java.version"));
         log.info("\tjava.vendor : " + System.getProperty("java.vendor"));
         
+        boolean startEditor = false;
+        boolean startManager = false;
         
-        if(!CLI.cli(args)) {
-
+        if((args.length) > 0 && (args[0].toLowerCase().equals("gui-editor"))) {
+            startEditor = true;
+        }
+        if((args.length) > 0 && (args[0].toLowerCase().equals("gui-manager"))) {
+            startManager = true;
+        }
+        
+        final boolean _startEditor = startEditor;
+        
+        if(startManager || startEditor) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -65,19 +76,30 @@ public class Tingeltangel {
                             Repository.initialUpdate(new Thread() {
                                 @Override
                                 public void run() {
-                                    new EditorFrame();
+                                    startGUI(_startEditor);
                                 }
                             });
                         } catch (IOException ex) {
-                            ex.printStackTrace();
-                            new EditorFrame();
+                            log.warn("initial update failed", ex);
+                            startGUI(_startEditor);
                         }
                     } else {
-                        new EditorFrame();
+                        startGUI(_startEditor);
                     }
                 }
             });
+        } else {
+            if(!CLI.cli(args)) {
+                log.warn("starting cli failed");
+            }
         }
     }
     
+    private static void startGUI(boolean startEditor) {
+        if(startEditor) {
+            new EditorFrame();
+        } else {
+            new ManagerFrame();
+        }
+    }
 }
