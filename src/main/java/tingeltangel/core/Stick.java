@@ -52,6 +52,7 @@ import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
+import tingeltangel.tools.OS;
 import tingeltangel.tools.ProgressDialog;
 
 
@@ -478,7 +479,7 @@ public class Stick {
      */
     public static Stick getStick() throws IOException {
         File[] mounts;
-        if (System.getProperty("os.name").startsWith("Windows")) {
+        if(OS.isWindows()) {
             mounts = File.listRoots();
         } else {
             LinkedList<File> mountList = new LinkedList<File>();
