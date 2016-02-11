@@ -52,6 +52,7 @@ import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
+import tingeltangel.tools.ProgressDialog;
 
 
 /**
@@ -504,15 +505,23 @@ public class Stick {
         return(null);
     }
     
-    public void update() {
-        update(null);
+    public void update(ProgressDialog progress) {
+        update(null, progress);
     }
     
-    public boolean update(JFrame frame) {
+    public boolean update(JFrame frame, ProgressDialog progress) {
         boolean result = true;
         try {
-            Iterator<Integer> ids = getBooks().iterator();
+            LinkedList<Integer> books = getBooks();
+            if(progress != null) {
+                progress.setMax(books.size());
+            }
+            Iterator<Integer> ids = books.iterator();
+            int c = 0;
             while(ids.hasNext()) {
+                if(progress != null) {
+                    progress.setVal(c++);
+                }
                 int id = ids.next();
                 try {
                     Repository.update(id, null);
@@ -552,9 +561,18 @@ public class Stick {
         }
         // process tbd
         try {
-            Iterator<Integer> tbds = getTBD().iterator();
+            HashSet<Integer> tbdSet = getTBD();
+            Iterator<Integer> tbds = tbdSet.iterator();
+            if(progress != null) {
+                progress.restart("Verarbeite TBD.TXT");
+                progress.setMax(tbdSet.size());
+            }
             LinkedList<Integer> newTbds = new LinkedList<Integer>();
+            int c = 0;
             while(tbds.hasNext()) {
+                if(progress != null) {
+                    progress.setVal(c++);
+                }
                 int id = tbds.next();
                 if(!Repository.txtExists(id)) {
                     Repository.search(id);
@@ -586,6 +604,9 @@ public class Stick {
                 JOptionPane.showMessageDialog(frame, "Die Datei TBD.TXT auf dem Stift kann nicht gelesen werden");
                 result = false;
             }
+        }
+        if(progress != null) {
+            progress.done();
         }
         return(result);
     }

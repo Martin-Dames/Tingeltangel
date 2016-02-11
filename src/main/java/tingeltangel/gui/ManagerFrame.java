@@ -48,6 +48,8 @@ import tingeltangel.core.Repository;
 import tingeltangel.core.Stick;
 import tingeltangel.core.constants.TxtFile;
 import tingeltangel.tools.Callback;
+import tingeltangel.tools.Progress;
+import tingeltangel.tools.ProgressDialog;
 
 public class ManagerFrame extends JFrame {
     
@@ -116,8 +118,14 @@ public class ManagerFrame extends JFrame {
             Iterator<Integer> ids = stick.getBooks().iterator();
             
             centerPanel.removeAll();
+            boolean first = true;
             while(ids.hasNext()) {
                 int id = ids.next();
+                if(first) {
+                    first = false;
+                } else {
+                    centerPanel.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
+                }
                 centerPanel.add(getBookPanel(id), PushBorderLayout.PAGE_START);
             }
             validate();
@@ -133,16 +141,9 @@ public class ManagerFrame extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
-        // get version from stick
-        Stick stick = Stick.getStick();
-        int stickVersion = stick.getBookVersion(mid);
         
-        // get version from repository
         HashMap<String, String> bookTxt = Repository.getBookTxt(mid);
-        int repositoryVersion = -1;
-        if(bookTxt != null) {
-            repositoryVersion = Integer.parseInt(bookTxt.get(TxtFile.KEY_VERSION));
-        }
+        
         
         File coverImage = Repository.getBookPng(mid);
         try {
@@ -158,6 +159,8 @@ public class ManagerFrame extends JFrame {
         
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new PushBorderLayout());
+        
+        infoPanel.add(PushBorderLayout.pad(10), PushBorderLayout.LINE_START);
         
         if(bookTxt == null) {
             infoPanel.add(new JLabel("keine Informationen vorhanden"), PushBorderLayout.PAGE_START);
@@ -201,7 +204,7 @@ public class ManagerFrame extends JFrame {
                 
                 
                 // update all books on stick
-                Stick stick = null;
+                Stick stick;
                 try {
                     stick = Stick.getStick();
                     if(stick == null) {
@@ -215,45 +218,56 @@ public class ManagerFrame extends JFrame {
                     return;
                 }
                 
-                if(stick.update(ManagerFrame.this)) {
-                    JOptionPane.showMessageDialog(ManagerFrame.this, "Update erfolgreich");
-                } else {
-                    JOptionPane.showMessageDialog(ManagerFrame.this, "Update fehlgeschlagen");
-                }
+                final Stick _stick = stick;
+                Progress pr = new Progress(ManagerFrame.this, "Stift aktualisieren") {
+                    @Override
+                    public void action(ProgressDialog progressDialog) {
+                        if(_stick.update(ManagerFrame.this, progressDialog)) {
+                            JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich");
+                        } else {
+                            JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung fehlgeschlagen");
+                        }
+                    }
+                };
             }
         });
         addButton(panel, "Neue Bücher suchen", new Callback<Object>() {
             @Override
             public void callback(Object t) {
-                Repository.search(null);
-                JOptionPane.showMessageDialog(ManagerFrame.this, "Update erfolgreich");
+                Progress pr = new Progress(ManagerFrame.this, "neue Bücher suchen") {
+                    @Override
+                    public void action(ProgressDialog progressDialog) {
+                        Repository.search(progressDialog);
+                        JOptionPane.showMessageDialog(ManagerFrame.this, "Update erfolgreich");
+                    }
+                };
             }
         });
         addButton(panel, "Repository aktualisieren", new Callback<Object>() {
             @Override
             public void callback(Object t) {
-                try {
-                    Repository.update(null);
-                    JOptionPane.showMessageDialog(ManagerFrame.this, "Update erfolgreich");
-                } catch (IOException ex) {
-                    log.warn("Repository.update error", ex);
-                    JOptionPane.showMessageDialog(ManagerFrame.this, "Es ist ein Fehler aufgetreten");
-                }
+                Progress pr = new Progress(ManagerFrame.this, "Repository aktualisieren") {
+                    @Override
+                    public void action(ProgressDialog progressDialog) {
+                        try {
+                            Repository.update(progressDialog);
+                            JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich");
+                        } catch (IOException ex) {
+                            log.warn("Repository.update error", ex);
+                            JOptionPane.showMessageDialog(ManagerFrame.this, "Es ist ein Fehler aufgetreten");
+                        }
+                    }
+                };
             }
         });
-        
+        /*
         addButton(panel, "Stift reparieren", new Callback<Object>() {
             @Override
             public void callback(Object t) {
                 
             }
         });
-        addButton(panel, "Repository aktualisieren", new Callback<Object>() {
-            @Override
-            public void callback(Object t) {
-                
-            }
-        });
+        */
         
         return(panel);
     }
