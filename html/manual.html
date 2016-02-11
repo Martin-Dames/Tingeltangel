@@ -341,6 +341,30 @@
 				<td>rnd [Register] [Register|Value]</td>
 				<td>arg1 wird auf einen zuf&auml;lligen Wert zw. 0 (inclusive) und arg1 (inclusive) gesetzt</td>
 			</tr>
+                        <tr>
+                                <td>volume [Register|Value]</td>
+                                <td>setzt die Stiftlautstärke (1-20)</td>
+                        </tr>
+                        <tr>
+                                <td>lastid [Register]</td>
+                                <td>arg1 = &quot;letzte angewählte Ting-OID&quot;</td>
+                        </tr>
+                        <tr>
+                                <td>lang [Register]</td>
+                                <td>arg1 = &quot;Sprachcode&quot;</td>
+                        </tr>
+                        <tr>
+                                <td>setbit [Register] [Register|Value]</td>
+                                <td>setzt das arg2-te Bit im Register arg1 auf 1</td>
+                        </tr>
+                        <tr>
+                                <td>unsetbit [Register] [Register|Value]</td>
+                                <td>setzt das arg2-te Bit im Register arg1 auf 0</td>
+                        </tr>
+                        <tr>
+                                <td>getbit [Register] [Register|Value] [Register|Value]</td>
+                                <td>arg1 = 1 wenn das arg3-te Bit von arg2 auf 1 gesetzt ist, ansonsten 0</td>
+                        </tr>
 		</table>
 		<br/>
 		Alle &quot;Value&quot;-Parameter sind in den offiziellen B&uuml;chern als Dezimalzahlen angegeben. Bei Tingeltangel ist

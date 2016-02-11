@@ -35,7 +35,21 @@ public class Template {
     private String name = "";
     private int labelCounter = 0;
     
-    private final static String[] TEMPLATES = {"mul", "div", "mod", "divmod", "min", "max", "exp2", "rnd"};
+    private final static String[] TEMPLATES = {
+        "mul",
+        "div",
+        "mod",
+        "divmod",
+        "min",
+        "max",
+        "exp2",
+        "rnd",
+        "volume",
+        "lastid",
+        "setbit",
+        "unsetbit",
+        "getbit"
+    };
     private final static HashMap<String, Template> templates = new HashMap<String, Template>();
     
     static {
