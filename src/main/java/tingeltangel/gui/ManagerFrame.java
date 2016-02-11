@@ -111,25 +111,29 @@ public class ManagerFrame extends JFrame {
         setVisible(true);
     }
 
+    private void updateList() throws IOException {
+        Stick stick = Stick.getStick();
+        Iterator<Integer> ids = stick.getBooks().iterator();
+
+        centerPanel.removeAll();
+        boolean first = true;
+        while(ids.hasNext()) {
+            int id = ids.next();
+            if(first) {
+                first = false;
+            } else {
+                centerPanel.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
+            }
+            centerPanel.add(getBookPanel(id), PushBorderLayout.PAGE_START);
+        }
+        validate();
+        repaint();
+    }
+    
     private void goOnline() {
         statusLabel.setText("Stift gefunden");
         try {
-            Stick stick = Stick.getStick();
-            Iterator<Integer> ids = stick.getBooks().iterator();
-            
-            centerPanel.removeAll();
-            boolean first = true;
-            while(ids.hasNext()) {
-                int id = ids.next();
-                if(first) {
-                    first = false;
-                } else {
-                    centerPanel.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
-                }
-                centerPanel.add(getBookPanel(id), PushBorderLayout.PAGE_START);
-            }
-            validate();
-            repaint();
+            updateList();
             
         } catch(IOException ioe) {
             log.warn("Stick konnte nicht geöffnet werden", ioe);
@@ -137,7 +141,7 @@ public class ManagerFrame extends JFrame {
         }
     }
     
-    private JPanel getBookPanel(int mid) throws IOException {
+    private JPanel getBookPanel(final int mid) throws IOException {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
@@ -157,10 +161,56 @@ public class ManagerFrame extends JFrame {
         }
         
         
+        JPanel actionPanel = new JPanel();
+        actionPanel.setLayout(new PushBorderLayout());
+        actionPanel.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
+        addButton(actionPanel, "aktualisieren", new Callback<Object>() {
+            @Override
+            public void callback(Object t) {
+                if(!Repository.txtExists(mid)) {
+                    Repository.search(mid);
+                }
+                if(!Repository.txtExists(mid)) {
+                    log.warn("book " + mid + " not found in repository");
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Das Buch wurde im Repository nicht gefunden");
+                } else {
+                    Progress pr = new Progress(ManagerFrame.this, "Buch aktualisieren") {
+                        @Override
+                        public void action(ProgressDialog progressDialog) {
+                            try {
+                                Repository.update(mid, progressDialog);
+                                Stick.getStick().copyFromRepositoryToStick(mid);
+                                updateList();
+                            } catch(IOException ioe) {
+                                log.warn("book " + mid + " update failed", ioe);
+                                JOptionPane.showMessageDialog(ManagerFrame.this, "Das Buch konnte nicht aktualisiert werden");
+                            }
+                        }
+                    };
+                }
+            }
+        });
+        actionPanel.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
+        addButton(actionPanel, "löschen", new Callback<Object>() {
+            @Override
+            public void callback(Object t) {
+                try {
+                    Stick.getStick().delete(mid);
+                    updateList();
+                } catch(IOException ioe) {
+                    log.warn("book " + mid + " delete failed", ioe);
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Das Buch konnte nicht gelöscht werden werden");
+                }
+            }
+        });
+        
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new PushBorderLayout());
         
         infoPanel.add(PushBorderLayout.pad(10), PushBorderLayout.LINE_START);
+        infoPanel.add(actionPanel, PushBorderLayout.LINE_START);
+        infoPanel.add(PushBorderLayout.pad(10), PushBorderLayout.LINE_START);
+        
         
         if(bookTxt == null) {
             infoPanel.add(new JLabel("keine Informationen vorhanden"), PushBorderLayout.PAGE_START);
@@ -223,6 +273,11 @@ public class ManagerFrame extends JFrame {
                     @Override
                     public void action(ProgressDialog progressDialog) {
                         if(_stick.update(ManagerFrame.this, progressDialog)) {
+                            try {
+                                updateList();
+                            } catch(IOException ioe) {
+                                log.warn("failed to update book list", ioe);
+                            }
                             JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich");
                         } else {
                             JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung fehlgeschlagen");
