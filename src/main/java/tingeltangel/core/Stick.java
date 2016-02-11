@@ -43,6 +43,8 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -244,6 +246,9 @@ public class Stick {
             _id = "0" + _id;
         }
         File txt = new File(getBookDir(), _id + TxtFile._EN_TXT);
+        if(!txt.exists()) {
+            return(-1);
+        }
         BufferedReader in = new BufferedReader(new FileReader(txt));
         String row;
         while((row = in.readLine()) != null) {
@@ -498,4 +503,89 @@ public class Stick {
         return(null);
     }
     
+    public void update() {
+        update(null);
+    }
+    
+    public boolean update(JFrame frame) {
+        boolean result = true;
+        try {
+            Iterator<Integer> ids = getBooks().iterator();
+            while(ids.hasNext()) {
+                int id = ids.next();
+                try {
+                    Repository.update(id, null);
+                    HashMap<String, String> bookTxt = Repository.getBookTxt(id);
+                    if(bookTxt == null) {
+                        log.info("skipping book " + id + ". not found in repository");
+                    } else {
+                        int repositoryVersion = Integer.parseInt(Repository.getBookTxt(id).get(TxtFile.KEY_VERSION));
+                        int stickVersion = -1;
+                        try {
+                            stickVersion = getBookVersion(id);
+                        } catch(IOException ioe) {
+                            log.warn("failed to get book version from stick (mid=" + id + ")", ioe);
+                        }
+                        if(stickVersion < repositoryVersion) {
+                            try {
+                                copyFromRepositoryToStick(id);
+                            } catch(IOException ioe) {
+                                log.warn("failed to copy book " + id + " from repository to stick", ioe);
+                                if(frame != null) {
+                                    JOptionPane.showMessageDialog(frame, "Das Buch " + id + " konnte nicht auf den Stift kopiert werden");
+                                }
+                                result = false;
+                            }
+                        }
+                    }
+                } catch(IOException fnfe) {
+                    log.info("book not found in repository (mid=" + id + ")", fnfe);
+                }
+            }
+        } catch(IOException ioe) {
+            log.warn("failed to get stick content", ioe);
+            if(frame != null) {
+                JOptionPane.showMessageDialog(frame, "Auf den Stift konnte nicht zugegriffen werden");
+            }
+            result = false;
+        }
+        // process tbd
+        try {
+            Iterator<Integer> tbds = getTBD().iterator();
+            LinkedList<Integer> newTbds = new LinkedList<Integer>();
+            while(tbds.hasNext()) {
+                int id = tbds.next();
+                if(!Repository.txtExists(id)) {
+                    Repository.search(id);
+                }
+                if(!Repository.txtExists(id)) {
+                    newTbds.add(id);
+                } else {
+                    try {
+                        Repository.update(id, null);
+                        copyFromRepositoryToStick(id);
+                    } catch(IOException ioe) {
+                        log.warn("failed to copy book " + id + " from repository to stick", ioe);
+                        if(frame != null) {
+                            JOptionPane.showMessageDialog(frame, "Das Buch " + id + " konnte nicht auf den Stift kopiert werden");
+                        }
+                        result = false;
+                        newTbds.add(id);
+                    }
+                }
+            }
+            try {
+                setTBD(newTbds);
+            } catch(IOException ioe) {
+                log.warn("failed to write TBD.TXT", ioe);
+            }
+        } catch(IOException ioe) {
+            log.warn("unable to read TBD.TXT", ioe);
+            if(frame != null) {
+                JOptionPane.showMessageDialog(frame, "Die Datei TBD.TXT auf dem Stift kann nicht gelesen werden");
+                result = false;
+            }
+        }
+        return(result);
+    }
 }

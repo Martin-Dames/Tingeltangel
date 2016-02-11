@@ -20,22 +20,30 @@
 package tingeltangel.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import tingeltangel.Tingeltangel;
@@ -74,6 +82,7 @@ public class ManagerFrame extends JFrame {
         
         setContentPane(getPanel());
         
+        centerPanel.setLayout(new PushBorderLayout());
         
         Runnable task = new TimerTask() {
             @Override
@@ -92,6 +101,8 @@ public class ManagerFrame extends JFrame {
                     }
                 } catch(IOException ioe) {
                     ioe.printStackTrace();
+                } catch(Exception e) {
+                    e.printStackTrace();
                 }
             }
         };
@@ -112,6 +123,8 @@ public class ManagerFrame extends JFrame {
                 int id = ids.next();
                 centerPanel.add(getBookPanel(id), PushBorderLayout.PAGE_START);
             }
+            validate();
+            repaint();
             
         } catch(IOException ioe) {
             log.warn("Stick konnte nicht geöffnet werden", ioe);
@@ -121,17 +134,52 @@ public class ManagerFrame extends JFrame {
     
     private JPanel getBookPanel(int mid) throws IOException {
         JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
         
         // get version from stick
         Stick stick = Stick.getStick();
         int stickVersion = stick.getBookVersion(mid);
         
         // get version from repository
-        int repositoryVersion = Integer.parseInt(Repository.getBookTxt(mid).get("Version"));
+        HashMap<String, String> bookTxt = Repository.getBookTxt(mid);
+        int repositoryVersion = -1;
+        if(bookTxt != null) {
+            repositoryVersion = Integer.parseInt(bookTxt.get(TxtFile.KEY_VERSION));
+        }
+        
+        File coverImage = Repository.getBookPng(mid);
+        try {
+            if((coverImage != null) && coverImage.exists()) {
+                panel.add(new JLabel(new ImageIcon(ImageIO.read(coverImage))), BorderLayout.WEST);
+            } else {
+                panel.add(new JLabel(new ImageIcon(ImageIO.read(getClass().getResource("/noCover.png")))), BorderLayout.WEST);
+            }
+        } catch(IOException ioe) {
+            log.warn("unable to load cover (mid=" + mid + ")", ioe);
+        }
+        
+        
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new PushBorderLayout());
+        
+        if(bookTxt == null) {
+            infoPanel.add(new JLabel("keine Informationen vorhanden"), PushBorderLayout.PAGE_START);
+        } else {
+            JLabel title = new JLabel(bookTxt.get(TxtFile.KEY_NAME));
+            Font f = title.getFont();
+            title.setFont(f.deriveFont(f.getSize2D() + 5f));
+
+
+            infoPanel.add(title, PushBorderLayout.PAGE_START);
+            infoPanel.add(new JLabel("Autor: " + bookTxt.get(TxtFile.KEY_AUTHOR)), PushBorderLayout.PAGE_START);
+            infoPanel.add(new JLabel("Verlag: " + bookTxt.get(TxtFile.KEY_PUBLISHER)), PushBorderLayout.PAGE_START);
+            infoPanel.add(new JLabel("URL: " + bookTxt.get(TxtFile.KEY_URL)), PushBorderLayout.PAGE_START);
+            infoPanel.add(new JLabel("Version: " + bookTxt.get(TxtFile.KEY_VERSION)), PushBorderLayout.PAGE_START);
+        }
         
         
         
-        panel.add(new JLabel("MID=" + mid + " StickVersion=" + stickVersion + " RepositoryVersion=" + repositoryVersion));
+        panel.add(infoPanel, BorderLayout.CENTER);
         
         
         return(panel);
@@ -141,7 +189,7 @@ public class ManagerFrame extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(statusLabel, BorderLayout.NORTH);
-        panel.add(centerPanel, BorderLayout.CENTER);
+        panel.add(new JScrollPane(centerPanel), BorderLayout.CENTER);
         panel.add(getRightPanel(), BorderLayout.EAST);
         return(panel);
     }
@@ -153,49 +201,60 @@ public class ManagerFrame extends JFrame {
         addButton(panel, "Stift aktualisieren", new Callback<Object>() {
             @Override
             public void callback(Object t) {
-                /*
+                
                 
                 // update all books on stick
-                Stick stick = Stick.getStick();
-                Iterator<Integer> ids = stick.getBooks().iterator();
-                while(ids.hasNext()) {
-                    int id = ids.next();
-                    Repository.update(id, null);
-                    int repositoryVersion = Integer.parseInt(Repository.getBookTxt(id).get(TxtFile.KEY_VERSION));
-                    int stickVersion =stick.getBookVersion(id);
-                    if(stickVersion < repositoryVersion) {
-                        stick.copyFromRepositoryToStick(id);
+                Stick stick = null;
+                try {
+                    stick = Stick.getStick();
+                    if(stick == null) {
+                        log.warn("no stick found");
+                        JOptionPane.showMessageDialog(ManagerFrame.this, "kein Stift gefunden");
+                        return;
                     }
+                } catch(IOException ioe) {
+                    log.warn("failed to access stick", ioe);
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Auf den Stift kann nicht zugegriffen werden");
+                    return;
                 }
                 
-                // process tbd
-                Iterator<Integer> tbds = stick.getTBD().iterator();
-                while(tbds.hasNext()) {
-                    try {
-                        int id = tbds.next();
-                        if(!Repository.txtExists(id)) {
-                            Repository.search(id);
-                        }
-                        Repository.update(id, null);
-                        stick.copyFromRepositoryToStick(id);
-                    } catch(IOException ioe) {
-                        
-                    }
-                    
+                if(stick.update(ManagerFrame.this)) {
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Update erfolgreich");
+                } else {
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Update fehlgeschlagen");
                 }
-                */
             }
         });
-        addButton(panel, "test 3", new Callback<Object>() {
+        addButton(panel, "Neue Bücher suchen", new Callback<Object>() {
             @Override
             public void callback(Object t) {
-                System.out.println("test 3");
+                Repository.search(null);
+                JOptionPane.showMessageDialog(ManagerFrame.this, "Update erfolgreich");
             }
         });
-        addButton(panel, "test 4", new Callback<Object>() {
+        addButton(panel, "Repository aktualisieren", new Callback<Object>() {
             @Override
             public void callback(Object t) {
-                System.out.println("test 4");
+                try {
+                    Repository.update(null);
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Update erfolgreich");
+                } catch (IOException ex) {
+                    log.warn("Repository.update error", ex);
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Es ist ein Fehler aufgetreten");
+                }
+            }
+        });
+        
+        addButton(panel, "Stift reparieren", new Callback<Object>() {
+            @Override
+            public void callback(Object t) {
+                
+            }
+        });
+        addButton(panel, "Repository aktualisieren", new Callback<Object>() {
+            @Override
+            public void callback(Object t) {
+                
             }
         });
         
