@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -112,7 +113,7 @@ public class Template {
         return(name);
     }
     
-    public String getCode(LinkedList<String> args, LinkedList<Integer> usableRegisters) throws SyntaxError {
+    public String getCode(LinkedList<String> args, HashSet<Integer> usableRegisters) throws SyntaxError {
         if(args.size() != params.size()) {
             throw new SyntaxError("falsche Anzahl der Argumente in " + name);
         }

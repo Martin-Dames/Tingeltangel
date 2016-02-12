@@ -46,6 +46,7 @@ public class Script {
     private LinkedList<Instance> script = null;
     private HashMap<String, Integer> instanceLabelsSI = null;
     private HashMap<Integer, Integer> instanceLabelsII = null;
+    private HashSet<Integer> usedRegisters = null;
     
     private static int labelCounter = 0;
     private final static Logger compilerLog = LogManager.getLogger("compiler");
@@ -63,6 +64,7 @@ public class Script {
     
     void changeMade() {
         entry.changeMade();
+        usedRegisters = null;
     }
     
     public void setCode(String code) {
@@ -146,6 +148,11 @@ public class Script {
     }
     
     public HashSet<Integer> getAllUsedRegisters() throws IOException, SyntaxError {
+        
+        if(usedRegisters != null) {
+            return(usedRegisters);
+        }
+        
         BufferedReader in = new BufferedReader(new StringReader(mergeCodeOnCalls(false).toString()));
         HashSet<Integer> registers = new HashSet<Integer>();
         String row;
@@ -166,6 +173,8 @@ public class Script {
                 }
             }
         }
+        
+        usedRegisters = registers;
         
         return(registers);
     }
@@ -342,6 +351,8 @@ public class Script {
         
         HashSet<Integer> usedRegs = entry.getBook().getAllUsedRegisters();
         
+        HashSet<Integer> registersUsedByTemplate = new HashSet<Integer>();
+        
         String row;
         while((row = in.readLine()) != null) {
             row = row.trim().toLowerCase();
@@ -358,13 +369,13 @@ public class Script {
                 for(int i = 0; i < _as.length; i++) {
                     as.add(_as[i].toLowerCase().trim());
                 }
-                LinkedList<Integer> ur = new LinkedList<Integer>();
+                
                 for(int r = 0; r <= Emulator.getMaxBasicRegister(); r++) {
                     if(!usedRegs.contains(r)) {
-                        ur.add(r);
+                        registersUsedByTemplate.add(r);
                     }
                 }
-                out.append(t.getCode(as, ur));
+                out.append(t.getCode(as, registersUsedByTemplate));
             } else {
                 out.append(row);
                 if(!args.isEmpty()) {
