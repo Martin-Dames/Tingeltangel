@@ -48,7 +48,9 @@ public class Template {
         "lastid",
         "setbit",
         "unsetbit",
-        "getbit"
+        "getbit",
+        "lock",
+        "unlock"
     };
     private final static HashMap<String, Template> templates = new HashMap<String, Template>();
     
