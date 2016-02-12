@@ -340,6 +340,8 @@ public class Script {
         BufferedReader in = new BufferedReader(new StringReader(code));
         StringBuilder out = new StringBuilder();
         
+        HashSet<Integer> usedRegs = entry.getBook().getAllUsedRegisters();
+        
         String row;
         while((row = in.readLine()) != null) {
             row = row.trim().toLowerCase();
@@ -357,7 +359,6 @@ public class Script {
                     as.add(_as[i].toLowerCase().trim());
                 }
                 LinkedList<Integer> ur = new LinkedList<Integer>();
-                HashSet<Integer> usedRegs = getAllUsedRegisters();
                 for(int r = 0; r <= Emulator.getMaxBasicRegister(); r++) {
                     if(!usedRegs.contains(r)) {
                         ur.add(r);
