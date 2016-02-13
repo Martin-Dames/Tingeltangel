@@ -51,7 +51,8 @@ public class Template {
         "unsetbit",
         "getbit",
         "lock",
-        "unlock"
+        "unlock",
+        "speak"
     };
     private final static HashMap<String, Template> templates = new HashMap<String, Template>();
     
@@ -74,20 +75,26 @@ public class Template {
                 if((!row.isEmpty()) && (!row.startsWith("//"))) {
                     if(inHead) {
                         if(row.startsWith("params=")) {
-                            String[] p = row.substring("params=".length()).split(",");
-                            for(int i = 0; i < p.length; i++) {
-                                int k = p[i].indexOf(":");
-                                String def = p[i].substring(0, k).trim();
-                                Parameter param = new Parameter();
-                                param.name = p[i].substring(k + 1).trim();
-                                param.register = def.contains("r");
-                                param.value = def.contains("v");
-                                params.add(param);
+                            row = row.substring("params=".length()).trim();
+                            if(!row.isEmpty()) {
+                                String[] p = row.split(",");
+                                for(int i = 0; i < p.length; i++) {
+                                    int k = p[i].indexOf(":");
+                                    String def = p[i].substring(0, k).trim();
+                                    Parameter param = new Parameter();
+                                    param.name = p[i].substring(k + 1).trim();
+                                    param.register = def.contains("r");
+                                    param.value = def.contains("v");
+                                    params.add(param);
+                                }
                             }
                         } else if(row.startsWith("work=")) {
-                            String[] p = row.substring("work=".length()).split(",");
-                            for(int i = 0; i < p.length; i++) {
-                                work.add(p[i].trim());
+                            row = row.substring("work=".length()).trim();
+                            if(!row.isEmpty()) {
+                                String[] p = row.split(",");
+                                for(int i = 0; i < p.length; i++) {
+                                    work.add(p[i].trim());
+                                }
                             }
                         } else if(row.equals("---")) {
                             inHead = false;

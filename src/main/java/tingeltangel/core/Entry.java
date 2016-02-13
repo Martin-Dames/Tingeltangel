@@ -38,7 +38,7 @@ public class Entry {
     private TTSEntry tts = null;
     private float mp3length = -1;
     private int size = -1;
-    private Book book;
+    private final Book book;
     private String hint = "";
     private int type = MP3;
     private int tingID = -1;

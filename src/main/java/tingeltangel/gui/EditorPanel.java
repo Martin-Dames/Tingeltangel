@@ -306,6 +306,7 @@ public final class EditorPanel extends JPanel {
         
         setLayout(new BorderLayout());
         jScrollPane = new JScrollPane(list);
+        jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
         add(jScrollPane, BorderLayout.CENTER);
         add(right, BorderLayout.EAST);
         
