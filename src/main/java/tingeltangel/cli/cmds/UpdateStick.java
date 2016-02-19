@@ -32,6 +32,7 @@ import tingeltangel.cli.CliCommand;
 import tingeltangel.cli.CliSwitch;
 import tingeltangel.core.Repository;
 import tingeltangel.core.Stick;
+import tingeltangel.core.Translator;
 import tingeltangel.core.constants.TxtFile;
 
 public class UpdateStick extends CliCommand {
@@ -76,7 +77,7 @@ public class UpdateStick extends CliCommand {
             
             int mid = mids.next();
             
-            if((mid > 0) && (mid < 10000)) {
+            if((mid > 0) && (mid <= Translator.MAX_MID)) {
                 
                 // update txt in repository
                 System.out.println("repository: update mid " + mid);

@@ -34,6 +34,8 @@ public class Translator {
     private final static int min_object_code = 15001;
     private final static int max_object_code;
     
+    public final static int MAX_MID = 9999;
+    
     private final static Random rnd = new Random();
     
     static {

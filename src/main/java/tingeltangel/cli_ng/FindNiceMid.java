@@ -40,12 +40,12 @@ class FindNiceMid extends CliCmd {
     private final static int[][] NICE_MIDS = {
         // real nice mids (free and far away from official mids)
         {8000, 8500},
-        {9500, 9999},
+        {9500, Translator.MAX_MID},
         // nice mids  (non official mids)
         {6000, 8799},
-        {8900, 9999},
+        {8900, Translator.MAX_MID},
         // all ids
-        {1, 9999}
+        {1, Translator.MAX_MID}
     };
     
     @Override

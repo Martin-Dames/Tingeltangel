@@ -21,6 +21,7 @@ import java.util.Map;
 import tingeltangel.core.Book;
 import tingeltangel.core.Importer;
 import tingeltangel.core.Repository;
+import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
 
@@ -50,10 +51,10 @@ class ImportFromRepository extends CliCmd {
             try {
                 mid = Integer.parseInt(args[0]);
             } catch(NumberFormatException e) {
-                return(error("keine Zahl (1-9999) als Parameter angegeben"));
+                return(error("keine Zahl (1-" + Translator.MAX_MID + ") als Parameter angegeben"));
             }
-            if((mid < 1) || (mid > 9999)) {
-                return(error("ungültige MID angegeben (1-9999)"));
+            if((mid < 1) || (mid > Translator.MAX_MID)) {
+                return(error("ungültige MID angegeben (1-" + Translator.MAX_MID + ")"));
             }
             String _mid = Integer.toString(mid);
             while(_mid.length() < 5) {

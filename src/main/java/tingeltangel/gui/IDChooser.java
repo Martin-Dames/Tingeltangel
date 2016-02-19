@@ -174,7 +174,7 @@ public class IDChooser extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private boolean isNiceID(int id) {
-        return((id >= 8000) && (id <= 8500)) || ((id >= 9500) && (id <= 9999));
+        return((id >= 8000) && (id <= 8500)) || ((id >= 9500) && (id <= Translator.MAX_MID));
     }
     
     private String renderName(int id) {
@@ -202,7 +202,7 @@ public class IDChooser extends javax.swing.JDialog {
             }
         }
         
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i <= Translator.MAX_MID; i++) {
             if((Translator.ting2code(i) >= 0) && isNiceID(i)) {
                 // check if book with mid i already exists
                 if(!_books.contains(i)) {
@@ -215,7 +215,7 @@ public class IDChooser extends javax.swing.JDialog {
 
     private void freeIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_freeIDActionPerformed
         idList.clear();
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i <= Translator.MAX_MID; i++) {
             if(Repository.getBookTxt(i) == null) {
                 idList.add(new Tupel(i, renderName(i)));
             }
@@ -225,7 +225,7 @@ public class IDChooser extends javax.swing.JDialog {
 
     private void anyIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anyIDActionPerformed
         idList.clear();
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i <= Translator.MAX_MID; i++) {
             idList.add(new Tupel(i, renderName(i)));
         }
         model.refresh();

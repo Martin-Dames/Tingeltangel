@@ -315,11 +315,11 @@ public class Repository {
     public static void search(ProgressDialog progress) {
         
         if(progress != null) {
-            progress.setMax(10000);
+            progress.setMax(Translator.MAX_MID);
         }
         
         
-        for(int id = 0; id <= 10000; id++) {
+        for(int id = 0; id <= Translator.MAX_MID; id++) {
             if(progress != null) {
                 progress.setVal(id);
             }

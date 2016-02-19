@@ -22,6 +22,7 @@ import java.io.IOException;
 import tingeltangel.core.Book;
 import tingeltangel.core.Importer;
 import tingeltangel.core.Repository;
+import tingeltangel.core.Translator;
 import tingeltangel.core.scripting.SyntaxError;
 
 /**
@@ -89,8 +90,8 @@ class ImportManual extends CliCmd {
             } catch(NumberFormatException e) {
                 return(error("Fehlerhafte mid angegeben"));
             }
-            if((id < 1) || (id > 9999)) {
-                return(error("Fehlerhafte mid angegeben (1-9999)"));
+            if((id < 1) || (id > Translator.MAX_MID)) {
+                return(error("Fehlerhafte mid angegeben (1-" + Translator.MAX_MID + ")"));
             }
         }
         if((id < 0) && (ouf != null)) {
