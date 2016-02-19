@@ -89,7 +89,9 @@ public class Tingeltangel {
                 }
             });
         } else {
-            if(!CLI.cli(args)) {
+            if(args.length == 0) {
+              tingeltangel.cli_ng.CLI.run();
+            } else if(!CLI.cli(args)) {
                 log.warn("starting cli failed");
             }
         }

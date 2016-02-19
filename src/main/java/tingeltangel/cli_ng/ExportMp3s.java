@@ -1,0 +1,103 @@
+/*
+ * Copyright 2016 martin.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package tingeltangel.cli_ng;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import tingeltangel.core.Book;
+import tingeltangel.tools.FileEnvironment;
+
+/**
+ *
+ * @author martin
+ */
+class ExportMp3s extends CliCmd {
+
+    @Override
+    public String getName() {
+        return("export-mp3s");
+    }
+
+    @Override
+    public String getDescription() {
+        return("export-mp3s <zip file>|<directory>");
+    }
+
+    @Override
+    public int execute(String[] args) {
+        
+        
+        
+        if(args.length != 1) {
+            return(error("falsche Anzahl von Parametern angegeben"));
+        }
+        File file = new File(args[0].trim());
+        if(!file.canWrite()) {
+            return(error("Die Datei oder das Verzeichnis " + file.getAbsolutePath() + " kann nicht geschrieben werden"));
+        }
+        
+        
+        try {
+            Book book = CLI.getBook();
+
+            File[] entries = FileEnvironment.getAudioDirectory(book.getID()).listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return(name.toLowerCase().endsWith(".mp3"));
+                }
+            });
+            
+            if(file.isDirectory()) {
+                
+                for(int i = 0; i < entries.length; i++) {
+                    FileEnvironment.copy(entries[i], new File(file, entries[i].getName()));
+                }
+                
+            } else {
+
+                FileOutputStream fos = new FileOutputStream(file);
+                ZipOutputStream out = new ZipOutputStream(fos);
+
+                byte[] buffer = new byte[4096];
+                for(int i = 0; i < entries.length; i++) {
+
+                    FileInputStream in = new FileInputStream(entries[i]);
+                    ZipEntry zipEntry = new ZipEntry(entries[i].getName());
+                    out.putNextEntry(zipEntry);
+
+                    int length;
+                    while((length = in.read(buffer)) >= 0) {
+                        out.write(buffer, 0, length);
+                    }
+
+                    out.closeEntry();
+                    in.close();
+
+                }
+                out.close();
+                fos.close();
+            }
+        } catch(Exception e) {
+            return(error("MP3s konnten nicht exportiert werden", e));
+        }
+        return(ok());
+    }
+
+}

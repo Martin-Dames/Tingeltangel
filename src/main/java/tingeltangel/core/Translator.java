@@ -123,6 +123,10 @@ public class Translator {
         return(ting2code[t]);
     }
     
+    public static boolean isKnownTingID(int t) {
+        return(ting2code[t] >= 0);
+    }
+    
     public static int getRandomBookCode() {
         int min = 8001;
         int max = 8500;

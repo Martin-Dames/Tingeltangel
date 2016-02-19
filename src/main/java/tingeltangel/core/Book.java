@@ -40,6 +40,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -82,7 +84,6 @@ public class Book {
     private long date = new Date().getTime() / 1000;
     private long magicValue = DEFAULT_MAGIC_VALUE;
     
-    private final static int PNG_SIZE = 12;
     
     private final Emulator emulator;
     
@@ -289,6 +290,26 @@ public class Book {
         return(v.replace("&", "&amp;").replace("<", "&gt;"));
     }
     
+    public static SortedSet<Integer> getBookMIDs() {
+        
+        SortedSet<Integer> books = new TreeSet<Integer>();
+        
+        File[] bookFiles = FileEnvironment.getBooksDirectory().listFiles();
+        for(int i = 0; i < bookFiles.length; i++) {
+            if(bookFiles[i].isDirectory()) {
+                try {
+                    int id = Integer.parseInt(bookFiles[i].getName());
+                    if(id != 15000) {
+                        books.add(id);
+                    }
+                } catch(NumberFormatException nfe) {
+                    log.warn("unable to parse book id", nfe);
+                }
+            }
+        }
+        return(books);
+    }
+    
     public void save() throws IOException {
         
         
@@ -428,6 +449,7 @@ public class Book {
             throw new IOException(ex);
         }
     }
+    
     
     private static String getTagContent(Node node) {
         NodeList childNodes = node.getChildNodes();
@@ -727,8 +749,12 @@ public class Book {
     }
     
     public void epsExport(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException {
+        epsExport(dir, 100, progress);
+    }
+    
+    public void epsExport(File dir, int size, ProgressDialog progress) throws IOException, IllegalArgumentException {
         
-        int size = getLastID() - 15000;
+        int bookSize = getLastID() - 15000;
         
         if(id > 15000) {
             throw new IllegalArgumentException("maximale Buch ID: 15000");
@@ -739,21 +765,21 @@ public class Book {
         if(Translator.ting2code(id) < 0) {
             throw new IllegalArgumentException("die Code-ID zur Buch ID " + id + " ist zur Zeit noch unbekannt");
         }
-        if(15000 + size > Translator.getMaxObjectCode()) {
+        if(15000 + bookSize > Translator.getMaxObjectCode()) {
             throw new IllegalArgumentException("zu viele OIDs. Maximale zur Zeit unterstüzte OIS: " + Translator.getMaxObjectCode());
         }
         
         
         
         PrintWriter out = new PrintWriter(new FileWriter(new File(dir, "activation.eps")));
-        Codes.drawEps(Translator.ting2code(id), 100, 100, out);
+        Codes.drawEps(Translator.ting2code(id), size, size, out);
         out.close();
         
         if(progress != null) {
-            progress.setMax(size);
+            progress.setMax(bookSize);
         }
         
-        for(int i = 0; i < size; i++) {
+        for(int i = 0; i < bookSize; i++) {
             if(progress != null) {
                 progress.setVal(i);
             }
@@ -764,8 +790,12 @@ public class Book {
     }
     
     public void pngExport(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException {
+        pngExport(dir, 100, progress);
+    }
+    
+    public void pngExport(File dir, int size, ProgressDialog progress) throws IOException, IllegalArgumentException {
         
-        int size = getLastID() - 15000;
+        int bookSize = getLastID() - 15000;
         
         if(id > 15000) {
             throw new IllegalArgumentException("maximale Buch ID: 15000");
@@ -776,20 +806,20 @@ public class Book {
         if(Translator.ting2code(id) < 0) {
             throw new IllegalArgumentException("die Code-ID zur Buch ID " + id + " ist zur Zeit noch unbekannt");
         }
-        if(15000 + size > Translator.getMaxObjectCode()) {
+        if(15000 + bookSize > Translator.getMaxObjectCode()) {
             throw new IllegalArgumentException("zu viele OIDs. Maximale zur Zeit unterstüzte OIS: " + Translator.getMaxObjectCode());
         }
         
         
         OutputStream out = new FileOutputStream(new File(dir, "activation.png"));
-        Codes.drawPng(Translator.ting2code(id), PNG_SIZE, PNG_SIZE, out);
+        Codes.drawPng(Translator.ting2code(id), size, size, out);
         out.close();
         
         if(progress != null) {
-            progress.setMax(size);
+            progress.setMax(bookSize);
         }
         
-        for(int i = 0; i < size; i++) {
+        for(int i = 0; i < bookSize; i++) {
             if(progress != null) {
                 progress.setVal(i);
             }
