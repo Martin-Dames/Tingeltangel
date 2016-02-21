@@ -20,6 +20,8 @@ package tingeltangel.core;
 
 import java.io.File;
 import java.io.IOException;
+import static tingeltangel.gui.TTSPreferences.PROPERTY_DEFAULT_VOICE;
+import static tingeltangel.gui.TTSPreferences.PROPERTY_DEFAULT_VARIANT;
 import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.TTS;
 
@@ -47,7 +49,7 @@ public class TTSEntry {
     
     public File generateTTS(Entry entry) throws IOException {
         File mp3 = getMP3(entry);
-        TTS.generate(text, amplitude, pitch, speed, voice, variant, mp3);
+        TTS.generate(text, amplitude, pitch, speed, Properties.getStringProperty(PROPERTY_DEFAULT_VOICE), Properties.getStringProperty(PROPERTY_DEFAULT_VARIANT), mp3);
         entry.setSize((int)mp3.length());
         return(mp3);
     }

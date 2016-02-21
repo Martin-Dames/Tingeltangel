@@ -137,7 +137,7 @@ public class Emulator {
     }
     
     public void play(int oid) {
-        Entry entry = book.getEntryFromTingID(oid);
+        Entry entry = book.getEntryByOID(oid);
         if(entry == null) {
             log.warn("NOT playing " + oid + ". Track not Found.");
             return;

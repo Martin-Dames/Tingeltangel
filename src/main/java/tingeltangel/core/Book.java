@@ -239,17 +239,14 @@ public class Book {
         return(indexEntries.get(indexIDs.get(i)));
     }
     
-    public Entry getEntryByID(int id) {
-        return(indexEntries.get(id));
+    public Entry getEntryByOID(int oid) {
+        return(indexEntries.get(oid));
     }
     
     public boolean entryForTingIDExists(int tingID) {
         return(indexEntries.get(tingID) != null);
     }
     
-    public Entry getEntryFromTingID(int tingID) {
-        return(indexEntries.get(tingID));
-    }
     
     public int getID() {
         return(id);
@@ -645,7 +642,7 @@ public class Book {
         // write index table
         int pos = startOfIndexTable + 12 * size;
         for(int i = 0; i < size; i++) {
-            Entry entry = getEntryFromTingID(i + 15001);
+            Entry entry = getEntryByOID(i + 15001);
             
             
             if(entry == null) {
@@ -687,7 +684,7 @@ public class Book {
             if(progress != null) {
                 progress.setVal(t);
             }
-            Entry e = getEntryFromTingID(t + 15001);
+            Entry e = getEntryByOID(t + 15001);
             if(e != null) {
                 int pad = getNextAddress(pos) - pos;
                 pos += pad;
@@ -871,7 +868,7 @@ public class Book {
         
         // test if index table is valid
         for(int i = 0; i < size; i++) {
-            Entry entry = getEntryFromTingID(i + 15001);
+            Entry entry = getEntryByOID(i + 15001);
             if((entry != null) && entry.isMP3() && (entry.getMP3() != null)) {
                 if(!entry.getMP3().canRead()) {
                     throw new IllegalArgumentException("Die Datei '" + entry.getMP3().getAbsolutePath() + "' konnte nicht gelesen werden.");
@@ -1000,7 +997,7 @@ public class Book {
                 inNote = false;
                 int tingID = Integer.parseInt( line.substring(line.indexOf('=')+1)   );
                 this.addEntry(tingID);
-                entry = this.getEntryFromTingID(tingID);
+                entry = this.getEntryByOID(tingID);
             } else if( entry != null && line.startsWith("TYPE="))  {
                 type = Integer.parseInt(line.substring(line.indexOf('=')+1));
                 if( type == 0 ) {

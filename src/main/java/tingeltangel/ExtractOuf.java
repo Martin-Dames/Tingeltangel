@@ -70,7 +70,7 @@ public class ExtractOuf {
         for (Integer code : code2entry.keySet()) {
             IndexTableEntry ite = code2entry.get(code);
             book.addEntry(code);
-            Entry entry = book.getEntryFromTingID(code);
+            Entry entry = book.getEntryByOID(code);
             if (ite.type == 1) {
                 in.seek(ite.position);
                 byte[] data = new byte[ite.size];

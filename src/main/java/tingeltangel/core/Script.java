@@ -132,7 +132,7 @@ public class Script {
                 return;
             } else if(instance.getCommand().getAsm().equals(ScriptFile.CALL) || instance.getCommand().getAsm().equals(ScriptFile.CALLID)) {
                 int oid = instance.getFirstArgument();
-                entry.getBook().getEntryByID(oid).getScript().execute(true);
+                entry.getBook().getEntryByOID(oid).getScript().execute(true);
                 pc++;
             } else if(instance.getCommand().getAsm().equals(ScriptFile.RETURN)) {
                 return;
@@ -192,7 +192,7 @@ public class Script {
                 if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                     try {
                         int oid = Integer.parseInt(row.substring(ScriptFile.CALL.length()).trim());
-                        String subCode = entry.getBook().getEntryByID(oid).getScript().mergeCodeOnCalls(true);
+                        String subCode = entry.getBook().getEntryByOID(oid).getScript().mergeCodeOnCalls(true);
                         mergedCode.append(subCode);
                     } catch(NumberFormatException nfe) {
                         SyntaxError error = new SyntaxError("call needs a value as argument");

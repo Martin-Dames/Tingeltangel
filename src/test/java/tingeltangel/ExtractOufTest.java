@@ -39,7 +39,7 @@ public class ExtractOufTest {
         Book result = extractOuf.extract(ouf, folder.newFolder());
 
         for (Integer id : result.getIds()) {
-            Entry entry = result.getEntryFromTingID(id);
+            Entry entry = result.getEntryByOID(id);
             System.out.println(entry.getTingID());
             if( entry.isCode()) {
                 System.out.println(entry.getScript() );

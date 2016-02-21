@@ -166,7 +166,7 @@ public class Importer {
                 int id = ids.next();
                 
                 book.addEntry(id);
-                Entry entry = book.getEntryByID(id);
+                Entry entry = book.getEntryByOID(id);
                 
                 if(scriptEntryIsMP3.get(id)) {
                     entry.setMP3();
@@ -365,7 +365,7 @@ public class Importer {
             // book.add e to index table
             book.addEntry(e[3]);
             
-            Entry entry = book.getEntryByID(e[3]);
+            Entry entry = book.getEntryByOID(e[3]);
             
             if(e[2] == 1) {
                 log.debug("@0x" + Integer.toHexString(epos) + " importing oid " + e[3] + " (mp3 len=" + e[1] + ") ...");

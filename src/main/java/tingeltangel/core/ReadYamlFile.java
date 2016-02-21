@@ -112,7 +112,7 @@ public class ReadYamlFile {
         for (String filename : interpreter.getFilename2oid().keySet()) {
             int oid = interpreter.getFilename2oid().get(filename);
             book.addEntry(oid);
-            Entry entry = book.getEntryFromTingID(oid);
+            Entry entry = book.getEntryByOID(oid);
 
             if (!ignoreAudioFiles) {
                 // Since the TipToi pen uses OggVorbis files we might have to convert the audio files to mp3.
@@ -166,7 +166,7 @@ public class ReadYamlFile {
             interpreter.getScript().append("end\n");
 
             book.addEntry(oid);
-            Entry entry = book.getEntryFromTingID(oid);
+            Entry entry = book.getEntryByOID(oid);
             Script script = new Script(interpreter.getScript().toString(), entry);
             entry.setScript(script);
             entry.setHint(identifier.toString());

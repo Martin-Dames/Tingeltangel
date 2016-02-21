@@ -102,11 +102,11 @@ public class ReadYamlFileTest {
         assertNotNull("OID for label b", label2oid.get("b"));
         assertNotNull("OID for label c", label2oid.get("c"));
 
-        Entry entryA = book.getEntryFromTingID(label2oid.get("a"));
+        Entry entryA = book.getEntryByOID(label2oid.get("a"));
         assertNotNull("entry for label a", entryA);
-        Entry entryB = book.getEntryFromTingID(label2oid.get("b"));
+        Entry entryB = book.getEntryByOID(label2oid.get("b"));
         assertNotNull("entry for label b", entryB);
-        Entry entryC = book.getEntryFromTingID(label2oid.get("c"));
+        Entry entryC = book.getEntryByOID(label2oid.get("c"));
         assertNotNull("entry for label c", entryC);
 
         // Change these tests if you optimize the result for MP3 files that are only used once.

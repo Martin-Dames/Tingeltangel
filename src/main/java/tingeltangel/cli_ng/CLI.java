@@ -35,22 +35,26 @@ public class CLI {
         new GenerateCodes(),
         new Exit(),
         new Help(),
-        /*
         new DeleteBook(),
         new SearchForNewBooksInRepository(),
-        new UpdateRepositoryBookList(),
-        new ShowBooksInRepository(),
+        new UpdateRepositoryBooks(),
         new CleanupRepository(),
-        new TtsGetLanguages(),
-        new TtsSetLanguage(),
+        new ShowBooksInRepository(),
+        new TtsGetVoices(),
+        new TtsGetVoice(),
+        new TtsSetVoice(),
         new TtsGetVariants(),
-        new TtsSetVariants(),
+        new TtsGetVariant(),
+        new TtsSetVariant(),
+        /*
         new CodePageRaw(),
         new CodePageTing(),
         new CodeGetRaw(),
         new CodeGetTing(),
         new CodeRawToTing(),
         new CodeTingToRaw(),
+        */
+        /*
         new SetEntryMp3(),
         new SetEntryMp3Hint(),
         new SetEntryScript(),
@@ -64,21 +68,32 @@ public class CLI {
         new GetEntryMp3Hint(),
         new GetEntryScript(),
         new GetEntryTts(),
+        */
+        /*
         new SetCover(),
         new GetCover(),
+        */
+        /*
         new Deploy(),
+        */
+        /*
         new GetRegister(),
         new SetRegister(),
         new GetRegisterHint(),
         new SetRegisterHint(),
+        */
+        /*
         new GetMid(),
         new ChangeMid(),
-        
+        */
+        /*
         new GetMeta(), // name, publisher, author, version, url, magic, date
         new SetMeta(), // name, publisher, author, version, url, magic, date
-        
+        */
+        /*
         new Play(),
-        
+        */
+        /*
         new StickUpdate(),
         new StickStatus(),
         new StickBooks(),
@@ -86,7 +101,8 @@ public class CLI {
         */
         new StickDebug(),
         /*
-        new StickActivateBook() */
+        new StickActivateBook()
+        */
     };
     
     private final static HashMap<String, CliCmd> cmds = new HashMap<String, CliCmd>();
@@ -155,7 +171,7 @@ public class CLI {
 
                     CliCmd cliCmd = cmds.get(cmd);
                     if(cliCmd == null) {
-                        System.err.println("unbekanntes kommando");
+                        System.err.println("unbekannter Befehl");
                     } else {
                         cliCmd.execute(args);
                     }

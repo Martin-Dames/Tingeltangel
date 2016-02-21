@@ -177,7 +177,7 @@ public final class EditorPanel extends JPanel {
                 for(int i = oid; i <= lastOid; i++) {
                     mainFrame.getBook().addEntry(i);
                     int rowNr = getPositionInIndex(i);
-                    list.add(new IndexListEntry(mainFrame.getBook().getEntryFromTingID(i), EditorPanel.this), rowNr);
+                    list.add(new IndexListEntry(mainFrame.getBook().getEntryByOID(i), EditorPanel.this), rowNr);
                 }
                 new Thread() {
                     @Override
@@ -427,7 +427,7 @@ public final class EditorPanel extends JPanel {
     public void stopTrack() {
         String tid = currentTrack.getText();
         if((tid != null) && !tid.isEmpty()) {
-            Entry entry = mainFrame.getBook().getEntryFromTingID(Integer.parseInt(tid));
+            Entry entry = mainFrame.getBook().getEntryByOID(Integer.parseInt(tid));
             if(entry.isCode()) {
                 entry.getScript().kill();
             }
