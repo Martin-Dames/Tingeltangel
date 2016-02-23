@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import tingeltangel.Tingeltangel;
 import tingeltangel.core.Book;
+import tingeltangel.core.scripting.SyntaxError;
 
 /**
  *
@@ -54,7 +55,6 @@ public class CLI {
         new CodeRawToTing(),
         new CodeTingToRaw(),
         */
-        /*
         new SetEntryMp3(),
         new SetEntryMp3Hint(),
         new SetEntryScript(),
@@ -66,8 +66,9 @@ public class CLI {
         new GetEntryMp3Name(),
         new GetEntryMp3Length(),
         new GetEntryMp3Hint(),
-        new GetEntryScript(),
         new GetEntryTts(),
+        new GetEntryScript(),
+        /*
         */
         /*
         new SetCover(),
@@ -156,24 +157,20 @@ public class CLI {
                     }
 
                     String[] args = new String[0];
-                    if(!argstr.isEmpty()) {
-                        args = argstr.split(" ");
-                    }
-
-                    LinkedList<String> argList = new LinkedList<String>();
-                    for(int i = 0; i < args.length; i++) {
-                        String arg = args[i].trim();
-                        if(!arg.isEmpty()) {
-                            argList.add(arg);
+                    try{
+                        if(!argstr.isEmpty()) {
+                            args = argssplit(argstr);
                         }
-                    }
-                    args = argList.toArray(new String[0]);
 
-                    CliCmd cliCmd = cmds.get(cmd);
-                    if(cliCmd == null) {
-                        System.err.println("unbekannter Befehl");
-                    } else {
-                        cliCmd.execute(args);
+
+                        CliCmd cliCmd = cmds.get(cmd);
+                        if(cliCmd == null) {
+                            System.err.println("unbekannter Befehl");
+                        } else {
+                            cliCmd.execute(args);
+                        }
+                    } catch(SyntaxError e) {
+                        System.err.println(e.getMessage());
                     }
                 }
                 System.out.print(">");
@@ -181,6 +178,33 @@ public class CLI {
         } catch(IOException e) {
             throw new Error(e);
         }
+    }
+    
+    private static String[] argssplit(String x) throws SyntaxError {
+        
+        LinkedList<String> args = new LinkedList<String>();
+        
+        while(!x.isEmpty()) {
+            if(x.startsWith("\"")) {
+                x = x.substring(1);
+                int p = x.indexOf("\"");
+                if(p == -1) {
+                    throw new SyntaxError("missing \"");
+                }
+                args.add(x.substring(0, p));
+                x = x.substring(p + 1).trim();
+            } else {
+                int p = x.indexOf(" ");
+                if(p == -1) {
+                    args.add(x);
+                    x = "";
+                } else {
+                    args.add(x.substring(0, p));
+                    x = x.substring(p).trim();
+                }
+            }
+        }
+        return(args.toArray(new String[0]));
     }
     
 }
