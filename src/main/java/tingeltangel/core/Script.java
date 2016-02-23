@@ -349,7 +349,11 @@ public class Script {
         BufferedReader in = new BufferedReader(new StringReader(code));
         StringBuilder out = new StringBuilder();
         
-        HashSet<Integer> usedRegs = entry.getBook().getAllUsedRegisters();
+        Book book = entry.getBook();
+        HashSet<Integer> usedRegs = new HashSet<Integer>();
+        if(book != null) {
+            usedRegs = book.getAllUsedRegisters();
+        }
         
         HashSet<Integer> registersUsedByTemplate = new HashSet<Integer>();
         
