@@ -42,6 +42,9 @@ class GetEntryMp3Length extends CliCmd {
         } catch(NumberFormatException e) {
             return(error("OID keine Zahl zw. 15001 und 65535"));
         }
+        if(oid < 15001 || oid > 0xffff) {
+            return(error("OID keine Zahl zw. 15001 und 65535"));
+        }
         
         if(!CLI.bookOpened()) {
             return(error("kein Buch geöffnet"));

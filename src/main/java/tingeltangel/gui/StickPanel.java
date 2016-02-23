@@ -96,6 +96,7 @@ public class StickPanel extends JPanel {
                                                 for(int i = 0; i < files.length; i++) {
                                                     FileEnvironment.copy(files[i], new File(dest, files[i].getName()));
                                                 }
+                                                stick.activateBook(book.getID());
                                                 JOptionPane.showMessageDialog(frame, "Buch auf den Stift kopiert");
                                             }
                                         } catch(IOException e) {

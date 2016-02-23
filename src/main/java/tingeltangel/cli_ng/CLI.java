@@ -52,9 +52,9 @@ public class CLI {
         new CodePageTing(),
         new CodeGetRaw(),
         new CodeGetTing(),
+        */
         new CodeRawToTing(),
         new CodeTingToRaw(),
-        */
         new SetEntryMp3(),
         new SetEntryMp3Hint(),
         new SetEntryScript(),
@@ -69,31 +69,21 @@ public class CLI {
         new GetEntryTts(),
         new GetEntryScript(),
         /*
-        */
-        /*
         new SetCover(),
         new GetCover(),
         */
-        /*
         new Deploy(),
-        */
         /*
         new GetRegister(),
         new SetRegister(),
         new GetRegisterHint(),
         new SetRegisterHint(),
         */
-        /*
         new GetMid(),
         new ChangeMid(),
-        */
-        /*
-        new GetMeta(), // name, publisher, author, version, url, magic, date
-        new SetMeta(), // name, publisher, author, version, url, magic, date
-        */
-        /*
+        new GetMeta(),
+        new SetMeta(),
         new Play(),
-        */
         /*
         new StickUpdate(),
         new StickStatus(),
@@ -101,9 +91,7 @@ public class CLI {
         new StickDeleteBook(),
         */
         new StickDebug(),
-        /*
         new StickActivateBook()
-        */
     };
     
     private final static HashMap<String, CliCmd> cmds = new HashMap<String, CliCmd>();

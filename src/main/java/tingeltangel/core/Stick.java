@@ -611,4 +611,17 @@ public class Stick {
         }
         return(result);
     }
+
+    public void activateBook(int id) throws IOException {
+        
+        String _id = Integer.toString(id);
+        while(_id.length() < 5) {
+            _id = "0" + _id;
+        }
+        
+        HashMap<String, String> settings = getSettings();
+        settings.put("book", _id);
+        setSettings(settings);
+        
+    }
 }
