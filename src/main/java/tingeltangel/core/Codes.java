@@ -25,6 +25,7 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -312,7 +313,48 @@ public class Codes {
         out.flush();
     }
 
-    public static void drawPage(int start, PrintWriter out) {
+    public static void drawPagePNG(int start, OutputStream out) throws IOException {
+        BufferedImage image = new BufferedImage(4960, 7015, BufferedImage.TYPE_INT_ARGB);
+
+        setResolution(DPI600);
+        
+        int cx = 25;
+        int cy = 40;
+        
+        int dx = 350;
+        int dy = 140;
+        
+        Graphics2D graphics = image.createGraphics();
+        graphics.setColor(Color.white);
+        graphics.fillRect(0, 0, 4960, 7015);
+        graphics.setColor(Color.black);
+        
+        graphics.setFont(graphics.getFont().deriveFont(35f));
+        graphics.drawString("Ting IDs ab " + Integer.toString(start), 5 + dx, 100);
+        
+        graphics.setFont(graphics.getFont().deriveFont(25f));
+
+        for (int y = 0; y < cy; y++) {
+            for (int x = 0; x < cx; x++) {
+                if (start < 65536) {
+                    int tc = Translator.ting2code(start++);
+                    if(tc >= 0) {
+                        drawPattern(tc, x * 170 + dx, y * 170 + dy, 4, 4, graphics);
+                        graphics.drawString(Integer.toString(start - 1), x * 170 + 5 + dx, y * 170 + 130 + dy);
+                    }
+                }
+            }
+        }
+        
+        writePng(image, out);
+        
+    }
+    
+    public static void main(String[] args) throws IOException {
+        drawPagePNG(0, new FileOutputStream("c:\\test.png"));
+    }
+    
+    public static void drawPagePS(int start, PrintWriter out) {
         int cx = 25;
         int cy = 40;
         int till = Math.min(65535, start + (cx * cy) - 1);

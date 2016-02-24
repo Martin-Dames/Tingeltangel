@@ -687,7 +687,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         file = file + ".ps";
                     }
                     PrintWriter out = new PrintWriter(new FileWriter(file));
-                    Codes.drawPage(start, out);
+                    Codes.drawPagePS(start, out);
                     out.close();
                 } catch(Exception e) {
                     JOptionPane.showMessageDialog(this, "Die Codetabelle konnte nicht gespeichert werden");
