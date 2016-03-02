@@ -1,5 +1,10 @@
 #!/bin/bash
 
-JAR=tingeltangel-0.2-beta3-jar-with-dependencies.jar
+JAR=tingeltangel-0.2-beta4-jar-with-dependencies.jar
 
-java -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true -jar $JAR gui-editor
+OPTIONS=""
+OPTIONS="$OPTIONS -Dawt.useSystemAAFontSettings=on"
+OPTIONS="$OPTIONS -Dswing.aatext=true"
+OPTIONS="$OPTIONS -Dsun.java2d.xrender=true"
+
+java $OPTIONS -jar $JAR gui-editor

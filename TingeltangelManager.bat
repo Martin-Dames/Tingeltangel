@@ -1,1 +1,1 @@
-java -jar tingeltangel-0.2-beta3-jar-with-dependencies.jar gui-manager
+java -jar tingeltangel-0.2-beta4-jar-with-dependencies.jar gui-manager
