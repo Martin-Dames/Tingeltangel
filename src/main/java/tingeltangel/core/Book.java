@@ -56,6 +56,7 @@ import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.constants.TxtFile;
+import tingeltangel.core.scripting.Constants;
 import tingeltangel.core.scripting.Emulator;
 import tingeltangel.core.scripting.RegisterListener;
 import tingeltangel.core.scripting.SyntaxError;
@@ -72,6 +73,8 @@ public class Book {
     private SortedIntList indexIDs = new SortedIntList();
     private HashMap<Integer, Entry> indexEntries = new HashMap<Integer, Entry>();
         
+    private Constants constants = new Constants();
+    
     private boolean changed = false;
     
     private int id;
@@ -99,18 +102,14 @@ public class Book {
         indexEntries = new HashMap<Integer, Entry>();
         changed = false;
         date = new Date().getTime() / 1000;
-        
+        constants = new Constants();
         magicValue = DEFAULT_MAGIC_VALUE;
     }
     
     public File getCover() {
         return(new File(FileEnvironment.getBookDirectory(id), "cover.png"));
     }
-    /*
-    public LinkedList<Page> getPages() {
-        return(pages);
-    }
-      */  
+    
     public void generateTestBooklet(PrintWriter out) {
         LinkedList<Tupel<Integer, String>> booklet = new LinkedList<Tupel<Integer, String>>();
         Iterator<Integer> ids = indexIDs.iterator();
@@ -127,7 +126,9 @@ public class Book {
                 txt = entry.getTTS().text;
             }
             if(txt != null) {
-                txt = txt.substring(0, 100) + " ...";
+                if(txt.length() > 100) {
+                    txt = txt.substring(0, 100) + " ...";
+                }
                 booklet.add(new Tupel<Integer, String>(tid, txt));
             }
             
@@ -313,7 +314,7 @@ public class Book {
         PrintWriter xml = new PrintWriter(new OutputStreamWriter(new FileOutputStream(FileEnvironment.getXML(id)), "UTF-8"));
         xml.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         xml.println("<book");
-        xml.println("\t\tformat=\"1\"");
+        xml.println("\t\tformat=\"2\"");
         xml.println("\t\tid=\"" + id + "\"");
         xml.println("\t\tversion=\"" + version + "\"");
         xml.println("\t\tdate=\"" + date + "\"");
@@ -392,6 +393,9 @@ public class Book {
             }
         }
         xml.println("\t</registers>");
+        
+        xml.println("\t<constants>" + constants.toString() + "</constants>");
+        
         xml.println("</book>");
         xml.close();
         
@@ -428,7 +432,7 @@ public class Book {
             Element bookElement = doc.getDocumentElement();
             
             int format = Integer.parseInt(bookElement.getAttribute("format")); // sould be 1
-            if(format != 1) {
+            if(format > 2) {
                 throw new IOException("unknown file format");
             }
             
@@ -467,7 +471,7 @@ public class Book {
             Element bookElement = doc.getDocumentElement();
             
             int format = Integer.parseInt(bookElement.getAttribute("format")); // sould be 1
-            if(format != 1) {
+            if(format > 2) {
                 throw new IOException("unknown file format");
             }
             
@@ -561,17 +565,12 @@ public class Book {
                     book.emulator.setHint(rID, hint);
                 }
             }
-            
             /*
-            NodeList pages = doc.getElementsByTagName("page");
-            for(int i = 0; i < pages.getLength(); i++) {
-                Node pageNode = pages.item(i);
-                if(pageNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element pageElement = (Element)pageNode;
-                    Page p = new Page();
-                    p.image = pageElement.getAttribute("image");
-                    p.description = getTagContent(pageElement);
-                    book.getPages().add(p);
+            NodeList consts = doc.getElementsByTagName("constants");
+            for(int i = 0; i < consts.getLength(); i++) {
+                Node constNode = consts.item(i);
+                if(constNode.getNodeType() == Node.ELEMENT_NODE) {
+                    book.constants = Constants.loadFromString(getTagContent((Element)constNode));
                 }
             }
             */
@@ -584,6 +583,9 @@ public class Book {
         }
     }
     
+    public Constants getConstants() {
+        return(constants);
+    }
 
     final protected static char[] hexArray = "0123456789abcdef".toCharArray();
     private String md5(File file) throws IOException {

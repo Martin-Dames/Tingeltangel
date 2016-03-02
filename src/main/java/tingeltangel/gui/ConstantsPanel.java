@@ -29,58 +29,48 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import tingeltangel.core.Book;
-import tingeltangel.core.SortedIntList;
-import tingeltangel.core.scripting.RegisterListener;
+import tingeltangel.core.scripting.Constants;
 
 
-public class RegisterPanel extends JPanel implements RegisterListener {
+public class ConstantsPanel extends JPanel {
     
-    private final SortedIntList registers = new SortedIntList();
     
-    private final RegisterTableModel model = new RegisterTableModel();
+    private final ConstantsTableModel model = new ConstantsTableModel();
     private final JTable table = new JTable(model);
     private final EditorFrame frame;
     
-    public RegisterPanel(EditorFrame frame) {
+    public ConstantsPanel(EditorFrame frame) {
         super();
         this.frame = frame;
         setLayout(new GridLayout(1, 1));
         
         table.getColumnModel().getColumn(0).setPreferredWidth(0);
         table.getColumnModel().getColumn(1).setMinWidth(20);
-        table.getColumnModel().getColumn(2).setPreferredWidth(0);
         JScrollPane jScrollPane = new JScrollPane(table);
         jScrollPane.setPreferredSize(new Dimension(0, 100));
         add(jScrollPane);
     }
 
-    @Override
-    public void registerChanged(int register, int value) {
-        registers.add(register);
-        model.pushEvent(new TableModelEvent(model));
-    }
 
-    class RegisterTableModel implements TableModel {
+    class ConstantsTableModel implements TableModel {
 
         private final HashSet<TableModelListener> listeners = new HashSet<TableModelListener>();
         
         @Override
         public int getRowCount() {
-            return(registers.size());
+            return(frame.getBook().getConstants().getNames().size());
         }
 
         @Override
         public int getColumnCount() {
-            return(3);
+            return(2);
         }
 
         @Override
         public String getColumnName(int columnIndex) {
             switch(columnIndex) {
-                case 0: return("Register");
-                case 1: return("Bemerkung");
-                case 2: return("Wert");
+                case 0: return("Name");
+                case 1: return("Wert");
             }
             throw new Error();
         }
@@ -95,40 +85,32 @@ public class RegisterPanel extends JPanel implements RegisterListener {
             switch(columnIndex) {
                 case 0: return(false);
                 case 1: return(true);
-                case 2: return(true);
             }
             throw new Error();
         }
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Book book = frame.getBook();
+            Constants constants = frame.getBook().getConstants();
+            String name = constants.getNameAt(rowIndex);
             switch(columnIndex) {
-                case 0: return(registers.get(rowIndex));
-                case 1: return(book.getEmulator().getHint(registers.get(rowIndex)));
-                case 2: return(book.getEmulator().getRegister(registers.get(rowIndex)));
+                case 0: return(name);
+                case 1: return(constants.get(name));
             }
             throw new Error();
         }
 
         @Override
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-            Book book = frame.getBook();
+            String value = (String)aValue;
+            Constants constants = frame.getBook().getConstants();
             switch(columnIndex) {
                 case 1:
-                    book.getEmulator().setHint(registers.get(rowIndex), (String)aValue);
-                    pushEvent(new TableModelEvent(this, rowIndex, rowIndex, 1));
-                    break;
-                case 2:
-                    int value = 0;
-                    try {
-                        value = Integer.parseInt((String)aValue);
-                    } catch(NumberFormatException e) {
-                    }
-                    book.getEmulator().setRegister(registers.get(rowIndex), value);
-                    pushEvent(new TableModelEvent(this, rowIndex, rowIndex, 1));
+                    String name = constants.getNameAt(rowIndex);
+                    constants.set(name, value);
                     break;
             }
+            pushEvent(new TableModelEvent(this, rowIndex, rowIndex, 1));
         }
         
         private void pushEvent(TableModelEvent event) {

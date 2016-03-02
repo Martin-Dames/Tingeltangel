@@ -86,7 +86,7 @@ public class Commands {
     
     public static boolean isJump(String cmd) {
         HashSet<Command> set = commands.get(cmd);
-        if(set.isEmpty()) {
+        if((set == null) || set.isEmpty()) {
             return(false);
         }
         return(set.iterator().next().firstArgumentIsLabel());

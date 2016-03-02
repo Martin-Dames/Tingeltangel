@@ -287,16 +287,23 @@ public final class EditorPanel extends JPanel {
         right.add(cover, PushBorderLayout.PAGE_START);
         
         
+        // add stick panel
         right.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
         right.add(new JLabel("Stift"), PushBorderLayout.PAGE_START);
         right.add(new StickPanel(mainFrame), PushBorderLayout.PAGE_START);
         
         
-        // add stick panel
+                
+        /*
+        // add constants panel
+        right.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
+        right.add(new JLabel("Konstanten"), PushBorderLayout.PAGE_START);
+        right.add(new ConstantsPanel(mainFrame), PushBorderLayout.PAGE_START);
+        */
+        
+        // add register panel
         right.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
         right.add(new JLabel("Register"), PushBorderLayout.PAGE_START);
-                
-        // add register panel
         RegisterPanel registerPanel = new RegisterPanel(mainFrame);
         getBook().addRegisterListener(registerPanel);
         right.add(registerPanel, PushBorderLayout.CENTER);

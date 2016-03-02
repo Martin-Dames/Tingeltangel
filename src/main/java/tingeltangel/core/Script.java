@@ -180,16 +180,39 @@ public class Script {
     }
     
     private String mergeCodeOnCalls(boolean subCall) throws IOException, SyntaxError {
-        String returnLabel = "return_" + (labelCounter++);
+        labelCounter++;
+        String returnLabel = "return_" + labelCounter;
         StringBuilder mergedCode = new StringBuilder();
         BufferedReader in = new BufferedReader(new StringReader(code));
         String row;
+        
+        String labelPrefix = "sub_" + labelCounter + "_";
+        
         int rc = 0;
         while((row = in.readLine()) != null) {
             rc++;
             row = row.trim().toLowerCase();
             if((!row.isEmpty()) && (!row.startsWith(ScriptFile.COMMENT))) {
-                if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
+                
+                int p = row.indexOf("//");
+                if(p != -1) {
+                    row = row.substring(0, p).trim();
+                }
+                
+                p = row.indexOf(" ");
+                boolean jump = false;
+                if(p != -1) {
+                    jump = Commands.isJump(row.substring(0, p));
+                }
+                
+                if(row.startsWith(ScriptFile.COLON)) {
+                    mergedCode.append(ScriptFile.COLON).append(labelPrefix + row.substring(1)).append(ScriptFile.LB);
+                } else if(jump) {
+                    p = row.indexOf(" ");
+                    String cmd = row.substring(0, p);
+                    String label = labelPrefix + row.substring(p + 1);
+                    mergedCode.append(cmd).append(" ").append(label).append(ScriptFile.LB);
+                } else if(row.startsWith(ScriptFile.CALL + ScriptFile.SINGLE_SPACE)) {
                     try {
                         int oid = Integer.parseInt(row.substring(ScriptFile.CALL.length()).trim());
                         String subCode = entry.getBook().getEntryByOID(oid).getScript().mergeCodeOnCalls(true);
@@ -369,9 +392,11 @@ public class Script {
             Template t = Template.getTemplate(row);
             if(t != null) {
                 LinkedList<String> as = new LinkedList<String>();
-                String[] _as = args.split(",");
-                for(int i = 0; i < _as.length; i++) {
-                    as.add(_as[i].toLowerCase().trim());
+                if(!args.isEmpty()) {
+                    String[] _as = args.split(",");
+                    for(int i = 0; i < _as.length; i++) {
+                        as.add(_as[i].toLowerCase().trim());
+                    }
                 }
                 
                 for(int r = 0; r <= Emulator.getMaxBasicRegister(); r++) {
