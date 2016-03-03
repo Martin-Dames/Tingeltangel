@@ -35,10 +35,11 @@ import java.util.List;
 
 public class Codes {
 
+    /*
     private final static float[] PS_DOT_SIZE = {0.12f, 0.06f};
     private final static float[] PS_DELTA_SIZE = {0.12f, 0.12f};
     private final static float[] PS_BLOCK_SIZE = {0.84f, 0.84f};
-
+    */
 
     private final static int[] PNG_DOT_SIZE = {1, 2};
     private final static int[] PNG_DELTA_SIZE = {1, 2};
@@ -105,6 +106,7 @@ public class Codes {
         return (pattern);
     }
 
+    /*
     private static void drawText(float x, float y, String text, PrintWriter out) {
         out.println("newpath");
         out.println(x + " " + y + " moveto");
@@ -155,6 +157,7 @@ public class Codes {
         out.println("%%BoundingBox: 0 0 " + width + " " + height);
         drawCarpet(code, 0, 0, width, height, null, out);
     }
+    */
 
     private static void drawPattern(int code, int x, int y, int width, int height, Graphics2D graphics) {
         int[][][] pattern = getPatternFromInt(code);
@@ -259,7 +262,7 @@ public class Codes {
     
     
 
-
+    /*
     public static void drawBooklet(String title, int mid, List<Tupel<Integer, String>> booklet, PrintWriter out) {
 
         mid = Translator.ting2code(mid);
@@ -312,6 +315,7 @@ public class Codes {
         out.println("showpage");
         out.flush();
     }
+    */
 
     public static void drawPagePNG(int start, OutputStream out) throws IOException {
         BufferedImage image = new BufferedImage(4960, 7015, BufferedImage.TYPE_INT_ARGB);
@@ -350,10 +354,12 @@ public class Codes {
         
     }
     
+    
     public static void main(String[] args) throws IOException {
         drawPagePNG(0, new FileOutputStream("c:\\test.png"));
     }
     
+    /*
     public static void drawPagePS(int start, PrintWriter out) {
         int cx = 25;
         int cy = 40;
@@ -400,5 +406,6 @@ public class Codes {
         out.println("showpage");
         out.flush();
     }
+    */
 
 }

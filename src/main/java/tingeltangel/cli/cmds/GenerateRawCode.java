@@ -87,48 +87,12 @@ public class GenerateRawCode extends CliCommand {
             new CliSwitch() {
                 @Override
                 public String getName() {
-                    return("f");
-                }
-
-                @Override
-                public String getDescription() {
-                    return("setzt das Ausgabedateiformat. png oder eps.");
-                }
-
-                @Override
-                public boolean hasArgument() {
-                    return(true);
-                }
-
-                @Override
-                public boolean isOptional() {
-                    return(true);
-                }
-
-                @Override
-                public String getLabel() {
-                    return("Dateiformat");
-                }
-
-                @Override
-                public String getDefault() {
-                    return("png");
-                }
-
-                @Override
-                public boolean acceptValue(String value) {
-                    return(value.equals("png") || value.equals("eps"));
-                }
-            },
-            new CliSwitch() {
-                @Override
-                public String getName() {
                     return("o");
                 }
 
                 @Override
                 public String getDescription() {
-                    return("setzt den Namen der Ausgabedatei (default: <Code-ID>_raw_<Auflösung>.<Dateiformat>)");
+                    return("setzt den Namen der Ausgabedatei (default: <Code-ID>_raw.png)");
                 }
 
                 @Override
@@ -297,10 +261,9 @@ public class GenerateRawCode extends CliCommand {
     @Override
     public void execute(Map<String, String> args) throws Exception {
         if(!args.containsKey("o")) {
-            args.put("o", args.get("t") + "_raw_" + args.get("r") + "." + args.get("f"));
+            args.put("o", args.get("t") + "_raw.png");
         }
         
-        String fileFormat = args.get("f");
         String _codeID = args.get("t");
         String resolution = args.get("r");
         String outputFile = args.get("o");
@@ -316,15 +279,10 @@ public class GenerateRawCode extends CliCommand {
         int width = Integer.parseInt(args.get("w"));
         int height = Integer.parseInt(args.get("h"));
         
-        if(fileFormat.equals("png")) {
-            OutputStream out = new FileOutputStream(outputFile);
-            Codes.drawPng(codeID, width, height, out);
-            out.close();
-        } else {
-            PrintWriter out = new PrintWriter(new FileWriter(outputFile));
-            Codes.drawEps(codeID, width, height, out);
-            out.close();
-        }
+        OutputStream out = new FileOutputStream(outputFile);
+        Codes.drawPng(codeID, width, height, out);
+        out.close();
+        
     }
     
 }

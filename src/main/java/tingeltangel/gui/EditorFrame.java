@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -587,19 +588,15 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     log.error("unable to save mp3 archive", e);
                 }
             }
-        } else if(id.startsWith("buch.generateEpsCodes.") || id.startsWith("buch.generatePngCodes.")) {
+        } else if(id.startsWith("buch.generatePngCodes.")) {
             if(id.endsWith(".600")) {
                 Codes.setResolution(Codes.DPI600);
             } else {
                 Codes.setResolution(Codes.DPI1200);
             }
-            final boolean png = id.startsWith("buch.generatePngCodes.");
             JFileChooser fc = new JFileChooser();
-            if(png) {
-                fc.setFileFilter(new FileNameExtensionFilter("PNG Codes (*.zip)", "zip"));
-            } else {
-                fc.setFileFilter(new FileNameExtensionFilter("EPS Codes (*.zip)", "zip"));
-            }
+            fc.setFileFilter(new FileNameExtensionFilter("PNG Codes (*.zip)", "zip"));
+            
             if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 try {
                     String file = fc.getSelectedFile().getCanonicalPath();
@@ -613,19 +610,12 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         @Override
                         public void action(ProgressDialog progressDialog) {
                             try {
-                                if(png) {
-                                    book.pngExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
-                                } else {
-                                    book.epsExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
-                                }
+                                book.pngExport(FileEnvironment.getCodesDirectory(book.getID()), progressDialog);
+                                
                                 File[] input = FileEnvironment.getCodesDirectory(book.getID()).listFiles(new FilenameFilter() {
                                     @Override
                                     public boolean accept(File dir, String name) {
-                                        if(png) {
-                                            return(name.toLowerCase().endsWith(".png"));
-                                        } else {
-                                            return(name.toLowerCase().endsWith(".eps"));
-                                        }
+                                        return(name.toLowerCase().endsWith(".png"));
                                     }
                                 });
                                 ZipHelper.zip(output, input, progressDialog, EditorFrame.this, book, "erzeuge ZIP", "ZIP konnte nicht erstellt werden");
@@ -640,7 +630,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     log.error("unable to generate codes", ioe);
                 }
             }
-        
+        /*
         } else if(id.startsWith("buch.booklet")) {
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new FileNameExtensionFilter("Code Tabelle (*.ps)", "ps"));
@@ -658,6 +648,8 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     log.error("unable to save code tabular", e);
                 }
             }
+        
+        */
         } else if(id.equals("prefs.binary")) {
             new BinaryLocationsDialog(this, true).setVisible(true);
         } else if(id.equals("prefs.tts")) {
@@ -679,15 +671,15 @@ public class EditorFrame extends JFrame implements Callback<String> {
             id = id.substring("codes.raw.".length());
             int start = Integer.parseInt(id.substring(0, 1)) * 10000 + Integer.parseInt(id.substring(2)) * 1000;
             JFileChooser fc = new JFileChooser();
-            fc.setFileFilter(new FileNameExtensionFilter("Code Tabelle (*.ps)", "ps"));
+            fc.setFileFilter(new FileNameExtensionFilter("Code Tabelle (*.png)", "png"));
             if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 try {
                     String file = fc.getSelectedFile().getCanonicalPath();
                     if(!file.toLowerCase().endsWith(".ps")) {
                         file = file + ".ps";
                     }
-                    PrintWriter out = new PrintWriter(new FileWriter(file));
-                    Codes.drawPagePS(start, out);
+                    OutputStream out = new FileOutputStream(file);
+                    Codes.drawPagePNG(start, out);
                     out.close();
                 } catch(Exception e) {
                     JOptionPane.showMessageDialog(this, "Die Codetabelle konnte nicht gespeichert werden");
@@ -785,16 +777,16 @@ public class EditorFrame extends JFrame implements Callback<String> {
             return(false);
         }
         JFileChooser fc = new JFileChooser();
-        fc.setFileFilter(new FileNameExtensionFilter("PostScript Datei (*.ps)", "ps"));
+        fc.setFileFilter(new FileNameExtensionFilter("PostScript Datei (*.png)", "png"));
         fc.setDialogTitle("Zieldatei auswählen");
         if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 String file = fc.getSelectedFile().getCanonicalPath();
-                if(!file.toLowerCase().endsWith(".ps")) {
-                    file = file + ".ps";
+                if(!file.toLowerCase().endsWith(".png")) {
+                    file = file + ".png";
                 }
                 
-                
+                /*
                 int[] idx = new int[1000];
                 
                 
@@ -804,8 +796,10 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     idx[i - start] = code;
                     lbs[i - start] = "" + i;
                 }
-                PrintWriter out = new PrintWriter(new FileWriter(file));
-                Codes.drawPage(idx, lbs, out);
+                */
+                OutputStream out = new FileOutputStream(file);
+                //Codes.drawPage(idx, lbs, out);
+                Codes.drawPagePNG(start, out);
                 out.close();
             } catch(IOException ioe) {
                 JOptionPane.showMessageDialog(this, "Codegenerierung fehlgeschlagen");

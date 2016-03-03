@@ -110,6 +110,7 @@ public class Book {
         return(new File(FileEnvironment.getBookDirectory(id), "cover.png"));
     }
     
+    /*
     public void generateTestBooklet(PrintWriter out) {
         LinkedList<Tupel<Integer, String>> booklet = new LinkedList<Tupel<Integer, String>>();
         Iterator<Integer> ids = indexIDs.iterator();
@@ -137,6 +138,7 @@ public class Book {
         Codes.setResolution(Codes.DPI600);
         Codes.drawBooklet(name, id, booklet, out);
     }
+    */
     
     public long getMagicValue() {
         return(magicValue);
@@ -747,6 +749,7 @@ public class Book {
         progress.done();
     }
     
+    /*
     public void epsExport(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException {
         epsExport(dir, 100, progress);
     }
@@ -787,7 +790,7 @@ public class Book {
             out.close();
         }
     }
-    
+    */
     public void pngExport(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException {
         pngExport(dir, 100, progress);
     }
@@ -833,6 +836,7 @@ public class Book {
         }
     }
     
+    /*
     public void epsSingleExport(File file, int tingID) throws IOException, IllegalArgumentException {
         
         
@@ -851,6 +855,7 @@ public class Book {
         out.close();
         
     }
+    */
     
     public void export(File dir, ProgressDialog progress) throws IOException, IllegalArgumentException, SyntaxError {
         

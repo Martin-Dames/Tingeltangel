@@ -41,7 +41,6 @@ public class CLI {
         Import.class,
         Assemble.class,
         OidCode.class,
-        Booklet.class,
         UpdateStick.class,
         ExportTrack.class,
     };

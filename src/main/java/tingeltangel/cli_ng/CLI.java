@@ -27,7 +27,6 @@ public class CLI {
         new BookInfo(),
         new ImportFromRepository(),
         new ImportManual(),
-        new GenerateBooklet(),
         new ShowBooks(),
         new FindNiceMid(),
         new SaveBook(),

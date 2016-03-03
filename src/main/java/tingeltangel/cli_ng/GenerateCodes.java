@@ -39,23 +39,23 @@ class GenerateCodes extends CliCmd {
 
     @Override
     public String getDescription() {
-        return("generate-codes png|eps 600|1200 <size in mm> <zip file>|<directory>");
+        return("generate-codes 600|1200 <size in mm> <zip file>|<directory>");
     }
 
     @Override
     public int execute(String[] args) {
         
-        if(args.length != 4) {
+        if(args.length != 3) {
             return(error("falsche Anzahl von Parametern angegeben"));
         }
-        File file = new File(args[3].trim());
+        File file = new File(args[2].trim());
         if(!file.canWrite()) {
             return(error("Die Datei oder das Verzeichnis \" + file.getAbsolutePath() + \" kann nicht geschrieben werden"));
         }
         
-        if(args[1].toLowerCase().equals("600")) {
+        if(args[0].toLowerCase().equals("600")) {
             Codes.setResolution(Codes.DPI600);
-        } else if(args[1].toLowerCase().equals("1200")) {
+        } else if(args[0].toLowerCase().equals("1200")) {
             Codes.setResolution(Codes.DPI1200);
         } else {
             return(error("Syntax Fehler"));
@@ -63,7 +63,7 @@ class GenerateCodes extends CliCmd {
         
         int size = -1;
         try {
-            size = Integer.parseInt(args[2]);
+            size = Integer.parseInt(args[1]);
         } catch(NumberFormatException e) {
             return(error("ungültige Große angegeben (5-100)"));
         }
@@ -77,25 +77,13 @@ class GenerateCodes extends CliCmd {
             
             File[] entries = null;
             
-            if(args[0].toLowerCase().equals("png")) {
-                book.pngExport(FileEnvironment.getCodesDirectory(book.getID()), size, null);
-                entries = FileEnvironment.getCodesDirectory(book.getID()).listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return(name.toLowerCase().endsWith(".png"));
-                    }
-                });
-            } else if(args[0].toLowerCase().equals("eps")) {
-                book.epsExport(FileEnvironment.getCodesDirectory(book.getID()), size, null);
-                entries = FileEnvironment.getCodesDirectory(book.getID()).listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return(name.toLowerCase().endsWith(".eps"));
-                    }
-                });
-            } else {
-                return(error("Syntax Fehler"));
-            }
+            book.pngExport(FileEnvironment.getCodesDirectory(book.getID()), size, null);
+            entries = FileEnvironment.getCodesDirectory(book.getID()).listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return(name.toLowerCase().endsWith(".png"));
+                }
+            });
             
             if(file.isDirectory()) {
                 
