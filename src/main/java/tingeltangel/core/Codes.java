@@ -28,9 +28,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.List;
 
 
 public class Codes {
@@ -50,12 +48,19 @@ public class Codes {
 
     public final static int DPI600 = 0;
     public final static int DPI1200 = 1;
+    
+    private final static int[] A4_WIDTH = {4960, 9920};
+    private final static int[] A4_HEIGHT = {7015, 14030};
 
     private static int resolution = DPI1200;
 
 
     public static void setResolution(int resolution) {
         Codes.resolution = resolution;
+    }
+    
+    public static int getResolution() {
+        return(resolution);
     }
 
 
@@ -318,9 +323,12 @@ public class Codes {
     */
 
     public static void drawPagePNG(int start, OutputStream out) throws IOException {
-        BufferedImage image = new BufferedImage(4960, 7015, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(A4_WIDTH[resolution], A4_HEIGHT[resolution], BufferedImage.TYPE_INT_ARGB);
 
-        setResolution(DPI600);
+        int f = 1;
+        if(resolution == Codes.DPI1200) {
+            f = 2;
+        }
         
         int cx = 25;
         int cy = 40;
@@ -330,11 +338,11 @@ public class Codes {
         
         Graphics2D graphics = image.createGraphics();
         graphics.setColor(Color.white);
-        graphics.fillRect(0, 0, 4960, 7015);
+        graphics.fillRect(0, 0, A4_WIDTH[resolution], A4_HEIGHT[resolution]);
         graphics.setColor(Color.black);
         
         graphics.setFont(graphics.getFont().deriveFont(35f));
-        graphics.drawString("Ting IDs ab " + Integer.toString(start), 5 + dx, 100);
+        graphics.drawString("Ting IDs ab " + Integer.toString(start), (5 + dx) * f, 100 * f);
         
         graphics.setFont(graphics.getFont().deriveFont(25f));
 
@@ -343,8 +351,8 @@ public class Codes {
                 if (start < 65536) {
                     int tc = Translator.ting2code(start++);
                     if(tc >= 0) {
-                        drawPattern(tc, x * 170 + dx, y * 170 + dy, 4, 4, graphics);
-                        graphics.drawString(Integer.toString(start - 1), x * 170 + 5 + dx, y * 170 + 130 + dy);
+                        drawPattern(tc, (x * 170 + dx) * f, (y * 170 + dy) * f, 4 * f, 4 * f, graphics);
+                        graphics.drawString(Integer.toString(start - 1), (x * 170 + 5 + dx) * f, (y * 170 + 130 + dy) * f);
                     }
                 }
             }

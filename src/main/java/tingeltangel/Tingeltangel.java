@@ -23,7 +23,10 @@ import javax.swing.SwingUtilities;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import tingeltangel.cli.CLI;
+import tingeltangel.core.Codes;
+import tingeltangel.core.Properties;
 import tingeltangel.core.Repository;
+import static tingeltangel.gui.CodePreferences.PROPERTY_RESOLUTION;
 import tingeltangel.gui.EditorFrame;
 import tingeltangel.gui.ManagerFrame;
 
@@ -63,6 +66,13 @@ public class Tingeltangel {
         }
         if((args.length) > 0 && (args[0].toLowerCase().equals("gui-manager"))) {
             startManager = true;
+        }
+        
+        // set resolution
+        if(Properties.getStringProperty(PROPERTY_RESOLUTION).equals("1200")) {
+            Codes.setResolution(Codes.DPI1200);
+        } else {
+            Codes.setResolution(Codes.DPI600);
         }
         
         final boolean _startEditor = startEditor;

@@ -589,11 +589,6 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 }
             }
         } else if(id.startsWith("buch.generatePngCodes.")) {
-            if(id.endsWith(".600")) {
-                Codes.setResolution(Codes.DPI600);
-            } else {
-                Codes.setResolution(Codes.DPI1200);
-            }
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new FileNameExtensionFilter("PNG Codes (*.zip)", "zip"));
             
@@ -654,6 +649,8 @@ public class EditorFrame extends JFrame implements Callback<String> {
             new BinaryLocationsDialog(this, true).setVisible(true);
         } else if(id.equals("prefs.tts")) {
             new TTSPreferences().setVisible(true);
+        } else if(id.equals("prefs.codes")) {
+            new CodePreferences().setVisible(true);
     /*    } else if(id.equals("windows.stick")) {
             stickFrame.setVisible(true); */
         } else if(id.equals("windows.index")) {

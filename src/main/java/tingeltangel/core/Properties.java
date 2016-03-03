@@ -63,6 +63,15 @@ public class Properties {
                 }
             }
             in.close();
+            // search for unknown properties
+            Iterator<String> i = Preferences.getKeys().iterator();
+            while(i.hasNext()) {
+                String key = i.next();
+                if(!PROPERTIES.containsKey(key)) {
+                    setProperty(key, Preferences.getDefault(key), false);
+                }
+            }
+            save();
         } catch(IOException ioe) {
             log.error("unable to read property file", ioe);
             throw new Error(ioe);
