@@ -31,7 +31,8 @@ import tingeltangel.tools.FileEnvironment;
  * @author martin
  */
 class GenerateCodes extends CliCmd {
-
+    
+    
     @Override
     public String getName() {
         return("generate-codes");
@@ -49,9 +50,6 @@ class GenerateCodes extends CliCmd {
             return(error("falsche Anzahl von Parametern angegeben"));
         }
         File file = new File(args[2].trim());
-        if(!file.canWrite()) {
-            return(error("Die Datei oder das Verzeichnis \" + file.getAbsolutePath() + \" kann nicht geschrieben werden"));
-        }
         
         if(args[0].toLowerCase().equals("600")) {
             Codes.setResolution(Codes.DPI600);

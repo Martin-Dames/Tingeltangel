@@ -49,9 +49,10 @@ public class Codes {
     public final static int DPI600 = 0;
     public final static int DPI1200 = 1;
     
-    private final static int[] A4_WIDTH = {4960, 9920};
-    private final static int[] A4_HEIGHT = {7015, 14030};
+    private final static int[] A4_WIDTH = {4880, 9760};
+    private final static int[] A4_HEIGHT = {6680, 13360};
 
+                
     private static int resolution = DPI1200;
 
 
@@ -321,7 +322,52 @@ public class Codes {
         out.flush();
     }
     */
+    
+    public static void drawPagePNG(int[] tingCodes, int patternWidthInMM, int patternHeightInMM, OutputStream out) throws IOException {
+        
+    
+        int patternWidth = ((int) ((patternWidthInMM * PNG_PIXEL_PER_MM[resolution]) / (4 * PNG_BLOCK_SIZE[resolution])) * 4 * PNG_BLOCK_SIZE[resolution]);
+        int patternHeight = ((int) ((patternHeightInMM * PNG_PIXEL_PER_MM[resolution]) / (4 * PNG_BLOCK_SIZE[resolution])) * 4 * PNG_BLOCK_SIZE[resolution]);
 
+        int space = (int)(PNG_PIXEL_PER_MM[resolution] * 4); // 4mm Abstand
+        int textSpace = (int)(PNG_PIXEL_PER_MM[resolution] * 2); // 4mm Abstand
+        
+        int cx = (A4_WIDTH[resolution] - space) / (patternWidth + space);
+        int cy = (A4_HEIGHT[resolution] - space) / (patternHeight + space + textSpace);
+        
+        BufferedImage image = new BufferedImage(A4_WIDTH[resolution], A4_HEIGHT[resolution], BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = image.createGraphics();
+        graphics.setColor(Color.white);
+        graphics.fillRect(0, 0, A4_WIDTH[resolution], A4_HEIGHT[resolution]);
+        graphics.setColor(Color.black);
+        graphics.setFont(graphics.getFont().deriveFont(35f));
+        
+        int p = 0;
+        
+        
+        for (int y = 0; y < cy; y++) {
+            for (int x = 0; x < cx; x++) {
+                if(p < tingCodes.length) {
+                    int tc = Translator.ting2code(tingCodes[p++]);
+                    if(tc >= 0) {
+                        
+                        int px = x * (patternWidth + space) + space;
+                        int py = y * (patternHeight + space + textSpace) + space;
+                        
+                        int pw = patternWidth / (PNG_BLOCK_SIZE[resolution] * 4);
+                        int ph = patternHeight / (PNG_BLOCK_SIZE[resolution] * 4);
+                        
+                        drawPattern(tingCodes[p-1], px, py, pw, ph, graphics);
+                        graphics.drawString(Integer.toString(tingCodes[p-1]), px, py + patternHeight + textSpace);
+                    }
+                }
+                
+            }
+        }
+        
+        writePng(image, out);
+    }
+    
     public static void drawPagePNG(int start, OutputStream out) throws IOException {
         BufferedImage image = new BufferedImage(A4_WIDTH[resolution], A4_HEIGHT[resolution], BufferedImage.TYPE_INT_ARGB);
 

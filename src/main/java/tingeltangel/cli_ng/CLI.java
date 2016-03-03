@@ -46,6 +46,7 @@ public class CLI {
         new TtsGetVariants(),
         new TtsGetVariant(),
         new TtsSetVariant(),
+        new GenerateCodesPage(),
         /*
         new CodePageRaw(),
         new CodePageTing(),
