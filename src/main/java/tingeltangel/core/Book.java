@@ -822,9 +822,14 @@ public class Book {
             if(progress != null) {
                 progress.setVal(i);
             }
-            out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
-            Codes.drawPng(Translator.ting2code(i + 15001), 100, 100, out);
-            out.close();
+            Entry entry = getEntryByOID(i + 15001);
+            if(entry != null) {
+                if(!entry.isSub()) {
+                    out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
+                    Codes.drawPng(Translator.ting2code(i + 15001), 100, 100, out);
+                    out.close();
+                }
+            }
         }
     }
     
