@@ -380,7 +380,7 @@ public class Codes {
         int cy = 40;
         
         int dx = 350;
-        int dy = 140;
+        int dy = 210;
         
         Graphics2D graphics = image.createGraphics();
         graphics.setColor(Color.white);
@@ -388,7 +388,7 @@ public class Codes {
         graphics.setColor(Color.black);
         
         graphics.setFont(graphics.getFont().deriveFont(35f));
-        graphics.drawString("Ting IDs ab " + Integer.toString(start), (5 + dx) * f, 100 * f);
+        graphics.drawString("Ting IDs ab " + Integer.toString(start), (5 + dx) * f, 150 * f);
         
         graphics.setFont(graphics.getFont().deriveFont(25f));
 
@@ -397,8 +397,8 @@ public class Codes {
                 if (start < 65536) {
                     int tc = Translator.ting2code(start++);
                     if(tc >= 0) {
-                        drawPattern(tc, (x * 170 + dx) * f, (y * 170 + dy) * f, 4 * f, 4 * f, graphics);
-                        graphics.drawString(Integer.toString(start - 1), (x * 170 + 5 + dx) * f, (y * 170 + 130 + dy) * f);
+                        drawPattern(tc, (x * 170 + dx) * f, (y * 155 + dy) * f, 4 * f, 4 * f, graphics);
+                        graphics.drawString(Integer.toString(start - 1), (x * 170 + 5 + dx) * f, (y * 155 + 130 + dy) * f);
                     }
                 }
             }
@@ -409,9 +409,6 @@ public class Codes {
     }
     
     
-    public static void main(String[] args) throws IOException {
-        drawPagePNG(0, new FileOutputStream("c:\\test.png"));
-    }
     
     /*
     public static void drawPagePS(int start, PrintWriter out) {
