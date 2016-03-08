@@ -33,6 +33,7 @@ public class CLI {
         new GenerateBook(),
         new ExportMp3s(),
         new GenerateCodes(),
+        new GenerateCode(),
         new Exit(),
         new Help(),
         new DeleteBook(),
@@ -47,12 +48,6 @@ public class CLI {
         new TtsGetVariant(),
         new TtsSetVariant(),
         new GenerateCodesPage(),
-        /*
-        new CodePageRaw(),
-        new CodePageTing(),
-        new CodeGetRaw(),
-        new CodeGetTing(),
-        */
         new CodeRawToTing(),
         new CodeTingToRaw(),
         new SetEntryMp3(),
