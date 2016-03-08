@@ -146,7 +146,7 @@ public class FileEnvironment {
                 myDocuments = new String(b);
                 myDocuments = myDocuments.split("\\s\\s+")[4];
             } catch (Exception e) {
-                throw new Error(e);
+                myDocuments = ".";
             }
             wd = new File(myDocuments, "tingeltangel");
         } else {
