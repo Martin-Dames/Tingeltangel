@@ -24,10 +24,12 @@ import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -45,6 +47,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import tingeltangel.Tingeltangel;
+import tingeltangel.cli_ng.CLI;
 import tingeltangel.core.Book;
 import tingeltangel.core.Codes;
 import tingeltangel.core.Entry;
@@ -588,6 +591,30 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     log.error("unable to save mp3 archive", e);
                 }
             }
+        } else if(id.equals("actions.cliscript")) {
+            JFileChooser fc = new JFileChooser();
+            fc.setFileFilter(new FileNameExtensionFilter("CLI Skript (*.ttcli)", "ttcli"));
+            
+            if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                
+                try {
+                    BufferedReader in = new BufferedReader(new FileReader(fc.getSelectedFile()));
+                    String row;
+                    CLI.init();
+                    CLI.setBook(book);
+                    while((row = in.readLine()) != null) {
+                        System.out.println(row);
+                        CLI.exec(row);
+                    }
+                } catch(IOException e) {
+                    JOptionPane.showMessageDialog(EditorFrame.this, "CLI Skript konnte nicht geladen werden");
+                    log.error("unable to load cli script", e);
+                }
+                
+            }
+            
+            
+            
         } else if(id.equals("buch.generatePngCodes")) {
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new FileNameExtensionFilter("PNG Codes (*.zip)", "zip"));
