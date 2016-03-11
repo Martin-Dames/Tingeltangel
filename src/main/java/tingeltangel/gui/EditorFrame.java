@@ -588,7 +588,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     log.error("unable to save mp3 archive", e);
                 }
             }
-        } else if(id.startsWith("buch.generatePngCodes.")) {
+        } else if(id.equals("buch.generatePngCodes")) {
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new FileNameExtensionFilter("PNG Codes (*.zip)", "zip"));
             
