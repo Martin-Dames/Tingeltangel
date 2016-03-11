@@ -99,10 +99,14 @@ public class CLI {
     };
     
     private final static HashMap<String, CliCmd> cmds = new HashMap<String, CliCmd>();
-    private final static Book book = new Book(15000);
+    private static Book book = new Book(15000);
     
     static Book getBook() {
         return(book);
+    }
+    
+    public static void setBook(Book b) {
+        book = b;
     }
     
     static void showCommands() {
@@ -112,7 +116,46 @@ public class CLI {
     }
     
     static boolean bookOpened() {
-        return(book.getID() == 15000);
+        return(book.getID() != 15000);
+    }
+    
+    public static void exec(String command) {
+        command = command.trim();
+        if((!command.isEmpty()) && !command.startsWith("//")) {
+
+            int p = command.indexOf(" ");
+            String argstr = "";
+            String cmd;
+            if(p < 0) {
+                cmd = command.toLowerCase();
+            } else {
+                cmd = command.substring(0, p).toLowerCase();
+                argstr = command.substring(p + 1).trim();
+            }
+
+            String[] args = new String[0];
+            try{
+                if(!argstr.isEmpty()) {
+                    args = argssplit(argstr);
+                }
+
+                CliCmd cliCmd = cmds.get(cmd);
+                if(cliCmd == null) {
+                    System.err.println("unbekannter Befehl");
+                } else {
+                    cliCmd.execute(args);
+                }
+            } catch(SyntaxError e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+    
+    public static void init() {
+        for(int i = 0; i < COMMANDS.length; i++) {
+            CliCmd cmd = COMMANDS[i];
+            cmds.put(cmd.getName(), cmd);
+        }
     }
     
     public static void run() {
@@ -121,10 +164,7 @@ public class CLI {
         out.println("Tingeltangel CLI " + Tingeltangel.MAIN_FRAME_VERSION);
         out.flush();
         
-        for(int i = 0; i < COMMANDS.length; i++) {
-            CliCmd cmd = COMMANDS[i];
-            cmds.put(cmd.getName(), cmd);
-        }
+        init();
         
         
         
@@ -135,36 +175,7 @@ public class CLI {
         try {
         
             while((row = in.readLine()) != null) {
-                row = row.trim();
-                if((!row.isEmpty()) && !row.startsWith("//")) {
-
-                    int p = row.indexOf(" ");
-                    String argstr = "";
-                    String cmd;
-                    if(p < 0) {
-                        cmd = row.toLowerCase();
-                    } else {
-                        cmd = row.substring(0, p).toLowerCase();
-                        argstr = row.substring(p + 1).trim();
-                    }
-
-                    String[] args = new String[0];
-                    try{
-                        if(!argstr.isEmpty()) {
-                            args = argssplit(argstr);
-                        }
-
-
-                        CliCmd cliCmd = cmds.get(cmd);
-                        if(cliCmd == null) {
-                            System.err.println("unbekannter Befehl");
-                        } else {
-                            cliCmd.execute(args);
-                        }
-                    } catch(SyntaxError e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
+                exec(row);
                 System.out.print(">");
             }
         } catch(IOException e) {
