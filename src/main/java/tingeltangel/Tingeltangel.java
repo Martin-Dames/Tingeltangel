@@ -99,10 +99,12 @@ public class Tingeltangel {
                 }
             });
         } else if((args.length) > 0 && (args[0].toLowerCase().equals("cli"))) {
+            tingeltangel.cli_ng.CLI.init();
             tingeltangel.cli_ng.CLI.run();
         } else {
             if(args.length == 0) {
-              tingeltangel.cli_ng.CLI.run();
+                tingeltangel.cli_ng.CLI.init();
+                tingeltangel.cli_ng.CLI.run();
             } else if(!CLI.cli(args)) {
                 log.warn("starting cli failed");
             }

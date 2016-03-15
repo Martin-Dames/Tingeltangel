@@ -31,12 +31,12 @@ class SetMeta extends CliCmd {
 
     @Override
     String getName() {
-        return("get-meta");
+        return("set-meta");
     }
 
     @Override
     String getDescription() {
-        return("get-meta name|publisher|author|version|url|magic|date <value>");
+        return("set-meta name|publisher|author|version|url|magic|date <value>");
     }
 
     @Override

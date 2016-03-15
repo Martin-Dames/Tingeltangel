@@ -83,6 +83,7 @@ public class CLI {
         new GetMeta(),
         new SetMeta(),
         new Play(),
+        new Execute(),
         /*
         new StickUpdate(),
         new StickStatus(),
@@ -107,21 +108,55 @@ public class CLI {
     }
     
     static boolean bookOpened() {
-        return(book.getID() == 15000);
+        return(book.getID() != 15000);
     }
     
-    public static void run() {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        PrintWriter out = new PrintWriter(System.out);
-        out.println("Tingeltangel CLI " + Tingeltangel.MAIN_FRAME_VERSION);
-        out.flush();
-        
+    public static void init() {
         for(int i = 0; i < COMMANDS.length; i++) {
             CliCmd cmd = COMMANDS[i];
             cmds.put(cmd.getName(), cmd);
         }
+    }
+    
+    static void exec(String _cmd) {
+        _cmd = _cmd.trim();
+        if((!_cmd.isEmpty()) && !_cmd.startsWith("//")) {
+
+            int p = _cmd.indexOf(" ");
+            String argstr = "";
+            String cmd;
+            if(p < 0) {
+                cmd = _cmd.toLowerCase();
+            } else {
+                cmd = _cmd.substring(0, p).toLowerCase();
+                argstr = _cmd.substring(p + 1).trim();
+            }
+
+            String[] args = new String[0];
+            try{
+                if(!argstr.isEmpty()) {
+                    args = argssplit(argstr);
+                }
+
+
+                CliCmd cliCmd = cmds.get(cmd);
+                if(cliCmd == null) {
+                    System.err.println("unbekannter Befehl");
+                } else {
+                    cliCmd.execute(args);
+                }
+            } catch(SyntaxError e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+    
+    public static void run() {
         
-        
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        out.println("Tingeltangel CLI " + Tingeltangel.MAIN_FRAME_VERSION);
+        out.flush();
         
         String row;
         
@@ -130,36 +165,7 @@ public class CLI {
         try {
         
             while((row = in.readLine()) != null) {
-                row = row.trim();
-                if((!row.isEmpty()) && !row.startsWith("//")) {
-
-                    int p = row.indexOf(" ");
-                    String argstr = "";
-                    String cmd;
-                    if(p < 0) {
-                        cmd = row.toLowerCase();
-                    } else {
-                        cmd = row.substring(0, p).toLowerCase();
-                        argstr = row.substring(p + 1).trim();
-                    }
-
-                    String[] args = new String[0];
-                    try{
-                        if(!argstr.isEmpty()) {
-                            args = argssplit(argstr);
-                        }
-
-
-                        CliCmd cliCmd = cmds.get(cmd);
-                        if(cliCmd == null) {
-                            System.err.println("unbekannter Befehl");
-                        } else {
-                            cliCmd.execute(args);
-                        }
-                    } catch(SyntaxError e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
+                exec(row);
                 System.out.print(">");
             }
         } catch(IOException e) {
