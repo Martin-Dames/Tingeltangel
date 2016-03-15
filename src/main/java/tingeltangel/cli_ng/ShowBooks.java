@@ -38,7 +38,7 @@ class ShowBooks extends CliCmd {
     public int execute(String[] args) {
         Iterator<Integer> books = Book.getBookMIDs().iterator();
         while(books.hasNext()) {
-            System.out.println(books);
+            System.out.println(books.next());
         }
         return(ok());
     }

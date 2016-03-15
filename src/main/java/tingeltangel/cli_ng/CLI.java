@@ -95,10 +95,14 @@ public class CLI {
     };
     
     private final static HashMap<String, CliCmd> cmds = new HashMap<String, CliCmd>();
-    private final static Book book = new Book(15000);
+    private static Book book = new Book(15000);
     
     static Book getBook() {
         return(book);
+    }
+    
+    public static void setBook(Book b) {
+        book = b;
     }
     
     static void showCommands() {
@@ -118,7 +122,7 @@ public class CLI {
         }
     }
     
-    static void exec(String _cmd) {
+    public static void exec(String _cmd) {
         _cmd = _cmd.trim();
         if((!_cmd.isEmpty()) && !_cmd.startsWith("//")) {
 
@@ -201,3 +205,4 @@ public class CLI {
     }
     
 }
+
