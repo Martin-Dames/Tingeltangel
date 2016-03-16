@@ -20,24 +20,17 @@ params=r:$result,rv:$value,rv:$b
 work=$s,$k,$bit
 ---
 set $bit,$b
-cmp $bit,1
-jge normal
-set $bit,1
-jmp end_exp2
-:normal
 set $s,1
 :loop_start
 cmp $bit,0
-jbe loop_end
+je loop_end
 sub $bit,1
 set $k,$s
 add $s,$k
 jmp loop_start
 :loop_end
-set $bit,$s
-:end_exp2
 set $result,$value
-and $result,$bit
+and $result,$s
 cmp $result,0
 je end
 set $result,1

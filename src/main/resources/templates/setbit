@@ -20,20 +20,13 @@ params=r:$register,rv:$b
 work=$s,$k,$bit
 ---
 set $bit,$b
-cmp $bit,1
-jge normal
-set $bit,1
-jmp ende_exp2
-:normal
 set $s,1
 :loop_start
 cmp $bit,0
-jbe loop_ende
+je loop_end
 sub $bit,1
 set $k,$s
 add $s,$k
 jmp loop_start
-:loop_ende
-set $bit,$s
-:ende_exp2
-or $register,$bit
+:loop_end
+or $register,$s
