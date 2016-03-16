@@ -77,9 +77,9 @@ public class CLI {
         new GetCover(),
         */
         new Deploy(),
-        /*
         new GetRegister(),
         new SetRegister(),
+        /*
         new GetRegisterHint(),
         new SetRegisterHint(),
         */
