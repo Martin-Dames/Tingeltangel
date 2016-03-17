@@ -447,6 +447,7 @@ public class Wimmelbuch implements ForeignImporter {
         
         generate(book, use_locking, start_generated_oids);
         
+        book.save();
     }
     
 }
