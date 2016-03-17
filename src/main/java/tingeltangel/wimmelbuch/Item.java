@@ -50,6 +50,9 @@ public class Item {
     }
     
     void addEvent(Event event) {
+        if((event.getMode() == Event.IN_ORDER) && (event.getItems().get(0) != this)) {
+            return;
+        }
         events.add(event);
     }
 }

@@ -18,26 +18,43 @@ public class Event implements Comparable {
     public final static int IN_ORDER = 0;
     public final static int PERMUTATE = 1;
     
-    private String tts;
-    private LinkedList<Item> items = new LinkedList<Item>();
+    private final String tts;
+    private final LinkedList<Item> items = new LinkedList<Item>();
     private int mode = IN_ORDER;
+    private boolean clearQueueAfterEvent = false;
     private int audioTrack = 0;
     
-    private LinkedList<Constraint> setConstraints = new LinkedList<Constraint>();
-    private LinkedList<Constraint> unsetConstraints = new LinkedList<Constraint>();
-    private LinkedList<Constraint> resultingSetConstraints = new LinkedList<Constraint>();
-    private LinkedList<Constraint> resultingUnsetConstraints = new LinkedList<Constraint>();
+    private final LinkedList<Constraint> setConstraints = new LinkedList<Constraint>();
+    private final LinkedList<Constraint> unsetConstraints = new LinkedList<Constraint>();
+    private final LinkedList<Constraint> resultingSetConstraints = new LinkedList<Constraint>();
+    private final LinkedList<Constraint> resultingUnsetConstraints = new LinkedList<Constraint>();
     
     public Event(String tts) {
         this.tts = tts;
     }
 
+    public void setClearQueueAfterEvent() {
+        clearQueueAfterEvent = true;
+    }
+    
+    public boolean clearQueueAfterEvent() {
+        return(clearQueueAfterEvent);
+    }
+    
     public LinkedList<Constraint> getSetConstraints() {
         return(setConstraints);
     }
     
     public LinkedList<Constraint> getUnsetConstraints() {
         return(unsetConstraints);
+    }
+
+    public LinkedList<Constraint> getResultingSetConstraints() {
+        return(resultingSetConstraints);
+    }
+    
+    public LinkedList<Constraint> getResultingUnsetConstraints() {
+        return(resultingUnsetConstraints);
     }
     
     public int getAudioTrack() {
@@ -52,7 +69,10 @@ public class Event implements Comparable {
         this.audioTrack = audioTrack;
     }
     
-    public void addItem(Item item) {
+    public void addItem(Item item) throws Exception {
+        if(items.size() == Wimmelbuch.MAX_QUEUE_SIZE) {
+            throw new Exception();
+        }
         items.add(item);
     }
     

@@ -61,6 +61,10 @@ import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.Progress;
 import tingeltangel.tools.ProgressDialog;
 import tingeltangel.tools.ZipHelper;
+import tingeltangel.wimmelbuch.Constraint;
+import tingeltangel.wimmelbuch.Event;
+import tingeltangel.wimmelbuch.Item;
+import tingeltangel.wimmelbuch.Wimmelbuch;
 import tiptoi_reveng.lexer.LexerException;
 import tiptoi_reveng.parser.ParserException;
 
@@ -432,7 +436,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 JOptionPane.showMessageDialog(this, "Das Buch konnte nicht gespeichert werden");
                 log.error("unable to save book", e);
             }
-            
+          
         } else if(id.equals("buch.generate")) {
             
             

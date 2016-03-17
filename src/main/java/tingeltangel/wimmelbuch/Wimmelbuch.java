@@ -4,31 +4,42 @@
  */
 package tingeltangel.wimmelbuch;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
+import tingeltangel.core.ForeignImporter;
+import tingeltangel.core.Script;
 import tingeltangel.core.TTSEntry;
+import tingeltangel.tools.Permutate;
 
 /**
  *
  * @author mdames
  */
-public class Wimmelbuch {
+public class Wimmelbuch implements ForeignImporter {
 
-    private HashSet<Event> events = new HashSet<Event>();
-    private HashSet<Item> items = new HashSet<Item>();
-    private HashSet<Constraint> constraints = new HashSet<Constraint>();
+    private final HashSet<Event> events = new HashSet<Event>();
+    private final HashSet<Item> items = new HashSet<Item>();
+    private final HashSet<Constraint> constraints = new HashSet<Constraint>();
     
-    public void addItem(Item item) {
+    final static int MAX_QUEUE_SIZE = 6;
+        
+    private void addItem(Item item) {
         items.add(item);
     }
     
-    public void addEvent(Event event) {
+    private void addEvent(Event event) {
         events.add(event);
     }
     
-    public void generate(Book book) throws Exception {
+    private void generate(Book book, boolean useLocking, int startOID) throws Exception {
+        
         
         // collect constraints
         constraints.clear();
@@ -63,24 +74,7 @@ public class Wimmelbuch {
             iItems.next().setAudioTrack(audioCounter++);
         }
         
-        int offset = 15001;
-        boolean done = false;
-        while(!done) {
-            while(book.entryForTingIDExists(offset)) {
-                offset++;
-            }
-            done = true;
-            for(int k = 1; k < audioCounter; k++) {
-                if(book.entryForTingIDExists(offset + k)) {
-                    offset = offset + k;
-                    done = false;
-                    break;
-                }
-            }
-        }
-        if(!done) {
-            throw new Exception("keine freien IDs gefunden");
-        }
+        int offset = startOID + items.size();
         
         // add audio tracks
         iItems = items.iterator();
@@ -100,16 +94,52 @@ public class Wimmelbuch {
             entry.setTTS(new TTSEntry(event.getTTS()));
         }
         
+        int[] reg_item_queue = new int[MAX_QUEUE_SIZE];
+        for(int i = 0; i < MAX_QUEUE_SIZE; i++) {
+            reg_item_queue[i] = i;
+        }
+        int reg_i = MAX_QUEUE_SIZE + 0;
+        int usedRegisters = MAX_QUEUE_SIZE + 1;
+        
         // add item scripts
         iItems = items.iterator();
         while(iItems.hasNext()) {
             Item item = iItems.next();
             
             StringBuilder sb = new StringBuilder();
-            sb.append("// wimmelbuch item " + item.getName() + "\n");
+            sb.append("// wimmelbuch item ").append(item.getName()).append("\n");
+            if(useLocking) {
+                sb.append("lock\n");
+            }
+            
+            // check if current selected item is in queue
+            
+            for(int i = 0; i < reg_item_queue.length; i++) {
+                sb.append("cmp v95,v").append(reg_item_queue[i]).append("\n");
+                sb.append("je queue_remove_").append(i).append("\n");
+            }
+            sb.append("jmp insert\n");
+            
+            for(int i = 0; i < reg_item_queue.length; i++) {
+                sb.append(":queue_remove_").append(i).append("\n");
+                for(int k = i + 1; k < reg_item_queue.length; k++) {
+                    sb.append("set v").append(reg_item_queue[k - 1]).append(",v").append(reg_item_queue[k]).append("\n");
+                }
+                sb.append("set v").append(reg_item_queue[reg_item_queue.length - 1]).append(",0\n");
+                sb.append("jmp insert\n");
+            }
+            
+            // insert into queue
+            sb.append(":insert\n");
+            for(int k = reg_item_queue.length - 1; k > 0; k--) {
+                sb.append("set v").append(reg_item_queue[k]).append(",v").append(reg_item_queue[k - 1]).append("\n");
+            }
+            sb.append("set v").append(reg_item_queue[0]).append(",v95\n");
+            
             // check for events
             iEvents = item.getEvents().iterator();
             while(iEvents.hasNext()) {
+                sb.append("// event\n");
                 Event event = iEvents.next();
                 // check for items
                 Item[][] eventItems = new Item[1][event.getItems().size()];
@@ -119,17 +149,26 @@ public class Wimmelbuch {
                 }
                 if(event.getMode() == Event.PERMUTATE) {
                     eventItems = permutations(eventItems[0]);
+                    LinkedList<Item[]> il = new LinkedList<Item[]>();
+                    for(int p = 0; p < eventItems.length; p++) {
+                        if(eventItems[p][0] == item) {
+                            il.add(eventItems[p]);
+                        }
+                    }
+                    eventItems = il.toArray(new Item[0][eventItems[0].length]);
                 }
                 
                 for(int p = 0; p < eventItems.length; p++) {
+                    
+                    
                     for(int i = 0; i < eventItems[p].length; i++) {
-                        // use v10,v11,v12
-                        sb.append("cmp v1").append(i).append(",").append(eventItems[p][i].getID()).append("\n");
+                        sb.append("cmp v").append(reg_item_queue[i]).append(",").append(eventItems[p][i].getID()).append("\n");
                         sb.append("jne not_match_").append(event.getAudioTrack()).append("_").append(p).append("\n");
                     }
                     sb.append("jmp match_").append(event.getAudioTrack()).append("\n");
                     sb.append(":not_match_").append(event.getAudioTrack()).append("_").append(p).append("\n");
                 }
+                sb.append("jmp not_match_").append(event.getAudioTrack()).append("\n");
                 
                 sb.append(":match_").append(event.getAudioTrack()).append("\n");
                 
@@ -137,143 +176,277 @@ public class Wimmelbuch {
                 iConstraints = event.getSetConstraints().iterator();
                 while(iConstraints.hasNext()) {
                     Constraint c = iConstraints.next();
-                    sb.append("getbit v16,v").append(c.getRegister() + 20).append(",v").append(c.getBit()).append("\n");
-                    sb.append("cmp v16,0\n");
+                    
+                    sb.append("getbit v").append(reg_i).append(",v").append(c.getRegister() + usedRegisters).append(",v").append(c.getBit()).append("\n");
+                    //sb.append("set v").append(reg_i).append(",v").append(c.getRegister() * 8 + c.getBit() + usedRegisters).append("\n");
+
+                    sb.append("cmp v").append(reg_i).append(",0\n");
                     sb.append("je not_match_").append(event.getAudioTrack()).append("\n");
                 }
                 iConstraints = event.getUnsetConstraints().iterator();
                 while(iConstraints.hasNext()) {
                     Constraint c = iConstraints.next();
-                    sb.append("getbit v16,v").append(c.getRegister() + 20).append(",v").append(c.getBit()).append("\n");
-                    sb.append("cmp v16,1\n");
+                    
+                    sb.append("getbit v").append(reg_i).append(",v").append(c.getRegister() + usedRegisters).append(",v").append(c.getBit()).append("\n");
+                    //sb.append("set v").append(reg_i).append(",v").append(c.getRegister() * 8 + c.getBit() + usedRegisters).append("\n");
+                    
+                    sb.append("cmp v").append(reg_i).append(",1\n");
                     sb.append("je not_match_").append(event.getAudioTrack()).append("\n");
                 }
                 // set resulting constraints
-                
+                iConstraints = event.getResultingSetConstraints().iterator();
+                while(iConstraints.hasNext()) {
+                    Constraint c = iConstraints.next();
+                    
+                    sb.append("setbit v").append(c.getRegister() + usedRegisters).append(",v").append(c.getBit()).append("\n");
+                    //sb.append("set v").append(c.getRegister() * 8 + c.getBit() + usedRegisters).append(",1\n");
+                    
+                }
+                iConstraints = event.getResultingUnsetConstraints().iterator();
+                while(iConstraints.hasNext()) {
+                    Constraint c = iConstraints.next();
+                    
+                    //sb.append("set v").append(c.getRegister() * 8 + c.getBit() + usedRegisters).append(",0\n");
+                    sb.append("unsetbit v").append(c.getRegister() + usedRegisters).append(",v").append(c.getBit()).append("\n");
+                    
+                }
                 // play event track
+                sb.append("playoid ").append(event.getAudioTrack() + offset).append("\n");
                 
-                // unset v10,v11,v12 if no further event exists
+                if(event.clearQueueAfterEvent()) {
+                    for(int i = 0; i < reg_item_queue.length; i++) {
+                        sb.append("set v").append(reg_item_queue[i]).append(",0\n");
+                    }
+                }
                 
                 // end
+                if(useLocking) {
+                    sb.append("unlock\n");
+                }
+                sb.append("end\n");
                 sb.append(":not_match_").append(event.getAudioTrack()).append("\n");
             }
-            sb.append("playoid ").append(item.getAudioTrack()).append("\n");
+            sb.append("playoid ").append(item.getAudioTrack() + offset).append("\n");
+            if(useLocking) {
+                sb.append("unlock\n");
+            }
             sb.append("end\n");
             
             // create script entry with sb at item.getID()
+            book.addEntry(item.getID());
+            Entry entry = book.getEntryByOID(item.getID());
+            entry.setScript(new Script(sb.toString(), entry));
         }
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws Exception {
-        Wimmelbuch wimmelbuch = new Wimmelbuch();
-        
-        Item feuerzeug = new Item(15001, "feuerzeug", "ein feuerzeug");
-        wimmelbuch.addItem(feuerzeug);
-        
-        Item holz = new Item(15002, "holz", "etwas holz");
-        wimmelbuch.addItem(holz);
-        
-        Item ofen = new Item(15003, "ofen", "ein ofen");
-        wimmelbuch.addItem(ofen);
-        
-        Item katze = new Item(15004, "katze", "eine kleine katze");
-        wimmelbuch.addItem(katze);
-        
-        Item pfanne = new Item(15005, "pfanne", "eine bratpfanne");
-        wimmelbuch.addItem(pfanne);
-        
-        Item kettensaege = new Item(15006, "kettensaege", "eine kettensaege");
-        wimmelbuch.addItem(kettensaege);
-        
-        Constraint ofen_warm = new Constraint();
-        Constraint katze_matsch = new Constraint();
-        
-        Event e1 = new Event("du hast den ofen angemacht. nun wird es warm");
-        e1.addItem(feuerzeug);
-        e1.addItem(holz);
-        e1.addItem(ofen);
-        e1.setMode(Event.PERMUTATE);
-        e1.addUnsetConstraint(ofen_warm);
-        e1.addResultingSetConstraint(ofen_warm);
-        wimmelbuch.addEvent(e1);
-        
-        Event e2 = new Event("der ofen ist schon warm");
-        e2.addItem(feuerzeug);
-        e2.addItem(holz);
-        e2.addItem(ofen);
-        e2.setMode(Event.PERMUTATE);
-        e2.addSetConstraint(ofen_warm);
-        wimmelbuch.addEvent(e2);
-        
-        Event e3 = new Event("nun ist die kleine katze matsch");
-        e3.addItem(katze);
-        e3.addItem(pfanne);
-        e3.setMode(Event.PERMUTATE);
-        e3.addUnsetConstraint(katze_matsch);
-        e3.addResultingSetConstraint(katze_matsch);
-        wimmelbuch.addEvent(e3);
-        
-        Event e4 = new Event("die katze ist nun noch etwas matschiger");
-        e4.addItem(katze);
-        e4.addItem(pfanne);
-        e4.setMode(Event.PERMUTATE);
-        e4.addSetConstraint(katze_matsch);
-        wimmelbuch.addEvent(e4);
-        
-        Event e5  = new Event("eine matschige katze");
-        e5.addItem(katze);
-        e5.addSetConstraint(katze_matsch);
-        wimmelbuch.addEvent(e5);
-        
-        wimmelbuch.generate(null);
+    private int fak(int n) {
+        if(n == 1) {
+            return(1);
+        }
+        return(n * fak(n - 1));
+    }
+    
+    private Item[][] permutations(Item[] itemA) throws Exception {
+        if(itemA.length == 0) {
+            throw new Exception("event with no item found");
+        }
+
+        Item[][] r4 = new Item[fak(itemA.length)][itemA.length];
+        Iterator<int[]> i = Permutate.perms(itemA.length);
+        int p = 0;
+        while(i.hasNext()) {
+            
+            int[] a = i.next();
+            for(int q = 0; q < a.length; q++) {
+                r4[p][q] = itemA[a[q]];
+            }
+            p++;
+        }
+        return(r4);
     }
 
-    private Item[][] permutations(Item[] itemA) throws Exception {
-        switch(itemA.length) {
-            case 0:
-                throw new Exception("event with no item found");
-            case 1:
-                Item[][] r1 = new Item[1][1];
-                r1[0][0] = itemA[0];
-                return(r1);
-            case 2:
-                Item[][] r2 = new Item[2][2];
-                r2[0][0] = itemA[0];
-                r2[0][1] = itemA[1];
-                r2[1][0] = itemA[1];
-                r2[1][1] = itemA[0];
-                return(r2);
-            case 3:
-                Item[][] r3 = new Item[6][3];
-                r3[0][0] = itemA[0];
-                r3[0][1] = itemA[1];
-                r3[0][2] = itemA[2];
-                
-                r3[1][0] = itemA[0];
-                r3[1][1] = itemA[2];
-                r3[1][2] = itemA[1];
-                
-                r3[2][0] = itemA[1];
-                r3[2][1] = itemA[0];
-                r3[2][2] = itemA[2];
-                
-                r3[3][0] = itemA[1];
-                r3[3][1] = itemA[2];
-                r3[3][2] = itemA[0];
-                
-                r3[4][0] = itemA[2];
-                r3[4][1] = itemA[0];
-                r3[4][2] = itemA[1];
-                
-                r3[5][0] = itemA[2];
-                r3[5][1] = itemA[1];
-                r3[5][2] = itemA[0];
-                
-                return(r3);
+    @Override
+    public void importBook(Book book, File file) throws Exception {
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        String row;
+        int n = 0;
+        
+        int mid = 0;
+        String name = "unknown";
+        String publisher = "unknown";
+        String author = "unknown";
+        int version = 1;
+        String url = "";
+        boolean use_locking = true;
+        int start_generated_oids = 20000;
+              
+        LinkedList<String> itemDefs = new LinkedList<String>();
+        LinkedList<String> eventDefs = new LinkedList<String>();
+        
+        while((row = in.readLine()) != null) {
+            n++;
+            row = row.trim();
+            if(!row.isEmpty() && !row.startsWith("//")) {
+                int p = row.indexOf(":");
+                String cmd = row.substring(0, p).trim().toLowerCase();
+                String args = row.substring(p + 1).trim();
+                if(cmd.equals("mid")) {
+                    mid = Integer.parseInt(args);
+                } else if(cmd.equals("name")) {
+                    name = args;
+                } else if(cmd.equals("publisher")) {
+                    publisher = args;
+                } else if(cmd.equals("author")) {
+                    author = args;
+                } else if(cmd.equals("version")) {
+                    version = Integer.parseInt(args);
+                } else if(cmd.equals("url")) {
+                    url = args;
+                } else if(cmd.equals("use-locking")) {
+                    use_locking = Boolean.parseBoolean(args);
+                } else if(cmd.equals("start-generated-oids")) {
+                    start_generated_oids = Integer.parseInt(args);
+                } else if(cmd.equals("item")) {
+                    itemDefs.add(args);
+                } else if(cmd.equals("event")) {
+                    eventDefs.add(args);
+                } else {
+                    throw new Exception("unknown argument: " + cmd + " on row " + n);
+                }
+            }
         }
-        throw new Exception("found more than 3 items in event");
+        in.close();
+        
+        if(mid <= 0 || mid >= 10000) {
+            throw new Exception("bad mid given");
+        }
+        
+        book.clear();
+        book.setID(mid);
+        book.setName(name);
+        book.setPublisher(publisher);
+        book.setAuthor(author);
+        book.setVersion(version);
+        book.setURL(url);
+        
+        HashMap<String, Item> _items = new HashMap<String, Item>();
+        HashMap<String, Constraint> _constr = new HashMap<String, Constraint>();
+        
+        Iterator<String> is = itemDefs.iterator();
+        while(is.hasNext()) {
+            String ide = is.next();
+            int p;
+            
+            p = ide.indexOf(":");
+            int oid = Integer.parseInt(ide.substring(0, p).trim());
+            ide = ide.substring(p + 1).trim();
+            
+            p = ide.indexOf(":");
+            String iName = ide.substring(0, p).trim().toLowerCase();
+            String tts = ide.substring(p + 1).trim();
+            
+            Item item = new Item(oid, iName, tts);
+            _items.put(iName, item);
+            addItem(item);
+        }
+        
+        is = eventDefs.iterator();
+        while(is.hasNext()) {
+            String ide = is.next();
+            int p;
+            
+            p = ide.indexOf(":");
+            String queue = ide.substring(0, p).trim().toLowerCase();
+            ide = ide.substring(p + 1).trim();
+            
+            p = ide.indexOf(":");
+            String constr = ide.substring(0, p).trim().toLowerCase();
+            ide = ide.substring(p + 1).trim();
+            
+            p = ide.indexOf(":");
+            String resConstr = ide.substring(0, p).trim().toLowerCase();
+            String tts = ide.substring(p + 1).trim();
+            
+            boolean permutate = false;
+            if(queue.startsWith("*")) {
+                permutate = true;
+                queue = queue.substring(1).trim();
+            }
+            
+            Event event = new Event(tts);
+            
+            String[] q = queue.split(",");
+            for(int i = 0; i < q.length; i++) {
+                String ins = q[i].trim();
+                if(!ins.isEmpty()) {
+                    event.addItem(_items.get(q[i].trim()));
+                    if(permutate) {
+                        event.setMode(Event.PERMUTATE);
+                    } else {
+                        event.setMode(Event.IN_ORDER);
+                    }
+                }
+            }
+            
+            q = constr.split(",");
+            for(int i = 0; i < q.length; i++) {
+                String ins = q[i].trim();
+                if(!ins.isEmpty()) {
+                    
+                    boolean not = false;
+                    if(ins.startsWith("!")) {
+                       not =  true;
+                       ins = ins.substring(1).trim();
+                    }
+                    
+                    if(!_constr.containsKey(ins)) {
+                        _constr.put(ins, new Constraint());
+                    }
+                    Constraint c = _constr.get(ins);
+                    
+                    if(!not) {
+                        event.addSetConstraint(c);
+                    } else {
+                        event.addUnsetConstraint(c);
+                    }
+                }
+            }
+            
+            q = resConstr.split(",");
+            for(int i = 0; i < q.length; i++) {
+                String ins = q[i].trim();
+                if(!ins.isEmpty()) {
+                    
+                    if(ins.equals("clear")) {
+                        event.clearQueueAfterEvent();
+                    } else {
+                    
+                        boolean not = false;
+                        if(ins.startsWith("!")) {
+                           not =  true;
+                           ins = ins.substring(1).trim();
+                        }
+
+                        if(!_constr.containsKey(ins)) {
+                            _constr.put(ins, new Constraint());
+                        }
+                        Constraint c = _constr.get(ins);
+
+                        if(!not) {
+                            event.addResultingSetConstraint(c);
+                        } else {
+                            event.addResultingUnsetConstraint(c);
+                        }
+                    }
+                }
+            }
+            
+            addEvent(event);
+        }
+        
+        
+        generate(book, use_locking, start_generated_oids);
+        
     }
+    
 }
