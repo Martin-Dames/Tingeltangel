@@ -42,12 +42,15 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -102,6 +105,10 @@ public class IndexListEntry extends JPanel {
     private static String lastChooseMp3DialogPath = null;
     private JLabel trackInfo = new JLabel(" ");
     private final Entry entry;
+    private final JTextArea hint = new JTextArea();
+    private final JCheckBox codeCheckBox = new JCheckBox();
+    private final JTextField name = new JTextField();
+
     
     private final static Logger log = LogManager.getLogger(IndexListEntry.class);
     
@@ -134,6 +141,28 @@ public class IndexListEntry extends JPanel {
             row.setBackground(Color.red);
         }
         
+        final JButton sizeButton = new JButton("<");
+        sizeButton.setMargin(new Insets(0, 0, 0, 0));
+        sizeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(hint.isVisible()) {
+                    hint.setVisible(false);
+                    sizeButton.setText(">");
+                } else {
+                    hint.setVisible(true);
+                    sizeButton.setText("<");
+                }
+            }
+        });
+        row.add(sizeButton);
+        
+        
+        JPanel space2 = new JPanel();
+        Dimension spaceDim = new Dimension(20, 1);
+        space2.setMinimumSize(spaceDim);
+        space2.setMaximumSize(spaceDim);
+        row.add(space2);
         
         JButton jboid = new JButton(Integer.toString(entry.getTingID()));
         jboid.addActionListener(new ActionListener() {
@@ -247,7 +276,6 @@ public class IndexListEntry extends JPanel {
         row.add(icon);
         
         JPanel space = new JPanel();
-        Dimension spaceDim = new Dimension(20, 1);
         space.setMinimumSize(spaceDim);
         space.setMaximumSize(spaceDim);
         row.add(space);
@@ -496,6 +524,43 @@ public class IndexListEntry extends JPanel {
         }
         row.add(saveMP3);
         
+        row.add(new JLabel("Code:"));
+        row.add(codeCheckBox);
+        codeCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                entry.setHasCode(codeCheckBox.isSelected());
+            }
+        });
+        if(entry.isSub()) {
+            codeCheckBox.setEnabled(false);
+        }
+        if(entry.hasCode()) {
+            codeCheckBox.setSelected(true);
+        }
+        
+        row.add(new JLabel("Name:"));
+        name.setPreferredSize(new Dimension(100, 20));
+        row.add(name);
+        name.setText(entry.getName());
+        name.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                changedUpdate(e);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                changedUpdate(e);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                entry.setName(name.getText());
+            }
+        });
+        
         // track info
         trackInfo.setText(getTrackInfo(entry));
         row.add(trackInfo);
@@ -510,7 +575,6 @@ public class IndexListEntry extends JPanel {
         
         add(header, BorderLayout.NORTH);
         
-        final JTextArea hint = new JTextArea();
         hint.setRows(1);
         
         
@@ -543,7 +607,6 @@ public class IndexListEntry extends JPanel {
                 }
             }
         });
-        
         
         add(hint, BorderLayout.CENTER);
         

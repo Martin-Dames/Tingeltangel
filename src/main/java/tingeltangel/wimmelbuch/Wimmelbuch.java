@@ -74,13 +74,12 @@ public class Wimmelbuch implements ForeignImporter {
             iItems.next().setAudioTrack(audioCounter++);
         }
         
-        int offset = startOID + items.size();
         
         // add audio tracks
         iItems = items.iterator();
         while(iItems.hasNext()) {
             Item item = iItems.next();
-            int tid = item.getAudioTrack() + offset;
+            int tid = item.getAudioTrack() + startOID;
             book.addEntry(tid);
             Entry entry = book.getEntryByOID(tid);
             entry.setTTS(new TTSEntry(item.getTTS()));
@@ -88,7 +87,7 @@ public class Wimmelbuch implements ForeignImporter {
         iEvents = events.iterator();
         while(iEvents.hasNext()) {
             Event event = iEvents.next();
-            int tid = event.getAudioTrack() + offset;
+            int tid = event.getAudioTrack() + startOID;
             book.addEntry(tid);
             Entry entry = book.getEntryByOID(tid);
             entry.setTTS(new TTSEntry(event.getTTS()));
@@ -211,7 +210,7 @@ public class Wimmelbuch implements ForeignImporter {
                     
                 }
                 // play event track
-                sb.append("playoid ").append(event.getAudioTrack() + offset).append("\n");
+                sb.append("playoid ").append(event.getAudioTrack() + startOID).append("\n");
                 
                 if(event.clearQueueAfterEvent()) {
                     for(int i = 0; i < reg_item_queue.length; i++) {
@@ -226,7 +225,7 @@ public class Wimmelbuch implements ForeignImporter {
                 sb.append("end\n");
                 sb.append(":not_match_").append(event.getAudioTrack()).append("\n");
             }
-            sb.append("playoid ").append(item.getAudioTrack() + offset).append("\n");
+            sb.append("playoid ").append(item.getAudioTrack() + startOID).append("\n");
             if(useLocking) {
                 sb.append("unlock\n");
             }
@@ -236,6 +235,8 @@ public class Wimmelbuch implements ForeignImporter {
             book.addEntry(item.getID());
             Entry entry = book.getEntryByOID(item.getID());
             entry.setScript(new Script(sb.toString(), entry));
+            entry.setHasCode(true);
+            entry.setName(item.getName());
         }
     }
     

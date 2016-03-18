@@ -241,6 +241,7 @@ public class Script {
         return(mergedCode.toString());
     }
     
+    
     public byte[] compile() throws SyntaxError {
         HashMap<String, Integer> labels = new HashMap<String, Integer>();
         instanceLabelsSI = new HashMap<String, Integer>();
@@ -249,7 +250,8 @@ public class Script {
         int rc = 0;
         try {
             
-            String mergedCode = replaceTemplates(mergeCodeOnCalls(false));
+            String mergedCode = replaceTemplatesAndResolveNames(mergeCodeOnCalls(false));
+            
             
             compilerLog.trace("ID=" + Integer.toString(entry.getTingID()));
             
@@ -370,7 +372,7 @@ public class Script {
         }
     }
 
-    private String replaceTemplates(String code) throws IOException, SyntaxError {
+    private String replaceTemplatesAndResolveNames(String code) throws IOException, SyntaxError {
         BufferedReader in = new BufferedReader(new StringReader(code));
         StringBuilder out = new StringBuilder();
         
@@ -391,11 +393,29 @@ public class Script {
                 args = row.substring(p + 1).trim();
                 row = row.substring(0, p);
             }
+            
+            // resolve names
+            String[] _as = args.split(",");
+            args = "";
+            for(int i = 0; i < _as.length; i++) {
+                _as[i] = _as[i].trim();
+                if(_as[i].startsWith("@")) {
+                    Entry e = book.getEntryByName(_as[i].substring(1));
+                    if(e == null) {
+                        throw new SyntaxError("OID Name '" + _as[i].substring(1) + "' nicht gefunden");
+                    }
+                    args += "," + Integer.toString(entry.getTingID());
+                } else {
+                    args += "," + _as[i];
+                }
+            }
+            args = args.substring(1);
+            
             Template t = Template.getTemplate(row);
             if(t != null) {
                 LinkedList<String> as = new LinkedList<String>();
                 if(!args.isEmpty()) {
-                    String[] _as = args.split(",");
+                    _as = args.split(",");
                     for(int i = 0; i < _as.length; i++) {
                         as.add(_as[i].toLowerCase().trim());
                     }
