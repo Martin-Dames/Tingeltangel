@@ -111,7 +111,6 @@ public class Script {
         compile();
         
         emulatorLog.trace("ID=" + Integer.toString(entry.getTingID()));
-        System.out.println("ID=" + Integer.toString(entry.getTingID()));
         
         if(!subCall) {
             entry.getBook().getEmulator().setLastOID(entry.getTingID());
@@ -128,7 +127,6 @@ public class Script {
             Instance instance = script.get(pc);
             
             emulatorLog.trace("\t" + pc + ": " + instance.toString(entry.getBook().getEmulator()));
-            System.out.println("\t" + pc + ": " + instance.toString(entry.getBook().getEmulator()));
             
             if(instance.getCommand().getAsm().equals(ScriptFile.END)) {
                 return;
