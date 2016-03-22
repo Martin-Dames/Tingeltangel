@@ -211,7 +211,7 @@ public class Wimmelbuch implements ForeignImporter {
                 }
                 // play event track
                 sb.append("playoid ").append(event.getAudioTrack() + startOID).append("\n");
-                
+                                
                 if(event.clearQueueAfterEvent()) {
                     for(int i = 0; i < reg_item_queue.length; i++) {
                         sb.append("set v").append(reg_item_queue[i]).append(",0\n");
@@ -419,7 +419,7 @@ public class Wimmelbuch implements ForeignImporter {
                 if(!ins.isEmpty()) {
                     
                     if(ins.equals("clear")) {
-                        event.clearQueueAfterEvent();
+                        event.setClearQueueAfterEvent();
                     } else {
                     
                         boolean not = false;
