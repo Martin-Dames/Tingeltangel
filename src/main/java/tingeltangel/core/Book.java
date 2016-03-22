@@ -984,11 +984,11 @@ public class Book {
         emulator.addRegisterListener(listener);
     }
 
-    public void generateScriptFile( File srcFile )  throws IOException {
+    public void generateScriptFile( File srcFile )  throws IOException, SyntaxError {
         this.generateScriptFile(new PrintWriter(new FileWriter(srcFile)) );
     }
 
-    void generateScriptFile(PrintWriter out) throws IOException {
+    void generateScriptFile(PrintWriter out) throws IOException, SyntaxError {
         Iterator<Integer> ids = indexIDs.iterator();
         int pathLength = FileEnvironment.getBookDirectory(id).getCanonicalPath().length() +1 ;
         while(ids.hasNext()) {
@@ -1010,7 +1010,7 @@ public class Book {
                     out.print("[Note]\r\n");
                     out.print(entry.getHint() + "\r\n");
                     out.print("[Content]\r\n");
-                    out.print(entry.getScript().toString().replaceAll("\n", "\r\n"));
+                    out.print(entry.getScript().toStringWithoutTemplatesAndNames().replaceAll("\n", "\r\n"));
                     out.print("\r\n");
                 }
             }

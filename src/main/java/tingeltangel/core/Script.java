@@ -370,6 +370,10 @@ public class Script {
         }
     }
 
+    public String toStringWithoutTemplatesAndNames() throws IOException, SyntaxError {
+        return(replaceTemplatesAndResolveNames(code));
+    }
+    
     private String replaceTemplatesAndResolveNames(String code) throws IOException, SyntaxError {
         BufferedReader in = new BufferedReader(new StringReader(code));
         StringBuilder out = new StringBuilder();
