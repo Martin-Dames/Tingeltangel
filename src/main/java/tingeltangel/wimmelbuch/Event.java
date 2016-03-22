@@ -73,7 +73,7 @@ public class Event implements Comparable {
         if(items.size() == Wimmelbuch.MAX_QUEUE_SIZE) {
             throw new Exception();
         }
-        items.add(item);
+        items.addFirst(item);
     }
     
     public List<Item> getItems() {

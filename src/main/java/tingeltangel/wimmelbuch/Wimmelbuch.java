@@ -16,6 +16,7 @@ import tingeltangel.core.Entry;
 import tingeltangel.core.ForeignImporter;
 import tingeltangel.core.Script;
 import tingeltangel.core.TTSEntry;
+import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.Permutate;
 
 /**
@@ -268,6 +269,17 @@ public class Wimmelbuch implements ForeignImporter {
 
     @Override
     public void importBook(Book book, File file) throws Exception {
+        
+        File audioDir = FileEnvironment.getAudioDirectory(book.getID());
+        if(audioDir.exists()) {
+            File[] tracks = audioDir.listFiles();
+            for(int i = 0; i < tracks.length; i++) {
+                if(tracks[i].isFile()) {
+                    tracks[i].delete();
+                }
+            }
+        }
+        
         BufferedReader in = new BufferedReader(new FileReader(file));
         String row;
         int n = 0;
