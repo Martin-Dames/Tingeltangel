@@ -187,7 +187,7 @@ public class Disassembler {
             } else if (b[offset] == 0x14 && b[offset + 1] == 0x00) {
                 sb.append("return\n");
                 offset += 2;
-            } else if (b[offset] == 0x15 && b[offset + 1] == 0x01) {
+            } else if (b[offset] == 0x15 && (b[offset + 1] == 0x01 || b[offset + 1] == 0x02)) {
                 sb.append("callid ");
                 int value = ((b[offset + 2] & 0xff) << 8) + (b[offset + 3] & 0xff);
                 sb.append(value);
