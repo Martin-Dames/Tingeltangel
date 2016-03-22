@@ -42,10 +42,24 @@ public class Entry {
     private String hint = "";
     private int type = MP3;
     private int tingID = -1;
+    private boolean hasCode;
+    private String name;
     
     public Entry(Book book, int tingID) {
         this.book = book;
         this.tingID = tingID;
+        name = Integer.toString(tingID);
+    }
+    
+    public void setName(String name) {
+        if(!this.name.equals(name)) {
+            changeMade();
+        }
+        this.name = name;
+    }
+    
+    public String getName() {
+        return(name);
     }
     
     public Book getBook() {
@@ -216,5 +230,19 @@ public class Entry {
         script = null;
         tts = null;
         type = MP3;
+    }
+
+    public void setHasCode(boolean hasCode) {
+        if(this.hasCode != hasCode) {
+            changeMade();
+        }
+        this.hasCode = hasCode;
+    }
+    
+    public boolean hasCode() {
+        if(type == SUB) {
+            return(false);
+        }
+        return(hasCode);
     }
 }

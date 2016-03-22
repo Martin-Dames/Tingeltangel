@@ -38,7 +38,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -246,6 +245,17 @@ public class Book {
         return(indexEntries.get(oid));
     }
     
+    public Entry getEntryByName(String name) {
+        Iterator<Entry> i = indexEntries.values().iterator();
+        while(i.hasNext()) {
+            Entry e = i.next();
+            if(e.getName().equals(name)) {
+                return(e);
+            }
+        }
+        return(null);
+    }
+    
     public boolean entryForTingIDExists(int tingID) {
         return(indexEntries.get(tingID) != null);
     }
@@ -346,6 +356,12 @@ public class Book {
                 }
                 xml.print(" mp3=\"" + encodeAttribute(mp3name) + "\"");
             }
+            if(entry.hasCode()) {
+                xml.print(" hasCode=\"true\"");
+            } else {
+                xml.print(" hasCode=\"false\"");
+            }
+            xml.print(" name=\"" + entry.getName() + "\"");
             xml.println(">");
             if(entry.isCode() || entry.isSub()) {
                 xml.println("\t\t\t<code>" + encodeValue(entry.getScript().toString()) + "</code>");
@@ -546,6 +562,23 @@ public class Book {
                     }
                     // get hint
                     entry.setHint(getTagContent(eElement.getElementsByTagName("hint").item(0)));
+                    
+                    // get hascode
+                    String _hasCode = eElement.getAttribute("hasCode");
+                    if(_hasCode.isEmpty()) {
+                        _hasCode = "true";
+                        if(entry.isSub()) {
+                            _hasCode = "false";
+                        }
+                    }
+                    entry.setHasCode(_hasCode.toLowerCase().equals("true"));
+                    
+                    // get name
+                    String name = eElement.getAttribute("name");
+                    if(name.isEmpty()) {
+                        name = Integer.toString(entry.getTingID());
+                    }
+                    entry.setName(name);
                     
                     book.addEntry(entry.getTingID());
                     book.indexEntries.put(entry.getTingID(), entry);
@@ -827,7 +860,7 @@ public class Book {
             }
             Entry entry = getEntryByOID(i + 15001);
             if(entry != null) {
-                if(!entry.isSub()) {
+                if(entry.hasCode()) {
                     out = new FileOutputStream(new File(dir, (i + 15001) + ".png"));
                     Codes.drawPng(Translator.ting2code(i + 15001), 100, 100, out);
                     out.close();

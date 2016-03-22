@@ -235,6 +235,8 @@ public class Wimmelbuch implements ForeignImporter {
             book.addEntry(item.getID());
             Entry entry = book.getEntryByOID(item.getID());
             entry.setScript(new Script(sb.toString(), entry));
+            entry.setHasCode(true);
+            entry.setName(item.getName());
         }
     }
     

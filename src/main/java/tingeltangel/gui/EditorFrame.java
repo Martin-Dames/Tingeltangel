@@ -617,8 +617,21 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 
             }
             
-            
-            
+        } else if(id.equals("buch.import.wimmelbuch")) {
+            JFileChooser fc2 = new JFileChooser();
+            fc2.setFileFilter(new FileNameExtensionFilter("Wimmelbuch (*.wb)", "wb"));
+            if(fc2.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File file = fc2.getSelectedFile();
+                    new Wimmelbuch().importBook(book, file);
+                } catch(Exception ioe) {
+                    JOptionPane.showMessageDialog(EditorFrame.this, "Wimmelbuch Import fehlgeschlagen");
+                    log.error("unable to import wimmelbuch", ioe);
+                }
+                indexPanel.updateList(null);
+                indexPanel.refresh();
+                setBookOpened();
+            }
         } else if(id.equals("buch.generatePngCodes")) {
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new FileNameExtensionFilter("PNG Codes (*.zip)", "zip"));
