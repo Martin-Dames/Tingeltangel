@@ -1,0 +1,136 @@
+/*
+010Editor Script
+Date: 23.03.2016
+Author: Glaukon Ariston
+About:
+	After running the ouf.bt template on the loaded OUF file (Ting digital pen file), 
+	run this script to extract all MP3 streams and binary scripts.
+*/
+
+#include "common.1sc"
+
+#define ASSERT 0
+
+// folder/tingId.ext
+const string mp3Pattern = "%s\\%d.mp3";
+const string scriptPattern = "%s\\%d.s";
+
+
+local int csvAggregateFileNo;
+
+
+void exportBookSegment(string bookFolder, int64 start, uint32 size, uint32 tingId, string filepathPattern) {
+	local string filepath = "";
+	local int status = 0;
+
+	SPrintf(filepath, filepathPattern, bookFolder, tingId);
+	Printf("Saving range [0x%LX,size 0x%LX] to %s\n", start, size, filepath);
+	if(!FileExists(bookFolder)) {
+		status = MakeDir(bookFolder);
+    	Assert(status, "MakeDir: " + bookFolder);
+	}
+	status = FileSaveRange(filepath, start, size);
+	Assert(status >= 0, "FileSaveRange: " + filepath);
+}
+
+
+void processBook(string bookId) {
+	local string bookFolder = getBookFolder(bookId);
+	local uint32 i;
+	local uint32 tingId;
+	local uint32 fileOffset;
+
+	for(i=0, tingId=oufFile.header.firstTingID; exists(oufFile.indexTable) && exists(oufFile.indexTable[i]); ++i, ++tingId) {
+		fileOffset = getFileOffset(i, oufFile.indexTable[i].resourceOffset);
+		switch(oufFile.indexTable[i].resourceType) {
+		case EMPTY: 
+			break;
+		case MP3:
+			//exportBookSegment(bookFolder, fileOffset, oufFile.indexTable[i].resourceSize, tingId, mp3Pattern);
+			break;
+		case SCRIPT: 
+			exportBookSegment(bookFolder, fileOffset, oufFile.indexTable[i].resourceSize, tingId, scriptPattern);
+			break;
+		default: 
+			ASSERT && Assert(false, SPrintf(s, "Unknown resource type %d for tingId %d at index table entry %d", oufFile.indexTable[i].resourceType, tingId, i));
+			break;
+		}
+	}
+}
+
+
+void saveStatistics(string bookId) {
+	local string bookFolder = getBookFolder(bookId);
+	if(!FileExists(bookFolder)) {
+		MakeDir(bookFolder);
+	}
+	local string csvFilePath = bookFolder + bookId + "_script.csv";
+	if(exists(oufFile.script[0])) {
+		local int csvFileNo = FileNew();
+		FileSelect(csvFileNo);
+		FileSave(csvFilePath);
+		FileClose();
+	} else {
+		DeleteFile(csvFilePath);
+	}
+}
+
+
+void parseOuf(const string& oufFileName) {
+	local string oufFilePath = repositoryFolder + oufFileName;
+	// run ouf.bt binary template on the file
+	local int currentFileNo = FileOpen(oufFilePath, /*runTemplate=*/1);
+	local string bookId = getBookId(GetFileName());
+	FileSelect(currentFileNo);
+	processBook(bookId);
+	saveStatistics(bookId);
+	FileSelect(currentFileNo);
+	FileClose();
+}
+
+
+void parseAllBooks() {
+	Printf("Gathering *.OUF file list from %s\n", repositoryFolder);
+	local TFileList fl = FindFiles(repositoryFolder, "*.ouf" );
+	local uint32 i;
+	local string filename;
+	local string bookId;
+	local string csvFilePath;
+
+	Printf("About to parse %d OUF files\n", fl.filecount);
+	for(i=0; i < fl.filecount; i++) {
+		filename = fl.file[i].filename;
+	    Printf(" %s\n", filename);
+	    bookId = getBookId(filename);
+		csvFilePath = getBookFolder(bookId) + bookId + "_script.csv";
+		if(FileExists(csvFilePath)) {
+			continue;
+		}
+	    parseOuf(filename);
+	}
+	Printf("Parsing done.\n");
+}
+
+
+uint32 main() {
+	local int argCount = GetNumArgs();
+	local int i;
+	local string filename;
+	local string bookId;
+	local string csvFilePath;
+
+	for(i=0; i < argCount; ++i) {
+		filename = GetArg(i);
+	    bookId = getBookId(filename);
+		csvFilePath = getBookFolder(bookId) + bookId + "_script.csv";
+		if(FileExists(csvFilePath)) {
+			continue;
+		}
+		parseOuf(filename);
+	}
+	return i;
+}
+
+
+main();
+

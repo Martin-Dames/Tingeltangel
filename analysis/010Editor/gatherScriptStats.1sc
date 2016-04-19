@@ -1,0 +1,331 @@
+/*
+Date: 05.04.2016
+Author: Glaukon Ariston
+About: 
+	Gather statistics from the extracted binary scripts (*.s).
+	http://www.ting-el-tangel.de/doku.php?id=skripte
+	http://www.ting.eu
+
+	start /wait 010Editor.exe -noui -nowarnings -script:gatherScriptStats.1sc -exit
+*/
+
+// DIRE WARNING: Make sure your 010Editor instance doesn0t have an *.s file loaded
+// already or your will get error complaining the types from s-types.bt have already
+// been defined.
+// In other words, open 010Editor, close all documents. close the editor. Then, you
+// can run this script.
+#include "common.1sc"
+#include "s-types.bt"
+
+local uint32 SCRIPT_COUNT_LIMIT = 10000;
+local int csvAggregateFileNo;
+local uint32 processedBooks = 0;
+
+
+//=================================================================== Statistics
+// csv
+local string csvDelimiter = ";";
+local string csvHeader = 
+	"bookId";
+local string csvRowFormat = 
+	"\"%s\"";
+
+// variables
+local uint32 invalidOperandType;
+local uint32 opcodeCount[OpCode_LAST+1];
+local uint32 operandTypeCount[OperandType_LAST+1];
+local int minRegisterIndex;
+local int maxRegisterIndex;
+local uint32 REG_LIMIT = 100;
+local uint32 registerUsageCount[REG_LIMIT];
+
+
+void initStatistics() {
+	local uint32 i; 
+
+	invalidOperandType = 0;
+	for(i=0; i < sizeof(opcodeCount)/sizeof(uint32); i++) {
+		opcodeCount[i] = 0;
+	}
+	for(i=0; i < sizeof(operandTypeCount)/sizeof(uint32); i++) {
+		operandTypeCount[i] = 0;
+	}
+
+	minRegisterIndex = 0xFFFF + 1;
+	maxRegisterIndex = -1;
+	for(i=0; i < sizeof(registerUsageCount)/sizeof(uint32); i++) {
+		registerUsageCount[i] = 0;
+	}
+}
+
+
+
+void updateRegStats(uint8 reg) {
+	if(reg < REG_LIMIT) {
+		++registerUsageCount[reg];
+	}
+	if(reg < minRegisterIndex) {
+		minRegisterIndex = reg;
+	}
+	if(reg > maxRegisterIndex) {
+		maxRegisterIndex = reg;
+	}
+}
+
+
+void registerStats(int j) {
+	Assert(exists(oufScript), "exists(oufFile)");
+
+	local string s;
+	local uint8 optype = oufScript.cmd[j].opcode.type;
+	local uint8 opcode = oufScript.cmd[j].opcode.code;
+	switch(opcode) {
+	case END:
+		break;
+	case CLEARVER:
+		break;
+	case SET:
+	case CMP:
+	case AND:
+	case OR:
+	case ADD:
+	case SUB:
+	case 0x07:
+	case 0x11:
+	case 0x12:
+	case 0x13:
+	case 0x18:
+	case 0x19:
+		if(optype == REGISTER_VALUE) {
+			updateRegStats(oufScript.cmd[j].op1);
+		}
+		if(optype == REGISTER_REGISTER) {
+			updateRegStats(oufScript.cmd[j].op2);
+		}
+		break;
+	case JMP:
+		break;
+	case JE:
+		break;
+	case JNE:
+		break;
+	case JG:
+		break;
+	case JGE:
+		break;
+	case JB:
+		break;
+	case JBE:
+		break;
+	case CALL:
+		break;
+	case NOT:
+	case CALLID:
+	case PLAYOID:
+	case PAUSE:
+		if(optype == REGISTER_REGISTER) {
+			updateRegStats(oufScript.cmd[j].op1);
+		}
+		break;
+	default:
+		Assert(0, SPrintf(s, "Unknown script opcode %02X", opcode));
+		break;
+	}
+}
+
+
+void gatherStatistics() {
+	Assert(exists(oufScript), "exists(oufFile)");
+	local uint32 j; 
+
+	for(j=0; exists(oufScript.cmd[j]); j++) {
+		++opcodeCount[oufScript.cmd[j].opcode.code];
+		if(oufScript.cmd[j].opcode.code != END) {
+			if(oufScript.cmd[j].opcode.type <= OperandType_LAST) {
+				++operandTypeCount[oufScript.cmd[j].opcode.type];
+			} else {
+				++invalidOperandType;
+			}
+			registerStats(j);
+		}
+	}
+}
+
+
+void saveStatisticsHeader(int fileNo) {
+	local uint32 i;
+	// workaround the bug in the 010Editor (current file position being reset to to zero, thus overwriting the previously written content)
+	FileSelect(fileNo);
+	FSeek(FileSize());
+	FPrintf(fileNo, "%s", csvHeader);
+	for(i=0; i < sizeof(opcodeCount)/sizeof(uint32); i++) {
+		FPrintf(fileNo, "%scmd_%s", csvDelimiter, operation(i));
+	}
+	for(i=0; i < sizeof(operandTypeCount)/sizeof(uint32); i++) {
+		FPrintf(fileNo, "%soptype_%s", csvDelimiter, operandType(i));
+	}
+	for(i=0; i < sizeof(registerUsageCount)/sizeof(uint32); i++) {
+		FPrintf(fileNo, "%sv%d", csvDelimiter, i);
+	}
+	FPrintf(fileNo, "%sminRegisterIndex", csvDelimiter);
+	FPrintf(fileNo, "%smaxRegisterIndex", csvDelimiter);
+	FPrintf(fileNo, "\n");
+}
+
+
+void saveStatisticsData(int fileNo, string bookId) {
+	local uint32 i;
+	// workaround the bug in the 010Editor (current file position being reset to to zero, thus overwriting the previously written content)
+	FileSelect(fileNo);
+	FSeek(FileSize());
+	FPrintf(fileNo, csvRowFormat, 
+		bookId
+		);
+	for(i=0; i < sizeof(opcodeCount)/sizeof(uint32); i++) {
+		FPrintf(fileNo, "%s%d", csvDelimiter, opcodeCount[i]);
+	}
+	for(i=0; i < sizeof(operandTypeCount)/sizeof(uint32); i++) {
+		FPrintf(fileNo, "%s%d", csvDelimiter, operandTypeCount[i]);
+	}
+	for(i=0; i < sizeof(registerUsageCount)/sizeof(uint32); i++) {
+		FPrintf(fileNo, "%s%d", csvDelimiter, registerUsageCount[i]);
+	}
+	FPrintf(fileNo, "%s%d", csvDelimiter, minRegisterIndex);
+	FPrintf(fileNo, "%s%d", csvDelimiter, maxRegisterIndex);
+	FPrintf(fileNo, "\n");
+}
+
+
+void saveStatistics(string bookId) {
+	local string bookFolder = getBookFolder(bookId);
+	if(!FileExists(bookFolder)) {
+		MakeDir(bookFolder);
+	}
+	local string csvFilePath = bookFolder + bookId + "_scriptStats.csv";
+	local int csvFileNo = FileNew();
+
+	saveStatisticsHeader(csvFileNo);
+	saveStatisticsData(csvFileNo, bookId);
+
+	FileSelect(csvFileNo);
+	FileSave(csvFilePath);
+	FileClose();
+}
+
+
+void parseScriptFile(string scriptFilePath) {
+	// run s.bt binary template on the file
+	local int currentFileNo = FileOpen(scriptFilePath, /*runTemplate=*/1);
+	local int64 filesize = FileSize();
+	local string tingId = getBookId(GetFileName());
+	FileSelect(currentFileNo);
+	gatherStatistics();
+	FileSelect(currentFileNo);
+	FileClose();
+}
+
+
+uint32 parseBook(string bookId) {
+	local string bookFolder = getBookFolder(bookId);
+	Printf("Gathering list of tingIds from %s\n", bookFolder);
+	local TFileList tingIds = FindFiles(bookFolder, "*.s" );
+	local string filename;
+	local string tingId;
+	local uint32 i; 
+	
+	Printf("About to parse %d tingIds (scripts)\n", tingIds.filecount);
+	initStatistics();
+	// Limit the script count per OUF file to workoaround the 010Editor limitations.
+	for(i=0; i < tingIds.filecount && i < SCRIPT_COUNT_LIMIT; i++) {
+		filename = tingIds.file[i].filename;
+	    Printf(" %s\n", filename);
+	    tingId = getBookId(filename);
+	    parseScriptFile(bookFolder + filename);
+	}
+
+	if(tingIds.filecount > 0) {
+		saveStatistics(bookId);
+		++processedBooks;
+	}
+	return i;
+}
+
+
+void parseAllBooks() {
+	Printf("Gathering list of bookIds from %s\n", statsFolder);
+	local TFileList bookIds = FindFiles(statsFolder + "books", "*." );
+	local uint32 i;
+	local string bookFolder;
+	local string bookId;
+	local string csvFilePath;
+	local uint32 tingIds;
+
+	Printf("About to parse %d bookIds\n", bookIds.dircount);
+	local string csvAggregateFilePath = statsFolder + "knownBooks_scriptStats.csv";
+	csvAggregateFileNo = FileNew();
+	saveStatisticsHeader(csvAggregateFileNo);
+
+	processedBooks = 0;
+	for(i=0; i < bookIds.dircount; i++) {
+		bookFolder = bookIds.dir[i].dirname;
+	    Printf(" %s\n", bookFolder);
+	    bookId = getBookId(bookFolder);
+	    tingIds = parseBook(bookId);
+		if(tingIds > 0) {
+			saveStatisticsData(csvAggregateFileNo, bookId);
+		}
+	}
+
+	FileSelect(csvAggregateFileNo);
+	FileSave(csvAggregateFilePath);
+	FileClose();
+	Printf("Parsing done.\n");
+}
+
+
+uint32 main() {
+	local int argCount = GetNumArgs();
+	local int i;
+	local string bookId;
+
+	for(i=0; i < argCount; ++i) {
+		bookId = GetArg(i);
+		parseBook(bookId);
+	}
+	return processedBooks;
+}
+
+main();
+
+
+/*
+Call : no operand needed
+Line s.bz:393 Template passed end of file at variable 'op1'
+00022/15505
+00022/18010
+00022/18023
+00022/18024
+00022/18025
+00022/18026
+00022/19000
+
+Callid can use opcode.type == 2 (REGISTER_REGISTER)
+Line s.bz:407 Assert 'opcode.type == 1'
+00035/16502
+00035/18000
+00035/18001
+05129/15506
+05129/15508
+05129/15509
+05129/15512
+05129/15516
+05129/15517
+05129/15518
+05129/15519
+05129/15522
+05129/15523
+
+Line s.bz:511 Assert 'Unknown script code 19'
+00038/15001
+*/
+

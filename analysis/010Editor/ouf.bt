@@ -1,0 +1,208 @@
+/*
+Date: 18.03.2016
+Author: Glaukon Ariston
+About: 
+	Ting pen's OUF file format.
+	http://www.ting-el-tangel.de/doku.php?id=dateiformat
+	http://www.ting.eu
+*/
+//#include "s.bt"
+
+#define ASSERT 0
+
+// Each frame has constant time length 0.026 sec.
+//#define MINIMUM_FRAME_COUNT 30
+local uint32 currentResourceIndex = 0;
+
+
+string getBookId() {
+	local string currentFilepath = GetFileName();
+	local string baseName = FileNameGetBase(currentFilepath, false);
+	local int i = 0;
+	local string bookID = "";
+	for(i=0; i < Strlen(baseName); ++i) {
+		if(baseName[i] >= '0' && baseName[i] <= '9') {
+			bookID += baseName[i];
+		} else {
+			break;
+		}
+	}
+	return bookID;
+}
+
+
+//==============================================================================
+// This code is from
+// Tingeltangel-master\src\main\java\tingeltangel\core\IndexTableCalculator.java
+local int MAGIC_OFFSET_FIX[32] = { 
+	578, 562, 546, 530, 514, 498, 482, 466
+	, 322, 306, 290, 274, 258, 242, 226, 210
+	, -446, -462, -478, -494, -510, -526, -542, -558
+	, -702, -718, -734, -750, -766, -782, -798, -814 
+};
+
+/*
+@param resourceOffset A value from the OUFIndexTable.resourceOffset
+@param resourceIndex An index into OUFIndexTable
+@return A file offset
+*/
+uint32 getFileOffset(uint32 resourceIndex, uint32 resourceOffset) {
+	Assert((resourceOffset & 0xFF) == 0, "(resourceOffset & 0xFF) == 0");
+	resourceOffset = resourceOffset >> 8;
+	// create an index out of bits 3,4,5,7,9
+	local uint32 c = ((resourceOffset >> 3) & 1) 
+		| (((resourceOffset >> 4) & 1) << 1) 
+		| (((resourceOffset >> 5) & 1) << 2) 
+		| (((resourceOffset >> 7) & 1) << 3) 
+		| (((resourceOffset >> 9) & 1) << 4);
+	resourceOffset -= (resourceIndex-1)*26 - MAGIC_OFFSET_FIX[c];
+	return resourceOffset << 8;
+}
+
+/**
+Reverse of getFileOffset().
+*/
+uint32 getResourceOffset(uint32 resourceIndex, uint32 fileOffset) {
+	Assert((fileOffset & 0xFF) == 0, "(fileOffset & 0xFF) == 0");
+	local uint32 b = (fileOffset >> 8) + (resourceIndex-1)*26;
+	local uint32 k = 0;
+	for(k=0; k < sizeof(MAGIC_OFFSET_FIX)/sizeof(int); k++) {
+		int v = (b - MAGIC_OFFSET_FIX[k]) << 8;
+		if(getFileOffset(v, resourceIndex) == fileOffset) {
+			return v;
+		}
+	}
+	Assert(false, SPrintf("", "Could not find the resource offset for the file offset 0x%08X", fileOffset));
+}
+//==============================================================================
+
+
+string readFileOffset(uint32 resourceOffset) {
+	local string s;
+	// DANGER: At the time this function gets called the currentResourceIndex
+	// counter has already been advanced by one in the for loop below!
+	return SPrintf(s, "%Xh", getFileOffset(currentResourceIndex-1, resourceOffset));
+}
+
+
+string readUnixTimestamp(time_t timestamp) {
+	return TimeTToString(timestamp);
+}
+
+
+string readResourceType(uint32 t) {
+	local string s;
+	switch(t) {
+	case 0: s = "Empty"; break; 
+	case 1: s = "MP3"; break; 
+	case 2: s = "Script"; break;
+	default:
+		Assert(false, SPrintf(s, "Unknown resource type %d", t));
+		break;
+	}
+	return s;
+}
+
+
+typedef struct {
+    uint32 indexTableOffset<format=hex, comment="fixed value 0x68">;
+    uint32 unknown1<format=hex, comment="fixed value 2">;
+    uint32 firstTingID<format=decimal>;
+    uint32 lastTingID<format=decimal>;
+    uint32 tingIDsCount<format=decimal>;
+    uint32 bookID<format=decimal>;
+    uint32 unknown2<format=decimal>;
+    time_t timeCompiled<read=readUnixTimestamp, format=hex, comment="UNIX timestamp">;
+    uint32 unknown3<comment="fixed value 0">;
+    uint32 unknown4<format=hex, comment="fixed value 0xFFFF">;
+    if(indexTableOffset-FTell() > 0) {
+    	uint32 padding[(indexTableOffset-FTell())/sizeof(uint32)]<bgcolor=cLtGray>;
+    }
+
+    if(ASSERT) {
+	    Assert(indexTableOffset == 0x68, "indexTableOffset == 0x68");
+	    Assert(unknown1 == 0x2, "unknown1 == 0x2");
+	    Assert(tingIDsCount == lastTingID-firstTingID+1, "tingIDsCount == lastTingID-firstTingID+1");
+	    Assert(unknown2 >= 1 && unknown2 <= 20, "unknown2 >= 1 && unknown2 <= 20");
+	    Assert(unknown3 == 0, "unknown3 == 0");
+	    Assert(unknown4 == 0xFFFF, "unknown4 == 0xFFFF");
+	}
+} OUFHeader;
+
+
+enum <uint32> ResourceType {
+    EMPTY = 0
+    , MP3 = 1
+    , SCRIPT = 2
+};
+
+typedef struct {
+	uint32 resourceOffset<read=readFileOffset, format=hex, comment="MP3 or Script coded offset">;
+	uint32 resourceSize<format=hex, comment="size in bytes">;
+	ResourceType resourceType<read=readResourceType, comment="0:Empty, 1:MP3, 2:Script">;
+} OUFIndexTable;
+
+
+typedef struct {
+	ubyte mp3[indexTable[i].resourceSize]; 
+} MP3Stream;
+
+
+typedef struct {
+	ubyte mp3[indexTable[i].resourceSize]; 
+} Script;
+
+
+typedef struct {
+	BigEndian();
+	OUFHeader header;
+
+	// Index Table
+	FSeek(header.indexTableOffset);
+	// 00043_en.ouf is a header only OUF file
+	if(header.tingIDsCount > 0) {	
+		OUFIndexTable indexTable[header.tingIDsCount];
+
+		// DANGER: assume the first non-empty entry in the index table points to a resource with
+		// the lowest file offset!
+		local uint32 i;
+		local uint32 firstFileOffset = 0;
+		for(i=0; i < sizeof(indexTable)/sizeof(OUFIndexTable); i++) {
+			firstFileOffset = getFileOffset(i, indexTable[i].resourceOffset);
+			if(EMPTY != indexTable[i].resourceType) {
+				break;
+			}
+		}
+		ubyte unknown[firstFileOffset - FTell()];
+
+		// Resources
+		local uint32 fileOffset = 0;
+		for(i=0; i < sizeof(indexTable)/sizeof(OUFIndexTable); i++) {
+			fileOffset = getFileOffset(i, indexTable[i].resourceOffset);
+			switch(indexTable[i].resourceType) {
+			case EMPTY: 
+				break;
+			case MP3:
+				FSeek(fileOffset);
+				MP3Stream mp3;
+				//tryMp3(fileOffset, MINIMUM_FRAME_COUNT);
+				break;
+			case SCRIPT: 
+				FSeek(fileOffset);
+				Script script;
+				//OUFBinaryScript script;
+				//ASSERT && Assert(sizeof(script) == indexTable[i].resourceSize, "sizeof(script) == indexTable[i].resourceSize");
+				break;
+			default: 
+				ASSERT && Assert(false, SPrintf(s, "Unknown resource type %d", indexTable[i].resourceType));
+				break;
+			}
+		}
+	}
+} OUFFile;
+
+
+//=================================================================== STRUCTURE
+OUFFile oufFile;
+
+

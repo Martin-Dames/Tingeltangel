@@ -1,0 +1,220 @@
+/*
+010Editor Script
+Date: 30.03.2016
+Author: Glaukon Ariston
+About: 
+	Parse a repository of Ting pen's OUF files and gather some statistics.
+	http://www.ting-el-tangel.de/doku.php?id=skripte
+	http://www.ting.eu
+*/
+#include "common.1sc"
+
+
+local int csvAggregateFileNo;
+
+
+//=================================================================== Statistics
+// csv
+local string csvDelimiter = ";";
+local string csvHeader = 
+	"bookId;filename;filesize;firstTingID;lastTingID;tingIDsCount;indexTableOffset;unknown1_;tingIDsCount_;unknown2_;unknown3_;unknown4_;resourceType_;emptyCount;mp3Count;scriptCount;mp3MinSize;mp3MaxSize;mp3FirstTingID;mp3LastTingID;scriptMinSize;scriptMaxSize;scriptFirstTingID;scriptLastTingID";
+local string csvRowFormat = 
+	"\"%s\";\"%s\"  ;%d      ;%d         ;%d        ;%d          ;%d               ;%d       ;%d           ;%d       ;%d       ;%d       ;%d       ;%d        ;%d      ;%d         ;%d        ;%d        ;%d            ;%d           ;%d           ;%d           ;%d               ;%d";
+
+// variables
+local uint32 firstTingID;
+local uint32 lastTingID;
+local uint32 tingIDsCount;
+local uint32 indexTableOffset;
+local uint32 unknown1_;         // Assert(unknown1 == 0x2, "unknown1 == 0x2");
+local uint32 tingIDsCount_;     // Assert(tingIDsCount == lastTingID-firstTingID+1, "tingIDsCount == lastTingID-firstTingID+1");
+local uint32 unknown2_;         // Assert(unknown2 >= 1 && unknown2 <= 20, "unknown2 >= 1 && unknown2 <= 20");
+local uint32 unknown3_;         // Assert(unknown3 == 0, "unknown3 == 0");
+local uint32 unknown4_;         // Assert(unknown4 == 0xFFFF, "unknown4 == 0xFFFF");
+local uint32 resourceType_;		// Assert(false, SPrintf(s, "Unknown resource type %d", indexTable[i].resourceType));
+local uint32 emptyCount = 0;
+local uint32 mp3Count = 0;
+local uint32 mp3MinSize = 0;
+local uint32 mp3MaxSize = 0;
+local uint32 mp3FirstTingID;
+local uint32 mp3LastTingID;
+local uint32 scriptCount = 0;
+local uint32 scriptMinSize = 0;
+local uint32 scriptMaxSize = 0;
+local uint32 scriptFirstTingID;
+local uint32 scriptLastTingID;
+
+
+void gatherStatistics() {
+	local uint32 fileOffset = 0;
+	local uint32 i, j;
+
+	Assert(exists(oufFile), "exists(oufFile)");
+
+	firstTingID = oufFile.header.firstTingID;
+	lastTingID = oufFile.header.lastTingID;
+	tingIDsCount = oufFile.header.tingIDsCount;
+	indexTableOffset = oufFile.header.indexTableOffset;
+	unknown1_ = !(oufFile.header.unknown1 == 0x2);
+	tingIDsCount_ = !(oufFile.header.tingIDsCount == oufFile.header.lastTingID -oufFile.header.firstTingID + 1);
+	unknown2_ = !(oufFile.header.unknown2 >= 1 && oufFile.header.unknown2 <= 20);
+	unknown3_ = !(oufFile.header.unknown3 == 0);
+	unknown4_ = !(oufFile.header.unknown4 == 0xFFFF);
+	resourceType_ = 0;
+	emptyCount = 0;
+	mp3Count = 0;
+	mp3MinSize = 0;
+	mp3MaxSize = 0;
+	mp3FirstTingID = 0;
+	mp3LastTingID = 0;
+	scriptCount = 0;
+	scriptMinSize = 0;
+	scriptMaxSize = 0;
+	scriptFirstTingID = 0;
+	scriptLastTingID = 0;
+
+	for(i=0; exists(oufFile.indexTable[i]); i++) {
+		fileOffset = getFileOffset(i, oufFile.indexTable[i].resourceOffset);
+		switch(oufFile.indexTable[i].resourceType) {
+		case EMPTY: 
+			++emptyCount;
+			break;
+		case MP3:
+			++mp3Count;
+			if(0 == mp3MinSize || oufFile.indexTable[i].resourceSize < mp3MinSize) {
+				mp3MinSize = oufFile.indexTable[i].resourceSize;
+			}
+			if(0 == mp3MaxSize || oufFile.indexTable[i].resourceSize > mp3MaxSize) {
+				mp3MaxSize = oufFile.indexTable[i].resourceSize;
+			}
+
+			if(0 == mp3FirstTingID || firstTingID + i < mp3FirstTingID) {
+				mp3FirstTingID = firstTingID + i;
+			}
+			if(0 == mp3LastTingID || firstTingID + i > mp3LastTingID) {
+				mp3LastTingID = firstTingID + i;
+			}
+			break;
+		case SCRIPT: 
+			++scriptCount;
+			if(0 == scriptMinSize || oufFile.indexTable[i].resourceSize < scriptMinSize) {
+				scriptMinSize = oufFile.indexTable[i].resourceSize;
+			}
+			if(0 == scriptMaxSize || oufFile.indexTable[i].resourceSize > scriptMaxSize) {
+				scriptMaxSize = oufFile.indexTable[i].resourceSize;
+			}
+
+			if(0 == scriptFirstTingID || firstTingID + i < scriptFirstTingID) {
+				scriptFirstTingID = firstTingID + i;
+			}
+			if(0 == scriptLastTingID || firstTingID + i > scriptLastTingID) {
+				scriptLastTingID = firstTingID + i;
+			}
+			break;
+		default:
+			++resourceType_;
+			break;
+		}
+	}
+}
+
+
+void saveStatisticsHeader(int fileNo) {
+	local uint32 i;
+	// workaround the bug in the 010Editor (current file position being reset to to zero, thus overwriting the previously written content)
+	FileSelect(fileNo);
+	FSeek(FileSize());
+	FPrintf(fileNo, "%s", csvHeader);
+	FPrintf(fileNo, "\n");
+}
+
+
+void saveStatisticsData(int fileNo, string bookId, string filename, uint32 filesize) {
+	local uint32 i;
+	// workaround the bug in the 010Editor (current file position being reset to to zero, thus overwriting the previously written content)
+	FileSelect(fileNo);
+	FSeek(FileSize());
+	FPrintf(fileNo, csvRowFormat, 
+		bookId,filename,filesize,firstTingID,lastTingID,tingIDsCount,indexTableOffset,unknown1_,tingIDsCount_,unknown2_,unknown3_,unknown4_,resourceType_,emptyCount,mp3Count,scriptCount,mp3MinSize,mp3MaxSize,mp3FirstTingID,mp3LastTingID,scriptMinSize,scriptMaxSize,scriptFirstTingID,scriptLastTingID
+		);
+	FPrintf(fileNo, "\n");
+}
+
+
+void saveStatistics(string bookId, string filename, uint32 filesize) {
+	local string bookFolder = getBookFolder(bookId);
+	if(!FileExists(bookFolder)) {
+		MakeDir(bookFolder);
+	}
+	local string csvFilePath = bookFolder + bookId + ".csv";
+	local int csvFileNo = FileNew();
+
+	saveStatisticsHeader(csvFileNo);
+	saveStatisticsData(csvFileNo, bookId, filename, filesize);
+
+	FileSelect(csvFileNo);
+	FileSave(csvFilePath);
+	FileClose();
+}
+
+
+void parseOuf(const string& oufFileName) {
+	local string oufFilePath = repositoryFolder + oufFileName;
+	// run ouf.bt binary template on the file
+	local int currentFileNo = FileOpen(oufFilePath, /*runTemplate=*/1);
+	local int64 filesize = FileSize();
+	local string bookId = getBookId(GetFileName());
+	FileSelect(currentFileNo);
+	gatherStatistics();
+	saveStatistics(bookId, oufFileName, filesize);
+	FileSelect(currentFileNo);
+	FileClose();
+}
+
+
+void parseAllBooks() {
+	Printf("Gathering *.OUF file list from %s\n", repositoryFolder);
+	local TFileList fl = FindFiles(repositoryFolder, "*.ouf" );
+	local uint32 i;
+	local string filename;
+	local string bookId;
+	local string csvFilePath;
+
+	Printf("About to parse %d OUF files\n", fl.filecount);
+	local string csvAggregateFilePath = statsFolder + "knownBooks.csv";
+	csvAggregateFileNo = FileNew();
+	saveStatisticsHeader(csvAggregateFileNo);
+
+	for(i=0; i < fl.filecount; i++) {
+		filename = fl.file[i].filename;
+	    Printf(" %s\n", filename);
+	    bookId = getBookId(filename);
+		csvFilePath = getBookFolder(bookId) + bookId + ".csv";
+		if(FileExists(csvFilePath)) {
+			continue;
+		}
+	    parseOuf(filename);
+		saveStatisticsData(csvAggregateFileNo, bookId);
+	}
+
+	FileSelect(csvAggregateFileNo);
+	FileSave(csvAggregateFilePath);
+	FileClose();
+	Printf("Parsing done.\n");
+}
+
+
+uint32 main() {
+	local int argCount = GetNumArgs();
+	local int i;
+	local string filename;
+
+	for(i=0; i < argCount; ++i) {
+		filename = GetArg(i);
+		parseOuf(filename);
+	}
+	return i;
+}
+
+main();
+

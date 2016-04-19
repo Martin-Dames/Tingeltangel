@@ -1,0 +1,707 @@
+/*
+Date: 21.03.2016
+Author: Glaukon Ariston
+About: Modified Ivan Getta's binary template so it can be used to map an mp3 structure 
+    at an arbitrary location in a file. This is so I can analyse embedded mp3 content in
+    OUF files (Ting digital pen).
+
+*/
+
+//--------------------------------------
+//--- 010 Editor v1.3.2 Binary Template
+//
+// File: MP3Template.bt
+// Author: Ivan Getta (ivanitto@ukr.net)
+// Purpose: MP3 files analysis and smart editing
+//
+// Template version: 1.0
+// Release date: 2005 Feb 18
+// Licence: free
+//
+//--- Template features ----------------
+//
+//   1) MPEG frames support:
+//        * MPEG-1, MPEG-2
+//        * Layer 1,2,3
+//   2) ID3v1 tags support
+//   3) ID3v1.1 tags support
+//   4) ID3v2.3 tags support
+//
+//--- Notes ----------------------------
+//
+// TODO:
+//   1) MPEG 2.5 support
+//   2) Resolve known bugs (see below)
+//
+// KNOWN BUGS (STILL PRESENT):
+//   1) Incorrect frame size detection for MPEG 1.0 layer 3
+//      mono files with low bitrate (for example 56k, 64k).
+//      Frame size must be detected twice long.
+//   2) Mp3pro files have some problems
+//
+//--- References -----------------------
+//
+//   1. "010 Editor templates"
+//          http://www.sweetscape.com/010editor/templates.html
+//
+//   2. "The private life of MP3 frames"
+//          http://www.id3.org/mp3frame.html
+//
+//   3. "ID3 made easy (ID3v1 & ID3v1.1)"
+//          http://www.id3.org/id3v1.html
+//
+//   4. "ID3 tag version 2.3.0 (Informal standard)"
+//          http://www.id3.org/id3v2.3.0.html
+//
+//--------------------------------------
+
+#define TRACE 0
+
+typedef byte int8;
+typedef ubyte uint8;
+
+local TFindResults tfrID3;
+#define MAX_MP3_STREAMS 64*1024 
+local uint32 id3StreamSize[MAX_MP3_STREAMS];
+local int64 frameSyncStreamStart[MAX_MP3_STREAMS];
+local uint32 frameSyncStreamSize[MAX_MP3_STREAMS];
+local uint32 frameSyncStreams = 0;
+
+local int64 mp3StreamStart;
+local uint32 bitrate, sampling_freq, frames_count = 0;
+local int64 frame_header_offset, sum_bitrate = 0;
+local int parsingStatus = MP3_OK;
+
+// http://www.colourlovers.com/palette/1250813/Pastel_Rainbow
+#define ImpertinentPink 0xFFABAB
+#define SpringCream 0xFFDAAB
+#define SunCries 0xDDFFAB
+#define Crumbles 0xABE4FF
+#define PastelLavender 0xD9ABFF
+
+
+//================================================================================================
+// https://hydrogenaud.io/index.php/topic,85125.msg747716.html#msg747716
+// MPEG versions - use [version]
+#define VERSIONS 4
+local const uint8 mpeg_versions[VERSIONS] = { 25, 0, 2, 1 };
+
+// Layers - use [layer]
+#define LAYERS 4
+local const uint8 mpeg_layers[LAYERS] = { 0, 3, 2, 1 };
+
+// Bitrates - use [version][layer][bitrate]
+#define BITRATES 16
+local const uint16 mpeg_bitrates[VERSIONS*LAYERS*BITRATES] = {
+  //{ // Version 2.5
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 0, // Reserved
+    0,   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160, 0, // Layer 3
+    0,   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160, 0, // Layer 2
+    0,  32,  48,  56,  64,  80,  96, 112, 128, 144, 160, 176, 192, 224, 256, 0, // Layer 1
+  //},
+  //{ // Reserved
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 0, // Invalid
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 0, // Invalid
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 0, // Invalid
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 0, // Invalid
+  //},
+  //{ // Version 2
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 0, // Reserved
+    0,   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160, 0, // Layer 3
+    0,   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160, 0, // Layer 2
+    0,  32,  48,  56,  64,  80,  96, 112, 128, 144, 160, 176, 192, 224, 256, 0,  // Layer 1
+  //},
+  //{ // Version 1
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 0, // Reserved
+    0,  32,  40,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 0, // Layer 3
+    0,  32,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384, 0, // Layer 2
+    0,  32,  64,  96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0  // Layer 1
+  //}
+};
+
+// Sample rates - use [version][srate]
+#define SAMPLE_RATES 4
+local const uint16 mpeg_srates[VERSIONS*SAMPLE_RATES] = {
+    11025, 12000,  8000, 0, // MPEG 2.5
+        0,     0,     0, 0, // Reserved
+    22050, 24000, 16000, 0, // MPEG 2
+    44100, 48000, 32000, 0  // MPEG 1
+};
+
+// Samples per frame - use [version][layer]
+#define FRAME_SAMPLES 4
+local const uint16 mpeg_frame_samples[VERSIONS*FRAME_SAMPLES] = {
+//  Rsvd     3     2     1  < Layer  v Version
+       0,  576, 1152,  384, //       2.5
+       0,    0,    0,    0, //       Reserved
+       0,  576, 1152,  384, //       2
+       0, 1152, 1152,  384  //       1
+};
+
+// Slot size (MPEG unit of measurement) - use [layer]
+local const uint8 mpeg_slot_size[LAYERS] = { 0, 1, 1, 4 }; // Rsvd, 3, 2, 1
+
+
+uint32 mpg_get_bitrate(uint8 version, uint8 layer, uint8 bitrateIndex) {
+    local uint32 bitrate = mpeg_bitrates[(version*LAYERS + layer)*BITRATES + bitrateIndex] * 1000;
+	return bitrate;
+}
+
+
+uint32 mpg_get_frame_size(uint8 version, uint8 layer, uint8 padding, uint8 bitrateIndex, uint8 sampleRateIndex) {
+    // Lookup real values of these fields
+    local uint32 bitrate = mpeg_bitrates[(version*LAYERS + layer)*BITRATES + bitrateIndex] * 1000;
+    local uint32 sampleRate = mpeg_srates[version*SAMPLE_RATES + sampleRateIndex];
+    local uint16 samples = mpeg_frame_samples[version*LAYERS + layer];
+    local uint8 slotSize = mpeg_slot_size[layer];
+    
+    // In-between calculations
+    local float bps = (float)samples / 8.0;
+    local float fsize = ( (bps * (float)bitrate) / (float)sampleRate )
+                        + ( (padding) ? slotSize : 0 );
+    
+    // Frame sizes are truncated integers
+    return (uint32)fsize;
+}
+//================================================================================================
+
+
+
+
+enum <int> MP3_BT_STATUS {
+    MP3_OK
+    , MP3_INVALID_STRUCTURE
+    , MP3_MISSING_AUDIO_FRAMES
+};
+
+
+enum <ubyte> ID3_GENRES {
+    Blues, Classic_Rock, Country, Dance, Disco, Funk, Grunge, Hip_Hop, // 7
+    Jazz, Metal, New_Age, Oldies, Other, Pop, R_and_B, Rap, // 15
+    Reggae, Rock, Techno, Industrial, Alternative, Ska, Death_Metal, Pranks, // 23
+    Soundtrack, Euro_Techno, Ambient, Trip_Hop, Vocal, Jazz_Funk, Fusion, Trance, // 31
+    Classical, Instrumental, Acid, House, Game, Sound_Clip, Gospel, Noise, // 39
+    AlternRock, Bass, Soul, Punk, Space, Meditative, Instrumental_Pop, Instrumental_Rock, // 47
+    Ethnic, Gothic, Darkwave, Techno_Industrial, Electronic, Pop_Folk, Eurodance, Dream, // 55
+    Southern_Rock, Comedy, Cult, Gangsta, Top_40, Christian_Rap, Pop_Funk, Jungle, // 63
+    Native_American, Cabaret, New_Wave, Psychadelic, Rave, Showtunes, Trailer, Lo_Fi, // 71
+    Tribal, Acid_Punk, Acid_Jazz, Polka, Retro, Musical, Rock_n_Roll, Hard_Rock, // 79
+    Folk, Folk_Rock, National_Folk, Swing, Fast_Fusion, Bebob, Latin, Revival, // 87
+    Celtic, Bluegrass, Avantgarde, Gothic_Rock,
+    Progressive_Rock, Psychedelic_Rock, Symphonic_Rock, Slow_Rock, // 95
+    Big_Band, Chorus, Easy_Listening, Acoustic, Humour, Speech, Chanson, Opera, // 103
+    Chamber_Music, Sonata, Symphony, Booty_Bass, Primus, Porn_Groove, Satire, Slow_Jam, // 111
+    Club, Tango, Samba, Folklore, Ballad, Power_Ballad, Rhythmic_Soul, Freestyle, // 119
+    Duet, Punk_Rock, Drum_Solo, A_capella, Euro_House, Dance_Hall, Goa, Drum_and_Bass, // 127
+    Club_House, Hardcore, Terror, Indie, BritPop, Negerpunk, Polsk_Punk, Beat, // 135
+    Christian, Heavy_Metal, Black_Metal, Crossover,
+    Contemporary, Christian_Rock, Merengue, Salsa, Thrash_Metal, Anime, JPop, Synthpop // 147
+};
+
+
+struct ID3v1Tag {
+    char id[3]; // always must be "TAG"
+    char title[30];
+    char artist[30];
+    char album[30];
+    char year[4];
+
+    if ( ReadByte(FTell()+28) == 0  &&  ReadByte(FTell()+29) != 0 ) {
+        // We have ID3v1.1 tag
+        char comment[28];
+        byte zero;
+        ubyte track;
+    } else {
+        // We have ID3v1.0 tag
+        char comment[30];
+    }
+
+    ID3_GENRES genre;
+
+    Assert(id == "TAG", "id == TAG");
+};
+
+
+struct ID3v2Header {
+    char head[3]; // always must be "ID3" ($49 44 33)
+    ubyte ver_major; // this byte will never be $FF
+    ubyte ver_revision; // this byte will never be $FF
+    struct FLAGS {
+        ubyte UNSYNCHRONISATION_USED  : 1;
+        ubyte EXTENDED_HEADER_PRESENT : 1;
+        ubyte EXPERIMENTAL_TAG        : 1;
+        ubyte                         : 5;
+    } flags;
+    ubyte size[4]; // Is the size of the complete tag after unsynchronisation,
+                   // including padding, excluding the header but not excluding
+                   // the extended header (total tag size - 10). Most
+                   // significant bit (bit 7) of each byte is set to zero
+
+    Assert(head == "ID3", "head == ID3");
+    Assert(ver_major != 0xFF, "ver_major != 0xFF");
+    Assert(ver_revision != 0xFF, "ver_revision != 0xFF");
+};
+
+
+struct ID3v2ExtentedHeader {
+    uint32 size; // extended header size, excluding this 'size' field
+    uint16 FLAG_CRC_PRESENT :  1;   // extended header flags
+    uint16                  : 15;   //
+    uint32 padding_sz;
+
+    if (FLAG_CRC_PRESENT) {
+        uint32 crc;
+    }
+};
+
+
+struct ID3v2Frame {
+    char id[4]; // four alpha chars
+    uint32 size; // frame size without frame header
+
+    struct FRAME_FLAGS {
+        uint16 TAG_ALTER_PRESERV  : 1;
+        uint16 FILE_ALTER_PRESERV : 1;
+        uint16 READ_ONLY_FRAME    : 1;
+        uint16                    : 5;
+        uint16 COMPRESSED_FRAME   : 1;
+        uint16 ENCRYPTED_FRAME    : 1;
+        uint16 GROUP_MEMBER_FRAME : 1;
+        uint16                    : 5;
+    } flags;
+
+    if (id[0] == 'T') {
+        // frame contains text related data
+        if ( ReadByte(FTell()) == 0  &&  size > 1) {
+            byte id_asciiz_str;
+            char frame_data [size - 1];
+        } else {
+            char frame_data [size];
+        }
+    } else {
+        ubyte frame_data [size];
+    }
+};
+
+
+struct ID3v2Tag {
+    ID3v2Header hdr;
+
+    // calculating real size of the ID3v2 tag
+    local uint32 tag_sz = hdr.size[0];
+    tag_sz <<= 7;
+    tag_sz |= hdr.size[1];
+    tag_sz <<= 7;
+    tag_sz |= hdr.size[2];
+    tag_sz <<= 7;
+    tag_sz |= hdr.size[3];
+
+    //
+    // An ID3v2 tag header can be detected with the following pattern:
+    // $49 44 33 yy yy xx zz zz zz zz
+    // Where yy is less than $FF, xx is the 'flags' byte and zz is less than $80.
+    //
+    if (hdr.ver_major == 0xFF  ||  hdr.ver_revision == 0xFF  ||
+        hdr.size[0] >= 0x80  ||  hdr.size[1] >= 0x80  ||
+        hdr.size[2] >= 0x80  ||  hdr.size[3] >= 0x80)
+    {
+        TRACE && Printf("MP3: warning: invalid ID3v2 tag header\n");
+        parsingStatus = MP3_INVALID_STRUCTURE;
+        return 0; // signal error
+    } else {
+        if (hdr.ver_major != 3  ||  hdr.flags.UNSYNCHRONISATION_USED  ||  hdr.flags.EXPERIMENTAL_TAG) {
+            TRACE && Printf("MP3: warning: skipping unsupported ID3v2.%d tag\n", hdr.ver_major);
+            ubyte id3v2_data[tag_sz];
+        } else {
+            local int64 mp3StreamStart = startof(hdr);
+            local int64 paddingSize;
+
+            if ( hdr.flags.EXTENDED_HEADER_PRESENT )
+                ID3v2ExtentedHeader ext_hdr;
+
+            // Now reading ID3v2 frames
+            // A tag must contain at least one frame. A frame must be
+            // at least 1 byte big, excluding the header.
+            //
+            local uint32 frame_color = 0xC9FCFF;
+            do {
+                SetBackColor(frame_color);
+                ID3v2Frame tf;
+                frame_color -= 0x020200;
+            } while (
+                (FTell() - mp3StreamStart) < tag_sz + sizeof(hdr)
+                && ReadByte(FTell()) != 0
+            );
+            paddingSize = tag_sz + sizeof(hdr) - (FTell() - mp3StreamStart);
+            if(paddingSize > 0) {
+                ubyte id3v2_padding[paddingSize];
+            }
+        }
+    }
+};
+
+
+
+string commentFrameSync(uint32 a) {
+	string s;
+	return SPrintf(s, "All ones");
+}
+
+
+string commentMpegId(uint32 a) {
+	switch(a) {
+	case 0: return "MPEG Version 2.5 (not an official standard)";
+	case 1: return "reserved";
+	case 2: return "MPEG Version 2";
+	case 3: return "MPEG Version 1";
+	}
+	return "ERROR";
+}
+
+
+string commentLayerId(uint32 a) {
+	switch(a) {
+	case 0: return "reserved";
+	case 1: return "Layer III";
+	case 2: return "Layer II";
+	case 3: return "Layer I";
+	}
+	return "ERROR";
+}
+
+
+string commentProtectionBit(uint32 a) {
+	switch(a) {
+	case 0: return "Protected by CRC";
+	case 1: return "Not protected";
+	}
+	return "ERROR";
+}
+
+
+string commentBitrateIndex(uint32 a) {
+	switch(a) {
+	case 0: return "free";
+	case 1: return "32 kbps";
+	case 2: return "40 kbps";
+	case 3: return "48 kbps";
+	case 4: return "56 kbps";
+	case 5: return "64 kbps";
+	case 6: return "80 kbps";
+	case 7: return "96 kbps";
+	case 8: return "112 kbps";
+	case 9: return "128 kbps";
+	case 10: return "160 kbps";
+	case 11: return "192 kbps";
+	case 12: return "224 kbps";
+	case 13: return "256 kbps";
+	case 14: return "320 kbps";
+	case 15: return "bad";
+	}
+	return "ERROR";
+}
+
+
+string commentFrequencyIndex(uint32 a) {
+	switch(a) {
+	case 0: return "44100";
+	case 1: return "48000";
+	case 2: return "32000";
+	case 3: return "reserved";
+	}
+	return "ERROR";
+}
+
+
+string commentPaddingBit(uint32 a) {
+	switch(a) {
+	case 0: return "Frame is not padded";
+	case 1: return "Frame is padded";
+	}
+	return "ERROR";
+}
+
+
+string commentChannelMode(uint32 a) {
+	switch(a) {
+	case 0: return "Stereo";
+	case 1: return "Joint Stereo";
+	case 2: return "Dual";
+	case 3: return "Mono";
+	}
+	return "ERROR";
+}
+
+
+string commentModeExtension(uint32 a) {
+	switch(a) {
+	case 0: return "Intensity Stereo off, MS Stereo off";
+	case 1: return "Intensity Stereo on, MS Stereo off";
+	case 2: return "Intensity Stereo off, MS Stereo on";
+	case 3: return "Intensity Stereo on, MS Stereo on";
+	}
+	return "ERROR";
+}
+
+
+string commentCopyright(uint32 a) {
+	switch(a) {
+	case 0: return "Audio is not copyrighted";
+	case 1: return "Audio is copyrighted";
+	}
+	return "ERROR";
+}
+
+
+string commentOriginal(uint32 a) {
+	switch(a) {
+	case 0: return "Copy of original media";
+	case 1: return "Original media";
+	}
+	return "ERROR";
+}
+
+
+string commentEmphasis(uint32 a) {
+	switch(a) {
+	case 0: return "None";
+	case 1: return "50/15";
+	case 2: return "reserved";
+	case 3: return "CCIT J.17";
+	}
+	return "ERROR";
+}
+
+
+// 32-bit MPEG frame header octets:
+// AAAAAAAA AAABBCCD EEEEFFGH IIJJKLMM
+//
+struct MPEGHeader {
+    uint32 frame_sync        : 11 <comment=commentFrameSync>;   		// A
+    uint32 mpeg_id           :  2 <comment=commentMpegId>;   				// B
+    uint32 layer_id          :  2 <comment=commentLayerId>;   			// C
+    uint32 protection_bit    :  1 <comment=commentProtectionBit>;   // D
+    uint32 bitrate_index     :  4 <comment=commentBitrateIndex>;   	// E
+    uint32 frequency_index   :  2 <comment=commentFrequencyIndex>;  // F
+    uint32 padding_bit       :  1 <comment=commentPaddingBit>;   		// G
+    uint32 private_bit       :  1;   		// H
+    uint32 channel_mode      :  2 <comment=commentChannelMode>;   	// I
+    uint32 mode_extension    :  2 <comment=commentModeExtension>;   // J
+    uint32 copyright         :  1 <comment=commentCopyright>;   		// K
+    uint32 original          :  1 <comment=commentOriginal>;   			// L
+    uint32 emphasis          :  2 <comment=commentEmphasis>;   			// M
+
+    if (protection_bit == 0) {
+        uint16 checksum;
+    }
+};
+
+
+struct MPEGFrame {
+    MPEGHeader mpeg_hdr<bgcolor=ImpertinentPink>;
+
+    // define frame bitrate
+	local uint32 bitrateX = 0;
+    bitrate = 0;
+
+    // header sanity check
+    if (mpeg_hdr.frame_sync < 0x7FF  ||  mpeg_hdr.layer_id == 0  ||
+        mpeg_hdr.bitrate_index == 0  ||  mpeg_hdr.bitrate_index == 15  ||
+        mpeg_hdr.frequency_index == 3)
+    {
+        TRACE && Printf("MP3: warning: invalid MPEG header in frame at offset 0x%X\n",
+            FTell() - 4 - (mpeg_hdr.protection_bit==0 ? 2:0) );
+
+        // Try to find MPEG header starting from offset (current - 2)
+        FSeek( FTell() - 2 );
+        parsingStatus = MP3_INVALID_STRUCTURE;
+        return 0; // signal error
+    } else {
+		bitrate = mpg_get_bitrate(mpeg_hdr.mpeg_id, mpeg_hdr.layer_id, mpeg_hdr.bitrate_index);
+		if(bitrate != 0) {
+			local uint32 frame_size = mpg_get_frame_size(mpeg_hdr.mpeg_id, mpeg_hdr.layer_id, mpeg_hdr.padding_bit, mpeg_hdr.bitrate_index, mpeg_hdr.frequency_index);
+
+			// read frame data
+			if ( FTell() + frame_size  >  FileSize() ) {
+				TRACE && Printf("MP3: warning: cut MPEG frame at end of file (frame header offset = 0x%LX, data length = %u)\n",
+						frame_header_offset, frame_size);
+				TRACE && Printf("MP3: file parsing completed!\nMP3: valid MPEG frames found: %d\n", frames_count);
+				if (frames_count != 0)
+						TRACE && Printf("MP3: average frame bitrate: %d kbit\n", sum_bitrate / frames_count);
+
+				parsingStatus = MP3_INVALID_STRUCTURE;
+				return 0; // signal error
+			} else {
+				ubyte mpeg_frame_data[frame_size]<bgcolor=SunCries>;
+			}
+
+			sum_bitrate += bitrate;
+
+			frames_count++;
+		}
+	}
+};
+
+
+struct MPEGStream {
+    // Find the longest valid MP3 stream.
+
+    local byte was_bad_sync, id3v1_tag_found = 0;
+    local ubyte buf[3];
+    local uint16 data;
+
+    BigEndian();
+
+    // The ID3 tag is optional at the beginning of the MP3 stream
+    ReadBytes(buf, mp3StreamStart, 3);
+    if(0 == Memcmp(buf, "ID3", 3)) {
+        TRACE && Printf("MP3: ID3v2 tag found\n");
+        ID3v2Tag id3v2tag<bgcolor=SpringCream>;
+    }
+
+    while(!FEof()) {
+        // The ID3 tag is optional at the end of the MP3 stream
+        ReadBytes(buf, FTell(), 3);
+        if(0 == Memcmp(buf, "TAG", 3)) {
+            TRACE && Printf("MP3: ID3v1 tag found\n");
+            ID3v1Tag id3v1tag<bgcolor=PastelLavender>;
+            break;  // assume this is the end of the MP3 stream
+        }
+
+        // Inbetween the optional ID3 at the beginning and the TAG at the end of the MP3 stream,
+        // there could be one or more data frames
+        data = ReadShort(FTell());
+        if(data < 0xFFE0) {
+            // assume this is the end of the MP3 stream
+            if(frames_count == 0) {
+                parsingStatus = MP3_MISSING_AUDIO_FRAMES;
+            }
+            break;
+        }
+
+        // otherwise asssume the next item in the audio stream is an audio frame 
+        MPEGFrame mf;
+
+        // info
+        if (frames_count == 1  &&  bitrate) {
+            TRACE && Printf("MP3: The first MPEGFrame parameters:\nMP3:\t- header ofsset: 0x%LX\nMP3:\t- bitrate: %d kbit\nMP3:\t- MPEG-%d layer %d\nMP3:\t- sampling frequency: %d Hz\nMP3:\t- channel mode: %s\nMP3:\t- CRC protected: %s\n",
+                frame_header_offset,
+                bitrate,
+                mf.mpeg_hdr.mpeg_id==1 ? 1:2,
+                mf.mpeg_hdr.layer_id==1 ? 3 : mf.mpeg_hdr.layer_id==2 ? 2:1,
+                sampling_freq*10,
+                mf.mpeg_hdr.channel_mode==3 ? "mono" :
+                mf.mpeg_hdr.channel_mode==0 ? "stereo" :
+                mf.mpeg_hdr.channel_mode==1 ? "joint stereo" : "dual channel",
+                mf.mpeg_hdr.protection_bit==0 ? "Yes" : "No");
+        }
+    }
+};
+
+
+//--------------------------------------------------------------
+
+
+uint32 tryMp3(int64 start, uint32 minimumFrameCount) {
+    FSeek(start);
+    mp3StreamStart = start;
+    frames_count = 0;
+    sum_bitrate = 0;
+    parsingStatus = MP3_OK;
+
+    TRACE && Printf("MP3: tryMp3 at 0x%LX\n", mp3StreamStart);
+    MPEGStream mp3;
+    TRACE && Printf("MP3: file parsing completed!\nMP3: valid MPEG frames found: %d\n", frames_count);
+    if (frames_count != 0) {
+        TRACE && Printf("MP3: average frame bitrate: %d kbit\n", sum_bitrate / frames_count);
+    }
+    return parsingStatus == MP3_OK && frames_count >= minimumFrameCount ? sizeof(mp3) : 0;
+}
+
+
+void mapMp3OverID3(uint32 minimumFrameCount) {
+    local uint i;
+    // assume the embedded mp3 content starts with the ID3 tag
+    tfrID3 = FindAll(
+        "ID3"       // what
+        , true      // matchcase
+        , false     // wholeword
+        , 0         // method | FINDMETHOD_NORMAL=0, FINDMETHOD_WILDCARDS=1 (*?), FINDMETHOD_REGEX=2
+        , 0.0       // tolerance
+        , 1         // dir | 1=forward, 0=backward
+        , 0         // start
+        , 0         // size
+        , 24        // wildcardMatchLength | default=24
+    );
+    Assert(tfrID3.count <= MAX_MP3_STREAMS, "tfrID3.count <= MAX_MP3_STREAMS");
+    for(i=0; i < tfrID3.count; i++) {
+        // limit the search to the cases when the match is on the 0x200 (512) byte boundary
+        //if((tfrID3.start[i] & 0x1FF) != 0) continue;
+        id3StreamSize[i] = tryMp3(tfrID3.start[i], minimumFrameCount);
+
+        if(id3StreamSize[i] == 0) {
+            TRACE && Printf("MP3: parsing failed for the item at 0x%LX\n", tfrID3.start[i]);
+        }
+    }
+}
+
+
+void searchForFrameSync(int64 start, int64 size, uint32 minimumFrameCount) {
+    local int64 mp3HeaderPos = 0;
+    local int64 mp3Size = 0;
+    local ubyte frameSync2 = 0;
+
+    // assume the embedded mp3 content starts with the ID3 tag
+    mp3HeaderPos = FindFirst(
+        "FF,h"      // what
+        , true      // matchcase
+        , false     // wholeword
+        , 0         // method | FINDMETHOD_NORMAL=0, FINDMETHOD_WILDCARDS=1 (*?), FINDMETHOD_REGEX=2
+        , 0.0       // tolerance
+        , 1         // dir | 1=forward, 0=backward
+        , start     // start
+        , size      // size
+        , 24        // wildcardMatchLength | default=24
+    );
+    Printf("searchForFrameSync: start 0x%LX size 0x%LX -> mp3HeaderPos 0x%LX\n", start, size, mp3HeaderPos);
+    for(0; mp3HeaderPos >= 0; mp3HeaderPos = FindNext()) {
+        // check for the valid frame sync (twelve bits all one)
+        frameSync2 = ReadByte(mp3HeaderPos+1);
+        if(frameSync2 < 0xE0) continue;
+
+        // we possibly have a valid MP3 frame header -> try parsing the MP3 stream
+        mp3Size = tryMp3(mp3HeaderPos, minimumFrameCount);
+        if(mp3Size > 0) {
+            frameSyncStreamStart[frameSyncStreams] = mp3HeaderPos;
+            frameSyncStreamSize[frameSyncStreams] = mp3Size;
+            ++frameSyncStreams;
+            Assert(frameSyncStreams <= MAX_MP3_STREAMS, "frameSyncStreams <= MAX_MP3_STREAMS");
+        }
+    }
+}
+
+
+void mapMp3OverFrameSync(uint32 minimumFrameCount) {
+    local uint i;
+    local int64 start = 0;
+    local int64 size = 0;
+
+    frameSyncStreams = 0;
+    for(i=0; i < tfrID3.count; i++) {
+        if(0 == id3StreamSize[i]) continue;
+        size = tfrID3.start[i] - start;
+        if(0 == size) continue;
+
+        searchForFrameSync(start, size, minimumFrameCount);
+        start = tfrID3.start[i] + id3StreamSize[i];
+    }
+    searchForFrameSync(start, 0, minimumFrameCount);
+}
+
+
+void mapMp3s(uint32 minimumFrameCount) {
+    mapMp3OverID3(minimumFrameCount);
+    mapMp3OverFrameSync(minimumFrameCount);
+}
+
+

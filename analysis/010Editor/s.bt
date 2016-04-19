@@ -1,0 +1,476 @@
+/*
+Date: 30.03.2016
+Author: Glaukon Ariston
+About: 
+	An 010Editor binary template for Ting pen's binary script embedded in an OUF file.
+	http://www.ting-el-tangel.de/doku.php?id=skripte
+	http://www.ting.eu
+
+Known operations:
+
+end
+clearver
+set
+cmp
+and
+or
+not
+jmp
+je
+jne
+jg
+jge
+jb
+jbe
+add
+sub
+call
+callid
+playoid
+pause
+
+*/
+
+#include "s-types.bt"
+#define ASSERT 0
+
+
+local string s;
+local int endOfScript = 0;
+
+
+typedef struct {
+	OpCode code;
+	if(code != END || !FEof()) {
+		OperandType type;
+		switch(type) {
+		case OPERAND_NONE: 
+			break;
+		case REGISTER_VALUE: 
+			break;
+		case REGISTER_REGISTER: 
+			break;
+		default: 
+			Assert(code == END, SPrintf(s, "Unknown operand type %02X", type));
+			break;
+		}
+	}
+
+	ASSERT && Assert(
+		code >= 0 && code <= OpCode_LAST && code != 0x07 && (code <= SUB || code >= CALL)
+		, SPrintf(s, "Unknown script opcode %02X", code)
+	);
+} OpCodePart;
+
+
+string readOp2(const OpCodePart& opcode, uint16 op1, uint16 op2) {
+	local string s;
+	local string format = opcode.type == REGISTER_VALUE 
+		? "%s v%d,%d"
+		: "%s v%d,v%d";
+	return SPrintf(s, format
+		, operation(opcode.code)
+		, op1
+		, op2
+	);
+}
+
+
+string readOp1(const OpCodePart& opcode, uint16 op1) {
+	local string format = opcode.type == REGISTER_VALUE 
+		? "%s %d"
+		: "%s v%d";
+	return SPrintf(s, format
+		, operation(opcode.code)
+		, op1
+	);
+}
+
+
+string readOpOffset(const OpCodePart& opcode, int16 op1) {
+	local string s;
+	local int64 scriptOffset = startof(parentof(parentof(opcode)));
+	return SPrintf(s, "%s %LX"
+		, operation(opcode.code)
+		, scriptOffset + op1
+	);
+}
+
+
+string readOp0(const OpCodePart& opcode) {
+	local string s;
+	return SPrintf(s, "%s"
+		, operation(opcode.code)
+	);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+
+	endOfScript = 1;
+	//Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} End<read=readEnd>;
+
+
+string readEnd(End& a) {
+	return readOp0(a.opcode);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Clearver<read=readClearver>;
+
+
+string readClearver(Clearver& a) {
+	return readOp0(a.opcode);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+	uint16 op2;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} Set<read=readSet>;
+
+
+string readSet(Set& a) {
+	return readOp2(a.opcode, a.op1, a.op2);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+	uint16 op2;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} Cmp<read=readCmp>;
+
+
+string readCmp(Cmp& a) {
+	return readOp2(a.opcode, a.op1, a.op2);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+	uint16 op2;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} And<read=readAnd>;
+
+
+string readAnd(And& a) {
+	return readOp2(a.opcode, a.op1, a.op2);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+	uint16 op2;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} Or<read=readOr>;
+
+
+string readOr(Or& a) {
+	return readOp2(a.opcode, a.op1, a.op2);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+	uint16 op2;
+
+	Assert(opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_REGISTER");
+} Not<read=readNot>;
+
+
+string readNot(Not& a) {
+	return readOp1(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	int16 op1;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Jmp<read=readJmp>;
+
+
+string readJmp(Jmp& a) {
+	return readOpOffset(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	int16 op1;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Je<read=readJe>;
+
+
+string readJe(Je& a) {
+	return readOpOffset(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	int16 op1;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Jne<read=readJne>;
+
+
+string readJne(Jne& a) {
+	return readOpOffset(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	int16 op1;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Jg<read=readJg>;
+
+
+string readJg(Jg& a) {
+	return readOpOffset(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	int16 op1;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Jge<read=readJge>;
+
+
+string readJge(Jge& a) {
+	return readOpOffset(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	int16 op1;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Jb<read=readJb>;
+
+
+string readJb(Jb& a) {
+	return readOpOffset(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	int16 op1;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Jbe<read=readJbe>;
+
+
+string readJbe(Jbe& a) {
+	return readOpOffset(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+	uint16 op2;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} Add<read=readAdd>;
+
+
+string readAdd(Add& a) {
+	return readOp2(a.opcode, a.op1, a.op2);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+	uint16 op2;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} Sub<read=readSub>;
+
+
+string readSub(Sub& a) {
+	return readOp2(a.opcode, a.op1, a.op2);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+
+	Assert(opcode.type == OPERAND_NONE, "opcode.type == OPERAND_NONE");
+} Call<read=readCall>;
+
+
+string readCall(Call& a) {
+	return readOp0(a.opcode);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} Callid<read=readCallid>;
+
+
+string readCallid(Callid& a) {
+	return readOp1(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} Playoid<read=readPlayoid>;
+
+
+string readPlayoid(Playoid& a) {
+	return readOp1(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+
+	Assert(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER, "opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER");
+} Pause<read=readPause>;
+
+
+string readPause(Pause& a) {
+	return readOp1(a.opcode, a.op1);
+}
+
+
+typedef struct {
+	OpCodePart opcode;
+	uint16 op1;
+	if(opcode.type == REGISTER_VALUE || opcode.type == REGISTER_REGISTER) {
+		uint16 op2;
+	}
+} UnknownCmd<read=readUnknownCmd>;
+
+
+string readUnknownCmd(UnknownCmd& a) {
+	if(a.opcode.type == REGISTER_VALUE || a.opcode.type == REGISTER_REGISTER) {
+		return readOp2(a.opcode, a.op1, a.op2);
+	} else {
+		return readOp1(a.opcode, a.op1);
+	}
+}
+
+
+
+
+typedef struct {
+	local uint8 opcode;
+	endOfScript = 0;
+	while(!endOfScript && !FEof()) {
+		opcode = ReadByte(FTell());
+		switch(opcode) {
+		case END:
+			End cmd;
+			break;
+		case CLEARVER:
+			Clearver cmd;
+			break;
+		case SET:
+			Set cmd;
+			break;
+		case CMP:
+			Cmp cmd;
+			break;
+		case AND:
+			And cmd;
+			break;
+		case OR:
+			Or cmd;
+			break;
+		case NOT:
+			Not cmd;
+			break;
+		case JMP:
+			Jmp cmd;
+			break;
+		case JE:
+			Je cmd;
+			break;
+		case JNE:
+			Jne cmd;
+			break;
+		case JG:
+			Jg cmd;
+			break;
+		case JGE:
+			Jge cmd;
+			break;
+		case JB:
+			Jb cmd;
+			break;
+		case JBE:
+			Jbe cmd;
+			break;
+		case ADD:
+			Add cmd;
+			break;
+		case SUB:
+			Sub cmd;
+			break;
+		case CALL:
+			Call cmd;
+			break;
+		case CALLID:
+			Callid cmd;
+			break;
+		case PLAYOID:
+			Playoid cmd;
+			break;
+		case PAUSE:
+			Pause cmd;
+			break;
+		default:
+			UnknownCmd cmd;
+			//Assert(0, SPrintf(s, "Unknown script opcode %02X", opcode));
+			break;
+		}
+	}
+} OUFBinaryScript;
+
+
+//======================================================== Generate Structure
+void parseScript(int64 position) {
+	FSeek(position);
+	BigEndian();
+	OUFBinaryScript oufScript;
+}
+
+
+parseScript(FTell());

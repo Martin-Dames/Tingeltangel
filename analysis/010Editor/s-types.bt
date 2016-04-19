@@ -1,0 +1,122 @@
+/*
+Date: 30.03.2016
+Author: Glaukon Ariston
+About: 
+	An 010Editor binary template for Ting pen's binary script embedded in an OUF file.
+	http://www.ting-el-tangel.de/doku.php?id=skripte
+	http://www.ting.eu
+
+Known operations:
+
+end
+clearver
+set
+cmp
+and
+or
+not
+jmp
+je
+jne
+jg
+jge
+jb
+jbe
+add
+sub
+call
+callid
+playoid
+pause
+
+*/
+
+typedef byte int8;
+typedef ubyte uint8;
+
+
+enum <uint8> OpCode {
+	  END 		= 0x00
+	, CLEARVER 	= 0x01
+	, SET 		= 0x02
+	, CMP 		= 0x03
+	, AND 		= 0x04
+	, OR 		= 0x05
+	, NOT 		= 0x06
+
+	, JMP 		= 0x08
+	, JE 		= 0x09
+	, JNE 		= 0x0A
+	, JG 		= 0x0B
+	, JGE 		= 0x0C
+	, JB 		= 0x0D
+	, JBE 		= 0x0E
+	, ADD 		= 0x0F
+	, SUB 		= 0x10
+
+	, CALL 		= 0x14
+	, CALLID 	= 0x15
+	, PLAYOID 	= 0x16
+	, PAUSE 	= 0x17
+	, OpCode_LAST = 0x19
+};
+
+
+string operation(uint8 opcode) {
+	local string s;
+	switch(opcode) {
+	case END: return "end"; 
+	case CLEARVER: return "clearver"; 
+	case SET: return "set"; 
+	case CMP: return "cmp"; 
+	case AND: return "and"; 
+	case OR: return "or"; 
+	case NOT: return "not"; 
+	case 0x07: return "0x07"; 
+	case JMP: return "jmp"; 
+	case JE: return "je"; 
+	case JNE: return "jne"; 
+	case JG: return "jg"; 
+	case JGE: return "jge"; 
+	case JB: return "jb"; 
+	case JBE: return "jbe"; 
+	case ADD: return "add"; 
+	case SUB: return "sub"; 
+	case 0x11: return "0x11"; 
+	case 0x12: return "0x12"; 
+	case 0x13: return "0x13"; 
+	case CALL: return "call"; 
+	case CALLID: return "callid"; 
+	case PLAYOID: return "playoid"; 
+	case PAUSE: return "pause"; 
+	case 0x18: return "0x18"; 
+	case 0x19: return "0x19"; 
+	default:
+		Assert(0, SPrintf(s, "Unknown script opcode %02X", opcode));
+		break;
+	}
+	return "#ERROR";
+}
+
+
+enum <uint8> OperandType {
+	  OPERAND_NONE 		= 0x00
+	, REGISTER_VALUE 	= 0x01
+	, REGISTER_REGISTER = 0x02
+	, OperandType_LAST = 0x02
+};
+
+
+string operandType(uint8 type) {
+	local string s;
+	switch(type) {
+	case OPERAND_NONE: return "None"; 
+	case REGISTER_VALUE: return "RV"; 
+	case REGISTER_REGISTER: return "RR"; 
+	default:
+		Assert(0, SPrintf(s, "Unknown operand type %02X", type));
+		break;
+	}
+	return "#ERROR";
+}
+

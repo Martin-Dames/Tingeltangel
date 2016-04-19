@@ -1,0 +1,51 @@
+/*
+010Editor Script
+Date: 15.04.2016
+Author: Glaukon Ariston
+About: 
+*/
+
+typedef byte int8;
+typedef ubyte uint8;
+
+string getRepositoryFolder() {
+	local string filepath = GetScriptFileName();
+	local string folder = FileNameGetPath(filepath, true);
+	return folder + "..\\system.ting.eu\\books\\";
+}
+
+
+string getStatsFolder() {
+	local string filepath = GetScriptFileName();
+	local string folder = FileNameGetPath(filepath, true);
+	return folder + "..\\extracted\\";
+}
+
+
+string getBookFolder(string bookId) {
+	local string filepath = GetScriptFileName();
+	local string folder = FileNameGetPath(filepath, true);
+	return folder + "..\\extracted\\books\\" + bookId + "\\";
+}
+
+
+string getBookId(string filepath) {
+	local string baseName = FileNameGetBase(filepath, false);
+	local int i = 0;
+	local string bookID = "";
+	for(i=0; i < Strlen(baseName); ++i) {
+		if(baseName[i] >= '0' && baseName[i] <= '9') {
+			bookID += baseName[i];
+		} else {
+			break;
+		}
+	}
+	return bookID;
+}
+
+
+local string repositoryFolder = getRepositoryFolder();
+local string statsFolder = getStatsFolder();
+if(!FileExists(statsFolder)) {
+	MakeDir(statsFolder);
+}
