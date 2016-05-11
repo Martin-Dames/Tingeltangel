@@ -1,1 +1,1 @@
-start javaw -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true -jar tingeltangel-0.2-beta4-jar-with-dependencies.jar gui-editor
+start javaw -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true -jar tingeltangel-0.2-beta5-jar-with-dependencies.jar gui-editor
