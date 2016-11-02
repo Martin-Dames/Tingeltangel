@@ -43,47 +43,27 @@ public class Translator {
             code2ting[i] = -1;
             ting2code[i] = -1;
         }
-        int r = 0;
-        int codeId = -1;
+        int codeId = 0;
         int lastLowerTingId = -1;
-        int lastHigherTingId = -1;
+        int lastHigherTingId = 4715;
         int lastCurrentCodeId = -1;
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(Translator.class.getResourceAsStream(ID_TRANS_FILE)));
             String row;
             while((row = in.readLine()) != null) {
-                r++;
                 row = row.trim();
                 if((!row.isEmpty()) && (!row.startsWith("#"))) {
-                    if(row.startsWith("set ")) {
-                        row = row.substring("set ".length()).trim();
-                        int p = row.indexOf(" ");
-                        if(p == -1) {
-                            throw new Error("error in '" + ID_TRANS_FILE + "' on line " + r);
-                        }
-                        codeId = Integer.parseInt(row.substring(0, p).trim());
-                        row = row.substring(p).trim();
-                        p = row.indexOf(" ");
-                        if(p == -1) {
-                            throw new Error("error in '" + ID_TRANS_FILE + "' on line " + r);
-                        }
-                        lastLowerTingId = Integer.parseInt(row.substring(0, p).trim());
-                        lastHigherTingId = Integer.parseInt(row.substring(p + 1).trim()) - 1;
-                        
-                    } else {
-                        
-                        int currentCodeId = Integer.parseInt(row);
-                        if(lastCurrentCodeId >= currentCodeId) {
-                            throw new Error();
-                        }
-                        lastCurrentCodeId = currentCodeId;
-                        
-                        for(int i = codeId; i < currentCodeId; i++) {
-                            code2ting[i] = ++lastHigherTingId;
-                        }
-                        code2ting[currentCodeId] = ++lastLowerTingId;
-                        codeId = currentCodeId + 1;
+                    int currentCodeId = Integer.parseInt(row);
+                    if(lastCurrentCodeId >= currentCodeId) {
+                        throw new Error();
                     }
+                    lastCurrentCodeId = currentCodeId;
+
+                    for(int i = codeId; i < currentCodeId; i++) {
+                        code2ting[i] = ++lastHigherTingId;
+                    }
+                    code2ting[currentCodeId] = ++lastLowerTingId;
+                    codeId = currentCodeId + 1;
                 }
             }
             for(int c = 0; c < 0x010000; c++) {

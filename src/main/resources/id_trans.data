@@ -21,9 +21,7 @@
 #    PLEASE CONTACT martin@bastionbytes.de
 #    IF THERE IS AN ERROR IN THIS FILE IT'S NEARLY IMPOSSIBLE TO FIND!
 #
-# set muss immer auf eine hohe ting-id zeigen (>4715)
-# set <code-id> <last lower ting-id> <current high ting-id>
-set 0 -1 4716
+
 4
 5
 6
