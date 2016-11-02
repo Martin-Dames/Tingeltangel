@@ -37,7 +37,7 @@ public class Tingeltangel {
     public static int MAIN_FRAME_WIDTH = 1200;
     public static int MAIN_FRAME_HEIGHT = 700;
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
-    public static String MAIN_FRAME_VERSION = " v0.2-beta5";
+    public static String MAIN_FRAME_VERSION = " v0.3";
     
     public final static String BASE_URL = "http://system.ting.eu/book-files";
     
