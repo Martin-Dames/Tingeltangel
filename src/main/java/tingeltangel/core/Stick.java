@@ -66,9 +66,8 @@ public class Stick {
     private final static String SETTINGS_FILE = "SETTINGS.INI";
     private final static String TBD_FILE = "TBD.TXT";
     
-    private final static String[] STICK_FILES = {
-        "TBD.TXT", "SETTINGS.INI", "SETTING.DAT", "BOOK.SYS"
-    };
+    private final static String[] STICK_FILES = {SETTINGS_FILE, TBD_FILE};
+
     
     private final File path;
     
