@@ -4,7 +4,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <modelVersion>4.0.0</modelVersion>
   <groupId>tingeltangel</groupId>
   <artifactId>tingeltangel</artifactId>
-  <version>0.3</version>
+  <version>0.4</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
