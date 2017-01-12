@@ -25,10 +25,10 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Iterator;
+import tingeltangel.gui.CodePreferences;
 
 
 public class Codes {
@@ -39,23 +39,77 @@ public class Codes {
     private final static float[] PS_BLOCK_SIZE = {0.84f, 0.84f};
     */
 
-    private final static int[] PNG_DOT_SIZE = {1, 2};
-    private final static int[] PNG_DELTA_SIZE = {1, 2};
-    private final static int[] PNG_DELTA_X_SIZE = {1, 2};
-    private final static int[] PNG_BLOCK_SIZE = {6, 12};
+    private static int[] PNG_DOT_SIZE = {2, 2};
+    //private final static int[] PNG_DOT_SIZE = {1, 2};
+    
+    private static int[] PNG_DELTA_SIZE = {1, 2};
+    private static int[] PNG_DELTA_X_SIZE = {1, 2};
+    
+    private static int[] PNG_BLOCK_SIZE = {8, 12};
+    //private final static int[] PNG_BLOCK_SIZE = {6, 12};
 
-    private final static float[] PNG_PIXEL_PER_MM = {23.62205f, 47.24409f};
+    public static float[] PNG_PIXEL_PER_MM = {23.62205f, 47.24409f};
 
     public final static int DPI600 = 0;
     public final static int DPI1200 = 1;
     
-    private final static int[] A4_WIDTH = {4880, 9760};
-    private final static int[] A4_HEIGHT = {6680, 13360};
+    public final static int[] A4_WIDTH = {4880, 9760};
+    public final static int[] A4_HEIGHT = {6680, 13360};
 
                 
     private static int resolution = DPI1200;
 
+    public static int getPatternSize600() {
+        return(PNG_BLOCK_SIZE[DPI600]);
+    }
+    
+    public static int getDeltaSize600() {
+        return(PNG_DELTA_SIZE[DPI600]);
+    }
+    
+    public static int getDotSize600() {
+        return(PNG_DOT_SIZE[DPI600]);
+    }
+    
+    public static int getPatternSize1200() {
+        return(PNG_BLOCK_SIZE[DPI1200]);
+    }
+    
+    public static int getDeltaSize1200() {
+        return(PNG_DELTA_SIZE[DPI1200]);
+    }
+    
+    public static int getDotSize1200() {
+        return(PNG_DOT_SIZE[DPI1200]);
+    }
 
+    public static void setPatternSize600(int x) {
+        PNG_BLOCK_SIZE[DPI600] = x;
+    }
+    
+    public static void setPatternSize1200(int x) {
+        PNG_BLOCK_SIZE[DPI1200] = x;
+    }
+    
+    public static void setDotSize600(int x) {
+        PNG_DOT_SIZE[DPI600] = x;
+    }
+    
+    public static void setDotSize1200(int x) {
+        PNG_DOT_SIZE[DPI1200] = x;
+    }
+    
+    public static void setDeltaSize600(int x) {
+        PNG_DELTA_SIZE[DPI600] = x;
+        PNG_DELTA_X_SIZE[DPI600] = x;
+    }
+    
+    public static void setDeltaSize1200(int x) {
+        PNG_DELTA_SIZE[DPI1200] = x;
+        PNG_DELTA_X_SIZE[DPI1200] = x;
+    }
+    
+    
     public static void setResolution(int resolution) {
         Codes.resolution = resolution;
     }
@@ -112,60 +166,8 @@ public class Codes {
         return (pattern);
     }
 
-    /*
-    private static void drawText(float x, float y, String text, PrintWriter out) {
-        out.println("newpath");
-        out.println(x + " " + y + " moveto");
-        out.println("(" + text + ") show");
-    }
 
-    private static void drawDot(float x, float y, PrintWriter out) {
-        out.println("newpath");
-        out.println(x + " " + y + " moveto");
-        out.println(x + " " + (y + PS_DOT_SIZE[resolution]) + " lineto");
-        out.println((x + PS_DOT_SIZE[resolution]) + " " + (y + PS_DOT_SIZE[resolution]) + " lineto");
-        out.println((x + PS_DOT_SIZE[resolution]) + " " + y + " lineto");
-        out.println("fill");
-    }
-
-    private static void drawPattern(int p, float x, float y, PrintWriter out) {
-        int[][][] pattern = getPatternFromInt(p);
-        for (int dx = 0; dx < 4; dx++) {
-            for (int dy = 0; dy < 4; dy++) {
-                float px = pattern[3 - dy][dx][0] * PS_DELTA_SIZE[resolution];
-                float py = pattern[3 - dy][dx][1] * PS_DELTA_SIZE[resolution];
-                drawDot(x + dx * PS_BLOCK_SIZE[resolution] + px, y + dy * PS_BLOCK_SIZE[resolution] + py, out);
-            }
-        }
-    }
-
-    private static void drawCarpet(int p, float x, float y, int w, int h, String label, PrintWriter out) {
-
-        if (label != null) {
-            drawText(x, y - 4, label, out);
-        }
-
-        w = (int) (w / (4 * PS_BLOCK_SIZE[resolution]));
-        h = (int) (h / (4 * PS_BLOCK_SIZE[resolution]));
-
-        for (int ix = 0; ix < w; ix++) {
-            for (int iy = 0; iy < h; iy++) {
-                drawPattern(p, x + ix * 4 * PS_BLOCK_SIZE[resolution], y + iy * 4 * PS_BLOCK_SIZE[resolution], out);
-            }
-        }
-        out.flush();
-    }
-
-    public static void drawEps(int code, int width, int height, PrintWriter out) {
-        width = (int) ((width * 100.0) / 25.4);
-        height = (int) ((height * 100.0) / 25.4);
-        out.println("%!PS-Adobe-3.0 EPSF-3.0");
-        out.println("%%BoundingBox: 0 0 " + width + " " + height);
-        drawCarpet(code, 0, 0, width, height, null, out);
-    }
-    */
-
-    private static void drawPattern(int code, int x, int y, int width, int height, Graphics2D graphics) {
+    public static void drawPattern(int code, int x, int y, int width, int height, Graphics2D graphics) {
         int[][][] pattern = getPatternFromInt(code);
         for (int ix = 0; ix < width; ix++) {
             for (int iy = 0; iy < height; iy++) {
@@ -193,7 +195,7 @@ public class Codes {
         }
     }
 
-    private static void writePng(BufferedImage image, OutputStream out) throws IOException {
+    public static void writePng(BufferedImage image, OutputStream out) throws IOException {
         
         // find an image writer for PNG
         for (Iterator<ImageWriter> iw = ImageIO.getImageWritersByFormatName("PNG"); iw.hasNext(); ) {
@@ -266,63 +268,7 @@ public class Codes {
         writePng(generateCodeImage(code, width, height), out);
     }
     
-    
 
-    /*
-    public static void drawBooklet(String title, int mid, List<Tupel<Integer, String>> booklet, PrintWriter out) {
-
-        mid = Translator.ting2code(mid);
-
-        int entriesPerPage = 30;
-        int pages = booklet.size() / entriesPerPage;
-        if (booklet.size() % entriesPerPage > 0) {
-            pages++;
-        }
-        int page = 0;
-        int entry = 0;
-
-        out.println("%!PS-Adobe-2.0");
-        out.println();
-        out.println("%%Pages: " + pages);
-
-        Iterator<Tupel<Integer, String>> entries = booklet.iterator();
-        while (entries.hasNext()) {
-
-            Tupel<Integer, String> tupel = entries.next();
-
-            if (entry % entriesPerPage == 0) {
-                if (entry != 0) {
-                    out.println("showpage");
-                    page++;
-                }
-                out.println("%%Page: " + (page + 1) + " " + (page + 1));
-                out.println("/Times-Roman findfont");
-                out.println("10 scalefont");
-                out.println("setfont");
-                drawText(80, 815, "Buch: " + title + " [Seite " + (page + 1) + " von " + pages + "]", out);
-                out.println("/Times-Roman findfont");
-                out.println("8 scalefont");
-                out.println("setfont");
-                if (mid >= 0) {
-                    drawCarpet(mid, 50, 810, 20, 20, null, out);
-                }
-            }
-
-
-            drawText(80, 780 - (entry % entriesPerPage) * 25, Integer.toString(tupel.a) + ": " + tupel.b, out);
-
-            int cid = Translator.ting2code(tupel.a);
-            if (cid >= 0) {
-                drawCarpet(cid, 50, 775 - (entry % entriesPerPage) * 25, 20, 20, null, out);
-            }
-
-            entry++;
-        }
-        out.println("showpage");
-        out.flush();
-    }
-    */
-    
     public static void drawPagePNG(int[] tingCodes, int patternWidthInMM, int patternHeightInMM, OutputStream out) throws IOException {
         
     
@@ -407,56 +353,25 @@ public class Codes {
         writePng(image, out);
         
     }
-    
-    
-    
-    /*
-    public static void drawPagePS(int start, PrintWriter out) {
-        int cx = 25;
-        int cy = 40;
-        int till = Math.min(65535, start + (cx * cy) - 1);
-        out.println("/Times-Roman findfont");
-        out.println("5 scalefont");
-        out.println("setfont");
-        drawText(50, 815, "CODE IDS: " + start + " - " + till, out);
-        out.println("/Times-Roman findfont");
-        out.println("4 scalefont");
-        out.println("setfont");
-        for (int y = cy - 1; y >= 0; y--) {
-            for (int x = 0; x < cx; x++) {
-                if (start < 65536) {
-                    drawCarpet(start, 50 + x * 20, 17 + y * 20, 15, 15, "" + (start++), out);
-                }
-            }
-        }
-        out.println("showpage");
-        out.flush();
+
+    public static void loadProperties() {
+        setPatternSize600(Properties.getIntegerProperty(CodePreferences.PROPERTY_PATTERN_SIZE_600));
+        setDotSize600(Properties.getIntegerProperty(CodePreferences.PROPERTY_DOT_SIZE_600));
+        setDeltaSize600(Properties.getIntegerProperty(CodePreferences.PROPERTY_DELTA_SIZE_600));
+        setPatternSize1200(Properties.getIntegerProperty(CodePreferences.PROPERTY_PATTERN_SIZE_1200));
+        setDotSize1200(Properties.getIntegerProperty(CodePreferences.PROPERTY_DOT_SIZE_1200));
+        setDeltaSize1200(Properties.getIntegerProperty(CodePreferences.PROPERTY_DELTA_SIZE_1200));
     }
 
-    public static void drawPage(int[] index, String[] caption, PrintWriter out) {
-        int cx = 25;
-        int cy = 40;
-        out.println("/Times-Roman findfont");
-        out.println("5 scalefont");
-        out.println("setfont");
-        drawText(50, 815, "TING IDS: " + caption[0] + " - " + caption[caption.length - 1], out);
-        out.println("/Times-Roman findfont");
-        out.println("4 scalefont");
-        out.println("setfont");
-        int p = 0;
-        for (int y = cy - 1; y >= 0; y--) {
-            for (int x = 0; x < cx; x++) {
-                if (p < index.length) {
-                    if (index[p] != -1) {
-                        drawCarpet(index[p], 50 + x * 20, 17 + y * 20, 15, 15, caption[p], out);
-                    }
-                    p++;
-                }
-            }
-        }
-        out.println("showpage");
-        out.flush();
+    public static void saveProperties() {
+        Properties.setProperty(CodePreferences.PROPERTY_PATTERN_SIZE_600, getPatternSize600());
+        Properties.setProperty(CodePreferences.PROPERTY_DOT_SIZE_600, getDotSize600());
+        Properties.setProperty(CodePreferences.PROPERTY_DELTA_SIZE_600, getDeltaSize600());
+        Properties.setProperty(CodePreferences.PROPERTY_PATTERN_SIZE_1200, getPatternSize1200());
+        Properties.setProperty(CodePreferences.PROPERTY_DOT_SIZE_1200, getDotSize1200());
+        Properties.setProperty(CodePreferences.PROPERTY_DELTA_SIZE_1200, getDeltaSize1200());
     }
-    */
+    
+    
 
 }

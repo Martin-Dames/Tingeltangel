@@ -96,6 +96,10 @@ public class Preferences {
         return(prefs.get(key).defaultValue);
     }
     
+    public static int getDefaultInteger(String key) {
+        return(Integer.parseInt(prefs.get(key).defaultValue));
+    }
+    
     public static String getDescription(String key) {
         return(prefs.get(key).description);
     }

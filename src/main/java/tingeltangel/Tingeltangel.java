@@ -75,6 +75,8 @@ public class Tingeltangel {
             Codes.setResolution(Codes.DPI600);
         }
         
+        Codes.loadProperties();
+        
         final boolean _startEditor = startEditor;
         
         if(startManager || startEditor) {

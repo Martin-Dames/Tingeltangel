@@ -20,6 +20,7 @@ package tingeltangel.gui;
 
 import tingeltangel.core.Codes;
 import tingeltangel.core.Properties;
+import tingeltangel.tools.Preferences;
 
 /**
  *
@@ -28,6 +29,12 @@ import tingeltangel.core.Properties;
 public class CodePreferences extends javax.swing.JDialog {
 
     public final static String PROPERTY_RESOLUTION = "resolution";
+    public final static String PROPERTY_DOT_SIZE_600 = "dot_size_600";
+    public final static String PROPERTY_PATTERN_SIZE_600 = "pattern_size_600";
+    public final static String PROPERTY_DELTA_SIZE_600 = "delta_size_600";
+    public final static String PROPERTY_DOT_SIZE_1200 = "dot_size_1200";
+    public final static String PROPERTY_PATTERN_SIZE_1200 = "pattern_size_1200";
+    public final static String PROPERTY_DELTA_SIZE_1200 = "delta_size_1200";
     
     /**
      * Creates new form TTSPreferences
@@ -43,6 +50,20 @@ public class CodePreferences extends javax.swing.JDialog {
             resolution.setSelectedIndex(1);
         }
         
+        patternSize600Slider.setValue(Codes.getPatternSize600());
+        patternSize600Label.setText(Integer.toString(Codes.getPatternSize600()));
+        dotSize600Slider.setValue(Codes.getDotSize600());
+        dotSize600Label.setText(Integer.toString(Codes.getDotSize600()));
+        deltaSize600Slider.setValue(Codes.getDeltaSize600());
+        deltaSize600Label.setText(Integer.toString(Codes.getDeltaSize600()));
+        
+        patternSize1200Slider.setValue(Codes.getPatternSize1200());
+        patternSize1200Label.setText(Integer.toString(Codes.getPatternSize1200()));
+        dotSize1200Slider.setValue(Codes.getDotSize1200());
+        dotSize1200Label.setText(Integer.toString(Codes.getDotSize1200()));
+        deltaSize1200Slider.setValue(Codes.getDeltaSize1200());
+        deltaSize1200Label.setText(Integer.toString(Codes.getDeltaSize1200()));
+        
     }
 
     /**
@@ -57,6 +78,27 @@ public class CodePreferences extends javax.swing.JDialog {
         resolution = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         okButton = new javax.swing.JButton();
+        patternSize600Slider = new javax.swing.JSlider();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        dotSize600Slider = new javax.swing.JSlider();
+        patternSize600Label = new javax.swing.JLabel();
+        dotSize600Label = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        deltaSize600Slider = new javax.swing.JSlider();
+        deltaSize600Label = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        patternSize1200Label = new javax.swing.JLabel();
+        dotSize1200Label = new javax.swing.JLabel();
+        deltaSize1200Label = new javax.swing.JLabel();
+        patternSize1200Slider = new javax.swing.JSlider();
+        dotSize1200Slider = new javax.swing.JSlider();
+        deltaSize1200Slider = new javax.swing.JSlider();
+        defaultButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -76,20 +118,148 @@ public class CodePreferences extends javax.swing.JDialog {
             }
         });
 
+        patternSize600Slider.setMaximum(10);
+        patternSize600Slider.setMinimum(6);
+        patternSize600Slider.setValue(8);
+        patternSize600Slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                patternSize600SliderStateChanged(evt);
+            }
+        });
+
+        jLabel2.setText("Rastergröße:");
+
+        jLabel3.setText("Punktgröße:");
+
+        dotSize600Slider.setMaximum(3);
+        dotSize600Slider.setMinimum(1);
+        dotSize600Slider.setValue(1);
+        dotSize600Slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                dotSize600SliderStateChanged(evt);
+            }
+        });
+
+        patternSize600Label.setText("8");
+
+        dotSize600Label.setText("1");
+
+        jLabel6.setText("Verschiebung:");
+
+        deltaSize600Slider.setMaximum(4);
+        deltaSize600Slider.setMinimum(1);
+        deltaSize600Slider.setValue(1);
+        deltaSize600Slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                deltaSize600SliderStateChanged(evt);
+            }
+        });
+
+        deltaSize600Label.setText("1");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setText("600dpi");
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setText("1200dpi");
+
+        jLabel10.setText("Rastergröße:");
+
+        jLabel11.setText("Punktgröße:");
+
+        jLabel12.setText("Verschiebung:");
+
+        patternSize1200Label.setText("16");
+
+        dotSize1200Label.setText("1");
+
+        deltaSize1200Label.setText("2");
+
+        patternSize1200Slider.setMaximum(20);
+        patternSize1200Slider.setMinimum(12);
+        patternSize1200Slider.setToolTipText("");
+        patternSize1200Slider.setValue(16);
+        patternSize1200Slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                patternSize1200SliderStateChanged(evt);
+            }
+        });
+
+        dotSize1200Slider.setMaximum(4);
+        dotSize1200Slider.setMinimum(1);
+        dotSize1200Slider.setValue(1);
+        dotSize1200Slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                dotSize1200SliderStateChanged(evt);
+            }
+        });
+
+        deltaSize1200Slider.setMaximum(4);
+        deltaSize1200Slider.setMinimum(1);
+        deltaSize1200Slider.setValue(2);
+        deltaSize1200Slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                deltaSize1200SliderStateChanged(evt);
+            }
+        });
+
+        defaultButton.setText("Standardwerte");
+        defaultButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                defaultButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(dotSize1200Slider, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                                    .addComponent(deltaSize1200Slider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addGap(40, 40, 40)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(deltaSize1200Label, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(dotSize1200Label, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(patternSize1200Slider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(deltaSize600Slider, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(dotSize600Slider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                                        .addComponent(patternSize600Slider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                    .addComponent(resolution, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(34, 34, 34)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(patternSize1200Label, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(deltaSize600Label, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(dotSize600Label, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(patternSize600Label, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(defaultButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(65, 65, 65)
-                        .addComponent(resolution, 0, 178, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel1))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -97,10 +267,57 @@ public class CodePreferences extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(resolution, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(okButton)
+                    .addComponent(resolution, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6)
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(patternSize600Slider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(patternSize600Label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dotSize600Slider, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dotSize600Label))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(deltaSize600Slider, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(deltaSize600Label)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(patternSize1200Label)
+                    .addComponent(patternSize1200Slider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dotSize1200Slider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dotSize1200Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(deltaSize1200Label)
+                            .addComponent(jLabel12))
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(okButton)
+                            .addComponent(defaultButton)))
+                    .addComponent(deltaSize1200Slider, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -116,15 +333,83 @@ public class CodePreferences extends javax.swing.JDialog {
             Properties.setProperty(PROPERTY_RESOLUTION, "1200");
         }
         setVisible(false);
+        Codes.setPatternSize600(patternSize600Slider.getValue());
+        Codes.setDotSize600(dotSize600Slider.getValue());
+        Codes.setDeltaSize600(deltaSize600Slider.getValue());
+        Codes.setPatternSize1200(patternSize1200Slider.getValue());
+        Codes.setDotSize1200(dotSize1200Slider.getValue());
+        Codes.setDeltaSize1200(deltaSize1200Slider.getValue());
+        Codes.saveProperties();
+        
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void resolutionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resolutionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_resolutionActionPerformed
 
+    private void patternSize600SliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_patternSize600SliderStateChanged
+        patternSize600Label.setText(Integer.toString(patternSize600Slider.getValue()));
+    }//GEN-LAST:event_patternSize600SliderStateChanged
+
+    private void dotSize600SliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_dotSize600SliderStateChanged
+        dotSize600Label.setText(Integer.toString(dotSize600Slider.getValue()));
+    }//GEN-LAST:event_dotSize600SliderStateChanged
+
+    private void deltaSize600SliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_deltaSize600SliderStateChanged
+        deltaSize600Label.setText(Integer.toString(deltaSize600Slider.getValue()));
+    }//GEN-LAST:event_deltaSize600SliderStateChanged
+
+    private void patternSize1200SliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_patternSize1200SliderStateChanged
+        patternSize1200Label.setText(Integer.toString(patternSize1200Slider.getValue()));
+    }//GEN-LAST:event_patternSize1200SliderStateChanged
+
+    private void dotSize1200SliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_dotSize1200SliderStateChanged
+        dotSize1200Label.setText(Integer.toString(dotSize1200Slider.getValue()));
+    }//GEN-LAST:event_dotSize1200SliderStateChanged
+
+    private void deltaSize1200SliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_deltaSize1200SliderStateChanged
+        deltaSize1200Label.setText(Integer.toString(deltaSize1200Slider.getValue()));
+    }//GEN-LAST:event_deltaSize1200SliderStateChanged
+
+    private void defaultButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultButtonActionPerformed
+        patternSize600Slider.setValue(Preferences.getDefaultInteger(PROPERTY_PATTERN_SIZE_600));
+        patternSize600Label.setText(Integer.toString(patternSize600Slider.getValue()));
+        dotSize600Slider.setValue(Preferences.getDefaultInteger(PROPERTY_DOT_SIZE_600));
+        dotSize600Label.setText(Integer.toString(dotSize600Slider.getValue()));
+        deltaSize600Slider.setValue(Preferences.getDefaultInteger(PROPERTY_DELTA_SIZE_600));
+        deltaSize600Label.setText(Integer.toString(deltaSize600Slider.getValue()));
+        patternSize1200Slider.setValue(Preferences.getDefaultInteger(PROPERTY_PATTERN_SIZE_1200));
+        patternSize1200Label.setText(Integer.toString(patternSize1200Slider.getValue()));
+        dotSize1200Slider.setValue(Preferences.getDefaultInteger(PROPERTY_DOT_SIZE_1200));
+        dotSize1200Label.setText(Integer.toString(dotSize1200Slider.getValue()));
+        deltaSize1200Slider.setValue(Preferences.getDefaultInteger(PROPERTY_DELTA_SIZE_1200));
+        deltaSize1200Label.setText(Integer.toString(deltaSize1200Slider.getValue()));
+    }//GEN-LAST:event_defaultButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton defaultButton;
+    private javax.swing.JLabel deltaSize1200Label;
+    private javax.swing.JSlider deltaSize1200Slider;
+    private javax.swing.JLabel deltaSize600Label;
+    private javax.swing.JSlider deltaSize600Slider;
+    private javax.swing.JLabel dotSize1200Label;
+    private javax.swing.JSlider dotSize1200Slider;
+    private javax.swing.JLabel dotSize600Label;
+    private javax.swing.JSlider dotSize600Slider;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JButton okButton;
+    private javax.swing.JLabel patternSize1200Label;
+    private javax.swing.JSlider patternSize1200Slider;
+    private javax.swing.JLabel patternSize600Label;
+    private javax.swing.JSlider patternSize600Slider;
     private javax.swing.JComboBox resolution;
     // End of variables declaration//GEN-END:variables
 
