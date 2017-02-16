@@ -666,26 +666,6 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     log.error("unable to generate codes", ioe);
                 }
             }
-        /*
-        } else if(id.startsWith("buch.booklet")) {
-            JFileChooser fc = new JFileChooser();
-            fc.setFileFilter(new FileNameExtensionFilter("Code Tabelle (*.ps)", "ps"));
-            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                try {
-                    String file = fc.getSelectedFile().getCanonicalPath();
-                    if(!file.toLowerCase().endsWith(".ps")) {
-                        file = file + ".ps";
-                    }
-                    PrintWriter out = new PrintWriter(new FileWriter(file));
-                    book.generateTestBooklet(out);
-                    out.close();
-                } catch(Exception e) {
-                    JOptionPane.showMessageDialog(this, "Die Codetabelle konnte nicht gespeichert werden");
-                    log.error("unable to save code tabular", e);
-                }
-            }
-        
-        */
         } else if(id.equals("prefs.binary")) {
             new BinaryLocationsDialog(this, true).setVisible(true);
         } else if(id.equals("prefs.tts")) {

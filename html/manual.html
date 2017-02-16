@@ -145,6 +145,10 @@
 				<td><img src="%%save-mp3.png%%"></td>
 				<td>speichert das MP3</td>
 			</tr>
+			<tr>
+				<td>Code</td>
+				<td>gibt an, ob ein Code f&uuml;r diesen eintrag erstellt werden soll</td>
+			</tr>
 		</table>
 		<br/>
 		Die Textbox unter den Icons hat je nach Typ des Eintrags eine andere Bedeutung.
@@ -180,36 +184,152 @@
 		<b>Buch</b>
 		<table border="1">
 			<tr>
-				<td></td>
-				<td></td>
+				<td>Neu</td>
+				<td>Erstellt ein neues Buch</td>
+			</tr>
+			<tr>
+				<td>Laden</td>
+				<td>Lädt ein Buch</td>
+			</tr>
+			<tr>
+				<td>Importieren</td>
+				<td>
+                                    <table border="1">
+                                        <tr>
+                                            <td>manuell</td>
+                                            <td>Importieren von ouf/src Dateien</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Repository</td>
+                                            <td>Importieren von offiziellen Ting-Servern</td>
+                                        </tr>
+                                        <tr>
+                                            <td>yaml (tiptoi)</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Wimmelbuch</td>
+                                            <td>wimmelbuch import (siehe https://www.ting-el-tangel.de/doku.php?id=wimmelbuch_import)</td>
+                                        </tr>
+                                    </table>
+                                </td>
+			</tr>
+			<tr>
+				<td>Speichern</td>
+				<td>Speichert das aktuelle Buch</td>
+			</tr>
+			<tr>
+				<td>Generieren</td>
+				<td>Generiert das aktuelle Buch zum mauellen kopieren auf den Ting-stift</td>
+			</tr>
+			<tr>
+				<td>alle MP3s als zip herunterladen</td>
+				<td>speichert alle MP3s des aktuellen Buches</td>
+			</tr>
+			<tr>
+				<td>Alle Codes generieren</td>
+				<td>speichert alle Codes des aktuellen Buches</td>
+			</tr>
+			<tr>
+				<td>Beenden</td>
+				<td>beendet das Tingeltangel-Tool</td>
 			</tr>
 		</table>
 		<b>Aktionen</b>
 		<table border="1">
 			<tr>
-				<td></td>
-				<td></td>
+				<td>B&uuml;cherliste aktualisieren</td>
+                                <td>sucht nach neuen/unbekannten B&uuml;chern auf den Ting-Servern</td>
+			</tr>
+			<tr>
+				<td>B&uuml;cher aktualisieren</td>
+				<td>aktualisiert heruntergeladene Bucher</td>
+			</tr>
+			<tr>
+				<td>Buch l&ouml;schen</td>
+				<td>l&ouml;scht ein Buch</td>
+			</tr>
+			<tr>
+				<td>B&uuml;cherliste aufr&auml;umen</td>
+				<td>l&ouml;scht heruntergeladene B&uuml;cher um Speicherplatz zu sparen</td>
+			</tr>
+			<tr>
+				<td>CLI Skript ausf&uuml;hren</td>
+				<td>f&uuml;hrt ein CLI Skript aus</td>
 			</tr>
 		</table>
 		<b>Einstellungen</b>
 		<table border="1">
 			<tr>
-				<td></td>
-				<td></td>
+				<td>externe Programme</td>
+				<td>
+                                    Konfiguration externer Programme (espeak, lame, avconv). Diese externen Programme
+                                    werden nur ben&ouml;tigt wenn TTS (Text-to-Speach) oder der yaml Import genutzt werden soll.
+                                </td>
+			</tr>
+			<tr>
+				<td>TTS</td>
+				<td>Text-to-Speach konfiguration (siehe https://www.ting-el-tangel.de/ext/install.html)</td>
+			</tr>
+			<tr>
+				<td>Codes</td>
+				<td>Konfiguration der Codes f&uuml;r einen bestimmten drucker (siehe https://www.ting-el-tangel.de/doku.php?id=drucken)</td>
 			</tr>
 		</table>
-		<b>Codes (600dpi)</b>
+		<b>Codes</b>
 		<table border="1">
 			<tr>
+				<td>Ting-IDs</td>
+				<td>
+                                    <table border="1">
+                                        <tr>
+                                            <td>Media IDs (MIDs)</td>
+                                            <td>Erstellen von Test-Codes</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Commercial IDs (CIDs)</td>
+                                            <td>Erstellen von Test-Codes</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Object IDs (OIDs)</td>
+                                            <td>Erstellen von Test-Codes</td>
+                                        </tr>
+                                    </table>
+                                </td>
+			</tr>
+			<tr>
+				<td>Code-IDs</td>
 				<td></td>
-				<td></td>
+			</tr>
+			<tr>
+				<td>Tabelle Erstellen</td>
+				<td>
+                                    <table border="1">
+                                        <tr>
+                                            <td>Ting-ID -&gt; Code-ID</td>
+                                            <td>Erstellt eine &Uuml;bersetzungstabelle von Ting-IDs nach Code-IDs</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Code-ID -&gt; Ting-ID</td>
+                                            <td>Erstellt eine &Uuml;bersetzungstabelle von Code-IDs nach Ting-IDs</td>
+                                        </tr>
+                                    </table>
+                                </td>
 			</tr>
 		</table>
 		<b>Informationen</b>
 		<table border="1">
 			<tr>
-				<td></td>
-				<td></td>
+				<td>Handbuch</td>
+				<td>&ouml;ffnet dieses Handbuch</td>
+			</tr>
+			<tr>
+				<td>Kontakt</td>
+				<td>Kontaktdaten</td>
+			</tr>
+			<tr>
+				<td>Lizenz</td>
+				<td>Die Lizenz</td>
 			</tr>
 		</table>
 
