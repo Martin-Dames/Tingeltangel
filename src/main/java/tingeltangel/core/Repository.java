@@ -446,11 +446,19 @@ public class Repository {
     public static void main(String[] args) throws Exception {
         Integer[] ids = getIDs();
         
+        String header = "\n^ Buch ID ^ Name ^ Herausgeber ^ Autor ^ Version ^ URL ^ Ländercode ^ Downloads ^^^^";
+        
         File f = new File("bookList.txt");
         PrintWriter out = new PrintWriter(new FileWriter(f));
         
-        out.println("^ Buch ID ^ Name ^ Herausgeber ^ Autor ^ Version ^ URL ^ Ländercode ^ Downloads ^^^^");
+        
+        
         for(int i = 0; i < ids.length; i++) {
+            
+            if((i % 15 == 0) && (i < ids.length - 1)) {
+                out.println(header);
+            }
+            
             HashMap<String, String> book = Repository.getBookTxt(ids[i]);
             String id = Integer.toString(ids[i]);
             while(id.length() < 5) {
@@ -468,6 +476,8 @@ public class Repository {
             } else {
                 out.println("- |");
             }
+            
+            
         }
         out.close();
     }
