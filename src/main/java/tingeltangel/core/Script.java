@@ -26,6 +26,9 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -389,9 +392,10 @@ public class Script {
         String row;
         while((row = in.readLine()) != null) {
             row = row.trim().toLowerCase();
-            int p = row.indexOf(" ");
             String args = "";
-            if(p != -1) {
+            Matcher matcher = Pattern.compile("\\s").matcher(row);
+            if(matcher.find()) {
+            	int p = matcher.start();
                 args = row.substring(p + 1).trim();
                 row = row.substring(0, p);
             }
@@ -406,7 +410,7 @@ public class Script {
                     if(e == null) {
                         throw new SyntaxError("OID Name '" + _as[i].substring(1) + "' nicht gefunden");
                     }
-                    args += "," + Integer.toString(entry.getTingID());
+                    args += "," + Integer.toString(e.getTingID());
                 } else {
                     args += "," + _as[i];
                 }
