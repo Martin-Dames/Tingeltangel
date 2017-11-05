@@ -30,6 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
 import tingeltangel.core.constants.ScriptFile;
 import tingeltangel.core.scripting.Command;
 import tingeltangel.core.scripting.Commands;
