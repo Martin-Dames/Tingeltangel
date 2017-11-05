@@ -390,10 +390,11 @@ public class Script {
         HashSet<Integer> registersUsedByTemplate = new HashSet<Integer>();
         
         String row;
+        Pattern pattern = Pattern.compile("\\s");
         while((row = in.readLine()) != null) {
             row = row.trim().toLowerCase();
             String args = "";
-            Matcher matcher = Pattern.compile("\\s").matcher(row);
+            Matcher matcher = pattern.matcher(row);
             if(matcher.find()) {
             	int p = matcher.start();
                 args = row.substring(p + 1).trim();
