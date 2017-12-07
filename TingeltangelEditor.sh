@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAR=tingeltangel-0.4-jar-with-dependencies.jar
+JAR=tingeltangel-0.5-jar-with-dependencies.jar
 
 OPTIONS=""
 OPTIONS="$OPTIONS -Dawt.useSystemAAFontSettings=on"
