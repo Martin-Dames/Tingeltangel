@@ -19,9 +19,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileOutputStream;
 import tingeltangel.core.Codes;
 import static tingeltangel.core.Codes.drawPattern;
+import tingeltangel.core.Translator;
 
 /**
  *
@@ -29,9 +31,11 @@ import static tingeltangel.core.Codes.drawPattern;
  */
 public class GenerateTestCodes {
     
-    private final static int CODE = 9999;
+    private final static int CODE = Translator.ting2code(9999);
     
     public static void main(String[] args) throws Exception {
+        
+        
         generate600dpi();
         generate1200dpi(1);
         generate1200dpi(2);

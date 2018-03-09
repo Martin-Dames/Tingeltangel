@@ -226,11 +226,32 @@ public class Repository {
         }
         File txtFile = new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT);
         download(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en", txtFile, null);
+        
+        if(!checkTxtForPlausibility(txtFile)) {
+            txtFile.delete();
+            throw new IOException("txt file for " + id + " seems to be broken");
+        }
+        
         BOOKS.put(id, readTxt(txtFile));
         File pngFile = new File(FileEnvironment.getRepositoryDirectory(), _id + PngFile._EN_PNG);
         download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/thumb", pngFile, null);
+        
+        
+        if(!checkPngForPlausibility(pngFile)) {
+            pngFile.delete();
+            throw new IOException("png file for " + id + " seems to be broken");
+        }
+        
         File oufFile = new File(FileEnvironment.getRepositoryDirectory(), _id + OufFile._EN_OUF);
         download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/archive", oufFile, progress);
+        
+        
+        if(!checkOufForPlausibility(oufFile)) {
+            pngFile.delete();
+            oufFile.delete();
+            throw new IOException("ouf file for " + id + " seems to be broken");
+        }
+        
         if(getBookTxt(id).containsKey("ScriptMD5")) {
             File scriptFile = new File(FileEnvironment.getRepositoryDirectory(), _id + ScriptFile._EN_SRC);
             try {
@@ -487,6 +508,19 @@ public class Repository {
             return(null);
         }
         return(readTxt(file));
+    }
+
+    private static boolean checkTxtForPlausibility(File txtFile) {
+        return(true);
+    }
+
+    private static boolean checkPngForPlausibility(File pngFile) {
+    
+        return(true);}
+
+    private static boolean checkOufForPlausibility(File oufFile) {
+        
+        return(true);
     }
     
 }
