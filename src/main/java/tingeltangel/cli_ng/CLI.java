@@ -166,7 +166,9 @@ public class CLI {
         }
     }
     
-    public static void run() {
+    public static void run(String cmd) {
+        
+        cmd = cmd.trim();
         
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(System.out);
@@ -174,18 +176,24 @@ public class CLI {
         out.flush();
         
         init();
-        String row;
         
-        System.out.print(">");
-        
-        try {
-        
-            while((row = in.readLine()) != null) {
-                exec(row);
-                System.out.print(">");
+        if(cmd.isEmpty()) {
+
+            String row;
+
+            System.out.print(">");
+
+            try {
+
+                while((row = in.readLine()) != null) {
+                    exec(row);
+                    System.out.print(">");
+                }
+            } catch(IOException e) {
+                throw new Error(e);
             }
-        } catch(IOException e) {
-            throw new Error(e);
+        } else {
+            exec(cmd);
         }
     }
     

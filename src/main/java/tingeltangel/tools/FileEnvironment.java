@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileChannel;
+import java.util.UUID;
 
 /**
  *
@@ -44,6 +45,31 @@ public class FileEnvironment {
 
     public static File getHomeDirectory() {
         return new File(System.getProperty("user.home"));
+    }
+    
+    public static File getAndersichtDirectory() {
+        File f = getWorkingDirectory("andersicht");
+        if(!f.exists()) {
+            f.mkdir();
+        }
+        return(f);
+    }
+    
+    public static File getAndersichtBookDirectory(String name) {
+        File f = new File(getAndersichtDirectory(), name);
+        if(!f.exists()) {
+            f.mkdir();
+            new File(f, "audio").mkdir();
+        }
+        return(f);
+    }
+    
+    public static File getAndersichtBookFile(String name) {
+        return(new File(getAndersichtBookDirectory(name), "book.def"));
+    }
+    
+    public static File getAndersichtAudioDirectory(String name) {
+        return(new File(getAndersichtBookDirectory(name), "audio"));
     }
 
     public static File getBooksDirectory() {
@@ -164,6 +190,14 @@ public class FileEnvironment {
         return wd;
     }
 
+    public static File getFreeFileName(File directory, String fileExtension) {
+        File f = new File(directory, UUID.randomUUID().toString() + fileExtension);
+        while(f.exists()) {
+            f = new File(directory, UUID.randomUUID().toString() + fileExtension);
+        }
+        return(f);
+    }
+    
     public static void copy(File source, File destination) throws IOException {
         FileChannel sourceChannel = null;
         FileChannel destChannel;
