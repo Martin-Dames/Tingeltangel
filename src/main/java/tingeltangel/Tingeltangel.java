@@ -37,7 +37,9 @@ public class Tingeltangel {
     public static int MAIN_FRAME_WIDTH = 1200;
     public static int MAIN_FRAME_HEIGHT = 700;
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
+    public static String ANDERSICHT_FRAME_TITLE = "Tingeltangel (Andersicht GUI)";
     public static String MAIN_FRAME_VERSION = " v0.5";
+    
     
     public final static String BASE_URL = "http://system.ting.eu/book-files";
     
@@ -45,7 +47,7 @@ public class Tingeltangel {
     /**
      * default area code
      */
-    public static final String DEFAULT_AREA_CODE="en";
+    public static final String DEFAULT_AREA_CODE = "en";
  
     private final static Logger log = LogManager.getLogger(Tingeltangel.class);
     
@@ -61,12 +63,18 @@ public class Tingeltangel {
         boolean startEditor = false;
         boolean startManager = false;
         
-        if((args.length) > 0 && (args[0].toLowerCase().equals("gui-editor"))) {
+        if((args.length > 0) && (args[0].toLowerCase().equals("gui-editor"))) {
             startEditor = true;
         }
-        if((args.length) > 0 && (args[0].toLowerCase().equals("gui-manager"))) {
+        if((args.length > 0) && (args[0].toLowerCase().equals("gui-manager"))) {
             startManager = true;
         }
+        
+        boolean doInitialUpdate = true;
+        if((args.length > 1) && (args[1].toLowerCase().equals("disable-official-books"))) {
+            doInitialUpdate = false;
+        }
+        final boolean _doInitialUpdate = doInitialUpdate;
         
         // set resolution
         if(Properties.getStringProperty(PROPERTY_RESOLUTION).equals("1200")) {
@@ -83,7 +91,7 @@ public class Tingeltangel {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    if(Repository.getIDs().length == 0) {
+                    if((Repository.getIDs().length == 0) && _doInitialUpdate) {
                         try {
                             Repository.initialUpdate(new Thread() {
                                 @Override
@@ -100,13 +108,17 @@ public class Tingeltangel {
                     }
                 }
             });
-        } else if((args.length) > 0 && (args[0].toLowerCase().equals("cli"))) {
+        } else if((args.length > 0) && (args[0].toLowerCase().equals("cli"))) {
             tingeltangel.cli_ng.CLI.init();
-            tingeltangel.cli_ng.CLI.run();
+            String clicmd = "";
+            if(args.length > 1) {
+                clicmd = args[1];
+            }
+            tingeltangel.cli_ng.CLI.run(clicmd);
         } else {
             if(args.length == 0) {
                 tingeltangel.cli_ng.CLI.init();
-                tingeltangel.cli_ng.CLI.run();
+                tingeltangel.cli_ng.CLI.run("");
             } else if(!CLI.cli(args)) {
                 log.warn("starting cli failed");
             }

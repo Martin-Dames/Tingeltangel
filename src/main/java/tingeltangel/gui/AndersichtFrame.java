@@ -58,6 +58,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import tingeltangel.Tingeltangel;
+import tingeltangel.andersicht.AndersichtBook;
 import tingeltangel.cli_ng.CLI;
 import tingeltangel.core.Book;
 import tingeltangel.core.Codes;
@@ -76,24 +77,23 @@ import tingeltangel.wimmelbuch.Wimmelbuch;
 import tiptoi_reveng.lexer.LexerException;
 import tiptoi_reveng.parser.ParserException;
 
-public class EditorFrame extends JFrame implements Callback<String> {
+public class AndersichtFrame extends JFrame implements Callback<String> {
 
-    private Book book = new Book(15000);
+    
+    
+    private AndersichtBook book = null;
     
     private final EditorPanel indexPanel;
     private final InfoFrame contactFrame = new InfoFrame("Kontakt", "html/contact.html");
     private final InfoFrame licenseFrame = new InfoFrame("Lizenz", "html/license.html");
-    private final InfoFrame manualFrame = new InfoFrame("Handbuch", "html/manual.html");
     
-    private final LinkedList<EntryListener> listeners = new LinkedList<EntryListener>();
+    private final static Logger log = LogManager.getLogger(AndersichtFrame.class);
     
-    private final static Logger log = LogManager.getLogger(EditorFrame.class);
-    
-    public EditorFrame() {
-        super(Tingeltangel.MAIN_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
+    public AndersichtFrame() {
+        super(Tingeltangel.ANDERSICHT_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
         
         
-        indexPanel = new EditorPanel(this);
+        indexPanel = new AndersichtPanel(this);
         
         
         JFrame.setDefaultLookAndFeelDecorated(true);
@@ -106,7 +106,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
         );
 
         MasterFrameMenu.setMenuCallback(this);
-        setJMenuBar(MasterFrameMenu.getMenuBar());
+        setJMenuBar(getMenuBar());
         
         
         
@@ -136,47 +136,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, 0, true), MENU_ACTION_KEY);
         
         
-        book.resetChangeMade();
         indexPanel.setVisible(false);
-    }
-    
-    public void setBookOpened() {
-        indexPanel.setVisible(true);
-        JMenuBar bar = getJMenuBar();
-        if(bar != null) {
-            for(int i = 0; i < bar.getMenuCount(); i++) {
-                enableMenu(bar.getMenu(i));
-            }
-        }
-    }
-    
-    private void enableMenu(JMenu menu) {
-        menu.setEnabled(true);
-        for(int i = 0; i < menu.getItemCount(); i++) {
-            JMenuItem item = menu.getItem(i);
-            if(item instanceof JMenu) {
-                enableMenu((JMenu)item);
-            } else {
-                item.setEnabled(true);
-            }
-        }
-    }
-    
-    public Book getBook() {
-        return(book);
-    }
-    
-    
-    void addEntryListener(EntryListener listener) {
-        listeners.add(listener);
-    }
-    
-    void entrySelected(int i) {
-        Entry entry = book.getEntry(i);
-        Iterator<EntryListener> it = listeners.iterator();
-        while(it.hasNext()) {
-            it.next().entrySelected(entry);
-        }
     }
     
     private void closeMasterFrame() {
@@ -196,6 +156,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
 
     @Override
     public void callback(String id) {
+        
         if(id.equals("buch.exit")) {
             closeMasterFrame();
         } else if(id.equals("buch.new")) {
@@ -221,7 +182,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         
                         // check if there is already a book with this id
                         if(new File(FileEnvironment.getBooksDirectory(), _id).exists()) {
-                            JOptionPane.showMessageDialog(EditorFrame.this, "Dieses Buch existiert schon");
+                            JOptionPane.showMessageDialog(AndersichtFrame.this, "Dieses Buch existiert schon");
                             return;
                         }
                         
@@ -252,12 +213,12 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     public void callback(final Integer id) {
                         // check repository
                         if(!Repository.exists(id)) {
-                            new Progress(EditorFrame.this, "Buch wird heruntergeladen") {
+                            new Progress(AndersichtFrame.this, "Buch wird heruntergeladen") {
                                 @Override
                                 public void action(ProgressDialog progressDialog) {
                                     try {
                                         Repository.download(id, progressDialog);
-                                        new Progress(EditorFrame.this, "Buch wird importiert") {
+                                        new Progress(AndersichtFrame.this, "Buch wird importiert") {
                                             @Override
                                             public void action(ProgressDialog progressDialog) {
                                                 try {
@@ -272,22 +233,22 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                                     indexPanel.refresh();
                                                     setBookOpened();
                                                 } catch (SyntaxError ex) {
-                                                    JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
+                                                    JOptionPane.showMessageDialog(AndersichtFrame.this, "Fehler beim Importieren des Buches");
                                                     log.error("unable to import book", ex);
                                                 } catch (IOException ex) {
-                                                    JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
+                                                    JOptionPane.showMessageDialog(AndersichtFrame.this, "Fehler beim Importieren des Buches");
                                                     log.error("unable to import book", ex);
                                                 }
                                             }
                                         };
                                     } catch (IOException ex) {
-                                        JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Herunterladen des Buches");
+                                        JOptionPane.showMessageDialog(AndersichtFrame.this, "Fehler beim Herunterladen des Buches");
                                         log.error("unable to download book", ex);
                                     }
                                 }
                             };
                         } else {
-                            new Progress(EditorFrame.this, "Buch wird importiert") {
+                            new Progress(AndersichtFrame.this, "Buch wird importiert") {
                                 @Override
                                 public void action(ProgressDialog progressDialog) {
                                     try {
@@ -302,10 +263,10 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                         indexPanel.refresh();
                                         setBookOpened();
                                     } catch (SyntaxError ex) {
-                                        JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
+                                        JOptionPane.showMessageDialog(AndersichtFrame.this, "Fehler beim Importieren des Buches");
                                         log.error("unable to import book", ex);
                                     } catch (IOException ex) {
-                                        JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim Importieren des Buches");
+                                        JOptionPane.showMessageDialog(AndersichtFrame.this, "Fehler beim Importieren des Buches");
                                         log.error("unable to import book", ex);
                                     }
                                 }
@@ -330,7 +291,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 fc.setFileFilter(new FileNameExtensionFilter("tiptoi Buch (*.yaml)", "yaml"));
                 if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     
-                    Progress pr = new Progress(EditorFrame.this, "importiere Buch") {
+                    Progress pr = new Progress(AndersichtFrame.this, "importiere Buch") {
                         @Override
                         public void action(ProgressDialog progressDialog) {
 
@@ -340,13 +301,13 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                 indexPanel.refresh();
                                 setBookOpened();
                             } catch(ParserException e) {
-                                JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
+                                JOptionPane.showMessageDialog(AndersichtFrame.this, "Die yaml Datei konnte nicht importiert werden");
                                 log.error("unable to import yaml file", e);
                             } catch (IOException e) {
-                                JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
+                                JOptionPane.showMessageDialog(AndersichtFrame.this, "Die yaml Datei konnte nicht importiert werden");
                                 log.error("unable to import yaml file", e);
                             } catch (LexerException e) {
-                                JOptionPane.showMessageDialog(EditorFrame.this, "Die yaml Datei konnte nicht importiert werden");
+                                JOptionPane.showMessageDialog(AndersichtFrame.this, "Die yaml Datei konnte nicht importiert werden");
                                 log.error("unable to import yaml file", e);
                             }
                         }
@@ -381,17 +342,17 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                 id = in.readInt();
                                 in.close();
                             } catch(IOException e) {
-                                JOptionPane.showMessageDialog(EditorFrame.this, "Fehler beim lesen der ouf Datei");
+                                JOptionPane.showMessageDialog(AndersichtFrame.this, "Fehler beim lesen der ouf Datei");
                                 log.error("unable to read ouf", e);
                                 return;
                             }
                         }
                         
                         final int _id = id;
-                        EditorFrame.this.setEnabled(false);
+                        AndersichtFrame.this.setEnabled(false);
                         
                         
-                        Progress pr = new Progress(EditorFrame.this, "importiere Buch") {
+                        Progress pr = new Progress(AndersichtFrame.this, "importiere Buch") {
                             @Override
                             public void action(ProgressDialog progressDialog) {
                                 try {
@@ -400,10 +361,10 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                     
                                     setBookOpened();
                                 } catch(IOException e) {
-                                    JOptionPane.showMessageDialog(EditorFrame.this, "Import ist fehlgeschlagen");
+                                    JOptionPane.showMessageDialog(AndersichtFrame.this, "Import ist fehlgeschlagen");
                                     log.error("unable to import book", e);
                                 } catch(SyntaxError se) {
-                                    JOptionPane.showMessageDialog(EditorFrame.this, "Import ist fehlgeschlagen");
+                                    JOptionPane.showMessageDialog(AndersichtFrame.this, "Import ist fehlgeschlagen");
                                     log.error("unable to import book", se);
                                 }
                                 progressDialog.restart("aktualisiere Liste");
@@ -414,7 +375,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         
                     }
                 };
-                new ImportDialog(EditorFrame.this, true, callback).setVisible(true);
+                new ImportDialog(AndersichtFrame.this, true, callback).setVisible(true);
                 
                 
             }
@@ -433,7 +394,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 ChooseBook cb = new ChooseBook(this, new Callback<Integer>() {
                     @Override
                     public void callback(final Integer _id) {
-                        Progress pr = new Progress(EditorFrame.this, "lade Buch") {
+                        Progress pr = new Progress(AndersichtFrame.this, "lade Buch") {
                             @Override
                             public void action(ProgressDialog progressDialog) {
                                 try {
@@ -475,13 +436,13 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         file = file + ".zip";
                     }
                     final File output = new File(file);
-                    new Progress(EditorFrame.this, "erzeuge Buch") {
+                    new Progress(AndersichtFrame.this, "erzeuge Buch") {
                         @Override
                         public void action(ProgressDialog progressDialog) {
                             try {
                                 book.generateTTS(progressDialog);
                                 
-                                new Progress(EditorFrame.this, "erzeuge Buch") {
+                                new Progress(AndersichtFrame.this, "erzeuge Buch") {
                                     @Override
                                     public void action(ProgressDialog progressDialog) {
                                         try {
@@ -491,7 +452,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                             final FileOutputStream fos = new FileOutputStream(output);
                                             final ZipOutputStream out = new ZipOutputStream(fos);
 
-                                            new Progress(EditorFrame.this, "erzeuge zip") {
+                                            new Progress(AndersichtFrame.this, "erzeuge zip") {
                                                 @Override
                                                 public void action(ProgressDialog progressDialog) {
                                                     File[] entries = FileEnvironment.getDistDirectory(book.getID()).listFiles(new FilenameFilter() {
@@ -527,7 +488,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                                         out.close();
                                                         fos.close();
                                                     } catch(IOException ioe) {
-                                                        JOptionPane.showMessageDialog(EditorFrame.this, "Ting Archiv konnte nicht erstellt werden: " + ioe.getMessage());
+                                                        JOptionPane.showMessageDialog(AndersichtFrame.this, "Ting Archiv konnte nicht erstellt werden: " + ioe.getMessage());
                                                     }
                                                     progressDialog.done();
                                                 }
@@ -535,24 +496,24 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                             };
                                         } catch(IOException e) {
                                             log.error("unable to generate book", e);
-                                            JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen");
+                                            JOptionPane.showMessageDialog(AndersichtFrame.this, "Buchgenerierung fehlgeschlagen");
                                         } catch(IllegalArgumentException e) {
                                             log.error("unable to generate book", e);
-                                            JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
+                                            JOptionPane.showMessageDialog(AndersichtFrame.this, "Buchgenerierung fehlgeschlagen: " + e.getMessage());
                                         } catch(SyntaxError e) {
                                             log.error("unable to generate book", e);
-                                            JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
+                                            JOptionPane.showMessageDialog(AndersichtFrame.this, "Buchgenerierung fehlgeschlagen: Syntax Error in Skript " + e.getTingID() + " in Zeile " + e.getRow() + " (" + e.getMessage() + ")");
                                         }
                                     }
 
                                 };
                             } catch (IOException ex) {
-                                JOptionPane.showMessageDialog(EditorFrame.this, "TTS Generierung fehlgeschlagen");
+                                JOptionPane.showMessageDialog(AndersichtFrame.this, "TTS Generierung fehlgeschlagen");
                             }
                         }
                     };
                 } catch(IOException ioe) {
-                    JOptionPane.showMessageDialog(EditorFrame.this, "Buchgenerierung fehlgeschlagen: " + ioe.getMessage());
+                    JOptionPane.showMessageDialog(AndersichtFrame.this, "Buchgenerierung fehlgeschlagen: " + ioe.getMessage());
                 }
             }
         } else if(id.equals("buch.generateMp3")) {
@@ -565,7 +526,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         file = file + ".zip";
                     }
                     final String _file = file;
-                    new Progress(EditorFrame.this, "erzeuge Buch") {
+                    new Progress(AndersichtFrame.this, "erzeuge Buch") {
                         @Override
                         public void action(ProgressDialog progressDialog) {
                             try {
@@ -574,7 +535,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                 final FileOutputStream fos = new FileOutputStream(_file);
                                 final ZipOutputStream out = new ZipOutputStream(fos);
 
-                                new Progress(EditorFrame.this, "erzeuge Buch") {
+                                new Progress(AndersichtFrame.this, "erzeuge Buch") {
                                     @Override
                                     public void action(ProgressDialog progressDialog) {
                                         File[] entries = FileEnvironment.getAudioDirectory(book.getID()).listFiles(new FilenameFilter() {
@@ -605,14 +566,14 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                             out.close();
                                             fos.close();
                                         } catch(IOException ioe) {
-                                            JOptionPane.showMessageDialog(EditorFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + ioe.getMessage());
+                                            JOptionPane.showMessageDialog(AndersichtFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + ioe.getMessage());
                                         }
                                         progressDialog.done();
                                     }
 
                                 };
                             } catch(IOException e) {
-                                JOptionPane.showMessageDialog(EditorFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + e.getMessage());
+                                JOptionPane.showMessageDialog(AndersichtFrame.this, "MP3 Archiv konnte nicht erstellt werden: " + e.getMessage());
                             }
                         }
                     };
@@ -637,7 +598,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         CLI.exec(row);
                     }
                 } catch(IOException e) {
-                    JOptionPane.showMessageDialog(EditorFrame.this, "CLI Skript konnte nicht geladen werden");
+                    JOptionPane.showMessageDialog(AndersichtFrame.this, "CLI Skript konnte nicht geladen werden");
                     log.error("unable to load cli script", e);
                 }
                 
@@ -651,7 +612,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     File file = fc2.getSelectedFile();
                     new Wimmelbuch().importBook(book, file);
                 } catch(Exception ioe) {
-                    JOptionPane.showMessageDialog(EditorFrame.this, "Wimmelbuch Import fehlgeschlagen");
+                    JOptionPane.showMessageDialog(AndersichtFrame.this, "Wimmelbuch Import fehlgeschlagen");
                     log.error("unable to import wimmelbuch", ioe);
                 }
                 indexPanel.updateList(null);
@@ -671,7 +632,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     final File output = new File(file);
 
 
-                    new Progress(EditorFrame.this, "erzeuge Codes") {
+                    new Progress(AndersichtFrame.this, "erzeuge Codes") {
                         @Override
                         public void action(ProgressDialog progressDialog) {
                             try {
@@ -683,15 +644,15 @@ public class EditorFrame extends JFrame implements Callback<String> {
                                         return(name.toLowerCase().endsWith(".png"));
                                     }
                                 });
-                                ZipHelper.zip(output, input, progressDialog, EditorFrame.this, book, "erzeuge ZIP", "ZIP konnte nicht erstellt werden");
+                                ZipHelper.zip(output, input, progressDialog, AndersichtFrame.this, book, "erzeuge ZIP", "ZIP konnte nicht erstellt werden");
                             } catch(IOException e) {
-                                JOptionPane.showMessageDialog(EditorFrame.this, "Code-Generierung fehlgeschlagen");
+                                JOptionPane.showMessageDialog(AndersichtFrame.this, "Code-Generierung fehlgeschlagen");
                                 log.error("unable to generate codes", e);
                             }
                         }
                     };
                 } catch(IOException ioe) {
-                    JOptionPane.showMessageDialog(EditorFrame.this, "Code-Generierung fehlgeschlagen");
+                    JOptionPane.showMessageDialog(AndersichtFrame.this, "Code-Generierung fehlgeschlagen");
                     log.error("unable to generate codes", ioe);
                 }
             }
@@ -701,19 +662,10 @@ public class EditorFrame extends JFrame implements Callback<String> {
             new TTSPreferences().setVisible(true);
         } else if(id.equals("prefs.codes")) {
             new CodePreferences().setVisible(true);
-    /*    } else if(id.equals("windows.stick")) {
-            stickFrame.setVisible(true); */
+    
         } else if(id.equals("windows.index")) {
             indexPanel.setVisible(true);
-    /*    } else if(id.equals("windows.reference")) {
-            referenceFrame.setVisible(true);
-        } else if(id.equals("windows.translator")) {
-            translatorFrame.setVisible(true);
-        } else if(id.equals("windows.repository")) {
-            repositoryFrame.setVisible(true);
-        } else if(id.equals("windows.gfx")) {
-            gfxEditFrame.setVisible(true);
-            gfxEditFrame.update(); */
+    
         } else if(id.startsWith("codes.raw.")) {
             id = id.substring("codes.raw.".length());
             int start = Integer.parseInt(id.substring(0, 1)) * 10000 + Integer.parseInt(id.substring(2)) * 1000;
@@ -756,7 +708,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                         Repository.update(progressDialog);
                     } catch(IOException ioe) {
                         log.error("unable to update books", ioe);
-                        JOptionPane.showMessageDialog(EditorFrame.this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());
+                        JOptionPane.showMessageDialog(AndersichtFrame.this, "Update der bekannten Bücher fehlgeschlagen: " + ioe.getMessage());
                     }
                 }
             };
@@ -765,24 +717,24 @@ public class EditorFrame extends JFrame implements Callback<String> {
                 @Override
                 public void callback(Integer _id) {
                     if(_id == book.getID()) {
-                        JOptionPane.showMessageDialog(EditorFrame.this, "Das Buch wird gerade bearbeitet und kann nicht gelöscht werden.");
+                        JOptionPane.showMessageDialog(AndersichtFrame.this, "Das Buch wird gerade bearbeitet und kann nicht gelöscht werden.");
                     } else if(!book.deleteBook(_id)) {
-                        JOptionPane.showMessageDialog(EditorFrame.this, "Das Buch konnte nicht gelöscht werden.");
+                        JOptionPane.showMessageDialog(AndersichtFrame.this, "Das Buch konnte nicht gelöscht werden.");
                     } else {
-                        JOptionPane.showMessageDialog(EditorFrame.this, "Das Buch wurde gelöscht.");
+                        JOptionPane.showMessageDialog(AndersichtFrame.this, "Das Buch wurde gelöscht.");
                     }
                 }
             });
         } else if(id.equals("actions.cleanupRepository")) {
             Repository.cleanup();
-            JOptionPane.showMessageDialog(EditorFrame.this, "Die Inhalte der Bücherliste wurde gelöscht.");
+            JOptionPane.showMessageDialog(AndersichtFrame.this, "Die Inhalte der Bücherliste wurde gelöscht.");
         } else if(id.equals("about.manual")) {
             manualFrame.setVisible(true);
         } else if(id.equals("about.contact")) {
             contactFrame.setVisible(true);
         } else if(id.equals("about.license")) {
             licenseFrame.setVisible(true);
-        }
+        }*/
     }
     
     private void generateTabular(boolean ting2code) {
@@ -833,17 +785,7 @@ public class EditorFrame extends JFrame implements Callback<String> {
                     file = file + ".png";
                 }
                 
-                /*
-                int[] idx = new int[1000];
                 
-                
-                String[] lbs = new String[idx.length];
-                for(int i = start; i < start + 1000; i++) {
-                    int code = Translator.ting2code(i);
-                    idx[i - start] = code;
-                    lbs[i - start] = "" + i;
-                }
-                */
                 OutputStream out = new FileOutputStream(file);
                 //Codes.drawPage(idx, lbs, out);
                 Codes.drawPagePNG(start, out);

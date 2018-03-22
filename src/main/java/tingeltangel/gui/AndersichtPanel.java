@@ -62,7 +62,7 @@ import tingeltangel.tools.Progress;
 import tingeltangel.tools.ProgressDialog;
 
 
-public final class EditorPanel extends JPanel {
+public final class AndersichtPanel extends JPanel {
     
     
      
@@ -92,11 +92,11 @@ public final class EditorPanel extends JPanel {
         "ID", "Name", "Verleger", "Autor", "Version", "URL", "?", "Datum"
     };
     
-    private final static Logger log = LogManager.getLogger(EditorPanel.class);
+    private final static Logger log = LogManager.getLogger(AndersichtPanel.class);
     
     private final JTextField addEntriesCount;
     private final JTextField addEntriesStart;
-    private final EditorFrame mainFrame;
+    private final AndersichtFrame mainFrame;
     
     private final JLabel currentTrack = new JLabel();
     
@@ -111,7 +111,7 @@ public final class EditorPanel extends JPanel {
         return(mainFrame);
     }
     
-    public EditorPanel(final EditorFrame mainFrame) {
+    public AndersichtPanel(final AndersichtFrame mainFrame) {
         super();
         
         this.mainFrame = mainFrame;
@@ -179,7 +179,7 @@ public final class EditorPanel extends JPanel {
                 for(int i = oid; i <= lastOid; i++) {
                     mainFrame.getBook().addEntry(i);
                     int rowNr = getPositionInIndex(i);
-                    list.add(new IndexListEntry(mainFrame.getBook().getEntryByOID(i), EditorPanel.this), rowNr);
+                    list.add(new AndersichtListEntry(mainFrame.getBook().getEntryByOID(i), AndersichtPanel.this), rowNr);
                 }
                 new Thread() {
                     @Override
