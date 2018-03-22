@@ -30,9 +30,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import tingeltangel.core.Tupel;
 
 
@@ -40,7 +37,7 @@ public class MasterFrameMenu implements ActionListener {
     
     private final static LinkedList<String> keys = new LinkedList<String>();
     private final static HashMap<String, Tupel<String, Boolean>> values = new HashMap<String, Tupel<String, Boolean>>();
-    private final static HashMap<String, JMenuItem> items = new HashMap<String, JMenuItem>();
+    private final static HashMap<String, MenuItem> items = new HashMap<String, MenuItem>();
     private static Callback<String> callback = null;
     private String id;
     
@@ -82,12 +79,9 @@ public class MasterFrameMenu implements ActionListener {
         callback = menuCallback;
     }
     
-    private static JMenuItem generateMenuItem(TreeElement element) {
+    private static MenuItem generateMenuItem(TreeElement element) {
         if(element.isLeaf()) {
-            JMenuItem item = new JMenuItem(element.getCaption());
-            
-            item.getAccessibleContext().setAccessibleDescription(item.getLabel());
-            
+            MenuItem item = new MenuItem(element.getCaption());
             item.addActionListener(new MasterFrameMenu(element.getFullID()));
             if(element.isHidden()) {
                 item.setEnabled(false);
@@ -97,10 +91,7 @@ public class MasterFrameMenu implements ActionListener {
             items.put(element.getFullID(), item);
             return(item);
         } else {
-            JMenu menu = new JMenu(element.getCaption());
-            
-            menu.getAccessibleContext().setAccessibleDescription(menu.getLabel());
-            
+            Menu menu = new Menu(element.getCaption());
             Iterator<TreeElement> i = element.getChilds();
             while(i.hasNext()) {
                 menu.add(generateMenuItem(i.next()));
@@ -114,7 +105,7 @@ public class MasterFrameMenu implements ActionListener {
     }
 
     
-    public static JMenuBar getMenuBar() {
+    public static MenuBar getMenuBar() {
         TreeElement root = new TreeElement(null);
         Iterator<String> keyIterator = keys.iterator();
         while(keyIterator.hasNext()) {
@@ -125,11 +116,11 @@ public class MasterFrameMenu implements ActionListener {
             element.setEnabled(t.b);
         }
         
-        JMenuBar menuBar = new JMenuBar();
+        MenuBar menuBar = new MenuBar();
         Iterator<TreeElement> i = root.getChilds();
         while(i.hasNext()) {
             TreeElement element = i.next();
-            menuBar.add((JMenu)generateMenuItem(element));
+            menuBar.add((Menu)generateMenuItem(element));
         }
         
         return(menuBar);

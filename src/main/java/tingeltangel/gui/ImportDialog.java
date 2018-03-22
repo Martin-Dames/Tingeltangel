@@ -47,11 +47,6 @@ public class ImportDialog extends javax.swing.JDialog {
         super(parent, modal);
         this.callback = callback;
         initComponents();
-        textFieldID.getAccessibleContext().setAccessibleDescription("neue Buch ID zuweisen");
-        textFieldOuf.getAccessibleContext().setAccessibleDescription("ouf-Datei");
-        textFieldPng.getAccessibleContext().setAccessibleDescription("png-Datei");
-        textFieldSrc.getAccessibleContext().setAccessibleDescription("src-Datei");
-        textFieldTxt.getAccessibleContext().setAccessibleDescription("txt-Datei");
     }
 
     /**

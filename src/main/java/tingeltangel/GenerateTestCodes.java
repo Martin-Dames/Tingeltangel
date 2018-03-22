@@ -31,9 +31,7 @@ import tingeltangel.core.Translator;
  */
 public class GenerateTestCodes {
     
-    private final static int TING_ID = 9999;
-    private final static int CODE_ID = Translator.ting2code(TING_ID);
-    
+    private final static int CODE = Translator.ting2code(9999);
     
     public static void main(String[] args) throws Exception {
         
@@ -75,7 +73,7 @@ public class GenerateTestCodes {
         graphics1200.setColor(Color.black);
 
         graphics1200.setFont(new Font("TimesRoman", Font.PLAIN, 400)); 
-        graphics1200.drawString("Ting Testcodes 1200dpi [Seite " + page + "/3] (code=" + TING_ID + ")", 400, 600);
+        graphics1200.drawString("Ting Testcodes 1200dpi [Seite " + page + "/3] (code=" + CODE + ")", 400, 600);
         graphics1200.setFont(new Font("TimesRoman", Font.PLAIN, 300)); 
         graphics1200.drawString("  (ps=Rastergröße / ds=Punktgröße / de=Verschiebung)", 400, 900);
         graphics1200.setFont(new Font("TimesRoman", Font.PLAIN, 200)); 
@@ -94,7 +92,7 @@ public class GenerateTestCodes {
                 for(int deltaSize = 1; deltaSize <= 4; deltaSize++) {
                     Codes.setDeltaSize1200(deltaSize);
                     
-                    drawPattern(CODE_ID, px, py, PATTERN_WIDTH, PATTERN_HEIGHT, graphics1200);
+                    drawPattern(CODE, px, py, PATTERN_WIDTH, PATTERN_HEIGHT, graphics1200);
                     graphics1200.drawString("ps = " + patternSize, px, py + (int)(PATTERN_HEIGHT * ppm) + 480);
                     graphics1200.drawString("ds = " + dotSize, px, py + (int)(PATTERN_HEIGHT * ppm) + 640);
                     graphics1200.drawString("de = " + deltaSize, px, py + (int)(PATTERN_HEIGHT * ppm) + 800);
@@ -121,6 +119,7 @@ public class GenerateTestCodes {
     
     private static void generate600dpi() throws Exception {
         
+        int CODE = 9999;
         int PATTERN_WIDTH = 10;
         int PATTERN_HEIGHT = 10;
         int PATTERN_DX = 10;
@@ -139,7 +138,7 @@ public class GenerateTestCodes {
         graphics600.setColor(Color.black);
 
         graphics600.setFont(new Font("TimesRoman", Font.PLAIN, 200)); 
-        graphics600.drawString("Ting Testcodes 600dpi (code=" + TING_ID + ")", 200, 300);
+        graphics600.drawString("Ting Testcodes 600dpi (code=" + CODE + ")", 200, 300);
         graphics600.setFont(new Font("TimesRoman", Font.PLAIN, 150)); 
         graphics600.drawString("  (ps=Rastergröße / ds=Punktgröße / de=Verschiebung)", 200, 450);
         graphics600.setFont(new Font("TimesRoman", Font.PLAIN, 100)); 
@@ -158,7 +157,7 @@ public class GenerateTestCodes {
                 for(int deltaSize = 1; deltaSize <= 4; deltaSize++) {
                     Codes.setDeltaSize600(deltaSize);
                     
-                    drawPattern(CODE_ID, px, py, PATTERN_WIDTH, PATTERN_HEIGHT, graphics600);
+                    drawPattern(CODE, px, py, PATTERN_WIDTH, PATTERN_HEIGHT, graphics600);
                     graphics600.drawString("ps = " + patternSize, px, py + (int)(PATTERN_HEIGHT * ppm) + 240);
                     graphics600.drawString("ds = " + dotSize, px, py + (int)(PATTERN_HEIGHT * ppm) + 320);
                     graphics600.drawString("de = " + deltaSize, px, py + (int)(PATTERN_HEIGHT * ppm) + 400);

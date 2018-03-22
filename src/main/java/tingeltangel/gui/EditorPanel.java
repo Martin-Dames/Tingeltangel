@@ -127,11 +127,9 @@ public final class EditorPanel extends JPanel {
         
         addEntriesCount = new JTextField(3);
         addEntriesCount.setText("1");
-        addEntriesCount.getAccessibleContext().setAccessibleDescription("Anzahl der hinzuzufügenden Einträge");
         
         addEntriesStart = new JTextField(5);
         addEntriesStart.setText("15001");
-        addEntriesStart.getAccessibleContext().setAccessibleDescription("OID des ersten hinzuzufügenden Eintrags");
         
         row.add(addEntriesCount, PushBorderLayout.LINE_START);
         row.add(new JLabel("Einträge ab OID"), PushBorderLayout.LINE_START);
@@ -247,7 +245,6 @@ public final class EditorPanel extends JPanel {
         fields.setLayout(new GridLayout(TEXT_FIELDS.length, 1));
         for(int i = 0; i < TEXT_FIELDS.length; i++) {
             fields.add(TEXT_FIELDS[i]);
-            TEXT_FIELDS[i].getAccessibleContext().setAccessibleDescription(TEXT_FIELD_LABELS[i]);
         }
         row.setLayout(new BorderLayout());
         row.add(labels, BorderLayout.WEST);

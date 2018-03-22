@@ -29,8 +29,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringReader;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -172,28 +170,6 @@ public class Importer {
                 
                 if(scriptEntryIsMP3.get(id)) {
                     entry.setMP3();
-                    
-                    BufferedReader br = new BufferedReader(new StringReader(scripts.get(id)));
-                    String row;
-                    String filename = "\n";
-                    while((row = br.readLine()) != null) {
-                        row = row.trim();
-                        if(!row.isEmpty()) {
-                            filename = row;
-                            break;
-                        }
-                    }
-                    
-                    File src = new File(filename);
-                    
-                    if(src.canRead()) {
-                        File target = new File(FileEnvironment.getAudioDirectory(book.getID()), src.getName());
-
-                        target.getParentFile().mkdirs();
-                        FileEnvironment.copy(src, target);
-                        entry.setMP3(target);
-                        entry.setHint(src.getName());
-                    }
                 } else {
                     Script script = new Script(scripts.get(id), entry);
                     entry.setScript(script);
@@ -209,7 +185,6 @@ public class Importer {
                 }
 
             }
-            System.out.println("save book");
             book.save();
             return;
         }
