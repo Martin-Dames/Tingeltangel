@@ -18,14 +18,16 @@ package tingeltangel.andersicht;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.tree.TreeNode;
 
 /**
  *
  * @author mdames
  */
-public class AndersichtGroup {
+public class AndersichtGroup implements TreeNode {
 
 
     private String name = "Gruppenname";
@@ -38,6 +40,11 @@ public class AndersichtGroup {
         this.name = name;
         this.description = description;
         this.book = book;
+    }
+    
+    @Override
+    public String toString() {
+        return(name);
     }
     
     public AndersichtBook getBook() {
@@ -104,5 +111,59 @@ public class AndersichtGroup {
         for(int i = 0; i < objects.size(); i++) {
             objects.get(i).save(out);
         }
+    }
+
+    public int getObjectIndex(AndersichtObject object) {
+        return(objects.indexOf(object));
+    }
+
+    @Override
+    public TreeNode getChildAt(int childIndex) {
+        return(getObject(childIndex));
+    }
+
+    @Override
+    public int getChildCount() {
+        return(getObjectCount());
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return(book);
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        if(!(node instanceof AndersichtObject)) return(-1);
+        return(getObjectIndex((AndersichtObject)node));
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return(true);
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return(false);
+    }
+
+    @Override
+    public Enumeration children() {
+        return(new Enumeration() {
+            
+            int pos = -1;
+            
+            @Override
+            public boolean hasMoreElements() {
+                return(pos < getObjectCount());
+            }
+
+            @Override
+            public Object nextElement() {
+                pos++;
+                return(getObject(pos));
+            }
+        });
     }
 }

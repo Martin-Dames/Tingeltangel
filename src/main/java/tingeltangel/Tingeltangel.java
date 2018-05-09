@@ -22,6 +22,7 @@ import java.io.IOException;
 import javax.swing.SwingUtilities;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import tingeltangel.andersicht.gui.AndersichtMainFrame;
 import tingeltangel.cli.CLI;
 import tingeltangel.core.Codes;
 import tingeltangel.core.Properties;
@@ -62,6 +63,7 @@ public class Tingeltangel {
         
         boolean startEditor = false;
         boolean startManager = false;
+        boolean startAndersicht = false;
         
         if((args.length > 0) && (args[0].toLowerCase().equals("gui-editor"))) {
             startEditor = true;
@@ -69,11 +71,15 @@ public class Tingeltangel {
         if((args.length > 0) && (args[0].toLowerCase().equals("gui-manager"))) {
             startManager = true;
         }
+        if((args.length > 0) && (args[0].toLowerCase().equals("andersicht"))) {
+            startAndersicht = true;
+        }
         
         boolean doInitialUpdate = true;
-        if((args.length > 1) && (args[1].toLowerCase().equals("disable-official-books"))) {
+        if(((args.length > 1) && (args[1].toLowerCase().equals("disable-official-books"))) || startAndersicht) {
             doInitialUpdate = false;
         }
+        
         final boolean _doInitialUpdate = doInitialUpdate;
         
         // set resolution
@@ -115,6 +121,13 @@ public class Tingeltangel {
                 clicmd = args[1];
             }
             tingeltangel.cli_ng.CLI.run(clicmd);
+        } else if(startAndersicht) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new AndersichtMainFrame();
+                }
+            });
         } else {
             if(args.length == 0) {
                 tingeltangel.cli_ng.CLI.init();

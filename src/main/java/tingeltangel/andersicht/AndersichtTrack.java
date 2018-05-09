@@ -19,20 +19,33 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
+import javax.swing.tree.TreeNode;
 import tingeltangel.tools.FileEnvironment;
 
 /**
  *
  * @author mdames
  */
-public class AndersichtTrack {
+public class AndersichtTrack implements TreeNode {
     
     private String internalFileName = null;
     private String transcript = "Transkript";
     private final AndersichtObject object;
+    private final AndersichtDescriptionLayer descriptionLayer;
     
-    AndersichtTrack(AndersichtObject object) {
+    AndersichtTrack(AndersichtObject object, AndersichtDescriptionLayer descriptionLayer) {
+        this.descriptionLayer = descriptionLayer;
         this.object = object;
+    }
+    
+    @Override
+    public String toString() {
+        String _t = transcript;
+        if(_t.length() > 20) {
+            _t = _t.substring(0, 17) + "...";
+        }
+        return(descriptionLayer + ": " + _t);
     }
     
     public String getTranscript() {
@@ -67,5 +80,50 @@ public class AndersichtTrack {
     
     public File getInternalMP3() {
         return(new File(FileEnvironment.getAndersichtBookDirectory(getBook().getName()), internalFileName));
+    }
+
+    @Override
+    public TreeNode getChildAt(int childIndex) {
+        return(null);
+    }
+
+    @Override
+    public int getChildCount() {
+        return(0);
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return(object);
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+       return(-1);
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return(false);
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return(true);
+    }
+
+    @Override
+    public Enumeration children() {
+        return(new Enumeration() {
+            @Override
+            public boolean hasMoreElements() {
+                return(false);
+            }
+
+            @Override
+            public Object nextElement() {
+                return(null);
+            }
+        });
     }
 }

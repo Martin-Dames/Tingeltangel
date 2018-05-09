@@ -18,17 +18,19 @@ package tingeltangel.andersicht;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.swing.tree.TreeNode;
 
 /**
  *
  * @author mdames
  */
-public class AndersichtObject {
+public class AndersichtObject implements TreeNode {
 
 
     private String name = "Objektname";
@@ -44,6 +46,27 @@ public class AndersichtObject {
         this.group = group;
     }
     
+    @Override
+    public String toString() {
+        return(name);
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    public String getName() {
+        return(name);
+    }
+    
+    public String getDescription() {
+        return(description);
+    }
+    
     public AndersichtGroup getGroup() {
         return(group);
     }
@@ -56,7 +79,7 @@ public class AndersichtObject {
         }
         AndersichtTrack track = map.get(descriptionLayer);
         if(track == null) {
-            track = new AndersichtTrack(this);
+            track = new AndersichtTrack(this, descriptionLayer);
             map.put(descriptionLayer, track);
             group.getBook().changeMade();
         }
@@ -141,6 +164,71 @@ public class AndersichtObject {
             i.next().save(out);
         }
         
+    }
+
+    public int getDescriptionTrackIndex(AndersichtLanguageLayer currentLanguageLayer, AndersichtTrack track) {
+        AndersichtBook book = group.getBook();
+        for(int i = 0; i < book.getDescriptionLayerCount(); i++) {
+            if(getTrack(currentLanguageLayer, book.getDescriptionLayer(i)) == track) {
+                return(i);
+            }
+        }
+        return(-1);
+    }
+
+
+    
+    
+    @Override
+    public TreeNode getChildAt(int childIndex) {
+         AndersichtLanguageLayer lLayer = group.getBook().getActiveLanguageLayer();
+         AndersichtDescriptionLayer dLayer = group.getBook().getDescriptionLayer(childIndex);
+         return(getTrack(lLayer, dLayer));
+    }
+
+    @Override
+    public int getChildCount() {
+        return(group.getBook().getDescriptionLayerCount());
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return(group);
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        if(!(node instanceof AndersichtTrack)) return(-1);
+        AndersichtLanguageLayer lLayer = group.getBook().getActiveLanguageLayer();
+        return(getDescriptionTrackIndex(lLayer, (AndersichtTrack)node));
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return(true);
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return(false);
+    }
+
+    @Override
+    public Enumeration children() {
+        return(new Enumeration() {
+            int pos = -1;
+            
+            @Override
+            public boolean hasMoreElements() {
+                return(pos < group.getBook().getDescriptionLayerCount());
+            }
+
+            @Override
+            public Object nextElement() {
+                pos++;
+                return(getChildAt(pos));
+            }
+        });
     }
     
 }

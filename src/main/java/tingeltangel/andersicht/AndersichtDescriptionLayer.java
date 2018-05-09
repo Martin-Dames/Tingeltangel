@@ -36,6 +36,11 @@ public class AndersichtDescriptionLayer {
         this.book = book;
     }
     
+    @Override
+    public String toString() {
+        return(name);
+    }
+    
     public AndersichtBook getBook() {
         return(book);
     }

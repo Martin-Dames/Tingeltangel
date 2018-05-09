@@ -21,18 +21,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.tree.TreeNode;
+import tingeltangel.tools.FileEnvironment;
 
 /**
  *
  * @author mdames
  */
-public class AndersichtBook {
+public class AndersichtBook implements TreeNode {
 
     private String description = "Beschreibung";
-    private String name = "Name";
+    private String name;
     private int bookId = 2303;
     private final List<AndersichtLanguageLayer> languageLayers = new LinkedList<AndersichtLanguageLayer>();
     private final List<AndersichtDescriptionLayer> descriptionLayers = new LinkedList<AndersichtDescriptionLayer>();
@@ -41,8 +44,26 @@ public class AndersichtBook {
  
     private boolean unsaved = true;
     
-    private AndersichtBook() {
-        
+    private AndersichtLanguageLayer activeLanguageLayer;
+    
+    private AndersichtBook(String name) {
+        this.name = name;
+        languageLayers.add(new AndersichtLanguageLayer("Standardsprache", "Standardsprache", this));
+        descriptionLayers.add(new AndersichtDescriptionLayer("Standardtext", "Standardtext", this));
+        groups.add(new AndersichtGroup("Standardraum", "Standardraum", this));
+    }
+    
+    public void setActiveLanguageLayer(AndersichtLanguageLayer lLayer) {
+        activeLanguageLayer = lLayer;
+    }
+    
+    public AndersichtLanguageLayer getActiveLanguageLayer() {
+        return(activeLanguageLayer);
+    }
+    
+    @Override
+    public String toString() {
+        return(name);
     }
     
     public boolean unsaved() {
@@ -54,8 +75,7 @@ public class AndersichtBook {
     }
     
     public static AndersichtBook newBook(String name, String description) {
-        AndersichtBook book = new AndersichtBook();
-        book.name = name;
+        AndersichtBook book = new AndersichtBook(name);
         book.description = description;
         return(book);
     }
@@ -76,17 +96,17 @@ public class AndersichtBook {
         return(name);
     }
     
-    public void setName(String name) {
-        this.name = name;
-        changeMade();
-    } 
-    
     public String getDescription() {
         return(description);
     }
     
     public void setDescription(String description) {
         this.description = description;
+        changeMade();
+    }  
+    
+    public void setName(String name) {
+        this.name = name;
         changeMade();
     }    
     
@@ -191,7 +211,7 @@ public class AndersichtBook {
     }
     
     public static AndersichtBook load(File file) throws IOException {
-        AndersichtBook book = new AndersichtBook();
+        AndersichtBook book = new AndersichtBook("unknown");
         DataInputStream in = new DataInputStream(new FileInputStream(file));
         
         book.name = in.readUTF();
@@ -215,6 +235,10 @@ public class AndersichtBook {
         
         book.unsaved = false;
         return(book);
+    }
+    
+    public void save() throws IOException {
+        save(FileEnvironment.getAndersichtBookFile(name));
     }
     
     public void save(File file) throws IOException {
@@ -260,5 +284,60 @@ public class AndersichtBook {
         }
         throw new IOException("corrupted file format");
     }
-    
+
+    public int getGroupIndex(AndersichtGroup group) {
+        int i = 0;
+        return(groups.indexOf(group));
+    }
+
+    @Override
+    public TreeNode getChildAt(int childIndex) {
+        return(getGroup(childIndex));
+    }
+
+    @Override
+    public int getChildCount() {
+        return(getGroupCount());
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return(null);
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        if(!(node instanceof AndersichtGroup)) return(-1);
+        return(getGroupIndex((AndersichtGroup)node));
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return(true);
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return(false);
+    }
+
+    @Override
+    public Enumeration children() {
+        return(new Enumeration() {
+            
+            int pos = -1;
+            
+            @Override
+            public boolean hasMoreElements() {
+                return(pos < getGroupCount());
+            }
+
+            @Override
+            public Object nextElement() {
+                pos++;
+                return(getGroup(pos));
+            }
+        });
+    }
+
 }
