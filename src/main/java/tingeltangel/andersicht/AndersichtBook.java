@@ -26,6 +26,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.tree.TreeNode;
+import tingeltangel.andersicht.gui.AndersichtBookDefinition;
+import tingeltangel.andersicht.pen.Pen;
+import tingeltangel.andersicht.pen.Pens;
 import tingeltangel.tools.FileEnvironment;
 
 /**
@@ -45,12 +48,13 @@ public class AndersichtBook implements TreeNode {
     private boolean unsaved = true;
     
     private AndersichtLanguageLayer activeLanguageLayer;
+    private final Pen pen;
     
-    private AndersichtBook(String name) {
+    private AndersichtBook(int bookId, String name, String description, Pen pen) {
         this.name = name;
-        languageLayers.add(new AndersichtLanguageLayer("Standardsprache", "Standardsprache", this));
-        descriptionLayers.add(new AndersichtDescriptionLayer("Standardtext", "Standardtext", this));
-        groups.add(new AndersichtGroup("Standardraum", "Standardraum", this));
+        this.description = description;
+        this.pen = pen;
+        this.bookId = bookId;
     }
     
     public void setActiveLanguageLayer(AndersichtLanguageLayer lLayer) {
@@ -74,9 +78,12 @@ public class AndersichtBook implements TreeNode {
         unsaved = true;
     }
     
-    public static AndersichtBook newBook(String name, String description) {
-        AndersichtBook book = new AndersichtBook(name);
-        book.description = description;
+    public void changeMade(boolean x) {
+        unsaved = x;
+    }
+    
+    public static AndersichtBook newBook(AndersichtBookDefinition def) {
+        AndersichtBook book = new AndersichtBook(def.bookId, def.name, def.description, def.pen);
         return(book);
     }
     
@@ -101,13 +108,17 @@ public class AndersichtBook implements TreeNode {
     }
     
     public void setDescription(String description) {
-        this.description = description;
-        changeMade();
+        if(!this.description.equals(description)) {
+            this.description = description;
+            changeMade();
+        }
     }  
     
     public void setName(String name) {
-        this.name = name;
-        changeMade();
+        if(!this.name.equals(name)) {
+            this.name = name;
+            changeMade();
+        }
     }    
     
     public AndersichtGroup addGroup(String name, String description) {
@@ -210,13 +221,22 @@ public class AndersichtBook implements TreeNode {
         return(descriptionLayers.get(i));
     }
     
-    public static AndersichtBook load(File file) throws IOException {
-        AndersichtBook book = new AndersichtBook("unknown");
+    public static AndersichtBook load(int bookId) throws IOException {
+        File file = FileEnvironment.getAndersichtBookFile(Integer.toString(bookId));
         DataInputStream in = new DataInputStream(new FileInputStream(file));
         
-        book.name = in.readUTF();
-        book.description = in.readUTF();
-        book.bookId = in.readInt();
+        String name = in.readUTF();
+        String description = in.readUTF();
+        int _bookId = in.readInt();
+        
+        if(_bookId != bookId) {
+            throw new IOException("bad book id found");
+        }
+        
+        String penName = in.readUTF();
+        
+        AndersichtBook book = new AndersichtBook(bookId, name, description, Pens.getPen(penName));
+
         
         int size = in.readInt();
         for(int i = 0; i < size; i++) {
@@ -237,15 +257,14 @@ public class AndersichtBook implements TreeNode {
         return(book);
     }
     
-    public void save() throws IOException {
-        save(FileEnvironment.getAndersichtBookFile(name));
-    }
     
-    public void save(File file) throws IOException {
+    public void save() throws IOException {
+        File file = FileEnvironment.getAndersichtBookFile(Integer.toString(bookId));
         DataOutputStream out = new DataOutputStream(new FileOutputStream(file));
         out.writeUTF(name);
         out.writeUTF(description);
         out.writeInt(bookId);
+        out.writeUTF(pen.toString());
         out.writeInt(languageLayers.size());
         for(int i = 0; i < languageLayers.size(); i++) {
             languageLayers.get(i).save(out);
@@ -259,7 +278,7 @@ public class AndersichtBook implements TreeNode {
             groups.get(i).save(out);
         }
         
-        unsaved = true;
+        unsaved = false;
         out.close();
     }
 
@@ -338,6 +357,16 @@ public class AndersichtBook implements TreeNode {
                 return(getGroup(pos));
             }
         });
+    }
+    
+    public Pen getPen() {
+        return(pen);
+    }
+
+    public void generate(File target) throws IOException {
+        
+        // create ouf
+        
     }
 
 }

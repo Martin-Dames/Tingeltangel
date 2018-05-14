@@ -20,12 +20,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -33,11 +36,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import tingeltangel.Tingeltangel;
 import tingeltangel.andersicht.AndersichtBook;
 import tingeltangel.andersicht.AndersichtLanguageLayer;
+import tingeltangel.tools.Callback;
+import tingeltangel.tools.Progress;
+import tingeltangel.tools.ProgressDialog;
 
 /**
  *
@@ -144,6 +151,7 @@ public class AndersichtMainFrame extends JFrame {
         file.add(newMenuItem("new", "Neu", false));
         file.add(newMenuItem("load", "Laden", false));
         file.add(newMenuItem("save", "Speichern", true));
+        file.add(newMenuItem("generate", "Generieren", true));
         file.add(newMenuItem("exit", "Beenden", false));
                 
         bar.add(file);
@@ -164,11 +172,66 @@ public class AndersichtMainFrame extends JFrame {
     
     void menuAction(String action) {
         if(action.equals("new")) {
-            book = AndersichtBook.newBook("testbuch", "das ist ein testbuch");
-            bookOpened();
-            mainPanel.refresh();
+            AndersichtNewBook nb = new AndersichtNewBook(this, new Callback<AndersichtBookDefinition>() {
+                @Override
+                public void callback(final AndersichtBookDefinition bookDefinition) {
+                    Progress pr = new Progress(AndersichtMainFrame.this, "lade Buch") {
+                        @Override
+                        public void action(ProgressDialog progressDialog) {
+                            book = AndersichtBook.newBook(bookDefinition);
+                            book.addLanguageLayer("Standardsprache", "Standardsprache");
+                            book.addDescriptionLayer("Standardbeschreibung", "Standardbeschreibung");
+                            bookOpened();
+                            mainPanel.refresh();
+                        }
+                    };
+                }
+            });
+        } else if(action.equals("generate")) {
+            try {
+                book.save();
+                
+                final JFileChooser fc = new JFileChooser();
+                fc.setFileFilter(new FileNameExtensionFilter("OUT (*.ouf)", "ouf"));
+                if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    File target = fc.getSelectedFile();
+                    try {
+                        book.generate(target);
+                    } catch(IOException ioe) {
+                        JOptionPane.showMessageDialog(this, "Fehler importieren des MP3: " + ioe.getMessage());
+                    }
+                }
+                
+                
+            } catch(IOException ioe) {
+                JOptionPane.showMessageDialog(this, "Fehler beim speichern des Buches: " + ioe.getMessage());
+            }
         } else if(action.equals("configure_languages")) {
             
+        } else if(action.equals("save")) {
+            try {
+                book.save();
+            } catch(IOException ioe) {
+                JOptionPane.showMessageDialog(this, "Fehler beim speichern des Buches: " + ioe.getMessage());
+            }
+        } else if(action.equals("load")) {
+            AndersichtChooseBook cb = new AndersichtChooseBook(this, new Callback<Integer>() {
+                @Override
+                public void callback(final Integer _id) {
+                    Progress pr = new Progress(AndersichtMainFrame.this, "lade Buch") {
+                        @Override
+                        public void action(ProgressDialog progressDialog) {
+                            try {
+                                book = AndersichtBook.load(_id);
+                                bookOpened();
+                                mainPanel.refresh();
+                            } catch (IOException ex) {
+                                log.error("unable to load book", ex);
+                            }
+                        }
+                    };
+                }
+            });
         }
     }
     

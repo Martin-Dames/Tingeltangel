@@ -64,13 +64,17 @@ public class AndersichtGroup implements TreeNode {
     }
     
     public void setName(String name) {
-        this.name = name;
-        book.changeMade();
+        if(!this.name.equals(name)) {
+            this.name = name;
+            book.changeMade();
+        }
     }
     
     public void setDescription(String description) {
-        this.description = description;
-        book.changeMade();
+        if(!this.description.equals(description)) {
+            this.description = description;
+            book.changeMade();
+        }
     }
     
     public String getName() {

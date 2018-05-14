@@ -19,6 +19,7 @@
 
 package tingeltangel.gui;
 
+import java.awt.Frame;
 import tingeltangel.tools.Callback;
 import java.io.File;
 import java.io.IOException;
@@ -51,8 +52,10 @@ public class ChooseBook extends javax.swing.JDialog {
     
     /**
      * Creates new form ChooseBook
+     * @param parent
+     * @param callback
      */
-    public ChooseBook(java.awt.Frame parent, Callback<Integer> callback) {
+    public ChooseBook(Frame parent, Callback<Integer> callback) {
         super(parent, false);
         initComponents();
         this.callback = callback;

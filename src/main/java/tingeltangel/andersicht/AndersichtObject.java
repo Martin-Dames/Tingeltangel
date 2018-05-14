@@ -35,6 +35,7 @@ public class AndersichtObject implements TreeNode {
 
     private String name = "Objektname";
     private String description = "Objektbeschreibung";
+    private int label = -1;
     private final AndersichtGroup group;
     
     Map<AndersichtLanguageLayer, Map<AndersichtDescriptionLayer, AndersichtTrack>> trackMap
@@ -51,12 +52,36 @@ public class AndersichtObject implements TreeNode {
         return(name);
     }
     
+    public int getLabelAsInt() {
+        return(label);
+    }
+    
+    private AndersichtBook getBook() {
+        return(group.getBook());
+    }
+    
+    public String getLabelAsString() {
+        return(getBook().getPen().fromTingId(label));
+    }
+    
+    public void setLabel(int label) {
+        if(this.label != label) {
+            this.label = label;
+            getBook().changeMade();
+        }
+    }
     public void setName(String name) {
-        this.name = name;
+        if(!this.name.equals(name)) {
+            this.name = name;
+            group.getBook().changeMade();
+        }
     }
     
     public void setDescription(String description) {
-        this.description = description;
+        if(!this.description.equals(description)) {
+            this.description = description;
+            group.getBook().changeMade();
+        }
     }
     
     public String getName() {
@@ -127,7 +152,9 @@ public class AndersichtObject implements TreeNode {
     static AndersichtObject load(AndersichtGroup group, DataInputStream in) throws IOException {
         String name = in.readUTF();
         String description = in.readUTF();
+        int label = in.readInt();
         AndersichtObject object = new AndersichtObject(name, description, group);
+        object.setLabel(label);
         int size = in.readInt();
         for(int i = 0; i < size; i++) {
             int descriptionId = in.readInt();
@@ -135,7 +162,7 @@ public class AndersichtObject implements TreeNode {
             AndersichtDescriptionLayer dLayer = group.getBook().getDescriptionLayerById(descriptionId);
             AndersichtLanguageLayer lLayer = group.getBook().getLanguageLayerById(languageId);
             AndersichtTrack track = object.getTrack(lLayer, dLayer);
-            track.load(in);
+            track.load(in, group.getBook().getBookId());
         }
         return(object);
     }
@@ -143,18 +170,19 @@ public class AndersichtObject implements TreeNode {
     void save(DataOutputStream out) throws IOException {
         out.writeUTF(name);
         out.writeUTF(description);
+        out.writeInt(label);
+        
+        AndersichtBook book = getGroup().getBook();
         
         List<SaveObject> list = new LinkedList<SaveObject>();
-        Iterator<AndersichtLanguageLayer> i1 = trackMap.keySet().iterator();
-        while(i1.hasNext()) {
-            AndersichtLanguageLayer languageLayer = i1.next();
-            Iterator<AndersichtDescriptionLayer> i2 = trackMap.get(languageLayer).keySet().iterator();
-            while(i2.hasNext()) {
-                AndersichtDescriptionLayer descriptionLayer = i2.next();
+        for(int ll = 0; ll < book.getLanguageLayerCount(); ll++) {
+            AndersichtLanguageLayer languageLayer = book.getLanguageLayer(ll);
+            for(int dl = 0; dl < book.getDescriptionLayerCount(); dl++) {
+                AndersichtDescriptionLayer descriptionLayer = book.getDescriptionLayer(dl);
                 SaveObject so = new SaveObject();
                 so.descriptionId = descriptionLayer.getId();
                 so.languageId = languageLayer.getId();
-                so.track = trackMap.get(languageLayer).get(descriptionLayer);
+                so.track = getTrack(languageLayer, descriptionLayer);
                 list.add(so);
             }
         }

@@ -29,7 +29,7 @@ import tingeltangel.tools.FileEnvironment;
  */
 public class AndersichtTrack implements TreeNode {
     
-    private String internalFileName = null;
+    private File internalFile = null;
     private String transcript = "Transkript";
     private final AndersichtObject object;
     private final AndersichtDescriptionLayer descriptionLayer;
@@ -37,6 +37,10 @@ public class AndersichtTrack implements TreeNode {
     AndersichtTrack(AndersichtObject object, AndersichtDescriptionLayer descriptionLayer) {
         this.descriptionLayer = descriptionLayer;
         this.object = object;
+    }
+    
+    public AndersichtObject getObject() {
+        return(object);
     }
     
     @Override
@@ -52,18 +56,34 @@ public class AndersichtTrack implements TreeNode {
         return(transcript);
     }
     
+ 
     public void setTranscript(String transcript) {
-        this.transcript = transcript;
-        object.getGroup().getBook().changeMade();
+        if(!this.transcript.equals(transcript)) {
+            this.transcript = transcript;
+            getBook().changeMade();
+        }
     }
 
-    void load(DataInputStream in) throws IOException {
-        internalFileName = in.readUTF();
+    void load(DataInputStream in, int bookId) throws IOException {
+        File audioDir = FileEnvironment.getAndersichtAudioDirectory(Integer.toString(bookId));
+        String fn = in.readUTF();
+        if(!fn.isEmpty()) {
+            internalFile = new File(audioDir, fn);
+            if(!internalFile.canRead()) {
+                throw new IOException("Kann MP3 " + internalFile.getAbsolutePath() + " nicht finden");
+            }
+        } else {
+            internalFile = null;
+        }
         transcript = in.readUTF();
     }
     
     void save(DataOutputStream out) throws IOException {
-        out.writeUTF(internalFileName);
+        if(internalFile == null) {
+            out.writeUTF("");
+        } else {
+            out.writeUTF(internalFile.getName());
+        }
         out.writeUTF(transcript);
     }
     
@@ -72,14 +92,14 @@ public class AndersichtTrack implements TreeNode {
     }
     
     public void setMP3(File file) throws IOException {
-        File f = FileEnvironment.getFreeFileName(FileEnvironment.getAndersichtBookDirectory(getBook().getName()), ".mp3");
-        FileEnvironment.copy(file, f);
-        internalFileName = f.getName();
-        object.getGroup().getBook().changeMade();
+        if(!this.internalFile.getAbsolutePath().equals(internalFile.getAbsolutePath())) {
+            internalFile = file;
+            getBook().changeMade();
+        }
     }
     
     public File getInternalMP3() {
-        return(new File(FileEnvironment.getAndersichtBookDirectory(getBook().getName()), internalFileName));
+        return(internalFile);
     }
 
     @Override
