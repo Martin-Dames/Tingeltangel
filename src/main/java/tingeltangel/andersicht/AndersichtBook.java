@@ -22,6 +22,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +31,7 @@ import javax.swing.tree.TreeNode;
 import tingeltangel.andersicht.gui.AndersichtBookDefinition;
 import tingeltangel.andersicht.pen.Pen;
 import tingeltangel.andersicht.pen.Pens;
+import tingeltangel.core.Translator;
 import tingeltangel.tools.FileEnvironment;
 
 /**
@@ -363,10 +366,51 @@ public class AndersichtBook implements TreeNode {
         return(pen);
     }
 
-    public void generate(File target) throws IOException {
+    public void generate(File target) throws IOException, IllegalArgumentException {
         
-        // create ouf
+        // pre check labels
+        HashMap<Integer, String> labels = new HashMap<Integer, String>();
         
+        Iterator<AndersichtLanguageLayer> ill = languageLayers.iterator();
+        while(ill.hasNext()) {
+            AndersichtLanguageLayer ll = ill.next();
+            String oldLabel = labels.get(ll.getLabel());
+            if(oldLabel != null) {
+                throw new IllegalArgumentException("Sprache '" + ll.toString() + "' hat das selbe Label wie '" + oldLabel + "' zugeordnet");
+            }
+            labels.put(ll.getLabel(), ll.toString());
+        }
+        
+        
+        Iterator<AndersichtGroup> ig = groups.iterator();
+        while(ig.hasNext()) {
+            AndersichtGroup group = ig.next();
+            for(int i = 0; i < group.getObjectCount(); i++) {
+                AndersichtObject object = group.getObject(i);
+                object.hasAllTracks();
+                Iterator<AndersichtDescriptionLayer> idl = descriptionLayers.iterator();
+                while(idl.hasNext()) {
+                    AndersichtDescriptionLayer dl = idl.next();
+                    String oldLabel = labels.get(object.getLabelAsInt(dl));
+                    if(oldLabel != null) {
+                        throw new IllegalArgumentException("Objekt '" + object.toString() + "' hat das selbe Label wie '" + oldLabel + "' zugeordnet");
+                    }
+                    labels.put(object.getLabelAsInt(dl), object.toString());
+                }
+            }
+        }
+        Iterator<Integer> labelIterator = labels.keySet().iterator();
+        while(labelIterator.hasNext()) {
+            int label = labelIterator.next();
+            if(label < Translator.getMinObjectCode()) {
+                throw new IllegalArgumentException("ungültiges Label für '" + labels.get(label) + "'");
+            }
+            if(Translator.ting2code(label) < 0) {
+                throw new IllegalArgumentException("unbekanntes Label für '" + labels.get(label) + "'");
+            }
+        }
+        
+        AndersichtBookGenerator.generate(this, target);
     }
 
 }

@@ -37,6 +37,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import tingeltangel.andersicht.AndersichtBook;
+import tingeltangel.andersicht.AndersichtDescriptionLayer;
 import tingeltangel.andersicht.AndersichtGroup;
 import tingeltangel.andersicht.AndersichtObject;
 import tingeltangel.andersicht.AndersichtTrack;
@@ -68,11 +69,11 @@ class AndersichtPanel extends JPanel {
     private JPanel objectOptionPanel = new JPanel();
     private JTextField objectNameField = new JTextField();
     private JTextArea objectDescriptionField = new JTextArea();
-    private JButton objectLabelButton = new JButton();
     
     private JPanel trackOptionPanel = new JPanel();
     private JTextArea trackTranscriptField = new JTextArea();
     private JLabel trackMp3Label = new JLabel();
+    private JButton trackLabelButton = new JButton();
     
     
     private final int ACTION_ADD_GROUP = 1;
@@ -139,13 +140,12 @@ class AndersichtPanel extends JPanel {
             }
         });
         
-        objectOptionPanel.setLayout(new GridLayout(3, 2));
+        objectOptionPanel.setLayout(new GridLayout(2, 2));
         objectOptionPanel.add(new JLabel("Objektname"));
         objectOptionPanel.add(objectNameField);
         objectOptionPanel.add(new JLabel("Objektbeschreibung"));
         objectOptionPanel.add(objectDescriptionField);
-        objectOptionPanel.add(new JLabel("Label"));
-        objectOptionPanel.add(objectLabelButton);
+        
         objectNameField.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             public void change() {
@@ -167,25 +167,9 @@ class AndersichtPanel extends JPanel {
                 }
             }
         });
-        objectLabelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // choose new label
-                new AndersichtChooseLabel(mainFrame, mainFrame.getBook().getPen(), new Callback<Integer>() {
-                    @Override
-                    public void callback(Integer label) {
-                        TreePath selectionPath = tree.getSelectionPath();
-                        if(selectionPath != null) {
-                            AndersichtObject object = (AndersichtObject)selectionPath.getLastPathComponent();
-                            object.setLabel(label);
-                            objectLabelButton.setText(object.getLabelAsString());
-                        }
-                    }
-                });
-            }
-        });
         
-        trackOptionPanel.setLayout(new GridLayout(3, 2));
+        
+        trackOptionPanel.setLayout(new GridLayout(4, 2));
         trackOptionPanel.add(new JLabel(""));
         trackOptionPanel.add(newActionButton(ACTION_ADD_MP3, "MP3 auswählen"));
         trackOptionPanel.add(new JLabel("Transkript"));
@@ -200,6 +184,26 @@ class AndersichtPanel extends JPanel {
                     AndersichtTrack track = (AndersichtTrack)selectionPath.getLastPathComponent();
                     track.setTranscript(trackTranscriptField.getText());
                 }
+            }
+        });
+        objectOptionPanel.add(new JLabel("Label"));
+        objectOptionPanel.add(trackLabelButton);
+        trackLabelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // choose new label
+                new AndersichtChooseLabel(mainFrame, mainFrame.getBook().getPen(), new Callback<Integer>() {
+                    @Override
+                    public void callback(Integer label) {
+                        TreePath selectionPath = tree.getSelectionPath();
+                        if(selectionPath != null) {
+                            AndersichtTrack track = (AndersichtTrack)selectionPath.getLastPathComponent();
+                            AndersichtDescriptionLayer dl = track.getObject().getDescriptionLayer(track);
+                            track.getObject().setLabel(dl, label);
+                            trackLabelButton.setText(track.getObject().getLabelAsString(dl));
+                        }
+                    }
+                });
             }
         });
         
@@ -229,7 +233,6 @@ class AndersichtPanel extends JPanel {
                     optionPanel.add(objectOptionPanel, BorderLayout.NORTH);
                     objectNameField.setText(object.getName());
                     objectDescriptionField.setText(object.getDescription());
-                    objectLabelButton.setText(object.getLabelAsString());
                 } else if(selectedObject instanceof AndersichtTrack) {
                     AndersichtTrack track = (AndersichtTrack)selectedObject;
                     optionPanel.add(trackOptionPanel, BorderLayout.NORTH);
@@ -240,6 +243,7 @@ class AndersichtPanel extends JPanel {
                     } else {
                         trackMp3Label.setText(mp3.getName());
                     }
+                    trackLabelButton.setText(track.getObject().getLabelAsString(track.getObject().getDescriptionLayer(track)));
                 }
                 optionPanel.revalidate();
                 optionPanel.repaint();
@@ -303,7 +307,7 @@ class AndersichtPanel extends JPanel {
                         FileEnvironment.copy(source, target);
                         track.setMP3(target);
                     } catch(IOException ioe) {
-                        JOptionPane.showMessageDialog(this, "Fehler importieren des MP3: " + ioe.getMessage());
+                        JOptionPane.showMessageDialog(this, "Fehler beim Importieren des MP3: " + ioe.getMessage());
                     }
                 }
                 break;

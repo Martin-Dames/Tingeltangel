@@ -17,7 +17,9 @@ package tingeltangel.andersicht;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
+import tingeltangel.tools.FileEnvironment;
 
 /**
  *
@@ -29,7 +31,9 @@ public class AndersichtLanguageLayer {
     private String name = "Name";
     private String description = "Beschreibung";
     private int id = 0;
+    private int label = -1;
     private final AndersichtBook book;
+    private File internalFile = null;
     
     AndersichtLanguageLayer(String name, String description, AndersichtBook book) {
         this.name = name;
@@ -42,8 +46,27 @@ public class AndersichtLanguageLayer {
         return(name);
     }
     
+    public void setMP3(File file) throws IOException {
+        if(!this.internalFile.getAbsolutePath().equals(internalFile.getAbsolutePath())) {
+            internalFile = file;
+            getBook().changeMade();
+        }
+    }
+    
+    public File getInternalMP3() {
+        return(internalFile);
+    }
+    
     public AndersichtBook getBook() {
         return(book);
+    }
+    
+    public int getLabel() {
+        return(label);
+    }
+    
+    public void setLabel(int label) {
+        this.label = label;
     }
     
     public String getName() {
@@ -77,6 +100,17 @@ public class AndersichtLanguageLayer {
         String description = in.readUTF();
         AndersichtLanguageLayer layer = new AndersichtLanguageLayer(name, description, book);
         layer.id = in.readInt();
+        layer.label = in.readInt();
+        File audioDir = FileEnvironment.getAndersichtAudioDirectory(Integer.toString(book.getBookId()));
+        String fn = in.readUTF();
+        if(!fn.isEmpty()) {
+            layer.internalFile = new File(audioDir, fn);
+            if(!layer.internalFile.canRead()) {
+                throw new IOException("Kann MP3 " + layer.internalFile.getAbsolutePath() + " nicht finden");
+            }
+        } else {
+            layer.internalFile = null;
+        }
         return(layer);
     }
     
@@ -84,5 +118,11 @@ public class AndersichtLanguageLayer {
         out.writeUTF(name);
         out.writeUTF(description);
         out.writeInt(id);
+        out.writeInt(label);
+        if(internalFile == null) {
+            out.writeUTF("");
+        } else {
+            out.writeUTF(internalFile.getName());
+        }
     }
 }

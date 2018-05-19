@@ -35,8 +35,9 @@ public class AndersichtObject implements TreeNode {
 
     private String name = "Objektname";
     private String description = "Objektbeschreibung";
-    private int label = -1;
     private final AndersichtGroup group;
+    
+    private final HashMap<AndersichtDescriptionLayer, Integer> labels = new HashMap<AndersichtDescriptionLayer, Integer>();
     
     Map<AndersichtLanguageLayer, Map<AndersichtDescriptionLayer, AndersichtTrack>> trackMap
                 = new HashMap<AndersichtLanguageLayer, Map<AndersichtDescriptionLayer, AndersichtTrack>>();
@@ -52,24 +53,29 @@ public class AndersichtObject implements TreeNode {
         return(name);
     }
     
-    public int getLabelAsInt() {
-        return(label);
+    public int getLabelAsInt(AndersichtDescriptionLayer dLayer) {
+        if(!labels.containsKey(dLayer)) {
+            labels.put(dLayer, -1);
+        }
+        return(labels.get(dLayer));
     }
     
     private AndersichtBook getBook() {
         return(group.getBook());
     }
     
-    public String getLabelAsString() {
-        return(getBook().getPen().fromTingId(label));
+    public String getLabelAsString(AndersichtDescriptionLayer dLayer) {
+        return(getBook().getPen().fromTingId(getLabelAsInt(dLayer)));
     }
     
-    public void setLabel(int label) {
-        if(this.label != label) {
-            this.label = label;
+    public void setLabel(AndersichtDescriptionLayer dLayer, int label) {
+        int oldLabel = getLabelAsInt(dLayer);
+        if(oldLabel != label) {
+            labels.put(dLayer, label);
             getBook().changeMade();
         }
     }
+    
     public void setName(String name) {
         if(!this.name.equals(name)) {
             this.name = name;
@@ -152,9 +158,17 @@ public class AndersichtObject implements TreeNode {
     static AndersichtObject load(AndersichtGroup group, DataInputStream in) throws IOException {
         String name = in.readUTF();
         String description = in.readUTF();
-        int label = in.readInt();
+        
         AndersichtObject object = new AndersichtObject(name, description, group);
-        object.setLabel(label);
+        
+        int s = in.readInt();
+        for(int i = 0; i < s; i++) {
+            int dId = in.readInt();
+            int label = in.readInt();
+            AndersichtDescriptionLayer dLayer = group.getBook().getDescriptionLayerById(dId);
+            object.labels.put(dLayer, label);
+        }
+        
         int size = in.readInt();
         for(int i = 0; i < size; i++) {
             int descriptionId = in.readInt();
@@ -170,9 +184,15 @@ public class AndersichtObject implements TreeNode {
     void save(DataOutputStream out) throws IOException {
         out.writeUTF(name);
         out.writeUTF(description);
-        out.writeInt(label);
         
         AndersichtBook book = getGroup().getBook();
+        
+        out.writeInt(book.getDescriptionLayerCount());
+        for(int dl = 0; dl < book.getDescriptionLayerCount(); dl++) {
+            AndersichtDescriptionLayer descriptionLayer = book.getDescriptionLayer(dl);
+            out.writeInt(descriptionLayer.getId());
+            out.writeInt(getLabelAsInt(descriptionLayer));
+        }
         
         List<SaveObject> list = new LinkedList<SaveObject>();
         for(int ll = 0; ll < book.getLanguageLayerCount(); ll++) {
@@ -257,6 +277,36 @@ public class AndersichtObject implements TreeNode {
                 return(getChildAt(pos));
             }
         });
+    }
+
+    void hasAllTracks() throws IllegalArgumentException {
+        AndersichtBook book = getGroup().getBook();
+        for(int ll = 0; ll < book.getLanguageLayerCount(); ll++) {
+            AndersichtLanguageLayer languageLayer = book.getLanguageLayer(ll);
+            for(int dl = 0; dl < book.getDescriptionLayerCount(); dl++) {
+                AndersichtDescriptionLayer descriptionLayer = book.getDescriptionLayer(dl);
+                AndersichtTrack track = getTrack(languageLayer, descriptionLayer);
+                if((track.getInternalMP3() == null) || !track.getInternalMP3().canRead()) {
+                    throw new IllegalArgumentException("Kann das MP3 für Objekt '" + toString() + "' (Sprache: '" + languageLayer.toString() +
+                                "', Beschreibung: '" + descriptionLayer.toString() + "' nicht finden.");
+                }
+            }
+        }
+    }
+
+    public AndersichtDescriptionLayer getDescriptionLayer(AndersichtTrack track) {
+        AndersichtBook book = getGroup().getBook();
+        for(int ll = 0; ll < book.getLanguageLayerCount(); ll++) {
+            AndersichtLanguageLayer languageLayer = book.getLanguageLayer(ll);
+            for(int dl = 0; dl < book.getDescriptionLayerCount(); dl++) {
+                AndersichtDescriptionLayer descriptionLayer = book.getDescriptionLayer(dl);
+                AndersichtTrack _track = getTrack(languageLayer, descriptionLayer);
+                if(_track == track) {
+                    return(descriptionLayer);
+                }
+            }
+        }
+        return(null);
     }
     
 }

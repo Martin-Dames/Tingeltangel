@@ -116,6 +116,10 @@ public class AndersichtMainFrame extends JFrame {
         
     }
 
+    AndersichtPanel getAndersichtPanel() {
+        return(mainPanel);
+    } 
+    
     AndersichtBook getBook() {
         return(book);
     }
@@ -158,7 +162,10 @@ public class AndersichtMainFrame extends JFrame {
         
         JMenu config = new JMenu("Einstellungen");
         
-        config.add(newMenuItem("configure_languages", "Sprachen", true));
+        config.add(newMenuItem("configure_languages", "Sprachlayer", true));
+        config.add(newMenuItem("configure_descriptions", "Beschreibungslayer", true));
+        
+        bar.add(config);
         
         return(bar);
     }
@@ -207,7 +214,9 @@ public class AndersichtMainFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Fehler beim speichern des Buches: " + ioe.getMessage());
             }
         } else if(action.equals("configure_languages")) {
-            
+            new AndersichtConfigureLanguageLayer(this, book);
+        } else if(action.equals("configure_descriptions")) {
+            new AndersichtConfigureDescriptionLayer(this, book);
         } else if(action.equals("save")) {
             try {
                 book.save();
