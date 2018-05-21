@@ -651,7 +651,7 @@ public class Book {
         return(x);
     }
     
-    private void generateOufFile(DataOutputStream out, ProgressDialog progress) throws IOException, SyntaxError {
+    public void generateOufFile(DataOutputStream out, ProgressDialog progress) throws IOException, SyntaxError {
         
         int startOfIndexTable = 0x0068;
         
