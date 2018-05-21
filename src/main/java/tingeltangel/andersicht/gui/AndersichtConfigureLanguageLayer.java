@@ -223,6 +223,10 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
         }
         
         model.refresh();
+        
+        setFocusableWindowState(false);
+        setFocusable(false);
+
         pack();
         setVisible(true);
     }

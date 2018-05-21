@@ -253,6 +253,12 @@ class AndersichtPanel extends JPanel {
         JPanel languageChooserPanel = new JPanel();
         
         languageChooserPanel.add(languageChooser);
+        languageChooser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refresh();
+            }
+        });
         
         add(languageChooserPanel, BorderLayout.NORTH);
         
