@@ -200,16 +200,20 @@ public class AndersichtMainFrame extends JFrame {
                 
                 final JFileChooser fc = new JFileChooser();
                 fc.setFileFilter(new FileNameExtensionFilter("OUT (*.ouf)", "ouf"));
+                boolean errorOccured = false;
                 if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                     File target = fc.getSelectedFile();
                     try {
                         book.generate(target);
-                    } catch(IOException ioe) {
-                        JOptionPane.showMessageDialog(this, "Fehler importieren des MP3: " + ioe.getMessage());
+                    } catch(Exception e) {
+                        JOptionPane.showMessageDialog(this, "Fehler beim Generieren des Buches: " + e.getMessage());
+                        e.printStackTrace();
+                        errorOccured = true;
                     }
                 }
-                
-                
+                if(!errorOccured) {
+                    JOptionPane.showMessageDialog(this, "Buch erstellt");
+                }
             } catch(IOException ioe) {
                 JOptionPane.showMessageDialog(this, "Fehler beim speichern des Buches: " + ioe.getMessage());
             }

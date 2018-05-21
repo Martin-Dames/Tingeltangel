@@ -16,7 +16,6 @@
 package tingeltangel.andersicht.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +36,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import tingeltangel.andersicht.AndersichtBook;
 import tingeltangel.andersicht.AndersichtDescriptionLayer;
-import tingeltangel.andersicht.AndersichtLanguageLayer;
 
 /**
  *
@@ -137,20 +135,20 @@ public class AndersichtConfigureDescriptionLayer extends javax.swing.JDialog {
         descriptionList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                AndersichtLanguageLayer lLayer = (AndersichtLanguageLayer)descriptionList.getSelectedValue();
-                name.setText(lLayer.getName());
-                description.setText(lLayer.getDescription());
+                AndersichtDescriptionLayer dLayer = (AndersichtDescriptionLayer)descriptionList.getSelectedValue();
+                name.setText(dLayer.getName());
+                description.setText(dLayer.getDescription());
             }
         });
         
         
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         
-        AndersichtLanguageLayer lLayer = book.getLanguageLayer(0);
+        AndersichtDescriptionLayer dLayer = book.getDescriptionLayer(0);
         
         descriptionList.setSelectedIndex(0);
-        name.setText(lLayer.getName());
-        description.setText(lLayer.getDescription());
+        name.setText(dLayer.getName());
+        description.setText(dLayer.getDescription());
         
         
         model.refresh();

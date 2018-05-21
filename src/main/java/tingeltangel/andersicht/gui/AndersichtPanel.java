@@ -186,8 +186,8 @@ class AndersichtPanel extends JPanel {
                 }
             }
         });
-        objectOptionPanel.add(new JLabel("Label"));
-        objectOptionPanel.add(trackLabelButton);
+        trackOptionPanel.add(new JLabel("Label"));
+        trackOptionPanel.add(trackLabelButton);
         trackLabelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -288,7 +288,7 @@ public class AndersichtObject implements TreeNode {
                 AndersichtTrack track = getTrack(languageLayer, descriptionLayer);
                 if((track.getInternalMP3() == null) || !track.getInternalMP3().canRead()) {
                     throw new IllegalArgumentException("Kann das MP3 für Objekt '" + toString() + "' (Sprache: '" + languageLayer.toString() +
-                                "', Beschreibung: '" + descriptionLayer.toString() + "' nicht finden.");
+                                "', Beschreibung: '" + descriptionLayer.toString() + "') nicht finden.");
                 }
             }
         }
