@@ -65,6 +65,8 @@ public class Tingeltangel {
         boolean startManager = false;
         boolean startAndersicht = false;
         
+        
+        
         if((args.length > 0) && (args[0].toLowerCase().equals("gui-editor"))) {
             startEditor = true;
         }

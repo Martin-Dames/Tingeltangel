@@ -72,7 +72,6 @@ public class AndersichtChooseLabel extends javax.swing.JDialog {
         idList.addAll(pen.getLabelList());
         
         model.refresh();
-        setFocusableWindowState(false);
         setFocusable(false);
         
         pack();

@@ -29,6 +29,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
+import tingeltangel.Tingeltangel;
 import tingeltangel.core.Tupel;
 import tingeltangel.tools.Callback;
 import tingeltangel.tools.FileEnvironment;
@@ -39,17 +40,19 @@ import tingeltangel.tools.FileEnvironment;
  */
 public class AndersichtChooseBook extends javax.swing.JDialog {
 
-    private final Callback<Integer> callback;
     
     private final LinkedList<Tupel<Integer, String>> idList = new LinkedList<Tupel<Integer, String>>();
-    private final static Logger log = LogManager.getLogger(AndersichtChooseBook.class);
+    private final static Logger LOG = LogManager.getLogger(AndersichtChooseBook.class);
     private JList bookList = new JList();
     private JButton button = new JButton();
     private JScrollPane jScrollPane = new JScrollPane();
     
     public AndersichtChooseBook(java.awt.Frame parent, final Callback<Integer> callback) {
         super(parent, false);
-        this.callback = callback;
+        
+        setTitle(Tingeltangel.MAIN_FRAME_TITLE + " - Buch laden");
+        
+        setSize(300, 400);
         
         // init components here
         getContentPane().setLayout(new BorderLayout());
@@ -68,7 +71,7 @@ public class AndersichtChooseBook extends javax.swing.JDialog {
                 if(index != -1) {
                     int id = idList.get(index).a;
                     callback.callback(id);
-                    setVisible(false);
+                    AndersichtChooseBook.this.dispose();
                 }
             }
         });
@@ -84,19 +87,18 @@ public class AndersichtChooseBook extends javax.swing.JDialog {
                         idList.add(new Tupel(id, getLabel(id)));
                     }
                 } catch(NumberFormatException nfe) {
-                    log.warn("unable to parse book", nfe);
+                    LOG.warn("unable to parse book", nfe);
                 } catch(IOException ioe) {
-                    log.warn("unable to parse book", ioe);
+                    LOG.warn("unable to parse book", ioe);
                 }
             }
         }
         
         model.refresh();
         
-        setFocusableWindowState(false);
         setFocusable(false);
         
-        pack();
+        //pack();
         setVisible(true);
     }
     

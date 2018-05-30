@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2018 mdames.
  *
@@ -16,7 +17,10 @@
 package tingeltangel.andersicht.gui;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -34,6 +38,7 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import tingeltangel.Tingeltangel;
 import tingeltangel.andersicht.AndersichtBook;
 import tingeltangel.andersicht.AndersichtDescriptionLayer;
 
@@ -56,16 +61,35 @@ public class AndersichtConfigureDescriptionLayer extends javax.swing.JDialog {
     public AndersichtConfigureDescriptionLayer(final AndersichtMainFrame parent, final AndersichtBook book) {
         super(parent, false);
         
+        setTitle(Tingeltangel.MAIN_FRAME_TITLE + " - Beschreibungslayer");
+        
         this.book = book;
         
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 2));
+        panel.setLayout(new GridBagLayout());
         
         
-        panel.add(new JLabel("Name"));
-        panel.add(name);
-        panel.add(new JLabel("Beschreibung"));
-        panel.add(description);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.3;
+        panel.add(new JLabel("Name"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 2;
+        panel.add(name, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.3;
+        panel.add(new JLabel("Beschreibung"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 2;
+        panel.add(description, gbc);
         
         final MyListModel model = new MyListModel();
         descriptionList.setModel(model);
@@ -90,6 +114,8 @@ public class AndersichtConfigureDescriptionLayer extends javax.swing.JDialog {
                 }
             }
         });
+        
+        description.setRows(10);
         
         JPanel buttonPanel = new JPanel();
         JButton addButton = new JButton("hinzufügen");
@@ -124,10 +150,14 @@ public class AndersichtConfigureDescriptionLayer extends javax.swing.JDialog {
             }
         });
         
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(2, 1));
+        centerPanel.add(jScrollPane);
+        centerPanel.add(panel);
+        
         // init components here
         getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(jScrollPane, BorderLayout.CENTER);
-        getContentPane().add(panel, BorderLayout.EAST);
+        getContentPane().add(centerPanel, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
         jScrollPane.setViewportView(descriptionList);
         
@@ -153,10 +183,10 @@ public class AndersichtConfigureDescriptionLayer extends javax.swing.JDialog {
         
         model.refresh();
         
-        setFocusableWindowState(false);
         setFocusable(false);
         
-        pack();
+        setSize(500, 400);
+        //pack();
         setVisible(true);
     }
 

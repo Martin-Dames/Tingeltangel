@@ -17,13 +17,17 @@ package tingeltangel.andersicht.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.DefaultComboBoxModel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import javax.swing.JButton;
@@ -40,6 +44,7 @@ import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import tingeltangel.Tingeltangel;
 import tingeltangel.andersicht.AndersichtBook;
 import tingeltangel.andersicht.AndersichtLanguageLayer;
 import tingeltangel.tools.Callback;
@@ -51,10 +56,10 @@ import tingeltangel.tools.FileEnvironment;
  */
 public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
 
-    private final static Logger log = LogManager.getLogger(AndersichtConfigureLanguageLayer.class);
+    private final static Logger LOG = LogManager.getLogger(AndersichtConfigureLanguageLayer.class);
     
     private JList languageList = new JList();
-    private JScrollPane jScrollPane = new JScrollPane();
+    private final JScrollPane jScrollPane = new JScrollPane();
     
     private JTextField name = new JTextField();
     private JTextField mp3 = new JTextField();
@@ -65,11 +70,19 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
     
     public AndersichtConfigureLanguageLayer(final AndersichtMainFrame parent, final AndersichtBook book) {
         super(parent, false);
+        setTitle(Tingeltangel.MAIN_FRAME_TITLE + " - Sprachlayer");
         
         this.book = book;
         
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 2));
+        panel.setLayout(new GridBagLayout());
+        
+        description.setRows(10);
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
         
         JButton setMp3Button = new JButton("MP3 auswählen");
         setMp3Button.addActionListener(new ActionListener() {
@@ -99,16 +112,29 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
             }
         });
         
-        panel.add(new JLabel("Name"));
-        panel.add(name);
-        panel.add(new JLabel("Beschreibung"));
-        panel.add(description);
-        panel.add(new JLabel("Label"));
-        panel.add(label);
-        panel.add(new JLabel(""));
-        panel.add(setMp3Button);
-        panel.add(new JLabel("MP3"));
-        panel.add(mp3);
+        gbc.weightx = 0.3;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Name"), gbc);
+        gbc.gridy = 1;
+        panel.add(new JLabel("Beschreibung"), gbc);
+        gbc.gridy = 2;
+        panel.add(new JLabel("Label"), gbc);
+        gbc.gridy = 4;
+        panel.add(new JLabel("MP3"), gbc);
+        
+        gbc.weightx = 2;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(name, gbc);
+        gbc.gridy = 1;
+        panel.add(description, gbc);
+        gbc.gridy = 2;
+        panel.add(label, gbc);
+        gbc.gridy = 3;
+        panel.add(setMp3Button, gbc);
+        gbc.gridy = 4;
+        panel.add(mp3, gbc);
         
         final MyListModel model = new MyListModel();
         languageList.setModel(model);
@@ -120,6 +146,11 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
                 if(lLayer != null) {
                     lLayer.setName(name.getText());
                     model.refresh();
+                    int selectedIndex = languageList.getSelectedIndex();
+                    DefaultComboBoxModel cbModel = parent.getAndersichtPanel().getLanguageChooserModel();
+                    cbModel.removeElementAt(selectedIndex);
+                    cbModel.insertElementAt(lLayer, selectedIndex);
+                    languageList.setSelectedIndex(selectedIndex);
                 }
             }
         });
@@ -129,7 +160,7 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
                 AndersichtLanguageLayer lLayer = (AndersichtLanguageLayer)languageList.getSelectedValue();
                 if(lLayer != null) {
                     lLayer.setDescription(description.getText());
-                    model.refresh();
+                    //model.refresh();
                 }
             }
         });
@@ -143,7 +174,7 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
                         if(lLayer != null) {
                             lLayer.setLabel(_label);
                             label.setText(Integer.toString(_label));
-                            model.refresh();
+                            //model.refresh();
                         }
                     }
                 });
@@ -161,15 +192,17 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parent.getAndersichtPanel().refresh();
+                //parent.getAndersichtPanel().refresh();
                 AndersichtConfigureLanguageLayer.this.dispose();
             }
         });
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                book.addLanguageLayer("Name", "Beschreibung");
+                AndersichtLanguageLayer lLayer = book.addLanguageLayer("Name", "Beschreibung");
                 model.refresh();
+                DefaultComboBoxModel cbModel = parent.getAndersichtPanel().getLanguageChooserModel();
+                cbModel.addElement(lLayer);
             }
         });
         removeButton.addActionListener(new ActionListener() {
@@ -179,14 +212,21 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
                 if((lLayer != null) && (model.getSize() > 1)) {
                     book.removeLanguageLayer(lLayer);
                     model.refresh();
+                    DefaultComboBoxModel cbModel = parent.getAndersichtPanel().getLanguageChooserModel();
+                    cbModel.removeElement(lLayer);
                 }
             }
         });
         
         // init components here
         getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(jScrollPane, BorderLayout.CENTER);
-        getContentPane().add(panel, BorderLayout.EAST);
+        
+        JPanel split = new JPanel();
+        split.setLayout(new GridLayout(2, 1));
+        split.add(jScrollPane);
+        split.add(panel);
+        
+        getContentPane().add(split, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
         jScrollPane.setViewportView(languageList);
         
@@ -223,11 +263,12 @@ public class AndersichtConfigureLanguageLayer extends javax.swing.JDialog {
         }
         
         model.refresh();
-        
-        setFocusableWindowState(false);
+   
         setFocusable(false);
 
-        pack();
+        setSize(500, 400);
+        
+        //pack();
         setVisible(true);
     }
 

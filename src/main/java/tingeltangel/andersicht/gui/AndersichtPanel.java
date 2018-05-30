@@ -16,11 +16,16 @@
 package tingeltangel.andersicht.gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -36,9 +41,12 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import tingeltangel.andersicht.AndersichtBook;
 import tingeltangel.andersicht.AndersichtDescriptionLayer;
 import tingeltangel.andersicht.AndersichtGroup;
+import tingeltangel.andersicht.AndersichtLanguageLayer;
 import tingeltangel.andersicht.AndersichtObject;
 import tingeltangel.andersicht.AndersichtTrack;
 import tingeltangel.tools.Callback;
@@ -51,8 +59,13 @@ import tingeltangel.tools.FileEnvironment;
 class AndersichtPanel extends JPanel {
     
     private final AndersichtMainFrame mainFrame;
+    
+    
+    private final static Logger LOG = LogManager.getLogger(AndersichtPanel.class);
         
-    private final JComboBox languageChooser = new JComboBox();
+    private final JComboBox languageChooser;
+    private final DefaultComboBoxModel languageChooserModel = new DefaultComboBoxModel();
+    
     private JTree tree;
     private final JSplitPane splitPane;
     private JPanel optionPanel;
@@ -75,6 +88,7 @@ class AndersichtPanel extends JPanel {
     private JLabel trackMp3Label = new JLabel();
     private JButton trackLabelButton = new JButton();
     
+    private File lastMp3Dir = null;
     
     private final int ACTION_ADD_GROUP = 1;
     private final int ACTION_ADD_OBJECT = 2;
@@ -85,20 +99,45 @@ class AndersichtPanel extends JPanel {
         super();
         this.mainFrame = mainFrame;
                 
-        bookDescriptionField.setRows(4);
-        groupDescriptionField.setRows(4);
-        objectDescriptionField.setRows(4);
-        trackTranscriptField.setRows(4);
+        bookDescriptionField.setRows(10);
+        groupDescriptionField.setRows(10);
+        objectDescriptionField.setRows(10);
+        trackTranscriptField.setRows(10);
         
-        bookOptionPanel.setLayout(new GridLayout(4, 2));
-        bookOptionPanel.add(new JLabel(""));
-        bookOptionPanel.add(newActionButton(ACTION_ADD_GROUP, "Gruppe hinzufügen"));
-        bookOptionPanel.add(new JLabel("Buch ID"));
-        bookOptionPanel.add(bookIdLabel);
-        bookOptionPanel.add(new JLabel("Buchname"));
-        bookOptionPanel.add(bookNameField);
-        bookOptionPanel.add(new JLabel("Buchbeschreibung"));
-        bookOptionPanel.add(bookDescriptionField);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        bookOptionPanel.setLayout(new GridBagLayout());
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        bookOptionPanel.add(newActionButton(ACTION_ADD_GROUP, "Gruppe hinzufügen"), gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.3;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        bookOptionPanel.add(new JLabel("Buch ID"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 2;
+        bookOptionPanel.add(bookIdLabel, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.3;
+        bookOptionPanel.add(new JLabel("Buchname"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.weightx = 2;
+        bookOptionPanel.add(bookNameField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 0.3;
+        bookOptionPanel.add(new JLabel("Buchbeschreibung"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.weightx = 2;
+        bookOptionPanel.add(bookDescriptionField, gbc);
         bookNameField.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             public void change() {
@@ -111,13 +150,30 @@ class AndersichtPanel extends JPanel {
             }
         });
         
-        groupOptionPanel.setLayout(new GridLayout(3, 2));
-        groupOptionPanel.add(new JLabel(""));
-        groupOptionPanel.add(newActionButton(ACTION_ADD_OBJECT, "Objekt hinzufügen"));
-        groupOptionPanel.add(new JLabel("Guppenname"));
-        groupOptionPanel.add(groupNameField);
-        groupOptionPanel.add(new JLabel("Guppenbeschreibung"));
-        groupOptionPanel.add(groupDescriptionField);
+        
+        groupOptionPanel.setLayout(new GridBagLayout());
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        groupOptionPanel.add(newActionButton(ACTION_ADD_OBJECT, "Objekt hinzufügen"), gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.3;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        groupOptionPanel.add(new JLabel("Guppenname"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 2;
+        groupOptionPanel.add(groupNameField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.3;
+        groupOptionPanel.add(new JLabel("Guppenbeschreibung"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.weightx = 2;
+        groupOptionPanel.add(groupDescriptionField, gbc);
         groupNameField.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             public void change() {
@@ -140,12 +196,24 @@ class AndersichtPanel extends JPanel {
             }
         });
         
-        objectOptionPanel.setLayout(new GridLayout(2, 2));
-        objectOptionPanel.add(new JLabel("Objektname"));
-        objectOptionPanel.add(objectNameField);
-        objectOptionPanel.add(new JLabel("Objektbeschreibung"));
-        objectOptionPanel.add(objectDescriptionField);
         
+        objectOptionPanel.setLayout(new GridBagLayout());
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.3;
+        objectOptionPanel.add(new JLabel("Objektname"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 2;
+        objectOptionPanel.add(objectNameField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.3;
+        objectOptionPanel.add(new JLabel("Objektbeschreibung"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 2;
+        objectOptionPanel.add(objectDescriptionField, gbc);
         objectNameField.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             public void change() {
@@ -169,13 +237,27 @@ class AndersichtPanel extends JPanel {
         });
         
         
-        trackOptionPanel.setLayout(new GridLayout(4, 2));
-        trackOptionPanel.add(new JLabel(""));
-        trackOptionPanel.add(newActionButton(ACTION_ADD_MP3, "MP3 auswählen"));
-        trackOptionPanel.add(new JLabel("Transkript"));
-        trackOptionPanel.add(trackTranscriptField);
-        trackOptionPanel.add(new JLabel("MP3"));
-        trackOptionPanel.add(trackMp3Label);
+        trackOptionPanel.setLayout(new GridBagLayout());
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 2;
+        trackOptionPanel.add(newActionButton(ACTION_ADD_MP3, "MP3 auswählen"), gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.3;
+        trackOptionPanel.add(new JLabel("Transkript"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 2;
+        trackOptionPanel.add(trackTranscriptField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.3;
+        trackOptionPanel.add(new JLabel("MP3"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.weightx = 2;
+        trackOptionPanel.add(trackMp3Label, gbc);
         trackTranscriptField.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             public void change() {
@@ -186,8 +268,14 @@ class AndersichtPanel extends JPanel {
                 }
             }
         });
-        trackOptionPanel.add(new JLabel("Label"));
-        trackOptionPanel.add(trackLabelButton);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 0.3;
+        trackOptionPanel.add(new JLabel("Label"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.weightx = 2;
+        trackOptionPanel.add(trackLabelButton, gbc);
         trackLabelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -251,15 +339,39 @@ class AndersichtPanel extends JPanel {
         });
         
         JPanel languageChooserPanel = new JPanel();
-        
-        languageChooserPanel.add(languageChooser);
-        languageChooser.addActionListener(new ActionListener() {
+        languageChooser = new JComboBox(languageChooserModel);
+        languageChooser.addItemListener(new ItemListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                refresh();
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() == ItemEvent.SELECTED) {
+                    AndersichtBook book = mainFrame.getBook();
+                    if(book != null) {
+                        AndersichtLanguageLayer lLayer = (AndersichtLanguageLayer)e.getItem();
+                        book.setActiveLanguageLayer(lLayer);
+                        
+                        TreePath path = tree.getSelectionPath();
+                        if(path != null) {
+                            if(path.getLastPathComponent() instanceof AndersichtTrack) {
+                                
+                                AndersichtTrack track = (AndersichtTrack)path.getLastPathComponent();
+                                path = path.getParentPath();
+                                AndersichtObject object = (AndersichtObject)path.getLastPathComponent();
+                                AndersichtDescriptionLayer dLayer = object.getDescriptionLayer(track);
+                                path = path.pathByAddingChild(object.getTrack(lLayer, dLayer));
+                                
+                            }
+                        }
+                        
+                        DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+                        model.setRoot(book);
+                        if(path != null) {
+                            tree.setSelectionPath(path);
+                        }
+                    }
+                }
             }
         });
-        
+        languageChooserPanel.add(languageChooser);
         add(languageChooserPanel, BorderLayout.NORTH);
         
         optionPanel = new JPanel();
@@ -269,6 +381,10 @@ class AndersichtPanel extends JPanel {
         add(splitPane, BorderLayout.CENTER);
         splitPane.setDividerLocation(500);
         
+    }
+    
+    public DefaultComboBoxModel getLanguageChooserModel() {
+        return(languageChooserModel);
     }
     
     private JButton newActionButton(final int action, String label) {
@@ -303,15 +419,20 @@ class AndersichtPanel extends JPanel {
                 AndersichtTrack track = (AndersichtTrack)selectedObject;
                 final JFileChooser fc = new JFileChooser();
                 fc.setFileFilter(new FileNameExtensionFilter("MP3 (*.mp3)", "mp3"));
+                if((lastMp3Dir != null) && lastMp3Dir.isDirectory()) {
+                    fc.setCurrentDirectory(lastMp3Dir);
+                }
                 if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     int bookId = track.getObject().getGroup().getBook().getBookId();
                     File source = fc.getSelectedFile();
+                    lastMp3Dir = source.getParentFile();
                     File targetDir = FileEnvironment.getAndersichtAudioDirectory(Integer.toString(bookId));
                     String uid = Integer.toString(targetDir.list().length);
                     File target = new File(targetDir, uid + "-" + source.getName());
                     try {
                         FileEnvironment.copy(source, target);
                         track.setMP3(target);
+                        trackMp3Label.setText(track.getInternalMP3().getName());
                     } catch(IOException ioe) {
                         JOptionPane.showMessageDialog(this, "Fehler beim Importieren des MP3: " + ioe.getMessage());
                     }
@@ -320,15 +441,17 @@ class AndersichtPanel extends JPanel {
         }
     }
     
-    void refresh() {
+    public void refresh() {
         AndersichtBook book = mainFrame.getBook();
         if(book != null) {
+            LOG.info("refresh()");
             DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
             model.setRoot(book);
-            languageChooser.removeAllItems();
+            languageChooserModel.removeAllElements();
             for(int i = 0; i < book.getLanguageLayerCount(); i++) {
-                languageChooser.addItem(book.getLanguageLayer(i));
+                languageChooserModel.addElement(book.getLanguageLayer(i));
             }
+            LOG.info("refresh finished");
         }
     }
     

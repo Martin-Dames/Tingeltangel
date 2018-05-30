@@ -19,25 +19,26 @@
 
 package tingeltangel.core;
 
-public class Tupel<T1, T2> {
+public class Tripel<T1, T2, T3> {
     
-    public Tupel(T1 a, T2 b) {
+    public Tripel(T1 a, T2 b, T3 c) {
         this.a = a;
         this.b = b;
+        this.c = c;
     }
     
     public T1 a;
     public T2 b;
+    public T3 c;
  
-    
     @Override
     public String toString() {
-        return("(" + a.toString() + "|" + b.toString() + ")");
+        return("(" + a.toString() + "|" + b.toString() + "|" + c.toString() + ")");
     }
     
     @Override
     public int hashCode() {
-        return((int)((((long)a.hashCode()) + b.hashCode()) % (long)Integer.MAX_VALUE));
+        return((int)((((long)a.hashCode()) + b.hashCode() + c.hashCode()) % (long)Integer.MAX_VALUE));
     }
 
     @Override
@@ -51,13 +52,17 @@ public class Tupel<T1, T2> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Tupel<?, ?> other = (Tupel<?, ?>) obj;
+        final Tripel<?, ?, ?> other = (Tripel<?, ?, ?>) obj;
         if (this.a != other.a && (this.a == null || !this.a.equals(other.a))) {
             return false;
         }
         if (this.b != other.b && (this.b == null || !this.b.equals(other.b))) {
             return false;
         }
+        if (this.c != other.c && (this.c == null || !this.c.equals(other.c))) {
+            return false;
+        }
         return true;
     }
+    
 }

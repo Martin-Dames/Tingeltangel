@@ -52,11 +52,11 @@ import tingeltangel.tools.ProgressDialog;
  */
 public class AndersichtMainFrame extends JFrame {
     
-    private AndersichtPanel mainPanel;
+    private final AndersichtPanel mainPanel;
     private AndersichtBook book = null;
-    private AndersichtLanguageLayer languageLayer = null;
+    private final AndersichtLanguageLayer languageLayer = null;
     
-    private final static Logger log = LogManager.getLogger(AndersichtMainFrame.class);
+    private final static Logger LOG = LogManager.getLogger(AndersichtMainFrame.class);
     
     public AndersichtMainFrame() {
         super(Tingeltangel.ANDERSICHT_FRAME_TITLE + Tingeltangel.MAIN_FRAME_VERSION);
@@ -88,7 +88,7 @@ public class AndersichtMainFrame extends JFrame {
                             book.save();
                         } catch(Exception ex) {
                             JOptionPane.showMessageDialog(AndersichtMainFrame.this, "Das Buch konnte nicht gespeichert werden");
-                            log.error("unable to save book (" + book.getName() + ")", ex);
+                            LOG.error("unable to save book (" + book.getName() + ")", ex);
                         }
                     }
                 }
@@ -207,7 +207,7 @@ public class AndersichtMainFrame extends JFrame {
                         book.generate(target);
                     } catch(Exception e) {
                         JOptionPane.showMessageDialog(this, "Fehler beim Generieren des Buches: " + e.getMessage());
-                        e.printStackTrace();
+                        LOG.error("error generating book", e);
                         errorOccured = true;
                     }
                 }
@@ -231,18 +231,14 @@ public class AndersichtMainFrame extends JFrame {
             AndersichtChooseBook cb = new AndersichtChooseBook(this, new Callback<Integer>() {
                 @Override
                 public void callback(final Integer _id) {
-                    Progress pr = new Progress(AndersichtMainFrame.this, "lade Buch") {
-                        @Override
-                        public void action(ProgressDialog progressDialog) {
-                            try {
-                                book = AndersichtBook.load(_id);
-                                bookOpened();
-                                mainPanel.refresh();
-                            } catch (IOException ex) {
-                                log.error("unable to load book", ex);
-                            }
-                        }
-                    };
+                    try {
+                        book = AndersichtBook.load(_id);
+                        bookOpened();
+                        mainPanel.refresh();
+                        LOG.info("book loaded");
+                    } catch (IOException ex) {
+                        LOG.error("unable to load book", ex);
+                    }
                 }
             });
         }

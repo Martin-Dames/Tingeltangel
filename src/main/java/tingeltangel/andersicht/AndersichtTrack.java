@@ -92,7 +92,7 @@ public class AndersichtTrack implements TreeNode {
     }
     
     public void setMP3(File file) throws IOException {
-        if(!this.internalFile.getAbsolutePath().equals(internalFile.getAbsolutePath())) {
+        if((internalFile == null) || !internalFile.getAbsolutePath().equals(file.getAbsolutePath())) {
             internalFile = file;
             getBook().changeMade();
         }

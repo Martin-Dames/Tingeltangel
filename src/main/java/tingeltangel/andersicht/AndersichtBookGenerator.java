@@ -27,6 +27,7 @@ import tingeltangel.core.Book;
 import tingeltangel.core.Entry;
 import tingeltangel.core.Script;
 import tingeltangel.core.Translator;
+import tingeltangel.core.Tripel;
 import tingeltangel.core.Tupel;
 import tingeltangel.core.scripting.SyntaxError;
 
@@ -70,8 +71,8 @@ public class AndersichtBookGenerator {
         
         Book _book = new Book(book.getBookId());
         
-        HashMap<Tupel<AndersichtObject, Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer>>, Integer> objectTracks =
-                            new HashMap<Tupel<AndersichtObject, Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer>>, Integer>();
+        HashMap<Tripel<AndersichtObject,AndersichtLanguageLayer, AndersichtDescriptionLayer>, Integer> objectTracks =
+                            new HashMap<Tripel<AndersichtObject,AndersichtLanguageLayer, AndersichtDescriptionLayer>, Integer>();
         HashMap<AndersichtLanguageLayer, Integer> languageTracks = new HashMap<AndersichtLanguageLayer, Integer>();
         
         for(int g = 0; g < book.getGroupCount(); g++) {
@@ -81,11 +82,11 @@ public class AndersichtBookGenerator {
                 for(int d = 0; d < book.getDescriptionLayerCount(); d++) {
                     for(int l = 0; l < book.getLanguageLayerCount(); l++) {
                         int oid = freeIDs.next();
-                        Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer> layerTupel =
-                                new Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer>(book.getLanguageLayer(l), book.getDescriptionLayer(d));
-                        Tupel<AndersichtObject, Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer>> keyTupel =
-                                new Tupel<AndersichtObject, Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer>>(object, layerTupel);
-                        objectTracks.put(keyTupel, oid);
+                        
+                        Tripel<AndersichtObject, AndersichtLanguageLayer, AndersichtDescriptionLayer> key =
+                                new Tripel<AndersichtObject, AndersichtLanguageLayer, AndersichtDescriptionLayer>(object, book.getLanguageLayer(l), book.getDescriptionLayer(d));
+                        
+                        objectTracks.put(key, oid);
                         AndersichtTrack aTrack = object.getTrack(book.getLanguageLayer(l), book.getDescriptionLayer(d));
                         _book.addEntry(oid);
                         Entry entry = _book.getEntryByOID(oid);
@@ -138,11 +139,11 @@ public class AndersichtBookGenerator {
                         AndersichtLanguageLayer lLayer = book.getLanguageLayer(l);
                         
                         
-                        Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer> layerTupel =
-                                new Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer>(lLayer, dLayer);
-                        Tupel<AndersichtObject, Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer>> keyTupel =
-                                new Tupel<AndersichtObject, Tupel<AndersichtLanguageLayer, AndersichtDescriptionLayer>>(object, layerTupel);
-                        int playoid = objectTracks.get(keyTupel);
+                        Tripel<AndersichtObject, AndersichtLanguageLayer, AndersichtDescriptionLayer> key =
+                                new Tripel<AndersichtObject, AndersichtLanguageLayer, AndersichtDescriptionLayer>(object, lLayer, dLayer);
+                        
+                        
+                        int playoid = objectTracks.get(key);
                         
                         code += "cmp v0, " + Integer.toString(lLayer.getId()) + "\n";
                         code += "jne L" + Integer.toString(labelCounter) + "\n";
