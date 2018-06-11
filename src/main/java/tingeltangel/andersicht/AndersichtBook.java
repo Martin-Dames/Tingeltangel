@@ -21,9 +21,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +31,7 @@ import javax.swing.tree.TreeNode;
 import tingeltangel.andersicht.gui.AndersichtBookDefinition;
 import tingeltangel.andersicht.pen.Pen;
 import tingeltangel.andersicht.pen.Pens;
+import tingeltangel.andersicht.pen.Ting;
 import tingeltangel.core.Translator;
 import tingeltangel.tools.FileEnvironment;
 
@@ -366,17 +367,49 @@ public class AndersichtBook implements TreeNode {
         return(pen);
     }
 
-    public void generate(File target) throws IOException, IllegalArgumentException {
+    private LinkedList<String> searchForMissingMp3s() {
+        LinkedList<String> errors = new LinkedList<String>();
+        Iterator<AndersichtLanguageLayer> ill = languageLayers.iterator();
+        while(ill.hasNext()) {
+            AndersichtLanguageLayer ll = ill.next();
+            if(ll.getInternalMP3() == null) {
+                errors.add("MP3 für die Sprache '" + ll.toString() + "' fehlt");
+            }
+        }
         
-        // pre check labels
+        Iterator<AndersichtGroup> ig = groups.iterator();
+        while(ig.hasNext()) {
+            AndersichtGroup group = ig.next();
+            for(int i = 0; i < group.getObjectCount(); i++) {
+                AndersichtObject object = group.getObject(i);
+                ill = languageLayers.iterator();
+                while(ill.hasNext()) {
+                    AndersichtLanguageLayer ll = ill.next();
+                    Iterator<AndersichtDescriptionLayer> idl = descriptionLayers.iterator();
+                    while(idl.hasNext()) {
+                        AndersichtDescriptionLayer dl = idl.next();
+                        AndersichtTrack track = object.getTrack(ll, dl);
+                        if(track.getInternalMP3() == null) {
+                            errors.add("MP3 für '" + group.getName() + "/" + object.getName() + "/" + ll.getName() + "/" + dl.getName() + "' fehlt");
+                        }
+                    }
+                }
+            }
+        }
+        return(errors);
+    }
+    
+    private LinkedList<String> searchForLabelConflicts() {
         HashMap<Integer, String> labels = new HashMap<Integer, String>();
+        
+        LinkedList<String> errors = new LinkedList<String>();
         
         Iterator<AndersichtLanguageLayer> ill = languageLayers.iterator();
         while(ill.hasNext()) {
             AndersichtLanguageLayer ll = ill.next();
             String oldLabel = labels.get(ll.getLabel());
             if(oldLabel != null) {
-                throw new IllegalArgumentException("Sprache '" + ll.toString() + "' hat das selbe Label wie '" + oldLabel + "' zugeordnet");
+                errors.add("Sprache '" + ll.toString() + "' hat das selbe Label wie '" + oldLabel + "' zugeordnet");
             }
             labels.put(ll.getLabel(), ll.toString());
         }
@@ -393,7 +426,7 @@ public class AndersichtBook implements TreeNode {
                     AndersichtDescriptionLayer dl = idl.next();
                     String oldLabel = labels.get(object.getLabelAsInt(dl));
                     if(oldLabel != null) {
-                        throw new IllegalArgumentException("Objekt '" + object.toString() + "' hat das selbe Label wie '" + oldLabel + "' zugeordnet");
+                        errors.add("Objekt '" + object.toString() + "' hat das selbe Label wie '" + oldLabel + "' zugeordnet");
                     }
                     labels.put(object.getLabelAsInt(dl), object.toString());
                 }
@@ -403,14 +436,116 @@ public class AndersichtBook implements TreeNode {
         while(labelIterator.hasNext()) {
             int label = labelIterator.next();
             if(label < Translator.getMinObjectCode()) {
-                throw new IllegalArgumentException("ungültiges Label für '" + labels.get(label) + "'");
+                errors.add("ungültiges Label für '" + labels.get(label) + "'");
             }
             if(Translator.ting2code(label) < 0) {
-                throw new IllegalArgumentException("unbekanntes Label für '" + labels.get(label) + "'");
+                errors.add("unbekanntes Label für '" + labels.get(label) + "'");
             }
+        }
+        
+        return(errors);
+    }
+    
+    public void generate(File target) throws IOException, IllegalArgumentException {
+        
+        LinkedList<String> labelErrors = searchForLabelConflicts();
+        if(labelErrors.size() > 0) {
+            throw new IllegalArgumentException(labelErrors.getFirst());
         }
         
         AndersichtBookGenerator.generate(this, target);
     }
 
+    public StringBuffer checkLabels() {
+        
+        StringBuffer sb = new StringBuffer();
+        
+        LinkedList<String> labelErrors = searchForLabelConflicts();
+        if(labelErrors.isEmpty()) {
+            return(null);
+        } else {
+            Iterator<String> i = labelErrors.iterator();
+            while(i.hasNext()) {
+                sb.append(i.next()).append("\n");
+            }
+        }
+        
+        return(sb);
+    }
+    
+    public StringBuffer checkMp3s() {
+        
+        StringBuffer sb = new StringBuffer();
+        
+        LinkedList<String> mp3Errors = searchForMissingMp3s();
+        if(mp3Errors.isEmpty()) {
+            return(null);
+        } else {
+            Iterator<String> i = mp3Errors.iterator();
+            while(i.hasNext()) {
+                sb.append(i.next()).append("\n");
+            }
+        }
+        
+        return(sb);
+    }
+
+    private String toLength(String s, int l) {
+        if(s.length() > l) {
+            s = s.substring(0, l - 3) + "...";
+        }
+        while(s.length() < l) {
+            s += " ";
+        }
+        return(s);
+    }
+    
+    private String tab(int i) {
+        String s = "";
+        for(int j = 0; j < i; j++) {
+            for(int k = 0; k < 6; k++) {
+                s += " ";
+            }
+        }
+        return(s);
+    } 
+    
+    public void generateLabelReport(PrintWriter out) throws IOException {
+        out.println("Buchname : " + getName());
+        out.println("Buch ID  : " + getBookId());
+        out.println("Pen      : " + getPen().toString());
+        out.println();
+        out.println();
+        out.println("Sprachlayer:");
+        for(int ll = 0; ll < getLanguageLayerCount(); ll++) {
+            int tingId = getLanguageLayer(ll).getLabel();
+            String label = Integer.toString(tingId);
+            if(!(getPen() instanceof Ting)) {
+                label = getPen().fromTingId(tingId) + " (" + label + ")";
+            }
+            out.println(tab(2) + toLength(getLanguageLayer(ll).getName(), 25) + " : " + label);
+        }
+        out.println();
+        out.println();
+        for(int g = 0; g < getGroupCount(); g++) {
+            AndersichtGroup group = getGroup(g);
+            out.println(group.getName());
+            for(int o = 0; o < group.getObjectCount(); o++) {
+                AndersichtObject object = group.getObject(o);
+                out.println(tab(1) + object.getName());
+                for(int l = 0; l < getDescriptionLayerCount(); l++) {
+                    AndersichtDescriptionLayer dLayer = getDescriptionLayer(l);
+                    int tingId = object.getLabelAsInt(dLayer);
+                    String label = Integer.toString(tingId);
+                    if(!(getPen() instanceof Ting)) {
+                        label = getPen().fromTingId(tingId) + " (" + label + ")";
+                    }
+                    out.println(tab(2) + toLength(dLayer.getName(), 25) + " : " + label);
+                }
+                out.println();
+            }
+            out.println();
+        }
+    }
+    
 }

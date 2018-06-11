@@ -21,7 +21,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.AbstractAction;
@@ -151,21 +153,23 @@ public class AndersichtMainFrame extends JFrame {
         JMenuBar bar = new JMenuBar();
         
         JMenu file = new JMenu("Buch");
-        
         file.add(newMenuItem("new", "Neu", false));
         file.add(newMenuItem("load", "Laden", false));
         file.add(newMenuItem("save", "Speichern", true));
         file.add(newMenuItem("generate", "Generieren", true));
         file.add(newMenuItem("exit", "Beenden", false));
-                
         bar.add(file);
         
         JMenu config = new JMenu("Einstellungen");
-        
         config.add(newMenuItem("configure_languages", "Sprachlayer", true));
         config.add(newMenuItem("configure_descriptions", "Beschreibungslayer", true));
-        
         bar.add(config);
+        
+        JMenu reports = new JMenu("Checks / Reports");
+        reports.add(newMenuItem("check_ids", "Label Check", true));
+        reports.add(newMenuItem("check_mp3s", "MP3 Check", true));
+        reports.add(newMenuItem("report_labels", "Label Report", true));
+        bar.add(reports);
         
         return(bar);
     }
@@ -199,12 +203,18 @@ public class AndersichtMainFrame extends JFrame {
                 book.save();
                 
                 final JFileChooser fc = new JFileChooser();
-                fc.setFileFilter(new FileNameExtensionFilter("OUT (*.ouf)", "ouf"));
+                //fc.setFileFilter(new FileNameExtensionFilter("OUT (*.ouf)", "ouf"));
+                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 boolean errorOccured = false;
                 if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                     File target = fc.getSelectedFile();
+                    String fileName = Integer.toString(book.getBookId());
+                    while(fileName.length() < 5) {
+                        fileName = "0" + fileName;
+                    }
+                    fileName += "_en.ouf";
                     try {
-                        book.generate(target);
+                        book.generate(new File(target, fileName));
                     } catch(Exception e) {
                         JOptionPane.showMessageDialog(this, "Fehler beim Generieren des Buches: " + e.getMessage());
                         LOG.error("error generating book", e);
@@ -227,6 +237,40 @@ public class AndersichtMainFrame extends JFrame {
             } catch(IOException ioe) {
                 JOptionPane.showMessageDialog(this, "Fehler beim speichern des Buches: " + ioe.getMessage());
             }
+        } else if(action.equals("check_ids")) {
+            StringBuffer sb = book.checkLabels();
+            if(sb == null) {
+                JOptionPane.showMessageDialog(this, "Keine Konflikte oder Fehler gefunden");
+            } else {
+                JOptionPane.showMessageDialog(this, "Fehler oder Konflikte gefunden:\n" + sb.toString());
+            }
+        } else if(action.equals("check_mp3s")) {
+            StringBuffer sb = book.checkMp3s();
+            if(sb == null) {
+                JOptionPane.showMessageDialog(this, "Alle MP3s vorhanden");
+            } else {
+                JOptionPane.showMessageDialog(this, "Fehlende MP3s gefunden:\n" + sb.toString());
+            }
+        } else if(action.equals("report_labels")) {
+            final JFileChooser fc = new JFileChooser();
+                fc.setFileFilter(new FileNameExtensionFilter("Label-Report (*.txt)", "txt"));
+                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                boolean errorOccured = false;
+                if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    File target = fc.getSelectedFile();
+                    try {
+                        PrintWriter out = new PrintWriter(new FileWriter(target));
+                        book.generateLabelReport(out);
+                        out.close();
+                    } catch(Exception e) {
+                        JOptionPane.showMessageDialog(this, "Fehler beim Generieren des Label-Reports: " + e.getMessage());
+                        LOG.error("error generating label report", e);
+                        errorOccured = true;
+                    }
+                }
+                if(!errorOccured) {
+                    JOptionPane.showMessageDialog(this, "Label-Report erstellt");
+                }
         } else if(action.equals("load")) {
             AndersichtChooseBook cb = new AndersichtChooseBook(this, new Callback<Integer>() {
                 @Override

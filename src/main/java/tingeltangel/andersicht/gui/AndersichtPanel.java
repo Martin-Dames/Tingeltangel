@@ -24,7 +24,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -49,6 +54,7 @@ import tingeltangel.andersicht.AndersichtGroup;
 import tingeltangel.andersicht.AndersichtLanguageLayer;
 import tingeltangel.andersicht.AndersichtObject;
 import tingeltangel.andersicht.AndersichtTrack;
+import tingeltangel.core.Stick;
 import tingeltangel.tools.Callback;
 import tingeltangel.tools.FileEnvironment;
 
@@ -88,11 +94,16 @@ class AndersichtPanel extends JPanel {
     private JLabel trackMp3Label = new JLabel();
     private JButton trackLabelButton = new JButton();
     
+    private JButton deploymentButton = new JButton();
+    
     private File lastMp3Dir = null;
     
     private final int ACTION_ADD_GROUP = 1;
     private final int ACTION_ADD_OBJECT = 2;
     private final int ACTION_ADD_MP3 = 3;
+    
+    
+    private boolean online = false;
     
     
     AndersichtPanel(final AndersichtMainFrame mainFrame) {
@@ -338,7 +349,6 @@ class AndersichtPanel extends JPanel {
             }
         });
         
-        JPanel languageChooserPanel = new JPanel();
         languageChooser = new JComboBox(languageChooserModel);
         languageChooser.addItemListener(new ItemListener() {
             @Override
@@ -371,8 +381,8 @@ class AndersichtPanel extends JPanel {
                 }
             }
         });
-        languageChooserPanel.add(languageChooser);
-        add(languageChooserPanel, BorderLayout.NORTH);
+        
+        
         
         optionPanel = new JPanel();
         optionPanel.setLayout(new BorderLayout());
@@ -381,6 +391,85 @@ class AndersichtPanel extends JPanel {
         add(splitPane, BorderLayout.CENTER);
         splitPane.setDividerLocation(500);
         
+        deploymentButton.setText("keinen Stift gefunden");
+        deploymentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    AndersichtBook book = mainFrame.getBook();
+                    book.save();
+                    try {
+                        String fileName = Integer.toString(book.getBookId());
+                        while(fileName.length() < 5) {
+                            fileName = "0" + fileName;
+                        }
+                        fileName += "_en.ouf";
+                        File file = new File(FileEnvironment.getAndersichtBookDirectory(Integer.toString(book.getBookId())), fileName);
+                        book.generate(file);
+                        try {
+                            // copy to stick
+                            Stick stick = Stick.getStick();
+                            if(stick != null) {
+                                File dest = stick.getBookDir();
+                                if(!dest.getAbsolutePath().contains("$ting")) {
+                                    dest = new File(stick.getBookDir(), "$ting");
+                                }
+                                FileEnvironment.copy(file, new File(dest, file.getName()));
+                                stick.activateBook(book.getBookId());
+                                JOptionPane.showMessageDialog(mainFrame, "Buch auf den Stift kopiert");
+                            } else {
+                                JOptionPane.showMessageDialog(mainFrame, "Stift nicht gefunden");
+                            }
+                        } catch(IOException e3) {
+                            JOptionPane.showMessageDialog(mainFrame, "Fehler beim Kopieren des Buches auf den Stift: " + e3.getMessage());
+                        }
+                    } catch(IOException e2) {
+                        JOptionPane.showMessageDialog(mainFrame, "Fehler beim Generieren des Buches: " + e2.getMessage());
+                    }
+                } catch(IOException e1) {
+                    JOptionPane.showMessageDialog(mainFrame, "Fehler beim Speichern des Buches: " + e1.getMessage());
+                }
+            }
+        });
+        
+        Runnable task = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    Stick stick = Stick.getStick();
+                    if(online && (stick == null)) {
+                        // go offline
+                        online = false;
+                        deploymentButton.setEnabled(false);
+                        deploymentButton.setText("keinen Stift gefunden");
+                    } else if((!online) && (stick != null) && (mainFrame.getBook() != null)) {
+                        // go online
+                        online = true;
+                        deploymentButton.setEnabled(true);
+                        deploymentButton.setText("auf den Stift kopieren");
+                    }
+                } catch(IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+        };
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(task, 3, 3, TimeUnit.SECONDS);
+        deploymentButton.setEnabled(false);
+        
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new GridBagLayout());
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        gbc.gridy = 0;
+        
+        gbc.gridx = 0;
+        topPanel.add(languageChooser, gbc);
+        gbc.gridx = 1;
+        topPanel.add(deploymentButton, gbc);
+        
+        
+        add(topPanel, BorderLayout.NORTH);
     }
     
     public DefaultComboBoxModel getLanguageChooserModel() {
