@@ -41,6 +41,7 @@
         <include>TingeltangelCLI.*</include>
         <include>TingeltangelEditor.*</include>
         <include>TingeltangelManager.*</include>
+        <include>TingeltangelAndersicht.*</include>
       </includes>
     </fileSet>
     

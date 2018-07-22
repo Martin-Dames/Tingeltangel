@@ -1,0 +1,1 @@
+start javaw -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true -jar tingeltangel-0.6-jar-with-dependencies.jar andersicht

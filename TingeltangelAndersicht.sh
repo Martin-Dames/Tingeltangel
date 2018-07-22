@@ -7,4 +7,4 @@ OPTIONS="$OPTIONS -Dawt.useSystemAAFontSettings=on"
 OPTIONS="$OPTIONS -Dswing.aatext=true"
 OPTIONS="$OPTIONS -Dsun.java2d.xrender=true"
 
-java $OPTIONS -jar $JAR gui-editor disable-official-books
+java $OPTIONS -jar $JAR andersicht

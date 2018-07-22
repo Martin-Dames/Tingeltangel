@@ -39,7 +39,7 @@ public class Tingeltangel {
     public static int MAIN_FRAME_HEIGHT = 700;
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
     public static String ANDERSICHT_FRAME_TITLE = "Tingeltangel (Andersicht GUI)";
-    public static String MAIN_FRAME_VERSION = " v0.5";
+    public static String MAIN_FRAME_VERSION = " v0.6";
     
     
     public final static String BASE_URL = "http://system.ting.eu/book-files";
