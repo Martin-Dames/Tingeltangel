@@ -482,7 +482,7 @@ public class Stick {
             mounts = File.listRoots();
         } else {
             LinkedList<File> mountList = new LinkedList<File>();
-            Process process = new ProcessBuilder("/bin/mount").start();
+            Process process = new ProcessBuilder(OS.getMountCommand()).start();
             BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String row;
             while ((row = in.readLine()) != null) {
