@@ -1,6 +1,6 @@
 /*
-    Copyright (C) 2015   Martin Dames <martin@bastionbytes.de>
-  
+    Copyright (C) 2015   Jesper Zedlitz <jesper@zedlitz.de>
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -14,26 +14,21 @@
     You should have received a copy of the GNU General Public License along
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-  
+
 */
+package tingeltangel.core;
 
-package tingeltangel.tools;
+import org.junit.Test;
+import tingeltangel.tools.OS;
+import static org.junit.Assert.assertEquals;
 
-/**
- *
- * @author mdames
- */
-public class OS {
+public class OSTest {
 
-    public static boolean isWindows() {
-        return System.getProperty("os.name").startsWith("Windows");
+    @Test
+    public void testMountForIOS() {
+        System.setProperty("os.name", "Mac OS X");
+        String command = OS.getMountCommand();
+        assertEquals(command, "/sbin/mount");
+
     }
-
-    public static boolean isMac() {
-        return System.getProperty("os.name").startsWith("Mac");
-    }
-    public static String getMountCommand() {
-        return  OS.isMac() ? "/sbin/mount" : "/bin/mount";
-    }
-    
 }
