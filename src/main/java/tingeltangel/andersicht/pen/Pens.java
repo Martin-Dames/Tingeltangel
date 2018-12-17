@@ -26,7 +26,7 @@ public class Pens {
     
     private final static Pen[] PENS = {
         new Ting(),
-        new PenFriend()  
+        new Penfriend()  
     };
     
     private final static HashMap<String, Pen> PEN_MAP = new HashMap<String, Pen>();

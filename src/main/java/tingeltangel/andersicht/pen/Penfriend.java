@@ -23,28 +23,35 @@ import tingeltangel.core.Tupel;
  *
  * @author mdames
  */
-public class PenFriend implements Pen {
+public class Penfriend implements Pen {
 
     @Override
     public String toString() {
-        return("Pen-Friend");
+        return("Penfriend");
     }
 
     @Override
     public String fromTingId(int id) {
-        return("A-" + id);
+        if((39185 <= id) && (id <= 39311)) return("CS" + (id - 39184));
+        if((39312 <= id) && (id <= 39729)) return("ID" + (id - 39311));
+        throw new Error();
     }
 
     @Override
     public int toTingId(String penId) {
-        return(Integer.parseInt(penId.substring(2)));
+        if(penId.startsWith("CS")) {
+            return(Integer.parseInt(penId.substring(2)) + 39184);
+        } else if(penId.startsWith("ID")) {
+            return(Integer.parseInt(penId.substring(2)) + 39311);
+        }
+        throw new Error();
     }
 
     @Override
     public Collection<Tupel<Integer, String>> getLabelList() {
-        LinkedList<Tupel<Integer, String>> list = new LinkedList<Tupel<Integer, String>>();
-        for(int i = 15001; i < 16001; i++) {
-            list.add(new Tupel<Integer, String>(i, "A-" + Integer.toString(i)));
+        LinkedList<Tupel<Integer, String>> list = new LinkedList<>();
+        for(int i = 39185; i <= 39729; i++) {
+            list.add(new Tupel<>(i, fromTingId(i)));
         }
         return(list);
     }

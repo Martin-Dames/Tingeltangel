@@ -62,6 +62,11 @@ public class Repository {
         init();
     }
     
+    private static boolean testTxtFile(File txt) {
+        
+        
+    }
+    
     private static HashMap<String, String> readTxt(File txt) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(txt), "UTF-8"));
         HashMap<String, String> data = new HashMap<String, String>();
@@ -408,6 +413,8 @@ public class Repository {
                         in.close();
                         out.close();
 
+                        
+                        
                     } catch(IOException ioe) {
                         if(in != null) {
                             try {
