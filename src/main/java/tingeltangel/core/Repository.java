@@ -63,8 +63,15 @@ public class Repository {
     }
     
     private static boolean testTxtFile(File txt) {
-        
-        
+        try {
+            HashMap<String, String> txtMap = readTxt(txt);
+            if(!txtMap.containsKey("Name")) {
+                return(false);
+            }
+        } catch(IOException e) {
+            return(false);
+        }
+        return(true);
     }
     
     private static HashMap<String, String> readTxt(File txt) throws IOException {
@@ -356,7 +363,7 @@ public class Repository {
     }
 
     public static void initialUpdate(final Thread done) throws IOException {
-        final HashSet<String> toDownload = new HashSet<String>();
+        final HashSet<String> toDownload = new HashSet<>();
         BufferedReader bin = new BufferedReader(new InputStreamReader(Repository.class.getResourceAsStream(KNOWN_BOOKS_FILE)));
         String row;
         while((row = bin.readLine()) != null) {
@@ -402,8 +409,11 @@ public class Repository {
                     InputStream in = null;
                     OutputStream out = null;
                     try {
+                        
+                        File txt = new File(FileEnvironment.getRepositoryDirectory() , row + TxtFile._EN_TXT);
+                        
                         in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + row + "/area/en").openStream();
-                        out = new FileOutputStream(new File(FileEnvironment.getRepositoryDirectory() , row + TxtFile._EN_TXT));
+                        out = new FileOutputStream(txt);
 
                         int k;
                         while((k = in.read(buffer)) != -1) {
@@ -413,19 +423,21 @@ public class Repository {
                         in.close();
                         out.close();
 
-                        
+                        if(!testTxtFile(txt)) {
+                            throw new IOException("txt file broken");
+                        }
                         
                     } catch(IOException ioe) {
                         if(in != null) {
                             try {
                                 in.close();
-                            } catch(Exception e) {
+                            } catch(IOException e) {
                             }
                         }
                         if(out != null) {
                             try {
                                 out.close();
-                            } catch(Exception e) {
+                            } catch(IOException e) {
                             }
                         }
                         new File(FileEnvironment.getRepositoryDirectory(), row + TxtFile._EN_TXT).delete();
@@ -442,10 +454,10 @@ public class Repository {
 
     public static void update(ProgressDialog progress) throws IOException {
         Integer[] ids = getIDs();
-        List<Integer> _ids = new LinkedList<Integer>();
-        for(int r = 0; r < ids.length; r++) {
-            if(Repository.exists(ids[r])) {
-                _ids.add(ids[r]);
+        List<Integer> _ids = new LinkedList<>();
+        for(Integer id : ids) {
+            if(Repository.exists(id)) {
+                _ids.add(id);
             }
         }
         if(progress != null) {
