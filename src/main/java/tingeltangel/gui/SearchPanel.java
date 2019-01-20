@@ -6,30 +6,27 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import tingeltangel.core.Entry;
-import tingeltangel.gui.EditorFrame;
-import tingeltangel.gui.EditorPanel;
-import tingeltangel.gui.IndexListEntry;
 
 public class SearchPanel extends JPanel {
 
-    private String SEARCH_LABEL = "Suche";
-    private String CLEAR_LABEL = "Löschen";
-    private String MP3_TYPE = "MP3";
-    private String SCRIPT_TYPE = "Script";
-    private String SCRIPT_SUBROUTINE_TYPE = "Script (Subroutine)";
-    private String TTS_TYPE = "TTS (Text to speech)";
-    private String NAME_LABEL = "Name: ";
-    private String ID_LABEL = "ID: ";
-    private String TYPE_LABEL = "Type: ";
-    private String SEARCH_RESULTS_LABEL = "Ergebnisse der Suche: ";
-    private int SEARCH_FIELD_WIDTH = 100;
-    private int SEARCH_FIELD_HIGH =  20;
+    private static final String SEARCH_LABEL = "Suche";
+    private static final String CLEAR_LABEL = "Löschen";
+    private static final String MP3_TYPE = "MP3";
+    private static final String SCRIPT_TYPE = "Script";
+    private static final String SCRIPT_SUBROUTINE_TYPE = "Script (Subroutine)";
+    private static final String TTS_TYPE = "TTS (Text to speech)";
+    private static final String NAME_LABEL = "Name: ";
+    private static final String ID_LABEL = "ID: ";
+    private static final String TYPE_LABEL = "Type: ";
+    private static final String SEARCH_RESULTS_LABEL = "Ergebnisse der Suche: ";
+    private static final int SEARCH_FIELD_WIDTH = 100;
+    private static final int SEARCH_FIELD_HIGH =  20;
 
 
 
@@ -45,7 +42,7 @@ public class SearchPanel extends JPanel {
 
 
     Border border = BorderFactory.createTitledBorder(SEARCH_LABEL);
-    public SearchPanel(EditorFrame mainFrame, EditorPanel editorPanel) {
+    public SearchPanel(final EditorFrame mainFrame, final EditorPanel editorPanel) {
         this.setBorder(this.border);
 
         this.add(new JLabel(ID_LABEL));
@@ -59,77 +56,98 @@ public class SearchPanel extends JPanel {
         this.name.setPreferredSize(new Dimension(SEARCH_FIELD_WIDTH, SEARCH_FIELD_HIGH));
         this.add(this.name);
 
-        this.search.addActionListener((ActionEvent se) -> {
-            log.info(NAME_LABEL + this.name.getText() + "\n"
-                    + ID_LABEL + this.id.getText() + "\n"
-                    + TYPE_LABEL + this.type.getSelectedItem().toString()
-                    + "selected index type: " + this.type.getSelectedIndex());
-            List<Entry> result = new ArrayList<>(mainFrame.getBook().getIndexEntries().values());
-            if (!this.name.getText().isEmpty()) {
-                result = result
-                        .stream()
-                        .filter(
-                                (entry) ->
-                                        entry.getName().equals(this.name.getText()
-                                        )
-                        ).collect(Collectors.toList());
+        this.search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                log.info(NAME_LABEL + name.getText() + "\n"
+                        + ID_LABEL + id.getText() + "\n"
+                        + TYPE_LABEL + type.getSelectedItem().toString()
+                        + "selected index type: " + type.getSelectedIndex());
+                List<Entry> result = new ArrayList<>(mainFrame.getBook().getIndexEntries().values());
+                List<Entry> filterName = new ArrayList<>();
+
+                if (!name.getText().isEmpty()) {
+                    for (Entry entry : result) {
+                        if (entry.getName().equals(name.getText())) {
+                            filterName.add(entry);
+                        }
+                    }
+                } else {
+                    filterName = result;
+                }
+
+                List<Entry> filterID = new ArrayList<>();
+                if (!id.getText().isEmpty() && id.getText().matches("-?\\d+")) {
+                    for (Entry entry : result) {
+                        if (entry.getTingID() == Integer.valueOf(id.getText())) {
+                            filterID.add(entry);
+                        }
+                    }
+                } else {
+                    filterID = result;
+                }
+
+                List<Entry> filterType = new ArrayList<>();
+                if (type.getSelectedIndex() != 0) {
+                    for (Entry entry : result) {
+                        if (entry.getType() == type.getSelectedIndex()) {
+                            filterType.add(entry);
+                        }
+                    }
+                } else {
+                    filterType = result;
+                }
+
+                List<Entry> filter = new ArrayList<>();
+                filterName.retainAll(filterID);
+                filterName.retainAll(filterType);
+                filter = filterName;
+
+
+                editorPanel.getList().removeAll();
+
+                editorPanel.getList()
+                        .setBorder(
+                                BorderFactory.createTitledBorder(SEARCH_RESULTS_LABEL + filter.size()));
+
+                for (Entry entry : filter) {
+                    editorPanel.getList().add(new IndexListEntry(entry, editorPanel));
+                }
+
+                Dimension size = mainFrame.getSize();
+
+                mainFrame.pack();
+                mainFrame.setSize(size);
+                log.info(result);
             }
-
-            if (!this.id.getText().isEmpty() && this.id.getText().matches("-?\\d+")){
-                result = result
-                        .stream()
-                        .filter(
-                                (entry) -> Integer.valueOf(this.id.getText()).equals(entry.getTingID())
-                        ).collect(Collectors.toList());
-            }
-
-            if (this.type.getSelectedIndex() != 0){
-                result = result
-                        .stream()
-                        .filter(
-                                (entry) -> (entry.getType() == this.type.getSelectedIndex())
-                        ).collect(Collectors.toList());
-            }
-
-            editorPanel.getList().removeAll();
-
-            editorPanel.getList()
-                    .setBorder(
-                            BorderFactory.createTitledBorder(SEARCH_RESULTS_LABEL + result.size()));
-
-            for (Entry entry: result) {
-                editorPanel.getList().add(new IndexListEntry(entry, editorPanel));
-            }
-
-            Dimension size = mainFrame.getSize();
-
-            mainFrame.pack();
-            mainFrame.setSize(size);
-            log.info(result);
-
         });
 
         this.add(this.search);
 
-        this.clear.addActionListener((ActionEvent cl) -> {
-            this.name.setText("");
-            this.id.setText("");
-            this.type.setSelectedIndex(0);
-            editorPanel.getList().removeAll();
+        this.clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            editorPanel.getList()
-                    .setBorder(
-                            BorderFactory.createTitledBorder( SEARCH_RESULTS_LABEL
-                                    + mainFrame.getBook().getIndexEntries().size()));
+                name.setText("");
+                id.setText("");
+                type.setSelectedIndex(0);
+                editorPanel.getList().removeAll();
 
-            for (Entry entry: mainFrame.getBook().getIndexEntries().values()) {
-                editorPanel.getList().add(new IndexListEntry(entry, editorPanel));
+                editorPanel.getList()
+                        .setBorder(
+                                BorderFactory.createTitledBorder(SEARCH_RESULTS_LABEL
+                                        + mainFrame.getBook().getIndexEntries().size()));
+
+                for (Entry entry : mainFrame.getBook().getIndexEntries().values()) {
+                    editorPanel.getList().add(new IndexListEntry(entry, editorPanel));
+                }
+
+                Dimension size = mainFrame.getSize();
+
+                mainFrame.pack();
+                mainFrame.setSize(size);
             }
-
-            Dimension size = mainFrame.getSize();
-
-            mainFrame.pack();
-            mainFrame.setSize(size);
         });
         this.add(this.clear);
 
