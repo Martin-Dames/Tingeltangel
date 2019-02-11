@@ -54,7 +54,7 @@ import tingeltangel.andersicht.AndersichtGroup;
 import tingeltangel.andersicht.AndersichtLanguageLayer;
 import tingeltangel.andersicht.AndersichtObject;
 import tingeltangel.andersicht.AndersichtTrack;
-import tingeltangel.core.Stick;
+import tingeltangel.core.TingStick;
 import tingeltangel.tools.Callback;
 import tingeltangel.tools.FileEnvironment;
 
@@ -408,7 +408,7 @@ class AndersichtPanel extends JPanel {
                         book.generate(file);
                         try {
                             // copy to stick
-                            Stick stick = Stick.getStick();
+                            TingStick stick = TingStick.getStick();
                             if(stick != null) {
                                 File dest = stick.getBookDir();
                                 if(!dest.getAbsolutePath().contains("$ting")) {
@@ -436,7 +436,7 @@ class AndersichtPanel extends JPanel {
             @Override
             public void run() {
                 try {
-                    Stick stick = Stick.getStick();
+                    TingStick stick = TingStick.getStick();
                     if(online && (stick == null)) {
                         // go offline
                         online = false;

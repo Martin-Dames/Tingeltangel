@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -35,19 +34,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.ImageIcon;
-import javax.swing.InputMap;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import tingeltangel.Tingeltangel;
@@ -60,7 +53,7 @@ import tingeltangel.tools.ProgressDialog;
 
 public class ManagerFrame extends JFrame {
     
-    private final static Logger log = LogManager.getLogger(ManagerFrame.class);
+    private final static Logger LOG = LogManager.getLogger(ManagerFrame.class);
     
     private final JPanel centerPanel = new JPanel();
     private final JLabel statusLabel = new JLabel("kein Stift gefunden");
@@ -95,7 +88,8 @@ public class ManagerFrame extends JFrame {
             @Override
             public void run() {
                 try {
-                    Stick stick = Stick.getStick();
+                    Stick stick = Stick.getAnyStick();
+                    
                     if(online && (stick == null)) {
                         // go offline
                         online = false;
@@ -123,7 +117,7 @@ public class ManagerFrame extends JFrame {
     }
 
     private void updateList() throws IOException {
-        Stick stick = Stick.getStick();
+        Stick stick = Stick.getAnyStick();
         Iterator<Integer> ids = stick.getBooks().iterator();
 
         centerPanel.removeAll();
@@ -147,7 +141,7 @@ public class ManagerFrame extends JFrame {
             updateList();
             
         } catch(IOException ioe) {
-            log.warn("Stick konnte nicht geöffnet werden", ioe);
+            LOG.warn("Stick konnte nicht geöffnet werden", ioe);
             JOptionPane.showMessageDialog(this, "Stick konnte nicht geöffnet werden");
         }
     }
@@ -168,7 +162,7 @@ public class ManagerFrame extends JFrame {
                 panel.add(new JLabel(new ImageIcon(ImageIO.read(getClass().getResource("/noCover.png")))), BorderLayout.WEST);
             }
         } catch(IOException ioe) {
-            log.warn("unable to load cover (mid=" + mid + ")", ioe);
+            LOG.warn("unable to load cover (mid=" + mid + ")", ioe);
         }
         
         
@@ -178,22 +172,28 @@ public class ManagerFrame extends JFrame {
         addButton(actionPanel, "aktualisieren", new Callback<Object>() {
             @Override
             public void callback(Object t) {
+                System.out.println("ManagerFrame::update:...");
                 if(!Repository.txtExists(mid)) {
+                    System.out.println("ManagerFrame::update: Repository.search(mid=" + mid + ")...");
                     Repository.search(mid);
+                    System.out.println("ManagerFrame::update: Repository.search(mid).");
                 }
                 if(!Repository.txtExists(mid)) {
-                    log.warn("book " + mid + " not found in repository");
+                    LOG.warn("book " + mid + " not found in repository");
                     JOptionPane.showMessageDialog(ManagerFrame.this, "Das Buch wurde im Repository nicht gefunden");
                 } else {
                     Progress pr = new Progress(ManagerFrame.this, "Buch aktualisieren") {
                         @Override
                         public void action(ProgressDialog progressDialog) {
                             try {
+                                System.out.println("ManagerFrame::update: Repository.update(mid, progressDialog)...");
                                 Repository.update(mid, progressDialog);
-                                Stick.getStick().copyFromRepositoryToStick(mid);
+                                System.out.println("ManagerFrame::update: Stick.getAnyStick().copyFromRepositoryToStick(mid)...");
+                                Stick.getAnyStick().copyFromRepositoryToStick(mid);
+                                System.out.println("ManagerFrame::update: updateList()...");
                                 updateList();
                             } catch(IOException ioe) {
-                                log.warn("book " + mid + " update failed", ioe);
+                                LOG.warn("book " + mid + " update failed", ioe);
                                 JOptionPane.showMessageDialog(ManagerFrame.this, "Das Buch konnte nicht aktualisiert werden");
                             }
                         }
@@ -206,10 +206,10 @@ public class ManagerFrame extends JFrame {
             @Override
             public void callback(Object t) {
                 try {
-                    Stick.getStick().delete(mid);
+                    Stick.getAnyStick().delete(mid);
                     updateList();
                 } catch(IOException ioe) {
-                    log.warn("book " + mid + " delete failed", ioe);
+                    LOG.warn("book " + mid + " delete failed", ioe);
                     JOptionPane.showMessageDialog(ManagerFrame.this, "Das Buch konnte nicht gelöscht werden werden");
                 }
             }
@@ -267,14 +267,14 @@ public class ManagerFrame extends JFrame {
                 // update all books on stick
                 Stick stick;
                 try {
-                    stick = Stick.getStick();
+                    stick = Stick.getAnyStick();
                     if(stick == null) {
-                        log.warn("no stick found");
+                        LOG.warn("no stick found");
                         JOptionPane.showMessageDialog(ManagerFrame.this, "kein Stift gefunden");
                         return;
                     }
                 } catch(IOException ioe) {
-                    log.warn("failed to access stick", ioe);
+                    LOG.warn("failed to access stick", ioe);
                     JOptionPane.showMessageDialog(ManagerFrame.this, "Auf den Stift kann nicht zugegriffen werden");
                     return;
                 }
@@ -287,7 +287,7 @@ public class ManagerFrame extends JFrame {
                             try {
                                 updateList();
                             } catch(IOException ioe) {
-                                log.warn("failed to update book list", ioe);
+                                LOG.warn("failed to update book list", ioe);
                             }
                             JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich");
                         } else {
@@ -319,7 +319,7 @@ public class ManagerFrame extends JFrame {
                             Repository.update(progressDialog);
                             JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich");
                         } catch (IOException ex) {
-                            log.warn("Repository.update error", ex);
+                            LOG.warn("Repository.update error", ex);
                             JOptionPane.showMessageDialog(ManagerFrame.this, "Es ist ein Fehler aufgetreten");
                         }
                     }

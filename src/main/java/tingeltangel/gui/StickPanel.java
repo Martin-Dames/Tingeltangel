@@ -34,7 +34,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import tingeltangel.core.Book;
-import tingeltangel.core.Stick;
+import tingeltangel.core.TingStick;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
 import tingeltangel.tools.Progress;
@@ -80,7 +80,7 @@ public class StickPanel extends JPanel {
                                         try {
                                             book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
                                             // now copy book to stick
-                                            Stick stick = Stick.getStick();
+                                            TingStick stick = TingStick.getStick();
                                             if(stick != null) {
                                                 File dest = stick.getBookDir();
                                                 if(!dest.getAbsolutePath().contains("$ting")) {
@@ -128,7 +128,7 @@ public class StickPanel extends JPanel {
             @Override
             public void run() {
                 try {
-                    Stick stick = Stick.getStick();
+                    TingStick stick = TingStick.getStick();
                     if(online && (stick == null)) {
                         // go offline
                         online = false;

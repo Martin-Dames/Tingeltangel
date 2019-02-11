@@ -16,7 +16,7 @@
 package tingeltangel.cli_ng;
 
 import java.io.IOException;
-import tingeltangel.core.Stick;
+import tingeltangel.core.TingStick;
 import tingeltangel.core.Translator;
 
 /**
@@ -50,7 +50,7 @@ class StickActivateBook extends CliCmd {
             return(error("MID keine Zahl zw. 1 und " + Integer.toString(Translator.MAX_MID)));
         }
         try {
-            Stick stick = Stick.getStick();
+            TingStick stick = TingStick.getStick();
             if(stick == null) {
                 return(error("kein Stift gefunden"));
             }

@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import tingeltangel.core.Book;
-import tingeltangel.core.Stick;
+import tingeltangel.core.TingStick;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
 
@@ -42,7 +42,7 @@ class Deploy extends CliCmd {
     @Override
     int execute(String[] args) {
         try {
-            Stick stick = Stick.getStick();
+            TingStick stick = TingStick.getStick();
             if(stick == null) {
                 return(error("kein Stift gefunden"));
             }

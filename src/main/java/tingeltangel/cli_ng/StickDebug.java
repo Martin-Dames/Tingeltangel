@@ -17,7 +17,7 @@ package tingeltangel.cli_ng;
 
 import java.io.IOException;
 import java.util.HashMap;
-import tingeltangel.core.Stick;
+import tingeltangel.core.TingStick;
 
 /**
  *
@@ -41,9 +41,9 @@ class StickDebug extends CliCmd {
             return(error("Falsche Anzahl von Parametern"));
         }
         
-        Stick stick = null;
+        TingStick stick = null;
         try {
-            stick = Stick.getStick();
+            stick = TingStick.getStick();
             if(stick == null) {
                 return(error("Kein Stift gefunden"));
             }

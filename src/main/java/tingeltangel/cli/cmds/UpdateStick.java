@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 import tingeltangel.cli.CliCommand;
 import tingeltangel.cli.CliSwitch;
 import tingeltangel.core.Repository;
-import tingeltangel.core.Stick;
+import tingeltangel.core.TingStick;
 import tingeltangel.core.Translator;
 import tingeltangel.core.constants.TxtFile;
 
@@ -57,7 +57,7 @@ public class UpdateStick extends CliCommand {
     public void execute(Map<String, String> args) throws Exception {
         
         
-        Stick stick = Stick.getStick();
+        TingStick stick = TingStick.getStick();
         
         if(stick == null) {
             System.err.println("no stick found");

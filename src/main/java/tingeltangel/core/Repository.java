@@ -45,6 +45,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
 import tingeltangel.Tingeltangel;
+import tingeltangel.core.constants.KiiFile;
 import tingeltangel.core.constants.OufFile;
 import tingeltangel.core.constants.PngFile;
 import tingeltangel.core.constants.ScriptFile;
@@ -114,7 +115,7 @@ public class Repository {
             
                     HashMap<String, String> data = readTxt(bookFile);
                     if(data.containsKey("Name")) {
-                        // System.out.println(String.format("Imported book %s", data.get("Name")));
+                        // System.out.println(String.format("Imported book %s (" + id + ")", data.get("Name"), id));
                         BOOKS.put(id, data);
                     } else {
                         // delete broken txt-file
@@ -193,6 +194,10 @@ public class Repository {
     
     public static File getBookOuf(int id) {
         return(getBookFile(id, OufFile._EN_OUF));
+    }
+    
+    public static File getBookKii(int id) {
+        return(getBookFile(id, KiiFile._EN_KII));
     }
     
     public static File getBookPng(int id) {
