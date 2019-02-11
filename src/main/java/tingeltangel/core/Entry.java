@@ -93,6 +93,10 @@ public class Entry {
         this.hint = hint.trim();
         changeMade();
     }
+
+    public int getType(){
+        return  type;
+    }
     
     
     void changeMade() {
