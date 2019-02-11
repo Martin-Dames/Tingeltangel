@@ -190,6 +190,10 @@ public class Book {
     public int getVersion() {
         return(version);
     }
+
+    public HashMap<Integer, Entry> getIndexEntries() {
+        return indexEntries;
+    }
     
     public void setName(String name) {
         this.name = name;

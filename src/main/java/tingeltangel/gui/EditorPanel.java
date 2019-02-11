@@ -110,6 +110,10 @@ public final class EditorPanel extends JPanel {
     public JFrame getMainFrame() {
         return(mainFrame);
     }
+
+    public JPanel getList() {
+        return list;
+    }
     
     public EditorPanel(final EditorFrame mainFrame) {
         super();
@@ -313,14 +317,18 @@ public final class EditorPanel extends JPanel {
         
         
         list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
-        
+
         setLayout(new BorderLayout());
         jScrollPane = new JScrollPane(list);
         jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
         add(jScrollPane, BorderLayout.CENTER);
+        JPanel container = new JPanel();
+        container.setLayout(new BorderLayout());
+        container.add(new SearchPanel(mainFrame, this), BorderLayout.NORTH);
+        container.add(jScrollPane, BorderLayout.CENTER);
+        add(container, BorderLayout.CENTER);
         add(right, BorderLayout.EAST);
-        
-        
+
         updateList(null);
         
         
