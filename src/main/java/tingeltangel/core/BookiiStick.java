@@ -349,6 +349,7 @@ public class BookiiStick extends Stick {
     */
     
     private static void fileCopy(File source, File target) throws IOException {
+        LOG.info("filecopy: src=" + source.getAbsolutePath() + "; target=" + target.getAbsolutePath());
         InputStream in = new FileInputStream(source);
         OutputStream out = new FileOutputStream(target);
         byte[] buffer = new byte[4096];
@@ -367,27 +368,34 @@ public class BookiiStick extends Stick {
      */
     @Override
     public void copyFromRepositoryToStick(int mid) throws IOException {
-        
         String _id = Integer.toString(mid);
         while(_id.length() < 5) {
             _id = "0" + _id;
         }
+        
+        
         File txt = new File(getBookDir(), _id + TxtFile._EN_TXT);
         File png = new File(getBookDir(), _id + PngFile._EN_PNG);
         File kii = new File(getBookDir(), _id + KiiFile._EN_KII);
         File src = new File(getBookDir(), _id + ScriptFile._EN_SRC);
-                
+        
         File srcKii = Repository.getBookKii(mid);
-        if(!srcKii.canRead()) {
+        LOG.info("srcKii=" + srcKii);
+        if((srcKii == null) || (!srcKii.canRead())) {
+            LOG.info("kii not found. try ouf...");
             srcKii = Repository.getBookOuf(mid);
         }
         
+        LOG.info("copy kii...");
         fileCopy(srcKii, kii);
+        LOG.info("copy png...");
         fileCopy(Repository.getBookPng(mid), png);
         File rSrc = Repository.getBookSrc(mid);
         if((rSrc != null) && (rSrc.exists())) {
+            LOG.info("copy src...");
             fileCopy(rSrc, src);
         }
+        LOG.info("copy txt...");
         fileCopy(Repository.getBookTxtFile(mid), txt);
     }
 
@@ -560,6 +568,7 @@ public class BookiiStick extends Stick {
         return(sticks);
     }
     
+    @Override
     public void update(ProgressDialog progress) {
         update(null, progress);
     }
@@ -611,7 +620,7 @@ public class BookiiStick extends Stick {
                         }
                     }
                 } catch(IOException fnfe) {
-                    LOG.info("book not found in repository (mid=" + id + ")", fnfe);
+                    LOG.info("book not found in repository (mid=" + id + "): perhaps a bookii only file", fnfe);
                 }
             }
         } catch(IOException ioe) {

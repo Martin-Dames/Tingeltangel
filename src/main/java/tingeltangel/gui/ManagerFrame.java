@@ -129,7 +129,7 @@ public class ManagerFrame extends JFrame {
             } else {
                 centerPanel.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
             }
-            centerPanel.add(getBookPanel(id), PushBorderLayout.PAGE_START);
+            centerPanel.add(getBookPanel(id, stick), PushBorderLayout.PAGE_START);
         }
         validate();
         repaint();
@@ -146,20 +146,37 @@ public class ManagerFrame extends JFrame {
         }
     }
     
-    private JPanel getBookPanel(final int mid) throws IOException {
+    private JPanel getBookPanel(final int mid, Stick stick) throws IOException {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
         
         HashMap<String, String> bookTxt = Repository.getBookTxt(mid);
+        if(bookTxt == null) {
+            try {
+                bookTxt = stick.getBookTxt(mid);
+            } catch(IOException ioe) {
+                LOG.warn("can't read txt file from stick (missing in repository)", ioe);
+                bookTxt = null;
+            }
+        }
         
+        int picW = 138;
+        int picH = 176;
         
         File coverImage = Repository.getBookPng(mid);
         try {
             if((coverImage != null) && coverImage.exists()) {
-                panel.add(new JLabel(new ImageIcon(ImageIO.read(coverImage))), BorderLayout.WEST);
+                panel.add(new JLabel(new ImageIcon(ImageIO.read(coverImage).getScaledInstance(picW, picH,  java.awt.Image.SCALE_SMOOTH))), BorderLayout.WEST);
             } else {
-                panel.add(new JLabel(new ImageIcon(ImageIO.read(getClass().getResource("/noCover.png")))), BorderLayout.WEST);
+                
+                // try to read cover fron stick
+                coverImage = stick.getPngFile(mid);
+                if((coverImage != null) && coverImage.exists()) {
+                    panel.add(new JLabel(new ImageIcon(ImageIO.read(coverImage).getScaledInstance(picW, picH,  java.awt.Image.SCALE_SMOOTH))), BorderLayout.WEST);
+                } else {
+                    panel.add(new JLabel(new ImageIcon(ImageIO.read(getClass().getResource("/noCover.png")).getScaledInstance(picW, picH,  java.awt.Image.SCALE_SMOOTH))), BorderLayout.WEST);
+                }
             }
         } catch(IOException ioe) {
             LOG.warn("unable to load cover (mid=" + mid + ")", ioe);
@@ -223,7 +240,9 @@ public class ManagerFrame extends JFrame {
         infoPanel.add(PushBorderLayout.pad(10), PushBorderLayout.LINE_START);
         
         
+        
         if(bookTxt == null) {
+            infoPanel.add(new JLabel("Media ID: " + mid), PushBorderLayout.PAGE_START);
             infoPanel.add(new JLabel("keine Informationen vorhanden"), PushBorderLayout.PAGE_START);
         } else {
             JLabel title = new JLabel(bookTxt.get(TxtFile.KEY_NAME));
@@ -232,6 +251,7 @@ public class ManagerFrame extends JFrame {
 
 
             infoPanel.add(title, PushBorderLayout.PAGE_START);
+            infoPanel.add(new JLabel("Media ID: " + mid), PushBorderLayout.PAGE_START);
             infoPanel.add(new JLabel("Autor: " + bookTxt.get(TxtFile.KEY_AUTHOR)), PushBorderLayout.PAGE_START);
             infoPanel.add(new JLabel("Verlag: " + bookTxt.get(TxtFile.KEY_PUBLISHER)), PushBorderLayout.PAGE_START);
             infoPanel.add(new JLabel("URL: " + bookTxt.get(TxtFile.KEY_URL)), PushBorderLayout.PAGE_START);

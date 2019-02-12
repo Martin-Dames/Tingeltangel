@@ -288,7 +288,11 @@ public class Repository {
         
         HashMap<String, String> bookTxt = getBookTxt(id);
         if(bookTxt == null) {
-            throw new FileNotFoundException();
+            search(id);
+            bookTxt = getBookTxt(id);
+            if(bookTxt == null) {
+                throw new FileNotFoundException();
+            }
         }
         int version = Integer.parseInt(getBookTxt(id).get(TxtFile.KEY_VERSION));
         File txtFile = new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT);

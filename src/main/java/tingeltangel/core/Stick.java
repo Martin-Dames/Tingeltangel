@@ -21,9 +21,11 @@ package tingeltangel.core;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -153,6 +155,41 @@ public abstract class Stick {
      * @return the book directory
      */
     public abstract File getBookDir();
+    
+    public File getPngFile(int mid) {
+        String _id = Integer.toString(mid);
+        while(_id.length() < 5) {
+            _id = "0" + _id;
+        }
+        return(new File(getBookDir(), _id + "_en.png"));
+    }
+    
+    public HashMap<String, String> getBookTxt(int mid) throws IOException {
+        String _id = Integer.toString(mid);
+        while(_id.length() < 5) {
+            _id = "0" + _id;
+        }
+        File txt = new File(getBookDir(), _id + "_en.txt");
+        
+        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(txt), "UTF-8"));
+        HashMap<String, String> data = new HashMap<>();
+        String row;
+        while((row = in.readLine()) != null) {
+            row = row.trim();
+            if(!row.isEmpty()) {
+                int p = row.indexOf(":");
+                if(p>0) {
+                        String key = row.substring(0, p).trim();
+                        String value = row.substring(p + 1).trim();
+                        data.put(key, value);
+                } else {
+                    throw new IOException("txt file broken");
+                }
+            }
+        }
+        in.close();
+        return(data);
+    }
     
     /**
      * sets the stick settings
