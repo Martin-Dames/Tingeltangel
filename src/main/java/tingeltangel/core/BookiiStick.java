@@ -347,19 +347,7 @@ public class BookiiStick extends Stick {
         return(-1);
     }
     */
-    
-    private static void fileCopy(File source, File target) throws IOException {
-        LOG.info("filecopy: src=" + source.getAbsolutePath() + "; target=" + target.getAbsolutePath());
-        InputStream in = new FileInputStream(source);
-        OutputStream out = new FileOutputStream(target);
-        byte[] buffer = new byte[4096];
-        int k;
-        while((k = in.read(buffer)) != -1) {
-            out.write(buffer, 0, k);
-        }
-        out.close();
-        in.close();
-    }
+
     
     /**
      * copies a book from the repository to the stick
@@ -679,6 +667,7 @@ public class BookiiStick extends Stick {
         if(progress != null) {
             progress.done();
         }
+        LOG.warn("update on bookii stick done");
         return(result);
     }
 
@@ -694,4 +683,15 @@ public class BookiiStick extends Stick {
         setSettings(settings);
         
     }
+    
+    
+    @Override
+    public File getBookOufOrKii(int mid) {
+        String _id = Integer.toString(mid);
+        while(_id.length() < 5) {
+            _id = "0" + _id;
+        }
+        return(new File(getBookDir(), _id + "_en.kii"));
+    }
+    
 }

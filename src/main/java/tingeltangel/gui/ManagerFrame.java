@@ -98,7 +98,7 @@ public class ManagerFrame extends JFrame {
                     } else if((!online) && (stick != null)) {
                         // go online
                         online = true;
-                        goOnline();
+                        goOnline(stick.getType());
                     }             
                 } catch(IOException ioe) {
                     ioe.printStackTrace();
@@ -135,8 +135,8 @@ public class ManagerFrame extends JFrame {
         repaint();
     }
     
-    private void goOnline() {
-        statusLabel.setText("Stift gefunden");
+    private void goOnline(String stickType) {
+        statusLabel.setText("Stift gefunden (" + stickType + ")");
         try {
             updateList();
             
@@ -305,12 +305,29 @@ public class ManagerFrame extends JFrame {
                     public void action(ProgressDialog progressDialog) {
                         if(_stick.update(ManagerFrame.this, progressDialog)) {
                             try {
+                                String message = _stick.validateBooks(progressDialog);
+                                
+                                if(progressDialog != null) {
+                                    progressDialog.done();
+                                }
+                                if(message != null) {
+                                    JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich\nWarnungen:\n" + message);
+                                }
                                 updateList();
                             } catch(IOException ioe) {
                                 LOG.warn("failed to update book list", ioe);
+                                
+                                if(progressDialog != null) {
+                                    progressDialog.done();
+                                }
                             }
+                            
                             JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich");
                         } else {
+                            
+                            if(progressDialog != null) {
+                                progressDialog.done();
+                            }
                             JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung fehlgeschlagen");
                         }
                     }

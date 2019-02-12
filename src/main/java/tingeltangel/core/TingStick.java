@@ -215,13 +215,14 @@ public class TingStick extends Stick {
      * @return the stick settings
      * @throws IOException
      */
+    @Override
     public HashMap<String, String> getSettings() throws IOException {
         File file = new File(new File(path, STICK_DIR), SETTINGS_FILE);
         if(!file.canRead()) {
             throw new FileNotFoundException(file.getAbsolutePath());
         }
         
-        HashMap<String, String> settings = new HashMap<String, String>();
+        HashMap<String, String> settings = new HashMap<>();
         
         
         BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-16")));
@@ -249,6 +250,7 @@ public class TingStick extends Stick {
      * @return the book version or -1 if book not found
      * @throws IOException
      */
+    @Override
     public int getBookVersion(int id) throws IOException {
         String _id = Integer.toString(id);
         while(_id.length() < 5) {
@@ -276,6 +278,7 @@ public class TingStick extends Stick {
      * deletes a book from the stick
      * @param id the book to delete
      */
+    @Override
     public void delete(int id) {
         String _id = Integer.toString(id);
         while(_id.length() < 5) {
@@ -294,42 +297,7 @@ public class TingStick extends Stick {
         }
         
     }
-    
-    /*
-    public static int getOnlineBookVersion(int id) throws IOException {
-        if(Repository.getBookTxt(id) == null) {
-            return(-1);
-        }
-        String _id = Integer.toString(id);
-        while(_id.length() < 5) {
-            _id = "0" + _id;
-        }
-        BufferedReader in = new BufferedReader(new InputStreamReader(new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream()));
-        String row;
-        while((row = in.readLine()) != null) {
-            row = row.trim();
-            if(row.startsWith("Book Version:")) {
-                row = row.substring("Book Version:".length()).trim();
-                in.close();
-                return(Integer.parseInt(row));
-            }
-        }
-        in.close();
-        return(-1);
-    }
-    */
-    
-    private static void fileCopy(File source, File target) throws IOException {
-        InputStream in = new FileInputStream(source);
-        OutputStream out = new FileOutputStream(target);
-        byte[] buffer = new byte[4096];
-        int k;
-        while((k = in.read(buffer)) != -1) {
-            out.write(buffer, 0, k);
-        }
-        out.close();
-        in.close();
-    }
+        
     
     /**
      * copies a book from the repository to the stick
@@ -643,5 +611,15 @@ public class TingStick extends Stick {
         settings.put("book", _id);
         setSettings(settings);
         
+    }
+    
+    
+    @Override
+    public File getBookOufOrKii(int mid) {
+        String _id = Integer.toString(mid);
+        while(_id.length() < 5) {
+            _id = "0" + _id;
+        }
+        return(new File(getBookDir(), _id + "_en.ouf"));
     }
 }

@@ -22,16 +22,23 @@ package tingeltangel.core;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
 import javax.swing.JFrame;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import tingeltangel.tools.MD5Sum;
 import tingeltangel.tools.ProgressDialog;
 
 
@@ -41,6 +48,9 @@ import tingeltangel.tools.ProgressDialog;
  */
 public abstract class Stick {
 
+    
+    private final static Logger LOG = LogManager.getLogger(Stick.class);
+    
     private final static String UID_FILE = "tt.uid";
     private final static String UNNAMED = "unnamed";
     
@@ -164,6 +174,19 @@ public abstract class Stick {
         return(new File(getBookDir(), _id + "_en.png"));
     }
     
+    
+    final static void fileCopy(File source, File target) throws IOException {
+        InputStream in = new FileInputStream(source);
+        OutputStream out = new FileOutputStream(target);
+        byte[] buffer = new byte[4096];
+        int k;
+        while((k = in.read(buffer)) != -1) {
+            out.write(buffer, 0, k);
+        }
+        out.close();
+        in.close();
+    }
+    
     public HashMap<String, String> getBookTxt(int mid) throws IOException {
         String _id = Integer.toString(mid);
         while(_id.length() < 5) {
@@ -253,4 +276,49 @@ public abstract class Stick {
     public abstract boolean update(JFrame frame, ProgressDialog progress);
 
     public abstract void activateBook(int id) throws IOException;
+    
+    public abstract File getBookOufOrKii(int mid);
+    
+    public String validateBooks(ProgressDialog progress) throws IOException {
+        
+        LinkedList<Integer> bookList = getBooks();
+        
+        if(progress != null) {
+            progress.restart("erstelle Prüfsummen");
+            progress.setMax(bookList.size());
+        }
+        int c = 0;
+        
+        String msg = "";
+        
+        Iterator<Integer> books = getBooks().iterator();
+        
+        while(books.hasNext()) {
+            int mid = books.next();
+            if(progress != null) {
+                progress.setVal(++c);
+            }
+            try {
+                HashMap<String, String> txt = getBookTxt(mid);
+                if(txt != null) {
+                    String md5_txt = txt.get("FileMD5").toLowerCase();
+                    String bookName = txt.get("Name");
+                    if(md5_txt != null) {
+                        File oufOrKii = getBookOufOrKii(mid);
+                        String md5_file = MD5Sum.md5sum(oufOrKii).toLowerCase();
+                        if(!md5_txt.equals(md5_file)) {
+                            msg += "Prüfsummenfehler für Buch '" + bookName + "' (mid=" + mid + ")\n";
+                        }
+                    }
+                }
+            } catch(IOException ioe) {
+                LOG.warn("error validation book (mid=" + mid + ")", ioe);
+            }
+        }
+        
+        if(msg.isEmpty()) {
+            msg = null;
+        }
+        return(msg);
+    }
 }
