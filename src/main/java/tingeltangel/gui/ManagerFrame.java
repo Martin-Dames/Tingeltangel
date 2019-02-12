@@ -38,6 +38,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -110,8 +113,103 @@ public class ManagerFrame extends JFrame {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(task, 3, 3, TimeUnit.SECONDS);
         
+        JMenuItem updateStick = new JMenuItem("Stift aktualisieren");
+        updateStick.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                // update all books on stick
+                Stick stick;
+                try {
+                    stick = Stick.getAnyStick();
+                    if(stick == null) {
+                        LOG.warn("no stick found");
+                        JOptionPane.showMessageDialog(ManagerFrame.this, "kein Stift gefunden");
+                        return;
+                    }
+                } catch(IOException ioe) {
+                    LOG.warn("failed to access stick", ioe);
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Auf den Stift kann nicht zugegriffen werden");
+                    return;
+                }
+                
+                final Stick _stick = stick;
+                Progress pr = new Progress(ManagerFrame.this, "Stift aktualisieren") {
+                    @Override
+                    public void action(ProgressDialog progressDialog) {
+                        if(_stick.update(ManagerFrame.this, progressDialog)) {
+                            try {
+                                String message = _stick.validateBooks(progressDialog);
+                                
+                                if(progressDialog != null) {
+                                    progressDialog.done();
+                                }
+                                if(message != null) {
+                                    JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich\nWarnungen:\n" + message);
+                                }
+                                updateList();
+                            } catch(IOException ioe) {
+                                LOG.warn("failed to update book list", ioe);
+                                
+                                if(progressDialog != null) {
+                                    progressDialog.done();
+                                }
+                            }
+                            
+                            JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich");
+                        } else {
+                            
+                            if(progressDialog != null) {
+                                progressDialog.done();
+                            }
+                            JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung fehlgeschlagen");
+                        }
+                    }
+                };
+            }
+        });
         
+        JMenuItem neueBuecherSuchen = new JMenuItem("Neue Bücher suchen");
+        neueBuecherSuchen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Progress pr = new Progress(ManagerFrame.this, "neue Bücher suchen") {
+                    @Override
+                    public void action(ProgressDialog progressDialog) {
+                        Repository.search(progressDialog);
+                        JOptionPane.showMessageDialog(ManagerFrame.this, "Update erfolgreich");
+                    }
+                };
+            }
+        });
         
+        JMenuItem repositoryAktualisieren = new JMenuItem("Repository aktualisieren");
+        repositoryAktualisieren.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Progress pr = new Progress(ManagerFrame.this, "Repository aktualisieren") {
+                    @Override
+                    public void action(ProgressDialog progressDialog) {
+                        try {
+                            Repository.update(progressDialog);
+                            JOptionPane.showMessageDialog(ManagerFrame.this, "Aktualisierung erfolgreich");
+                        } catch (IOException ex) {
+                            LOG.warn("Repository.update error", ex);
+                            JOptionPane.showMessageDialog(ManagerFrame.this, "Es ist ein Fehler aufgetreten");
+                        }
+                    }
+                };
+            }
+        });
+        
+        JMenu advanced = new JMenu("anderes");
+        advanced.add(neueBuecherSuchen);
+        advanced.add(repositoryAktualisieren);
+        
+        JMenuBar bar = new JMenuBar();
+        bar.add(updateStick);
+        bar.add(advanced);
+        setJMenuBar(bar);
         
         setVisible(true);
     }
@@ -271,14 +369,14 @@ public class ManagerFrame extends JFrame {
         panel.setLayout(new BorderLayout());
         panel.add(statusLabel, BorderLayout.NORTH);
         panel.add(new JScrollPane(centerPanel), BorderLayout.CENTER);
-        panel.add(getRightPanel(), BorderLayout.EAST);
+        //panel.add(getRightPanel(), BorderLayout.EAST);
         return(panel);
     }
     
+    /*
     private JPanel getRightPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new PushBorderLayout());
-        
         addButton(panel, "Stift aktualisieren", new Callback<Object>() {
             @Override
             public void callback(Object t) {
@@ -334,6 +432,7 @@ public class ManagerFrame extends JFrame {
                 };
             }
         });
+        //panel.add(new JLabel(""));
         addButton(panel, "Neue Bücher suchen", new Callback<Object>() {
             @Override
             public void callback(Object t) {
@@ -363,17 +462,10 @@ public class ManagerFrame extends JFrame {
                 };
             }
         });
-        /*
-        addButton(panel, "Stift reparieren", new Callback<Object>() {
-            @Override
-            public void callback(Object t) {
-                
-            }
-        });
-        */
         
         return(panel);
     }
+    */
     
     private void addButton(JPanel panel, String label, final Callback<Object> callback) {
         JButton button = new JButton(label);
