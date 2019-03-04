@@ -81,6 +81,11 @@ public class TingStick extends Stick {
         return("Ting");
     }
     
+    @Override
+    public boolean isBookii() {
+        return(false);
+    }
+    
     private TingStick(File path) {
         this.path = path;
     }

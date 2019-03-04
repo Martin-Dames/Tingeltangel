@@ -133,6 +133,8 @@ public abstract class Stick {
         out.close();
     }
     
+    public abstract boolean isBookii();
+    
     /**
      * retrieves size of free space on stick
      * @return free space in bytes

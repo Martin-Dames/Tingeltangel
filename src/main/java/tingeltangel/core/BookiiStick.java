@@ -82,6 +82,11 @@ public class BookiiStick extends Stick {
         return("Bookii");
     }
     
+    @Override
+    public boolean isBookii() {
+        return(true);
+    }
+    
     private BookiiStick(File path) {
         this.path = path;
         File[] content = path.listFiles();

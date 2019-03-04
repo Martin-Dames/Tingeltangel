@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import tingeltangel.core.Book;
+import tingeltangel.core.Stick;
 import tingeltangel.core.TingStick;
 import tingeltangel.core.scripting.SyntaxError;
 import tingeltangel.tools.FileEnvironment;
@@ -80,12 +81,14 @@ public class StickPanel extends JPanel {
                                         try {
                                             book.export(FileEnvironment.getDistDirectory(book.getID()), progressDialog);
                                             // now copy book to stick
-                                            TingStick stick = TingStick.getStick();
+                                            Stick stick = Stick.getAnyStick();
                                             if(stick != null) {
                                                 File dest = stick.getBookDir();
+                                                /*
                                                 if(!dest.getAbsolutePath().contains("$ting")) {
                                                     dest = new File(stick.getBookDir(), "$ting");
                                                 }
+                                                */
                                                 File[] files = FileEnvironment.getDistDirectory(book.getID()).listFiles(new FilenameFilter() {
                                                     @Override
                                                     public boolean accept(File dir, String name) {
@@ -94,6 +97,10 @@ public class StickPanel extends JPanel {
                                                     }
                                                 });
                                                 for(int i = 0; i < files.length; i++) {
+                                                    String destName = files[i].getName();
+                                                    if(stick.isBookii()) {
+                                                        destName = destName.substring(0, destName.length() - ".ouf".length()) + ".kii";
+                                                    }
                                                     FileEnvironment.copy(files[i], new File(dest, files[i].getName()));
                                                 }
                                                 stick.activateBook(book.getID());
@@ -128,7 +135,7 @@ public class StickPanel extends JPanel {
             @Override
             public void run() {
                 try {
-                    TingStick stick = TingStick.getStick();
+                    Stick stick = Stick.getAnyStick();
                     if(online && (stick == null)) {
                         // go offline
                         online = false;
@@ -138,7 +145,7 @@ public class StickPanel extends JPanel {
                         // go online
                         online = true;
                         button.setEnabled(true);
-                        label.setText("Stift gefunden");
+                        label.setText("Stift gefunden (" + stick.getType() + ")");
                     }
                 } catch(IOException ioe) {
                     ioe.printStackTrace();
