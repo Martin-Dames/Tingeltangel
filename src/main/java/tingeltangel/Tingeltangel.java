@@ -42,7 +42,7 @@ public class Tingeltangel {
     public static String MAIN_FRAME_VERSION = " v0.6";
     
     
-    public final static String BASE_URL = "http://system.ting.eu/book-files";
+    public final static String BASE_URL = "http://13.80.138.170/book-files";
     
     
     /**

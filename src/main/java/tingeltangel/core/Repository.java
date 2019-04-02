@@ -242,7 +242,7 @@ public class Repository {
             _id = "0" + _id;
         }
         File txtFile = new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT);
-        download(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en", txtFile, null);
+        download(Tingeltangel.BASE_URL + "/get-description/id/" + Integer.toString(id) + "/area/en/sn/5497559973888/", txtFile, null);
         
         if(!checkTxtForPlausibility(txtFile)) {
             txtFile.delete();
@@ -251,7 +251,7 @@ public class Repository {
         
         BOOKS.put(id, readTxt(txtFile));
         File pngFile = new File(FileEnvironment.getRepositoryDirectory(), _id + PngFile._EN_PNG);
-        download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/thumb", pngFile, null);
+        download(Tingeltangel.BASE_URL + "/get/id/" + Integer.toString(id) + "/type/thumb/area/en/sn/5497559973888/", pngFile, null);
         
         
         if(!checkPngForPlausibility(pngFile)) {
@@ -260,7 +260,7 @@ public class Repository {
         }
         
         File oufFile = new File(FileEnvironment.getRepositoryDirectory(), _id + OufFile._EN_OUF);
-        download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/archive", oufFile, progress);
+        download(Tingeltangel.BASE_URL + "/get/id/" + Integer.toString(id) + "/area/en/type/archive/sn/5497559973888/", oufFile, progress);
         
         
         if(!checkOufForPlausibility(oufFile)) {
@@ -268,7 +268,7 @@ public class Repository {
             oufFile.delete();
             throw new IOException("ouf file for " + id + " seems to be broken");
         }
-        
+        /*
         if(getBookTxt(id).containsKey("ScriptMD5")) {
             File scriptFile = new File(FileEnvironment.getRepositoryDirectory(), _id + ScriptFile._EN_SRC);
             try {
@@ -277,6 +277,7 @@ public class Repository {
                 // ignore this
             }
         }
+        */
     }
     
     public static void update(int id, ProgressDialog progress) throws FileNotFoundException, IOException {
@@ -296,14 +297,15 @@ public class Repository {
         }
         int version = Integer.parseInt(getBookTxt(id).get(TxtFile.KEY_VERSION));
         File txtFile = new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT);
-        download(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en", txtFile, null);
+        download(Tingeltangel.BASE_URL + "/get-description/id/" + Integer.toString(id) + "/area/en/sn/5497559973888/", txtFile, null);
         BOOKS.put(id, readTxt(txtFile));
         int version2 = Integer.parseInt(getBookTxt(id).get(TxtFile.KEY_VERSION));
         if((version2 > version) || !exists(id)) {
             File pngFile = new File(FileEnvironment.getRepositoryDirectory(), _id + PngFile._EN_PNG);
-            download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/thumb", pngFile, null);
+            download(Tingeltangel.BASE_URL + "/get/id/" + Integer.toString(id) + "/type/thumb/area/en/sn/5497559973888/", pngFile, null);
             File oufFile = new File(FileEnvironment.getRepositoryDirectory(), _id + OufFile._EN_OUF);
-            download(Tingeltangel.BASE_URL + "/get/id/" + _id + "/area/en/type/archive", oufFile, progress);
+            download(Tingeltangel.BASE_URL + "/get/id/" + Integer.toString(id) + "/area/en/type/archive/sn/5497559973888/", oufFile, progress);
+            /*
             if(getBookTxt(id).containsKey("ScriptMD5")) {
                 File scriptFile = new File(FileEnvironment.getRepositoryDirectory(), _id + ScriptFile._EN_SRC);
                 try {
@@ -312,6 +314,7 @@ public class Repository {
                     // ignore this
                 }
             }
+            */
         }
         if(progress != null) {
             progress.done();
@@ -327,7 +330,7 @@ public class Repository {
             while(_id.length() < 5) {
                 _id = "0" + _id;
             }
-            in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + _id + "/area/en").openStream();
+            in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + Integer.toString(id) + "/area/en/sn/5497559973888/").openStream();
             out = new FileOutputStream(new File(FileEnvironment.getRepositoryDirectory(), _id + TxtFile._EN_TXT));
 
             int k;
@@ -421,7 +424,7 @@ public class Repository {
                         
                         File txt = new File(FileEnvironment.getRepositoryDirectory() , row + TxtFile._EN_TXT);
                         
-                        in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + row + "/area/en").openStream();
+                        in = new URL(Tingeltangel.BASE_URL + "/get-description/id/" + Integer.toString(Integer.parseInt(row)) + "/sn/5497559973888/").openStream();
                         out = new FileOutputStream(txt);
 
                         int k;
@@ -495,37 +498,33 @@ public class Repository {
     public static void main(String[] args) throws Exception {
         Integer[] ids = getIDs();
         
-        String header = "\n^ Buch ID ^ Name ^ Herausgeber ^ Autor ^ Version ^ URL ^ Ländercode ^ Downloads ^^^^";
+        String header = "\n^ Buch ID ^ Name ^ Herausgeber ^ Autor ^ Version ^ Downloads ^^^";
         
         File f = new File("bookList.txt");
         PrintWriter out = new PrintWriter(new FileWriter(f));
-        
+        out.print("\n====== Offizielle Bücher ======\n");
         
         
         for(int i = 0; i < ids.length; i++) {
             
-            if((i % 15 == 0) && (i < ids.length - 1)) {
+            if((i % 10 == 0) && (i < ids.length - 1)) {
                 out.println(header);
             }
             
             HashMap<String, String> book = Repository.getBookTxt(ids[i]);
-            String id = Integer.toString(ids[i]);
-            while(id.length() < 5) {
-                id = "0" + id;
+            String id_short = Integer.toString(ids[i]);
+            String id_long = id_short;
+            while(id_long.length() < 5) {
+                id_long = "0" + id_long;
             }
-            out.print("| " + id + " | " + book.get("Name") + " | ");
+            out.print("| " + id_long + " | " + book.get("Name") + " | ");
             out.print(book.get("Publisher") + " | " + book.get("Author") + " | ");
-            out.print(book.get("Book Version") + " | " + book.get("URL") + " | " + book.get("Book Area Code") + " | ");
-            out.print("[[http://system.ting.eu/book-files/get-description/id/" + id + "/area/en|txt-Datei]]" + " | ");
-            out.print("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/thumb|png-Datei]]" + " | ");
-            out.print("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/archive|ouf-Datei]]" + " | ");
+            out.print(book.get("Book Version") + " | ");
+            out.print("[[http://13.80.138.170/book-files/get-description/id/" + id_short + "/area/en/sn/5497559973888/|txt-Datei]]" + " | ");
+            out.print("[[http://13.80.138.170/book-files/get/id/" + id_short + "/type/thumb/area/en/sn/5497559973888/|png-Datei]]" + " | ");
+            out.print("[[http://13.80.138.170/book-files/get/id/" + id_short + "/area/en/type/archive/sn/5497559973888/|ouf-Datei]]" + " |\n");
             
-            if(book.get("ScriptMD5") != null) {
-                out.println("[[http://system.ting.eu/book-files/get/id/" + id + "/area/en/type/script|src-Datei]]" + " |");
-            } else {
-                out.println("- |");
-            }
-            
+          
             
         }
         out.close();

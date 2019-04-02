@@ -43,8 +43,9 @@ public class ImportTest {
         List<Integer> success = new LinkedList<Integer>();
 	List<Integer> failed = new LinkedList<Integer>();
 
-        Integer[] iDs = Repository.getIDs();
-        
+        Integer[] _iDs = Repository.getIDs();
+        Integer[] iDs = new Integer[Math.min(_iDs.length, 3)];
+        System.arraycopy(_iDs, 0, iDs, 0, iDs.length);
         
         for(int i = 0; i < iDs.length; i++) {
             int id = iDs[i];
