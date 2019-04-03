@@ -38,10 +38,7 @@
         <include>README.md</include>
         <include>sample.png</include>
         <include>logo.png</include>
-        <include>TingeltangelCLI.*</include>
-        <include>TingeltangelEditor.*</include>
-        <include>TingeltangelManager.*</include>
-        <include>TingeltangelAndersicht.*</include>
+        <include>Tingeltangel*</include>
       </includes>
     </fileSet>
     
