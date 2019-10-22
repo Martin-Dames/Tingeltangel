@@ -102,10 +102,11 @@ public class CLI {
         new StickDeleteBook(),
         */
         new StickDebug(),
-        new StickActivateBook()
+        new StickActivateBook(),
+        new SetCodeConfig()
     };
     
-    private final static HashMap<String, CliCmd> cmds = new HashMap<String, CliCmd>();
+    private final static HashMap<String, CliCmd> CMDS = new HashMap<String, CliCmd>();
     private static Book book = new Book(15000);
     
     static Book getBook() {
@@ -129,7 +130,7 @@ public class CLI {
     public static void init() {
         for(int i = 0; i < COMMANDS.length; i++) {
             CliCmd cmd = COMMANDS[i];
-            cmds.put(cmd.getName(), cmd);
+            CMDS.put(cmd.getName(), cmd);
         }
     }
     
@@ -154,7 +155,7 @@ public class CLI {
                 }
 
 
-                CliCmd cliCmd = cmds.get(cmd);
+                CliCmd cliCmd = CMDS.get(cmd);
                 if(cliCmd == null) {
                     System.err.println("unbekannter Befehl");
                 } else {
