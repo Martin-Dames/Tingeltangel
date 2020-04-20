@@ -34,6 +34,9 @@ public class Penfriend implements Pen {
     public String fromTingId(int id) {
         if((39185 <= id) && (id <= 39311)) return("CS" + (id - 39184));
         if((39312 <= id) && (id <= 39729)) return("ID" + (id - 39311));
+        if(id == -1) {
+            return("X");
+        }
         throw new Error();
     }
 
@@ -43,6 +46,8 @@ public class Penfriend implements Pen {
             return(Integer.parseInt(penId.substring(2)) + 39184);
         } else if(penId.startsWith("ID")) {
             return(Integer.parseInt(penId.substring(2)) + 39311);
+        } else if(penId.equals("X")) {
+            return(-1);
         }
         throw new Error();
     }

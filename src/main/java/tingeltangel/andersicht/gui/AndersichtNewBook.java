@@ -76,7 +76,7 @@ public class AndersichtNewBook extends javax.swing.JDialog {
         southPanel.add(bookName);
         southPanel.add(new JLabel("Buchbeschreibung"));
         southPanel.add(bookDescription);
-        southPanel.add(new JLabel("Stifttyp"));
+        southPanel.add(new JLabel("Labeltyp"));
         southPanel.add(penChooser);
         southPanel.add(new JLabel(""));
         southPanel.add(button);

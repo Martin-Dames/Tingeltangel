@@ -254,7 +254,7 @@ public class AndersichtMainFrame extends JFrame {
         } else if(action.equals("report_labels")) {
             final JFileChooser fc = new JFileChooser();
                 fc.setFileFilter(new FileNameExtensionFilter("Label-Report (*.txt)", "txt"));
-                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                //fc.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
                 boolean errorOccured = false;
                 if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                     File target = fc.getSelectedFile();

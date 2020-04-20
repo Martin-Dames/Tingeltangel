@@ -420,7 +420,11 @@ public class AndersichtBook implements TreeNode {
             AndersichtGroup group = ig.next();
             for(int i = 0; i < group.getObjectCount(); i++) {
                 AndersichtObject object = group.getObject(i);
-                object.hasAllTracks();
+                try {
+                    object.hasAllTracks();
+                } catch(IllegalArgumentException iae) {
+                    errors.add(iae.getMessage());
+                }
                 Iterator<AndersichtDescriptionLayer> idl = descriptionLayers.iterator();
                 while(idl.hasNext()) {
                     AndersichtDescriptionLayer dl = idl.next();
@@ -437,8 +441,7 @@ public class AndersichtBook implements TreeNode {
             int label = labelIterator.next();
             if(label < Translator.getMinObjectCode()) {
                 errors.add("ungültiges Label für '" + labels.get(label) + "'");
-            }
-            if(Translator.ting2code(label) < 0) {
+            } else if(Translator.ting2code(label) < 0) {
                 errors.add("unbekanntes Label für '" + labels.get(label) + "'");
             }
         }
