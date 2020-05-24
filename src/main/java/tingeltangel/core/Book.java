@@ -297,6 +297,9 @@ public class Book {
     }
 
     private static String encodeAttribute(String v) {
+        if(v == null) {
+            return "";
+        }
         return(v.replace("&", "&amp;").replace("\"", "&quot;"));
     }
     
