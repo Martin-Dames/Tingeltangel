@@ -39,7 +39,7 @@ public class Tingeltangel {
     public static int MAIN_FRAME_HEIGHT = 700;
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
     public static String ANDERSICHT_FRAME_TITLE = "Tingeltangel (Andersicht GUI)";
-    public static String MAIN_FRAME_VERSION = " v0.6";
+    public static String MAIN_FRAME_VERSION = " v0.7";
     
     
     public final static String BASE_URL = "http://13.80.138.170/book-files";
@@ -100,6 +100,9 @@ public class Tingeltangel {
                 @Override
                 public void run() {
                     if((Repository.getIDs().length == 0) && _doInitialUpdate) {
+                        // do not download repository just start tool directly
+                        startGUI(_startEditor);
+                        /*
                         try {
                             Repository.initialUpdate(new Thread() {
                                 @Override
@@ -111,6 +114,8 @@ public class Tingeltangel {
                             log.warn("initial update failed", ex);
                             startGUI(_startEditor);
                         }
+                        */
+                        
                     } else {
                         startGUI(_startEditor);
                     }

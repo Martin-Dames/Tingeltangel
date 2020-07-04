@@ -112,7 +112,6 @@ public class Repository {
             	String name = bookFile.getName();
                 if(name.endsWith(".txt")) {
                     int id = Integer.parseInt(name.substring(0, name.indexOf("_")));
-            
                     HashMap<String, String> data = readTxt(bookFile);
                     if(data.containsKey("Name")) {
                         // System.out.println(String.format("Imported book %s (" + id + ")", data.get("Name"), id));

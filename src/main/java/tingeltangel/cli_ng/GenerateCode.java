@@ -36,7 +36,7 @@ class GenerateCode extends CliCmd {
 
     @Override
     public String getDescription() {
-        return("generate-code 600|1200 <size in mm> <ting id> <png file>");
+        return("generate-code 600|1200 <size in mm> <ting id>|<ting id bereich> <directory>");
     }
 
     @Override
@@ -65,26 +65,45 @@ class GenerateCode extends CliCmd {
             return(error("ungültige Große angegeben (5-500)"));
         }
         
-        int id = -1;
+        int idStart = -1;
+        int idEnd = -1;
         try {
-            id = Integer.parseInt(args[2]);
+            int p = args[2].indexOf("-");
+            
+            if(p < 0) {
+                idStart = Integer.parseInt(args[2]);
+                idEnd = idStart;
+            } else {
+                idStart = Integer.parseInt(args[2].substring(0, p));
+                idEnd = Integer.parseInt(args[2].substring(p + 1));
+            }
         } catch(NumberFormatException e) {
             return(error("ungültige id angegeben (0-65535)"));
         }
         
-        id = Translator.ting2code(id);
-        if(id < 0) {
-            return(error("unbekannte id angegeben"));
+        if(idStart > idEnd) {
+            return(error("ungültige id bereich angegeben"));
         }
         
-        
-        Book book = CLI.getBook();
+        int[] cIds = new int[idEnd - idStart + 1];
+        for(int i = 0; i < cIds.length; i++) {
+            cIds[i] = Translator.ting2code(idStart + i);
+            if(cIds[i] < 0) {
+                return(error("unbekannte id angegeben (" + (idStart + i) + ")"));
+            }
+        }
         
         try {
-            
-            FileOutputStream out = new FileOutputStream(file);
-            Codes.drawPng(id, size, size, out);
-            out.close();
+            for(int i = 0; i < cIds.length; i++) {
+                String filename = Integer.toString(i + idStart);
+                while(filename.length() < 5) {
+                    filename = "0" + filename;
+                }
+                filename = "ting_label_" + filename + ".png";
+                FileOutputStream out = new FileOutputStream(new File(file, filename));
+                Codes.drawPng(cIds[i], size, size, out);
+                out.close();
+            }
         
         } catch(IOException e) {
             return(error("Code konnten nicht erzeugt werden", e));
