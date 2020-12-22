@@ -1,13 +1,27 @@
-Ting-el-Tangel hat eine deutsche Webseite für Anwender: http://www.ting-el-tangel.de/
+Ting-el-Tangel has a [german website](http://www.ting-el-tangel.de/)
 
 # Tingeltangel
-Das Ting-Stift Tool
+A tool for the Ting Pen to create your own books.
+
+# Prerequisites
+
+## For running the software
+* [Install Java 8 or higher](https://www.oracle.com/java/technologies/javase-downloads.html#JDK15).
+
+
+
 
 How to build the software
 ----
-With Maven https://maven.apache.org building Ting-el-Tangel is as simple as typing
+## For developing the software
+* [Install maven](https://maven.apache.org/install.html).
+
+With [Maven](https://maven.apache.org) building Ting-el-Tangel is as simple as typing
    
-   mvn package assembly:single  
+```cmd
+mvn package assembly:single
+```
+
 
 TODO
 ----

@@ -1,5 +1,1 @@
-IF EXIST open_jre_1.8.0/ (
-	start open_jre_1.8.0/bin/javaw -jar tingeltangel-0.7-jar-with-dependencies.jar gui-manager
-) ELSE (
-	start javaw -jar tingeltangel-0.7-jar-with-dependencies.jar gui-manager
-)
+start javaw -jar tingeltangel-0.7-jar-with-dependencies.jar gui-manager
