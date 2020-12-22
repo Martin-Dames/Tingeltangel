@@ -1,10 +1,7 @@
 #!/bin/bash
 
-JAR=tingeltangel-0.7-jar-with-dependencies.jar
+OPTIONS="-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true"
 
-OPTIONS=""
-OPTIONS="$OPTIONS -Dawt.useSystemAAFontSettings=on"
-OPTIONS="$OPTIONS -Dswing.aatext=true"
-OPTIONS="$OPTIONS -Dsun.java2d.xrender=true"
+java $OPTIONS -jar tingeltangel-0.7-jar-with-dependencies.jar gui-editor disable-official-books
 
-java $OPTIONS -jar $JAR gui-editor disable-official-books
+

@@ -51,7 +51,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                 <descriptors>
                     <descriptor>src/main/assembly/jar.xml</descriptor>
                     <descriptor>src/main/assembly/zip.xml</descriptor>
-                    <descriptor>src/main/assembly/zip-with-jre.xml</descriptor>
                 </descriptors>
             </configuration>
             <executions>
