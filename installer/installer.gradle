@@ -26,6 +26,10 @@ setupBuilder {
         include '*.sh'
     }
 
+    from('../') {
+        include 'html'
+    }
+
 
     desktopStarter {
         displayName = applicationName
