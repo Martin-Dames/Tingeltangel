@@ -1,6 +1,9 @@
 name: Build a Release
 
-#on: [pull_request]
+on:
+  push:
+    tags:
+      - '*.*.*'
 
 jobs:
   build:
@@ -23,5 +26,3 @@ jobs:
       # run gradle command to build the project
       - name: Building Application
         run: ./gradlew tingeltangel:build tingeltangel:msi --no-daemon --no-parallel --stacktrace
-
-:
