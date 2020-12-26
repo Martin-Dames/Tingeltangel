@@ -6,7 +6,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         // shadow plugin to create fat jar
         classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
 
