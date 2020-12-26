@@ -39,5 +39,3 @@ jobs:
           fi
           echo "Next Version: $version"
           ./gradlew tingeltangel:build --no-daemon --no-parallel --stacktrace
-
-:
