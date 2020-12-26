@@ -1,4 +1,5 @@
 apply plugin: 'de.inetsoftware.setupbuilder'
+
 setupBuilder {
     vendor = 'Tingeltangel'
     application = "Tingeltangel"
@@ -7,7 +8,7 @@ setupBuilder {
     licenseFile = '../LICENSE'
 
     // icons in different sizes for different usage. you can also use a single *.ico or *.icns file
-    icons = "../tingeltangel.icns"
+    icons = "../installer/tingeltangel.icns"
 
 
     // This is taking the local setup JRE (actually its the jdk, but it could be cleaned up on nice day)
@@ -34,17 +35,13 @@ setupBuilder {
         workDir = "."
 
         // optional, additional arguments to start the service with
-        startArguments = "-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true gui-editor"
-
-        // optional, an icon file. Defaults to setupBuilder.icons
-        icons = "../tingeltangel.icns"
-
+//        startArguments = "-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true gui-editor"
     }
 
     msi {
         languages = ["en-US"]
-        runAfterIsOptional = true
-//        installScope = pe
+//        runAfterIsOptional = true
+//        installScope = perUser
 
     }
 }
