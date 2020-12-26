@@ -38,4 +38,5 @@ jobs:
             exit 1;
           fi
           echo "Next Version: $version"
-          sh ./gradlew tingeltangel:build --no-daemon --no-parallel --stacktrace
+          ./gradlew tingeltangel:build --no-daemon --no-parallel --stacktrace
+        shell: bash
