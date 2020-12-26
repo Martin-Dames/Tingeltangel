@@ -13,9 +13,12 @@ Clone the repository
 ```
 git clone git@github.com:Martin-Dames/Tingeltangel.git
 ```
-Execute the following command to build the software:
+If you want to create your own installer on windows, make sure you [install WIX before](https://wixtoolset.org/)
+
+
+Execute the following command to build and run the software:
 ```
-gradlew shadowJar
+gradlew run -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true --args='gui-editor'
 ```
 Run following command in the repository root.
 ```

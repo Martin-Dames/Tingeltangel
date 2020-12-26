@@ -30,38 +30,4 @@ jar.manifest {
     attributes("Main-Class": project.mainClassName)
 }
 
-setupBuilder {
-    vendor = 'Tingeltangel'
-    application = "Tingeltangel"
-    appIdentifier = applicationName
-    version = "$VERSION_NAME"
-    licenseFile = '../LICENSE'
-
-    // icons in different sizes for different usage. you can also use a single *.ico or *.icns file
-    icons = "../tingeltangel.icns"
-
-
-    bundleJre = System.properties.find { it.key == "java.home" }.value
-
-//    mainJar = "tingeltangel/build/tingeltangel-0.8.0-all.jar"
-
-
-    desktopStarter {
-        displayName = applicationName
-        description = "This is an Application service"
-
-        // The working directory of the service, relative to installation root
-        workDir = "."
-
-        // optional, additional arguments to start the service with
-//        startArguments = "-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true gui-editor"
-
-        // optional, an icon file. Defaults to setupBuilder.icons
-        icons = "../tingeltangel.icns"
-
-    }
-
-    msi {
-        languages = [ "en-US" ]
-    }
-}
+apply from: rootProject.file('installer/installer.gradle')
