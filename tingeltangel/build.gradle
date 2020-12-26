@@ -41,7 +41,7 @@ setupBuilder {
     icons = "../tingeltangel.icns"
 
 
-    bundleJre = "C:\\Program Files\\Java\\jdk-15.0.1"
+    bundleJre = System.properties.find { it.key == "java.home" }.value
 
 //    mainJar = "tingeltangel/build/tingeltangel-0.8.0-all.jar"
 
