@@ -1,0 +1,23 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        // shadow plugin to create fat jar
+        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
+
+        classpath 'org.anarres.gradle:gradle-sablecc-plugin:[1.0.0,)'
+    }
+}
+allprojects {
+    repositories {
+        mavenLocal()
+        maven { url { "https://maven.onehippo.com/maven2/" }}
+        mavenCentral()
+        jcenter()
+    }
+}
+
