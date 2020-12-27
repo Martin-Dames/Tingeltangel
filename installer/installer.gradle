@@ -3,49 +3,32 @@ apply plugin: 'de.inetsoftware.setupbuilder'
 setupBuilder {
     vendor = 'Tingeltangel'
     application = "Tingeltangel"
-    appIdentifier = applicationName
-    version = "$VERSION_NAME"
-    licenseFile = '../LICENSE'
+    appIdentifier = project.applicationName
+    version = VERSION_NAME
+    licenseFile = rootProject.file('LICENSE')
 
     // icons in different sizes for different usage. you can also use a single *.ico or *.icns file
-    icons = "../installer/tingeltangel.icns"
+    icons = ['../installer/icon/icon16.png', '../installer/icon/icon32.png', '../installer/icon/icon64.png', '../installer/icon/icon128.png']
 
 
     // This is taking the local setup JRE (actually its the jdk, but it could be cleaned up on nice day)
-    bundleJre = System.properties.find { it.key == "java.home" }.value
-
+    bundleJre = System.properties.getProperty('java.home')
+    from (project.buildDir.toString()+'/install/tingeltangel') {
+        include '**/*'
+    }
     mainClass = project.mainClassName
-    mainJar = "tingeltangel-0.8.0-all.jar"
-
-    from('build/libs/') {
-        include 'tingeltangel-0.8.0-all.jar'
-    }
-
-    from('../installer/scripts/') {
-        include '*.bat'
-        include '*.sh'
-    }
-
-    from('../') {
-        include 'html'
-    }
-
+    mainJar = "${project.applicationName}-${VERSION_NAME}.jar"
 
     desktopStarter {
-        displayName = applicationName
-        description = "This is an Application service"
-
-        // The working directory of the service, relative to installation root
-        workDir = "."
-
+        displayName = project.applicationName
+        description = "This is the tingeltangel gui-editor"
         // optional, additional arguments to start the service with
-//        startArguments = "-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true gui-editor"
+        startArguments = "-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dsun.java2d.xrender=true gui-editor"
     }
 
     msi {
+        arch = "x86"
         languages = ["en-US"]
-//        runAfterIsOptional = true
-//        installScope = perUser
-
+        runAfterIsOptional = true
     }
 }
