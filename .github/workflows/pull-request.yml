@@ -31,12 +31,5 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       # run gradle command to build the project
       - name: Building and testing Application
-        run: |
-          version=$(grep "VERSION_NAME" gradle.properties | cut -d'=' -f2 )
-          if [[ $version != *"-SNAPSHOT"* ]]; then
-            echo "Version string MUST contain \"-SNAPSHOT\"!"
-            exit 1;
-          fi
-          echo "Next Version: $version"
-          ./gradlew tingeltangel:jpackageImage --no-daemon --no-parallel --stacktrace
+        run: ./gradlew tingeltangel:jpackageImage --no-daemon --no-parallel --stacktrace
         shell: bash
