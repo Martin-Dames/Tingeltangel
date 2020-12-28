@@ -1,3 +1,6 @@
 include 'tingeltangel'
+include 'tingeltangel-manager'
+include 'andersicht'
 
 rootProject.name = 'tingeltangel-root'
+

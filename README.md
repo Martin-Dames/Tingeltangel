@@ -23,6 +23,11 @@ gradlew jpackage
 ## Notes: 
 * jpackage doesn't allow SNAPSHOT versions, so you might want to change the version.
 * Windows only: [install WIX](https://wixtoolset.org/)
+* Since recently there was a migration to installers and gradle, the projects 
+  [andersicht](andersicht/) and [tingeltangel-manager](tingeltangel-manager/) are empty projects
+  starting the [tingeltangel](tingeltangel/) project with a different commandline option only.
+  Futurewise, the project should be splitted.
+* If you need the tingeltangel version with no official books, use [tingeltangel](tingeltangel/) with the commandline option `disable-official-books`
 
 
 

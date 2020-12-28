@@ -1,1 +1,0 @@
-start javaw -jar tingeltangel-0.7-jar-with-dependencies.jar gui-manager

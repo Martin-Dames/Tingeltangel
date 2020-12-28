@@ -31,5 +31,8 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       # run gradle command to build the project
       - name: Building and testing Application
-        run: ./gradlew tingeltangel:jpackageImage --no-daemon --no-parallel --stacktrace
+        run: |
+          ./gradlew build jpackageImage --no-daemon --no-parallel --stacktrace
+          ls -la tingeltangel/build/jpackage/tingeltangel
+          ls -la andersicht/build/jpackage/andersicht
         shell: bash
