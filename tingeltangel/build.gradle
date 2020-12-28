@@ -31,6 +31,8 @@ jar.manifest {
 
 runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    additive = true
+    modules = ['java.management', 'java.naming']
     launcher {
         jvmArgs = ["-Dawt.useSystemAAFontSettings=on", "-Dswing.aatext=true", "-Dsun.java2d.xrender=true"]
         noConsole = false // true in the future

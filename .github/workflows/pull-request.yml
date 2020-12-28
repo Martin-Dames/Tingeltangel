@@ -24,7 +24,7 @@ jobs:
       - name: Install JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 14
 
       # validate the gradle wrapper
       - name: Gradle Wrapper Validation
@@ -38,5 +38,5 @@ jobs:
             exit 1;
           fi
           echo "Next Version: $version"
-          ./gradlew tingeltangel:build --no-daemon --no-parallel --stacktrace
+          ./gradlew tingeltangel:jpackageImage --no-daemon --no-parallel --stacktrace
         shell: bash
