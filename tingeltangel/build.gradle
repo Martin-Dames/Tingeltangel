@@ -29,28 +29,38 @@ jar.manifest {
     attributes("Main-Class": project.mainClassName)
 }
 
+run {
+    args = ["gui-editor"]
+}
+
 runtime {
-    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
-    additive = true
-    modules = ['java.management', 'java.naming']
+    options = ['--bind-services', '--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
         jvmArgs = ["-Dawt.useSystemAAFontSettings=on", "-Dswing.aatext=true", "-Dsun.java2d.xrender=true"]
-        noConsole = false // true in the future
-//        arguments = "" ???
+        noConsole = true
     }
     jpackage {
-        installerOptions += ['--resource-dir', "src/main/resources"] // completely missing in `jpackageImage`
-
+        def os = org.gradle.internal.os.OperatingSystem.current()
+        installerOptions += [
+                '--resource-dir', "src/main/resources",
+                '--app-version', version
+        ]
         mainJar = "${project.name}-${VERSION_NAME}.jar" // doesn't work with -SNAPSHOT versions
         mainClass = project.mainClassName
-
-        // commandline argument for the jar file ?!? like so: java -jar foo.jar XXXX ?
-        // args = "gui-editor" // NOT working (https://badass-runtime-plugin.beryx.org/releases/latest/#_jpackage) wrong doc?
-        def os = org.gradle.internal.os.OperatingSystem.current()
         if (os.windows) {
             installerType = "msi"
-            imageOptions += ['--win-console']
+            imageOptions += ['--icon', "icon/icon.ico"]
+//            imageOptions += ['--win-console']
             installerOptions += ['--win-per-user-install', '--win-dir-chooser', '--win-menu', '--win-shortcut']
+        } else if(os.macOsX) {
+            icon = "icon.icns"
         }
+    }
+}
+
+tasks.jpackageImage.doLast {
+    copy {
+        from("$projectDir/html")
+        into("$buildDir/jpackage/${project.name}/html")
     }
 }

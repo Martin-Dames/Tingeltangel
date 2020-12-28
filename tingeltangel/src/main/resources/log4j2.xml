@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <RollingFile name="CoreFile" filePattern="tt-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="CoreFile" fileName="tt.log" filePattern="tt-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -9,7 +9,7 @@
             </Policies>
             <DefaultRolloverStrategy compressionLevel="0" max="3"/>
         </RollingFile>
-        <RollingFile name="CompilerFile" filePattern="compiler-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="CompilerFile" fileName="compiler.log" filePattern="compiler-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -17,7 +17,7 @@
             </Policies>
             <DefaultRolloverStrategy compressionLevel="0" max="3"/>
         </RollingFile>
-        <RollingFile name="EmulatorFile" filePattern="emulator-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="EmulatorFile" fileName="emulator.log" filePattern="emulator-%d{yyyy-MM-dd}-%i.log">
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="10 MB"/>
