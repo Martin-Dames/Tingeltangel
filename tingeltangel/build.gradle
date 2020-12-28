@@ -33,16 +33,17 @@ runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
         jvmArgs = ["-Dawt.useSystemAAFontSettings=on", "-Dswing.aatext=true", "-Dsun.java2d.xrender=true"]
-        noConsole = false
-        arguments = ""
-//        runInBinDir = true
+        noConsole = false // true in the future
+//        arguments = "" ???
     }
     jpackage {
-        installerOptions += ['--resource-dir', "src/main/resources"]
-        mainJar = "tingeltangel-0.8.0.jar"
-        mainClass = "tingeltangel.Tingeltangel"
-        // commandline argument for the jar file ?!? java -jar foo.jar XXXX ?
-//        args = "gui-editor"
+        installerOptions += ['--resource-dir', "src/main/resources"] // completely missing in `jpackageImage`
+
+        mainJar = "${project.name}-${VERSION_NAME}.jar" // doesn't work with -SNAPSHOT versions
+        mainClass = project.mainClassName
+
+        // commandline argument for the jar file ?!? like so: java -jar foo.jar XXXX ?
+        // args = "gui-editor" // NOT working (https://badass-runtime-plugin.beryx.org/releases/latest/#_jpackage) wrong doc?
         def os = org.gradle.internal.os.OperatingSystem.current()
         if (os.windows) {
             installerType = "msi"
