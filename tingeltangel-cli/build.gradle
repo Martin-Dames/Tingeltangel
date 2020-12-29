@@ -28,12 +28,15 @@ runtime {
         ]
         mainJar = "${project.name}-${VERSION_NAME}.jar" // doesn't work with -SNAPSHOT versions
         mainClass = project.mainClassName
+        imageOptions += ['--name', project.name]
         if (os.windows) {
             installerType = "msi"
             imageOptions += ['--icon', "icon/icon.ico"]
             imageOptions += ['--win-console']
             installerOptions += ['--win-per-user-install', '--win-dir-chooser', '--win-menu', '--win-shortcut']
         } else if(os.macOsX) {
+            installerType = "dmg"
+            imageOptions += ['--mac-package-identifier', project.name]
             imageOptions += ['--icon', "icon/icon.icns"]
         } else {
             imageOptions += ['--icon', "icon/icon.png"]
