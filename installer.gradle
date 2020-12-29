@@ -40,14 +40,3 @@ runtime {
         }
     }
 }
-
-
-tasks.jpackageImage.doLast {
-    copy {
-        def os = org.gradle.internal.os.OperatingSystem.current()
-        from("$rootDir/html")
-        def target = "$jpackageData.imageOutputDir/$jpackageData.imageName"
-        if (os.macOsX) target += ".app/Contents"
-        into("$target/html")
-    }
-}
