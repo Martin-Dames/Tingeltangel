@@ -47,12 +47,20 @@ class SetEntryScript extends CliCmd {
         } catch(NumberFormatException e) {
             return(error("OID keine Zahl zw. 15001 und 65535"));
         }
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/cli_ng/SetEntryScript.java
         
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/cli_ng/SetEntryScript.java
         File scriptFile = new File(args[1]);
         if(!scriptFile.canRead()) {
             return(error("angebebene Skript-Datei ist nicht lesbar"));
         }
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/cli_ng/SetEntryScript.java
         
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/cli_ng/SetEntryScript.java
         if(!CLI.bookOpened()) {
             return(error("kein Buch geöffnet"));
         }
@@ -60,7 +68,11 @@ class SetEntryScript extends CliCmd {
             CLI.getBook().addEntry(oid);
         }
         try {
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/cli_ng/SetEntryScript.java
             
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/cli_ng/SetEntryScript.java
             // store content of scriptFile to script
             BufferedReader in = new BufferedReader(new FileReader(scriptFile));
             StringBuilder sb = new StringBuilder();
@@ -69,7 +81,11 @@ class SetEntryScript extends CliCmd {
                 sb.append(row).append("\n");
             }
             in.close();
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/cli_ng/SetEntryScript.java
             
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/cli_ng/SetEntryScript.java
             CLI.getBook().getEntryByOID(oid).setCode();
             CLI.getBook().getEntryByOID(oid).getScript().setCode(sb.toString());
         } catch (IOException ex) {

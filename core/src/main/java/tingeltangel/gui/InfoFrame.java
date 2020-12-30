@@ -1,6 +1,10 @@
 /*
     Copyright (C) 2015   Martin Dames <martin@bastionbytes.de>
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/gui/InfoFrame.java
   
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/gui/InfoFrame.java
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -14,7 +18,11 @@
     You should have received a copy of the GNU General Public License along
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/gui/InfoFrame.java
   
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/gui/InfoFrame.java
 */
 
 package tingeltangel.gui;
@@ -22,14 +30,24 @@ package tingeltangel.gui;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/gui/InfoFrame.java
+=======
+import java.io.InputStreamReader;
+>>>>>>> feature/update:core/src/main/java/tingeltangel/gui/InfoFrame.java
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 public class InfoFrame extends JFrame {
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/gui/InfoFrame.java
     
     private JEditorPane text = new JEditorPane();
     
+=======
+
+    private JEditorPane text = new JEditorPane();
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/gui/InfoFrame.java
     public InfoFrame(String title, String file) {
         super(title);
         setTitle(title);
@@ -38,11 +56,19 @@ public class InfoFrame extends JFrame {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         text.setEditorKit(JEditorPane.createEditorKitForContentType("text/html"));
         text.setEditable(false);
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/gui/InfoFrame.java
         
         setContentPane(new JScrollPane(text));
                 
         try {
             BufferedReader in = new BufferedReader(new FileReader(file));
+=======
+
+        setContentPane(new JScrollPane(text));
+
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(InfoFrame.class.getClassLoader().getResourceAsStream(file)));
+>>>>>>> feature/update:core/src/main/java/tingeltangel/gui/InfoFrame.java
             String row;
             StringBuilder s = new StringBuilder();
             while((row = in.readLine()) != null) {
@@ -60,12 +86,21 @@ public class InfoFrame extends JFrame {
                 }
             }
             in.close();
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/gui/InfoFrame.java
             
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/gui/InfoFrame.java
             text.setText(s.toString());
             text.setCaretPosition(0);
         } catch(IOException e) {
             throw new Error(e);
         }
     }
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/gui/InfoFrame.java
     
 }
+=======
+
+}
+>>>>>>> feature/update:core/src/main/java/tingeltangel/gui/InfoFrame.java

@@ -13,16 +13,9 @@ mainClassName = "tingeltangel.Tingeltangel"
 dependencies {
     implementation project(":core")
 }
+
+run {
+    args = ["gui-editor"]
+}
 apply plugin: "org.beryx.runtime"
 apply from: rootProject.file('installer.gradle')
-runtime {
-    launcher {
-        noConsole = false
-    }
-    jpackage {
-        if(org.gradle.internal.os.OperatingSystem.current().windows) {
-            imageOptions += ['--win-console']
-        }
-    }
-}
-
