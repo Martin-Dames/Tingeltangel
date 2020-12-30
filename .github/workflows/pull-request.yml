@@ -1,0 +1,35 @@
+name: PR Check
+
+on: [pull_request]
+
+jobs:
+  build:
+    name: Building release for ${{ matrix.os }}
+    runs-on: ${{ matrix.image }}
+    strategy:
+      matrix:
+        image: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - image: ubuntu-latest
+            os: linux
+          - image: windows-latest
+            os: windows
+          - image: macos-latest
+            os: macos
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # install that the jdk 8 is installed
+      - name: Install JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
+
+      # validate the gradle wrapper
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+      # run gradle command to build the project
+      - name: Building and testing Application
+        run: ./gradlew build jpackageImage --no-daemon --no-parallel --stacktrace
+        shell: bash

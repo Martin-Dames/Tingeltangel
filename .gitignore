@@ -1,11 +1,12 @@
-/target/
-/.idea/
+.idea
 /tingeltangel.iml
-/tt.properties
-/nbactions.xml
-/tt.log
-/Tingeltangel.zip
-/compiler.log
-/emulator.log
-/*.log
+
+nbactions.xml
+tt.log
+tt.properties
+Tingeltangel.zip
+*.log
+.gradle
+build
+target
 

@@ -1,0 +1,185 @@
+//    Copyright (C) 2015   Martin Dames <martin@bastionbytes.de>
+//  
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License along
+//    with this program; if not, write to the Free Software Foundation, Inc.,
+//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+// optimized division (using only "add" and "sub")
+//
+params=rv:$v,rv:$offset
+work=$value,$value2,$thousands,$hundreds,$tens,$i,$ret
+---
+//                                  int value = v;
+//                                  int thousands = 0;
+set $value,$v
+set $thousands,0
+
+//                                  if(value == 0) { // if11       
+cmp $value,0
+jne if11_e
+//                                      playoid(0);
+//                                      return;
+playoid $offset
+jmp end
+
+//                                  }
+:if11_e
+        
+//                                  while(value >= 1000) { // loop1
+:loop1_s
+cmp $value,1000
+jb loop1_e
+//                                      value -= 1000;
+//                                      thousands += 1;
+sub $value,1000
+add $thousands,1
+//                                  }
+jmp loop1_s
+:loop1_e
+      
+//                                  if(thousands > 0) { // if12
+cmp $thousands,0
+jbe if12_e
+//                                      if(thousands > 1) { // if121
+cmp $thousands,1
+jbe if121_e             
+//                                          speak_1_to_999(thousands);
+set $ret,0
+set $value2,$thousands
+jmp speak_1_to_999
+:ret_0   
+//                                      }
+:if121_e
+//                                        playoid(38);
+set $i,$offset
+add $i,38
+playoid $i
+//                                  }
+:if12_e
+        
+//                                  if(value > 0) { // if13
+cmp $value,0
+jbe if13_e
+//                                      speak_1_to_999(value);
+set $ret,1
+set $value2,$value
+jmp speak_1_to_999
+:ret_1
+//                                  }
+:if13_e
+
+//                                  return
+jmp end
+        
+        
+
+
+:speak_1_to_999
+
+//                                  int hundreds = 0;
+//                                  int tens = 0;
+set $hundreds,0
+set $tens,0
+
+//                                  while(value2 >= 100) {
+:loop21_s
+cmp $value2,100
+jb loop21_e
+//                                      value2 -= 100;
+//                                      hundreds += 1;
+sub $value2,100
+add $hundreds,1
+//                                  }
+jmp loop21_s
+:loop21_e
+        
+//                                  if(hundreds > 0) {
+cmp $hundreds,0
+jbe if211_e
+//                                      if(hundreds > 1) {
+cmp $hundreds,1
+jbe if212_e
+//                                          layoid(hundreds);
+set $i,$offset
+add $i,$hundreds
+playoid $i
+//                                      }
+:if212_e
+//                                      playoid(37);
+set $i,$offset
+add $i,37
+playoid $i
+//                                  }
+:if211_e
+        
+//                                  if(value2 > 0) {
+cmp $value2,0
+jbe if221_e
+//                                      if(value2 <= 20) {
+cmp $value2,20
+jg if222_else
+//                                          playoid(value2);
+set $i,$offset
+add $i,$value2
+playoid $i
+//                                      } else {
+jmp if222_e
+:if222_else
+//                                          while(value2 >= 10) {
+:loop22_s
+cmp $value2,10
+jb loop22_e
+//                                              value2 -= 10;
+//                                              tens += 1;
+sub $value2,10
+add $tens,1
+//                                          }
+jmp loop22_s
+:loop22_e
+//                                          if(value2 > 0) {
+cmp $value2,0
+jbe if2221_e
+//                                              playoid(value2 + 20);
+set $i,$offset
+add $i,$value2
+add $i,20
+playoid $i
+//                                          }
+:if2221_e
+//                                          if(tens == 2) {
+cmp $tens,2
+jne if2222_else
+//                                              playoid(20);
+set $i,$offset
+add $i,20
+playoid $i
+//                                          } else {
+jmp if2222_e
+:if2222_else
+//                                              playoid(tens + 27);
+set $i,$offset
+add $i,$tens
+add $i,27
+playoid $i
+//                                          }
+:if2222_e
+//                                      }
+:if222_e
+//                                  }
+:if221_e
+
+       
+cmp $ret,0
+je ret_0
+jmp ret_1
+:end

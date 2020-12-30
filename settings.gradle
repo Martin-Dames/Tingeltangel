@@ -1,0 +1,7 @@
+include 'tingeltangel'
+include 'tingeltangel-manager'
+include 'tingeltangel-cli'
+include 'andersicht'
+
+rootProject.name = 'tingeltangel-root'
+

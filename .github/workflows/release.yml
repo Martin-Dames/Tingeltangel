@@ -1,0 +1,29 @@
+name: Build a Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  build:
+    name: Building release for windows
+    runs-on: windows-latest
+
+    steps:
+      # checkout the git repo
+      - name: Checkout
+        uses: actions/checkout@v2
+      # install that the jdk 8 is installed
+      - name: Install JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 14
+
+      # validate the gradle wrapper
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+      # run gradle command to build the project
+      - name: Building Application
+        run: ./gradlew tingeltangel:build tingeltangel:msi --no-daemon --no-parallel --stacktrace
+        shell: bash

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <RollingFile name="CoreFile" fileName="tt.log" filePattern="tt-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy compressionLevel="0" max="3"/>
+        </RollingFile>
+        <RollingFile name="CompilerFile" fileName="compiler.log" filePattern="compiler-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy compressionLevel="0" max="3"/>
+        </RollingFile>
+        <RollingFile name="EmulatorFile" fileName="emulator.log" filePattern="emulator-%d{yyyy-MM-dd}-%i.log">
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy compressionLevel="0" max="3"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CoreFile"/>
+        </Root>
+        <Logger name="tingeltangel.Tingeltangel" level="trace" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CoreFile"/>
+        </Logger>
+        <Logger name="compiler" level="trace" additivity="false">
+            <AppenderRef ref="CompilerFile"/>
+        </Logger>
+        <Logger name="emulator" level="trace" additivity="false">
+            <AppenderRef ref="EmulatorFile"/>
+        </Logger>
+    </Loggers>
+</Configuration>
