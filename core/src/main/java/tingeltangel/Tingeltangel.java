@@ -1,6 +1,10 @@
 /*
     Copyright (C) 2015   Martin Dames <martin@bastionbytes.de>
-  
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/Tingeltangel.java
+
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/Tingeltangel.java
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -14,7 +18,11 @@
     You should have received a copy of the GNU General Public License along
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-  
+<<<<<<< HEAD:tingeltangel/src/main/java/tingeltangel/Tingeltangel.java
+
+=======
+
+>>>>>>> feature/update:core/src/main/java/tingeltangel/Tingeltangel.java
 */
 package tingeltangel;
 
@@ -40,7 +48,7 @@ public class Tingeltangel {
     public static int MAIN_FRAME_HEIGHT = 700;
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
     public static String ANDERSICHT_FRAME_TITLE = "Tingeltangel (Andersicht GUI)";
-    public static String MAIN_FRAME_VERSION = " v0.7";
+    public static String MAIN_FRAME_VERSION = " v0.8.0";
 
 
     public final static String BASE_URL = "http://13.80.138.170/book-files";

@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'sablecc'
+}
+
+sourceCompatibility = "1.8"
+
+group "$GROUP"
+version "$VERSION_NAME"
+
+dependencies {
+
+    implementation files('lib/AbsoluteLayout-SNAPSHOT.jar')
+
+    implementation "javazoom:jlayer:1.0.1"
+    implementation "org.yaml:snakeyaml:1.15"
+    implementation "org.apache.logging.log4j:log4j-1.2-api:2.3"
+    // required by the sablecc generated code.
+    implementation 'javax.annotation:jsr305:1.0'
+
+    testImplementation "junit:junit:$junitVersion"
+}
