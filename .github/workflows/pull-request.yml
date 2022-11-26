@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   build:
-    name: Building release for ${{ matrix.os }}
+    name: Checks PR for ${{ matrix.os }}
     runs-on: ${{ matrix.image }}
     strategy:
       matrix:

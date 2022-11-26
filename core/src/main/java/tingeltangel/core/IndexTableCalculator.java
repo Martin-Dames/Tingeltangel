@@ -48,7 +48,7 @@ public class IndexTableCalculator {
      * @return Positionscode in der Indextabelle (1. Feld)
      */
     static int getCodeFromPositionInFile(int position, int n) {
-        if (((position & 255) != 0) | (n < 0)) {
+        if (((position & 255) != 0) || (n < 0)) {
             return Integer.MIN_VALUE;
         }
         n--;

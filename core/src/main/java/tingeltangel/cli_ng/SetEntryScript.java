@@ -47,12 +47,10 @@ class SetEntryScript extends CliCmd {
         } catch(NumberFormatException e) {
             return(error("OID keine Zahl zw. 15001 und 65535"));
         }
-        
         File scriptFile = new File(args[1]);
         if(!scriptFile.canRead()) {
             return(error("angebebene Skript-Datei ist nicht lesbar"));
         }
-        
         if(!CLI.bookOpened()) {
             return(error("kein Buch geöffnet"));
         }
@@ -60,7 +58,6 @@ class SetEntryScript extends CliCmd {
             CLI.getBook().addEntry(oid);
         }
         try {
-            
             // store content of scriptFile to script
             BufferedReader in = new BufferedReader(new FileReader(scriptFile));
             StringBuilder sb = new StringBuilder();
@@ -69,7 +66,6 @@ class SetEntryScript extends CliCmd {
                 sb.append(row).append("\n");
             }
             in.close();
-            
             CLI.getBook().getEntryByOID(oid).setCode();
             CLI.getBook().getEntryByOID(oid).getScript().setCode(sb.toString());
         } catch (IOException ex) {
