@@ -131,17 +131,17 @@ public final class EditorPanel extends JPanel {
         
         addEntriesCount = new JTextField(3);
         addEntriesCount.setText("1");
-        addEntriesCount.getAccessibleContext().setAccessibleDescription("Anzahl der hinzuzufügenden Einträge");
+        addEntriesCount.getAccessibleContext().setAccessibleDescription("Anzahl der hinzuzufÃ¼genden EintrÃ¤ge");
         
         addEntriesStart = new JTextField(5);
         addEntriesStart.setText("15001");
-        addEntriesStart.getAccessibleContext().setAccessibleDescription("OID des ersten hinzuzufügenden Eintrags");
+        addEntriesStart.getAccessibleContext().setAccessibleDescription("OID des ersten hinzuzufÃ¼genden Eintrags");
         
         row.add(addEntriesCount, PushBorderLayout.LINE_START);
-        row.add(new JLabel("Einträge ab OID"), PushBorderLayout.LINE_START);
+        row.add(new JLabel("EintrÃ¤ge ab OID"), PushBorderLayout.LINE_START);
         row.add(addEntriesStart, PushBorderLayout.LINE_START);
         
-        JButton addEntriesButton = new JButton("hinzufügen");        
+        JButton addEntriesButton = new JButton("hinzufÃ¼gen");        
         addEntriesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -152,26 +152,26 @@ public final class EditorPanel extends JPanel {
                 try {
                     oid = Integer.parseInt(_oid);
                     if((oid < 15001) || (oid >= 0x10000)) {
-                        JOptionPane.showMessageDialog(mainFrame, "ungültige OID angegeben (15001 bis 65535)");
+                        JOptionPane.showMessageDialog(mainFrame, "ungÃ¼ltige OID angegeben (15001 bis 65535)");
                         return;
                     }
                 } catch(NumberFormatException nfe) {
-                    JOptionPane.showMessageDialog(mainFrame, "ungültige OID angegeben (15001 bis 65535)");
+                    JOptionPane.showMessageDialog(mainFrame, "ungÃ¼ltige OID angegeben (15001 bis 65535)");
                     return;
                 }
                 try {
                     count = Integer.parseInt(_count);
                     if((count < 1) || (count >= 1000)) {
-                        JOptionPane.showMessageDialog(mainFrame, "ungültige Anzahl angegeben (1-999)");
+                        JOptionPane.showMessageDialog(mainFrame, "ungÃ¼ltige Anzahl angegeben (1-999)");
                         return;
                     }
                 } catch(NumberFormatException nfe) {
-                    JOptionPane.showMessageDialog(mainFrame, "ungültige Anzahl angegeben (1-999)");
+                    JOptionPane.showMessageDialog(mainFrame, "ungÃ¼ltige Anzahl angegeben (1-999)");
                     return;
                 }
                 int lastOid = oid + count - 1;
                 if(lastOid >= 0x10000) {
-                    JOptionPane.showMessageDialog(mainFrame, "ungültiges OID Interval angegeben (max 65535)");
+                    JOptionPane.showMessageDialog(mainFrame, "ungÃ¼ltiges OID Interval angegeben (max 65535)");
                     return;
                 }
                 for(int i = oid; i <= lastOid; i++) {
@@ -205,7 +205,7 @@ public final class EditorPanel extends JPanel {
         row.setLayout(new PushBorderLayout());
         
         JButton skip = new JButton(getIcon(ICON_SKIP));
-        skip.setToolTipText("MP3 überspringen");
+        skip.setToolTipText("MP3 Ã¼berspringen");
         skip.setMargin(new Insets(0, 0, 0, 0));
         skip.addActionListener(new ActionListener() {
             @Override
@@ -367,7 +367,7 @@ public final class EditorPanel extends JPanel {
                         }
                         
                         
-                        Progress pr = new Progress(mainFrame, "Ändere mid") {
+                        Progress pr = new Progress(mainFrame, "Ã„ndere mid") {
                             @Override
                             public void action(ProgressDialog progressDialog) {
                         

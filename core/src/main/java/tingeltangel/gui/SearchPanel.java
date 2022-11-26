@@ -16,7 +16,7 @@ import tingeltangel.core.Entry;
 public class SearchPanel extends JPanel {
 
     private static final String SEARCH_LABEL = "Suche";
-    private static final String CLEAR_LABEL = "Löschen";
+    private static final String CLEAR_LABEL = "LÃ¶schen";
     private static final String MP3_TYPE = "MP3";
     private static final String SCRIPT_TYPE = "Script";
     private static final String SCRIPT_SUBROUTINE_TYPE = "Script (Subroutine)";
