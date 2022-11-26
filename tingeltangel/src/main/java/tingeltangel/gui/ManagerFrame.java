@@ -169,11 +169,11 @@ public class ManagerFrame extends JFrame {
             }
         });
         
-        JMenuItem neueBuecherSuchen = new JMenuItem("Neue BÃ¼cher suchen");
+        JMenuItem neueBuecherSuchen = new JMenuItem("Neue Bücher suchen");
         neueBuecherSuchen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Progress pr = new Progress(ManagerFrame.this, "neue BÃ¼cher suchen") {
+                Progress pr = new Progress(ManagerFrame.this, "neue Bücher suchen") {
                     @Override
                     public void action(ProgressDialog progressDialog) {
                         Repository.search(progressDialog);
@@ -239,8 +239,8 @@ public class ManagerFrame extends JFrame {
             updateList();
             
         } catch(IOException ioe) {
-            LOG.warn("Stick konnte nicht geÃ¶ffnet werden", ioe);
-            JOptionPane.showMessageDialog(this, "Stick konnte nicht geÃ¶ffnet werden");
+            LOG.warn("Stick konnte nicht geöffnet werden", ioe);
+            JOptionPane.showMessageDialog(this, "Stick konnte nicht geöffnet werden");
         }
     }
     
@@ -317,7 +317,7 @@ public class ManagerFrame extends JFrame {
             }
         });
         actionPanel.add(PushBorderLayout.pad(10), PushBorderLayout.PAGE_START);
-        addButton(actionPanel, "lÃ¶schen", new Callback<Object>() {
+        addButton(actionPanel, "löschen", new Callback<Object>() {
             @Override
             public void callback(Object t) {
                 try {
@@ -325,7 +325,7 @@ public class ManagerFrame extends JFrame {
                     updateList();
                 } catch(IOException ioe) {
                     LOG.warn("book " + mid + " delete failed", ioe);
-                    JOptionPane.showMessageDialog(ManagerFrame.this, "Das Buch konnte nicht gelÃ¶scht werden werden");
+                    JOptionPane.showMessageDialog(ManagerFrame.this, "Das Buch konnte nicht gelöscht werden werden");
                 }
             }
         });
@@ -433,10 +433,10 @@ public class ManagerFrame extends JFrame {
             }
         });
         //panel.add(new JLabel(""));
-        addButton(panel, "Neue BÃ¼cher suchen", new Callback<Object>() {
+        addButton(panel, "Neue Bücher suchen", new Callback<Object>() {
             @Override
             public void callback(Object t) {
-                Progress pr = new Progress(ManagerFrame.this, "neue BÃ¼cher suchen") {
+                Progress pr = new Progress(ManagerFrame.this, "neue Bücher suchen") {
                     @Override
                     public void action(ProgressDialog progressDialog) {
                         Repository.search(progressDialog);

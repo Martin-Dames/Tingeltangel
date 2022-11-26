@@ -100,7 +100,7 @@ public class BookiiStick extends Stick {
             }
         }
         File[] configContent = configDir.listFiles();
-        for(int i = 0; i < content.length; i++) {
+        for(int i = 0; i < configContent.length; i++) {
             if(configContent[i].isFile() && (configContent[i].getName().toUpperCase().equals(SETTINGS_FILE))) {
                 settingsFile = configContent[i];
             }
@@ -129,7 +129,7 @@ public class BookiiStick extends Stick {
             File[] configContent = configDir.listFiles();
             boolean foundSettings = false;
             boolean foundTbd = false;
-            for(int i = 0; i < content.length; i++) {
+            for(int i = 0; i < configContent.length; i++) {
                 if(configContent[i].isFile() && (configContent[i].getName().toUpperCase().equals(SETTINGS_FILE))) {
                     foundSettings = true;
                 }
@@ -554,7 +554,7 @@ public class BookiiStick extends Stick {
         }
         HashSet<BookiiStick> sticks = new HashSet<>();
         for (File mount : mounts) {
-            if (BookiiStick.checkForStick(mount)) {
+            if(BookiiStick.checkForStick(mount)) {
                 sticks.add(new BookiiStick(mount));
             }
         }
@@ -677,7 +677,7 @@ public class BookiiStick extends Stick {
     }
 
     public void activateBook(int id) throws IOException {
-        
+        /*
         String _id = Integer.toString(id);
         while(_id.length() < 5) {
             _id = "0" + _id;
@@ -686,7 +686,7 @@ public class BookiiStick extends Stick {
         HashMap<String, String> settings = getSettings();
         settings.put("book", _id);
         setSettings(settings);
-        
+        */
     }
     
     

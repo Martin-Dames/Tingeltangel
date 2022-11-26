@@ -19,15 +19,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import javax.swing.JOptionPane;
 import tingeltangel.core.Book;
-import tingeltangel.gui.EditorFrame;
 import tingeltangel.tools.FileEnvironment;
-import tingeltangel.tools.Progress;
-import tingeltangel.tools.ProgressDialog;
 
 /**
  *

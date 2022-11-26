@@ -40,7 +40,7 @@ public class Tingeltangel {
     public static int MAIN_FRAME_HEIGHT = 700;
     public static String MAIN_FRAME_TITLE = "Tingeltangel";
     public static String ANDERSICHT_FRAME_TITLE = "Tingeltangel (Andersicht GUI)";
-    public static String MAIN_FRAME_VERSION = " v0.7";
+    public static String MAIN_FRAME_VERSION = " v0.8";
 
 
     public final static String BASE_URL = "http://13.80.138.170/book-files";
@@ -67,7 +67,7 @@ public class Tingeltangel {
         boolean startAndersicht = false;
 
 
-        if ((args.length > 0) && (args[0].toLowerCase().equals("gui-editor"))) {
+        if (((args.length > 0) && (args[0].toLowerCase().equals("gui-editor"))) || (args.length == 0)){
             startEditor = true;
         }
         if ((args.length > 0) && (args[0].toLowerCase().equals("gui-manager"))) {

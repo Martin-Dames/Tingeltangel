@@ -85,7 +85,7 @@ public class RepositoryManager extends javax.swing.JInternalFrame {
 
         jMenu1.setText("Aktionen");
         update.setText("aktualisieren");
-        search.setText("neue BÃ¼cher suchen");
+        search.setText("neue Bücher suchen");
         
         update.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -190,13 +190,13 @@ public class RepositoryManager extends javax.swing.JInternalFrame {
     }                                      
 
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        new Progress(masterFrame, "Suche nach neuen BÃ¼chern") {
+        new Progress(masterFrame, "Suche nach neuen Büchern") {
             @Override
             public void action(ProgressDialog progressDialog) {
                 try {
                     Repository.search(progressDialog);
                 } catch(IllegalArgumentException e) {
-                    JOptionPane.showMessageDialog(RepositoryManager.this, "Suche nach neuen BÃ¼chern fehlgeschlagen: " + e.getMessage());
+                    JOptionPane.showMessageDialog(RepositoryManager.this, "Suche nach neuen Büchern fehlgeschlagen: " + e.getMessage());
                 }
                 update();
             }
