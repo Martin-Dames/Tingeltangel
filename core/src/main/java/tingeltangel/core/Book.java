@@ -772,7 +772,9 @@ public class Book {
     
     public void generateTTS(ProgressDialog progress) throws IOException {
         Iterator<Integer> ids = indexIDs.iterator();
-        progress.setMax(indexIDs.size());
+        if(progress != null) {
+            progress.setMax(indexIDs.size());
+        }
         int c = 0;
         try {
             while(ids.hasNext()) {
@@ -780,13 +782,19 @@ public class Book {
                 if(entry.isTTS()) {
                     entry.getTTS().generateTTS(entry);
                 }
-                progress.setVal(c++);
+                if(progress != null) {
+                    progress.setVal(c++);
+                }
             }
         } catch(IOException ioe) {
-            progress.done();
+            if(progress != null) {
+                progress.done();
+            }
             throw ioe;
         }
-        progress.done();
+        if(progress != null) {
+            progress.done();
+        }
     }
     
     /*
@@ -1113,6 +1121,9 @@ public class Book {
             _id = "0" + _id;
         }
         File f = new File(FileEnvironment.getBooksDirectory(), _id);
+        if(!f.exists()) {
+            return(true);
+        }
         return(deleteFile(f));
     }
     

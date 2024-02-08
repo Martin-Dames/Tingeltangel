@@ -46,14 +46,14 @@ class DeleteBook extends CliCmd {
                 return(error("keine Zahl (1-" + Translator.MAX_MID + ") als Parameter angegeben"));
             }
             if((mid < 1) || (mid > Translator.MAX_MID)) {
-                return(error("ungÃ¼ltige MID angegeben (1-" + Translator.MAX_MID + ")"));
+                return(error("ungültige MID angegeben (1-" + Translator.MAX_MID + ")"));
             }
             Book current = CLI.getBook();
             if(current.getID() == mid) {
-                return(error("Buch ist geÃ¶ffnet. Ein geÃ¶ffnetes Buch kann nicht gelÃ¶scht werden."));
+                return(error("Buch ist geöffnet. Ein geöffnetes Buch kann nicht gelöscht werden."));
             }
             if(!current.deleteBook(mid)) {
-                return(error("das Buch konnte nicht gelÃ¶scht werden."));
+                return(error("das Buch konnte nicht gelöscht werden."));
             }
             return(ok());
     }

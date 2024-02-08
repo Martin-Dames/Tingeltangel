@@ -159,7 +159,14 @@ public class FileEnvironment {
     }
 
     public static File getWorkingDirectoryRoot() {
-        File wd = new File(getHomeDirectory(), ".tingeltangel");
+        
+        File wd;
+        if(System.getProperty("tt_home") != null) {
+            wd = new File(System.getProperty("tt_home"));
+        } else {
+            wd = new File(getHomeDirectory(), ".tingeltangel");
+        }
+        
         if (wd.exists()) {
             if (!wd.isDirectory()) {
                 throw new Error(wd.getAbsolutePath() + " exists but is not a directory");

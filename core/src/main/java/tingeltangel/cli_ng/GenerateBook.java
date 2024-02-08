@@ -46,7 +46,7 @@ class GenerateBook extends CliCmd {
             return(error("falsche Anzahl von Parametern angegeben"));
         }
         File file = new File(args[0].trim());
-        if(!file.canWrite()) {
+        if(file.exists() && !file.canWrite()) {
             return(error("Die Datei oder das Verzeichnis " + file.getAbsolutePath() + " kann nicht geschrieben werden"));
         }
         
